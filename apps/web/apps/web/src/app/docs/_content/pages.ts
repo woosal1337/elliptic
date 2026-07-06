@@ -5248,7 +5248,7 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "code",
         "lang": "bash",
-        "code": "# Download the analytics rollups for one org as CSV\ncurl -L -H \"Authorization: Bearer $TOKEN\" \\\n  \"https://api.company.chele.bi/api/v1/orgs/$ORG_ID/analytics/export.csv\" \\\n  -o analytics.csv"
+        "code": "# Download the analytics rollups for one org as CSV\ncurl -L -H \"Authorization: Bearer $TOKEN\" \\\n  \"https://api-company.chele.bi/api/v1/orgs/$ORG_ID/analytics/export.csv\" \\\n  -o analytics.csv"
       },
       {
         "type": "h2",
@@ -5365,7 +5365,7 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "code",
         "lang": "bash",
-        "code": "# Fetch the printable HTML for a dashboard, then print to PDF in the browser\ncurl -L -H \"Authorization: Bearer $TOKEN\" \\\n  \"https://api.company.chele.bi/api/v1/orgs/$ORG_ID/dashboards/$DASHBOARD_ID/export.html\" \\\n  -o dashboard.html"
+        "code": "# Fetch the printable HTML for a dashboard, then print to PDF in the browser\ncurl -L -H \"Authorization: Bearer $TOKEN\" \\\n  \"https://api-company.chele.bi/api/v1/orgs/$ORG_ID/dashboards/$DASHBOARD_ID/export.html\" \\\n  -o dashboard.html"
       },
       {
         "type": "h2",
@@ -6647,7 +6647,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "info",
         "title": "Endpoint",
-        "text": "On the hosted instance the server lives at `https://api.company.chele.bi/api/v1/mcp`, a single streamable-HTTP MCP endpoint. Self-hosting follows the same path under your own API origin (for local development, `http://localhost:8000/api/v1/mcp`). Authentication is OAuth 2.1, so there is nothing to copy and paste. The client walks you through a browser consent the first time."
+        "text": "On the hosted instance the server lives at `https://api-company.chele.bi/api/v1/mcp`, a single streamable-HTTP MCP endpoint. Self-hosting follows the same path under your own API origin (for local development, `http://localhost:8000/api/v1/mcp`). Authentication is OAuth 2.1, so there is nothing to copy and paste. The client walks you through a browser consent the first time."
       },
       {
         "type": "h2",
@@ -6729,7 +6729,7 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "code",
         "lang": "bash",
-        "code": "WWW-Authenticate: Bearer resource_metadata=\"https://api.company.chele.bi/.well-known/oauth-protected-resource/api/v1/mcp\""
+        "code": "WWW-Authenticate: Bearer resource_metadata=\"https://api-company.chele.bi/.well-known/oauth-protected-resource/api/v1/mcp\""
       },
       {
         "type": "p",
@@ -6775,7 +6775,7 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "code",
         "lang": "bash",
-        "code": "claude mcp add --transport http companyos https://api.company.chele.bi/api/v1/mcp\n\n# then, inside Claude Code:\n/mcp        # opens the CompanyOS consent screen in your browser"
+        "code": "claude mcp add --transport http companyos https://api-company.chele.bi/api/v1/mcp\n\n# then, inside Claude Code:\n/mcp        # opens the CompanyOS consent screen in your browser"
       },
       {
         "type": "h3",
@@ -6788,7 +6788,7 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "code",
         "lang": "json",
-        "code": "{\n  \"mcpServers\": {\n    \"companyos\": {\n      \"url\": \"https://api.company.chele.bi/api/v1/mcp\"\n    }\n  }\n}"
+        "code": "{\n  \"mcpServers\": {\n    \"companyos\": {\n      \"url\": \"https://api-company.chele.bi/api/v1/mcp\"\n    }\n  }\n}"
       },
       {
         "type": "p",
@@ -6805,7 +6805,7 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "code",
         "lang": "json",
-        "code": "{\n  \"mcpServers\": {\n    \"companyos\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"mcp-remote\", \"https://api.company.chele.bi/api/v1/mcp\"]\n    }\n  }\n}"
+        "code": "{\n  \"mcpServers\": {\n    \"companyos\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"mcp-remote\", \"https://api-company.chele.bi/api/v1/mcp\"]\n    }\n  }\n}"
       },
       {
         "type": "callout",
@@ -7400,7 +7400,7 @@ export const DOC_PAGES: DocPage[] = [
           [
             "`--endpoint URL`",
             "the `COMPANYOS_MCP_URL` env var, else `http://localhost:8000/api/v1/mcp`",
-            "The MCP endpoint written into `.mcp.json`. Point it at your CompanyOS API's `/api/v1/mcp` path. On the hosted instance that is `https://api.company.chele.bi/api/v1/mcp`."
+            "The MCP endpoint written into `.mcp.json`. Point it at your CompanyOS API's `/api/v1/mcp` path. On the hosted instance that is `https://api-company.chele.bi/api/v1/mcp`."
           ],
           [
             "`--name companyos`",
@@ -7412,7 +7412,7 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "code",
         "lang": "bash",
-        "code": "# point at the hosted instance explicitly\nbash companyos-agent-init.sh --endpoint https://api.company.chele.bi/api/v1/mcp\n\n# or set it once in the environment\nexport COMPANYOS_MCP_URL=https://api.company.chele.bi/api/v1/mcp\nbash companyos-agent-init.sh"
+        "code": "# point at the hosted instance explicitly\nbash companyos-agent-init.sh --endpoint https://api-company.chele.bi/api/v1/mcp\n\n# or set it once in the environment\nexport COMPANYOS_MCP_URL=https://api-company.chele.bi/api/v1/mcp\nbash companyos-agent-init.sh"
       },
       {
         "type": "callout",
@@ -7439,7 +7439,7 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "code",
         "lang": "json",
-        "code": "{\n  \"mcpServers\": {\n    \"companyos\": {\n      \"type\": \"http\",\n      \"url\": \"https://api.company.chele.bi/api/v1/mcp\"\n    }\n  }\n}"
+        "code": "{\n  \"mcpServers\": {\n    \"companyos\": {\n      \"type\": \"http\",\n      \"url\": \"https://api-company.chele.bi/api/v1/mcp\"\n    }\n  }\n}"
       },
       {
         "type": "p",
@@ -7543,7 +7543,7 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "code",
         "lang": "json",
-        "code": "{\n  \"mcpServers\": {\n    \"companyos\": {\n      \"url\": \"https://api.company.chele.bi/api/v1/mcp\"\n    }\n  }\n}"
+        "code": "{\n  \"mcpServers\": {\n    \"companyos\": {\n      \"url\": \"https://api-company.chele.bi/api/v1/mcp\"\n    }\n  }\n}"
       },
       {
         "type": "p",
