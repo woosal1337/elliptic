@@ -2,9 +2,11 @@
 
 Production runs on the self-hosted **ct104** server (Tailscale
 `ct104-apps.minotaur-banded.ts.net`), fronted by **Cloudflare** →
-`api-company.chele.bi`. The stack is a **git checkout at `/opt/companyos`** that
-**builds its images locally** (`companyos-api:local`, `companyos-web:local`) via
-`docker-compose.yml` plus two host-managed, git-ignored files:
+`api-company.chele.bi`. ct104 serves the **API + Postgres**; the **web app is
+deployed via Vercel**, so only the api image is built here (building Next.js on
+this 4 GB box OOMs, and would duplicate Vercel). The stack is a **git checkout
+at `/opt/companyos`** that **builds the api image locally** (`companyos-api:local`)
+via `docker-compose.yml` plus two host-managed, git-ignored files:
 
 - `docker-compose.override.yml` — restart policies + prod `OAUTH_ISSUER` /
   `MCP_RESOURCE_BASE`.
@@ -20,7 +22,7 @@ self-migrate.
 | Workflow | Trigger | What it does |
 |---|---|---|
 | `ci.yml` | push to `main`, PRs | lint / typecheck / test (api + web) |
-| `deploy.yml` | after CI passes on `main`; manual dispatch | on the ct104 self-hosted runner: `git fetch` + `reset --hard` to the built SHA, `docker compose up -d --build --remove-orphans`, wait for `/api/v1/health` |
+| `deploy.yml` | after CI passes on `main`; manual dispatch | on the ct104 self-hosted runner: `git fetch` + `reset --hard` to the built SHA, `docker compose up -d --build api`, wait for `/api/v1/health` |
 | `release.yml` | `v*` tags | publish semver images to GHCR (unchanged) |
 
 ## One-time host setup
