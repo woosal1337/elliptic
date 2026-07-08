@@ -7,10 +7,13 @@ from urllib.parse import parse_qs, urlparse
 
 from httpx import AsyncClient
 
+from companyos.core.config import get_settings
 from tests.helpers import create_org, register_and_login
 
 _REDIRECT = "http://127.0.0.1:53999/callback"
-_RESOURCE = "https://mcp.companyos.ai"
+# The canonical MCP resource URI the server validates against (RFC 8707/9728);
+# derived from settings so it tracks the configured value instead of drifting.
+_RESOURCE = get_settings().mcp_resource_base
 
 
 def _pkce_pair() -> tuple[str, str]:
