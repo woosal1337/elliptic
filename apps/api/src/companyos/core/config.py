@@ -28,7 +28,10 @@ class Settings(BaseSettings):
     refresh_token_expire_days: int = 30
 
     oauth_issuer: str = "http://localhost:8000"
-    mcp_resource_base: str = "https://mcp.companyos.ai"
+    # Canonical MCP resource URI (RFC 8707/9728): the full URL clients connect
+    # to, including the /api/v1/mcp path. Must match what MCP clients send as the
+    # `resource` param at /oauth/authorize, else the flow 400s. Override per env.
+    mcp_resource_base: str = "http://localhost:8000/api/v1/mcp"
     mcp_access_token_expire_minutes: int = 10
     mcp_refresh_token_expire_days: int = 30
 
