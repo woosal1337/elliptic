@@ -356,12 +356,20 @@ export function TasksTable({
                   onDoubleClick={() => surface.setOpenTaskId(task.id)}
                   className={cn(
                     "group relative cursor-pointer border-b border-border bg-surface transition-colors duration-150 last:border-b-0 hover:bg-muted/50",
-                    "before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-accent before:opacity-0 before:transition-opacity hover:before:opacity-100",
                     selected && "bg-accent/10 hover:bg-accent/15",
                     focused && "outline-none ring-2 ring-inset ring-ring"
                   )}
                 >
-                  <td className={cn("w-full px-4", cellY)}>
+                  {/* Hover accent bar lives on the first cell, NOT the <tr>: a ::before on a
+                      table-row gets wrapped in an anonymous table-cell, adding a phantom leading
+                      column that shifts every body cell one column right of the header. */}
+                  <td
+                    className={cn(
+                      "relative w-full px-4",
+                      "before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-accent before:opacity-0 before:transition-opacity group-hover:before:opacity-100",
+                      cellY
+                    )}
+                  >
                     <div className="flex min-w-0 items-center gap-2.5">
                       {show.identifier ? (
                         <span className={cn(hierarchy.meta, "shrink-0")}>{task.identifier}</span>
