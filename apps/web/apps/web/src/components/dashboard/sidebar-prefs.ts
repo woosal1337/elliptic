@@ -32,6 +32,21 @@ export const SIDEBAR_ITEMS: readonly SidebarItemDef[] = [
 
 const ITEM_KEYS = SIDEBAR_ITEMS.map((item) => item.key);
 
+// Only the most-used items live in the sidebar by default; everything else starts
+// in the collapsible "More" section. Users can still pin/hide/reorder from there.
+const DEFAULT_HIDDEN: readonly string[] = [
+  "assistant",
+  "triage",
+  "stickies",
+  "initiatives",
+  "releases",
+  "customers",
+  "meetings",
+  "calendar",
+  "query",
+  "dashboards",
+];
+
 export interface SidebarPrefs {
   order: string[];
   hidden: string[];
@@ -40,11 +55,13 @@ export interface SidebarPrefs {
 function defaults(): SidebarPrefs {
   return {
     order: [...ITEM_KEYS],
-    hidden: [],
+    hidden: [...DEFAULT_HIDDEN],
   };
 }
 
 const STORAGE_KEY = "companyos:sidebar";
+// Bump when the curated default changes so existing installs migrate once.
+const PREFS_VERSION = 2;
 
 function isKnownKey(value: unknown): value is string {
   return typeof value === "string" && ITEM_KEYS.includes(value);
@@ -77,9 +94,18 @@ function read(): SidebarPrefs {
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (!raw) return defaults();
-    const parsed = JSON.parse(raw) as Partial<SidebarPrefs>;
+    const parsed = JSON.parse(raw) as Partial<SidebarPrefs> & { version?: number };
     const order = Array.isArray(parsed.order) ? parsed.order : [];
-    const hidden = Array.isArray(parsed.hidden) ? parsed.hidden : [];
+    let hidden = Array.isArray(parsed.hidden) ? parsed.hidden : [];
+    // One-time migration to the curated default: installs from before the default
+    // was curated (no version) that never hid anything adopt DEFAULT_HIDDEN once.
+    // Anyone who deliberately curated visibility keeps their own choice.
+    if (parsed.version !== PREFS_VERSION) {
+      if (hidden.length === 0) hidden = [...DEFAULT_HIDDEN];
+      const migrated = reconcile(order, hidden);
+      write(migrated);
+      return migrated;
+    }
     return reconcile(order, hidden);
   } catch {
     return defaults();
@@ -89,7 +115,7 @@ function read(): SidebarPrefs {
 function write(prefs: SidebarPrefs): void {
   if (typeof window === "undefined") return;
   try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(prefs));
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...prefs, version: PREFS_VERSION }));
   } catch {
     return;
   }

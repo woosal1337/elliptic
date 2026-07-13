@@ -40,6 +40,7 @@ import {
 } from "@companyos/ui";
 import { OrgSwitcher } from "./org-switcher";
 import { SidebarFavorites } from "./sidebar-favorites";
+import { SidebarProjects } from "./sidebar-projects";
 import { UserMenu } from "./user-menu";
 import {
   useSidebarPrefs,
@@ -117,6 +118,13 @@ export function Sidebar({
   };
 
   const renderItem = (item: ResolvedSidebarItem) => {
+    // Projects expands to an inline, highlightable list of every project.
+    // Only when visible — a hidden "projects" falls back to the normal row so it
+    // keeps its "Show" action and doesn't render the full widget inside "More".
+    if (item.key === "projects" && !collapsed && !item.hidden) {
+      return <SidebarProjects key={item.key} orgId={orgId} pathname={pathname} />;
+    }
+
     const Icon = ICONS[item.key] ?? FileText;
     const href = `/app/${orgId}/${item.segment}`;
     const active = pathname === href || pathname.startsWith(`${href}/`);
