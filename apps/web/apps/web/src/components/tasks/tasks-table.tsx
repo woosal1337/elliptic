@@ -174,7 +174,7 @@ export function TasksTable({
   const [query, setQuery] = useState<string>("");
   const [creating, setCreating] = useState(false);
   const [activeViewId, setActiveViewId] = useState<string | null>(null);
-  const [collapsed, setCollapsed] = useState<ReadonlySet<TaskStatus>>(() => new Set());
+  const [collapsed, setCollapsed] = useState<ReadonlySet<TaskStatus>>(() => new Set<TaskStatus>());
   const [composing, setComposing] = useState<TaskStatus | null>(null);
   const filterRef = useRef<HTMLInputElement>(null);
 
