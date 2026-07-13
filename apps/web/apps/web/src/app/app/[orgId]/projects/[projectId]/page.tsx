@@ -2,9 +2,14 @@
 
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { LayoutGrid, List, Users } from "lucide-react";
+import { Check, ChevronDown, LayoutGrid, List, Users } from "lucide-react";
 import {
   Badge,
+  cn,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
   Select,
   SelectContent,
   SelectItem,
@@ -121,6 +126,31 @@ function ProjectDetailContent() {
   const showMilestones = features.milestones !== false;
   const showModules = features.modules !== false;
 
+  // Only the most-used views stay pinned in the tab bar; the rest live behind a
+  // "More" overflow menu to cut visual noise for people (agents/deep-links reach
+  // every view regardless, since content renders off the controlled `tab` value).
+  const primaryTabs = [
+    { value: "overview", label: "Overview", show: true },
+    { value: "board", label: "Board", show: true },
+    { value: "tasks", label: "Tasks", show: true },
+    { value: "insights", label: "Insights", show: true },
+    { value: "notes", label: "Notes", show: showNotes },
+    { value: "settings", label: "Settings", show: true },
+  ].filter((tab) => tab.show);
+  const moreTabs = [
+    { value: "updates", label: "Updates", show: true },
+    { value: "epics", label: "Epics", show: true },
+    { value: "timeline", label: "Timeline", show: showTimeline },
+    { value: "calendar", label: "Calendar", show: true },
+    { value: "cycles", label: "Cycles", show: showCycles },
+    { value: "milestones", label: "Milestones", show: showMilestones },
+    { value: "modules", label: "Modules", show: showModules },
+    { value: "register", label: "Register", show: true },
+    { value: "meetings", label: "Meetings", show: showMeetings },
+    { value: "members", label: "Members", show: true },
+  ].filter((tab) => tab.show);
+  const activeMoreTab = moreTabs.find((tab) => tab.value === activeTab);
+
   useShortcut(
     {
       id: "tasks-toggle-view",
@@ -206,24 +236,49 @@ function ProjectDetailContent() {
         }}
       >
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <TabsList>
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="updates">Updates</TabsTrigger>
-            <TabsTrigger value="board">Board</TabsTrigger>
-            <TabsTrigger value="tasks">Tasks</TabsTrigger>
-            <TabsTrigger value="epics">Epics</TabsTrigger>
-            {showTimeline ? <TabsTrigger value="timeline">Timeline</TabsTrigger> : null}
-            <TabsTrigger value="calendar">Calendar</TabsTrigger>
-            {showCycles ? <TabsTrigger value="cycles">Cycles</TabsTrigger> : null}
-            {showMilestones ? <TabsTrigger value="milestones">Milestones</TabsTrigger> : null}
-            {showModules ? <TabsTrigger value="modules">Modules</TabsTrigger> : null}
-            <TabsTrigger value="register">Register</TabsTrigger>
-            <TabsTrigger value="insights">Insights</TabsTrigger>
-            {showMeetings ? <TabsTrigger value="meetings">Meetings</TabsTrigger> : null}
-            {showNotes ? <TabsTrigger value="notes">Notes</TabsTrigger> : null}
-            <TabsTrigger value="members">Members</TabsTrigger>
-            <TabsTrigger value="settings">Settings</TabsTrigger>
-          </TabsList>
+          <div className="flex items-center gap-4 border-b border-border">
+            <TabsList className="border-b-0">
+              {primaryTabs.map((tab) => (
+                <TabsTrigger key={tab.value} value={tab.value}>
+                  {tab.label}
+                </TabsTrigger>
+              ))}
+              {/* Promote the active overflow view into the tablist as a real tab so
+                  the mounted panel keeps a matching role="tab" (labelled + selected). */}
+              {activeMoreTab ? (
+                <TabsTrigger key={activeMoreTab.value} value={activeMoreTab.value}>
+                  {activeMoreTab.label}
+                </TabsTrigger>
+              ) : null}
+            </TabsList>
+            {moreTabs.length > 0 ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    type="button"
+                    aria-label="More project views"
+                    className="-mb-px inline-flex h-9 items-center gap-1 rounded-t-sm border-b-2 border-transparent px-1 text-small font-medium text-muted-foreground transition-colors duration-150 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 [&_svg]:size-4"
+                  >
+                    More
+                    <ChevronDown className="opacity-60" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start">
+                  {moreTabs.map((tab) => (
+                    <DropdownMenuItem
+                      key={tab.value}
+                      onSelect={() => setActiveTab(tab.value)}
+                      aria-current={activeTab === tab.value ? "true" : undefined}
+                      className={cn(activeTab === tab.value && "text-foreground")}
+                    >
+                      {tab.label}
+                      {activeTab === tab.value ? <Check className="ml-auto" aria-hidden /> : null}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : null}
+          </div>
           {onTaskTab ? (
             <div className="flex items-center gap-2 pb-1">
               {activeTab === "board" ? (
