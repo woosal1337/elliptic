@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Download, ListTodo, Plus, Search, Tag } from "lucide-react";
+import { ChevronRight, Download, ListTodo, Plus, Search } from "lucide-react";
 import {
   Avatar,
   Button,
@@ -17,24 +17,23 @@ import {
   Skeleton,
   cn,
 } from "@companyos/ui";
-import type { Task } from "@/lib/types";
-import { PRIORITY_LABELS, STATUS_LABELS, STATUS_ORDER } from "@/lib/task-meta";
+import type { Label, Task, TaskStatus } from "@/lib/types";
+import { STATUS_LABELS, STATUS_ORDER } from "@/lib/task-meta";
 import { formatDate, formatRelative } from "@/lib/format";
 import { hierarchy } from "@/lib/hierarchy";
-import { downloadProjectTasksCsv, useTasks } from "@/hooks/use-task-queries";
+import { downloadProjectTasksCsv, useCreateTask, useTasks } from "@/hooks/use-task-queries";
 import { useModules } from "@/hooks/use-module-queries";
 import { useOrgMembers } from "@/hooks/use-org-queries";
 import { useShortcut } from "@/lib/keyboard";
 import { ErrorState } from "@/components/error-state";
 import { CreateTaskDialog } from "./create-task-dialog";
-import { InlineTableAdd } from "./inline-table-add";
 import { TaskDetailDialog } from "./task-detail-dialog";
 import {
   BlockedBadge,
   BugGlyph,
   PriorityIcon,
   SeverityBadge,
-  StatusDot,
+  StatusIcon,
   SubtaskProgressPill,
 } from "./task-bits";
 import { TaskSurfaceOverlays } from "./task-surface-overlays";
@@ -70,6 +69,93 @@ function progressOf(task: Task) {
   );
 }
 
+/** Compact single-row label chips (up to two, then a +N pill). Hidden on narrow viewports. */
+function RowLabels({ labels }: { labels: Label[] }) {
+  const shown = labels.slice(0, 2);
+  const extra = labels.length - shown.length;
+  return (
+    <span className="hidden shrink-0 items-center gap-1 lg:flex">
+      {shown.map((label) => (
+        <span
+          key={label.id}
+          className="inline-flex h-5 max-w-[9rem] items-center gap-1 rounded-full border border-border bg-surface px-1.5 text-caption text-foreground"
+        >
+          <span
+            aria-hidden
+            className="size-1.5 shrink-0 rounded-full"
+            style={{ backgroundColor: label.color }}
+          />
+          <span className="truncate">{label.name}</span>
+        </span>
+      ))}
+      {extra > 0 ? (
+        <span className="inline-flex h-5 items-center rounded-full border border-border bg-surface px-1.5 text-caption text-muted-foreground">
+          +{extra}
+        </span>
+      ) : null}
+    </span>
+  );
+}
+
+/** Inline composer appended to a status group (opened from that group's header "+"). */
+function GroupComposer({
+  orgId,
+  projectId,
+  status,
+  rowY,
+  onClose,
+}: {
+  orgId: string;
+  projectId: string;
+  status: TaskStatus;
+  rowY: string;
+  onClose: () => void;
+}) {
+  const createTask = useCreateTask(orgId, projectId);
+  const [title, setTitle] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const submit = () => {
+    const trimmed = title.trim();
+    if (!trimmed || createTask.isPending) return;
+    createTask.mutate(
+      { title: trimmed, status, priority: "none" },
+      {
+        onSuccess: () => {
+          setTitle("");
+          inputRef.current?.focus();
+        },
+      }
+    );
+  };
+
+  return (
+    <div className={cn("flex items-center border-b border-border px-4 last:border-b-0", rowY)}>
+      <input
+        ref={inputRef}
+        autoFocus
+        value={title}
+        onChange={(event) => setTitle(event.target.value)}
+        onKeyDown={(event) => {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            submit();
+          } else if (event.key === "Escape") {
+            onClose();
+          }
+        }}
+        onBlur={() => {
+          if (!title.trim() && !createTask.isPending) onClose();
+        }}
+        placeholder={`Add task to ${STATUS_LABELS[status]}…`}
+        aria-label={`New task in ${STATUS_LABELS[status]}`}
+        disabled={createTask.isPending}
+        className="w-full bg-transparent text-small text-foreground outline-none placeholder:text-muted-foreground"
+      />
+    </div>
+  );
+}
+
 export function TasksTable({
   orgId,
   projectId,
@@ -88,6 +174,8 @@ export function TasksTable({
   const [query, setQuery] = useState<string>("");
   const [creating, setCreating] = useState(false);
   const [activeViewId, setActiveViewId] = useState<string | null>(null);
+  const [collapsed, setCollapsed] = useState<ReadonlySet<TaskStatus>>(() => new Set<TaskStatus>());
+  const [composing, setComposing] = useState<TaskStatus | null>(null);
   const filterRef = useRef<HTMLInputElement>(null);
 
   const views = useTaskViews<TableViewConfig>(orgId, projectId, "table");
@@ -128,7 +216,7 @@ export function TasksTable({
   }, [views.defaultView, applyView]);
 
   const compact = density === "compact";
-  const cellY = compact ? "py-1.5" : "py-3";
+  const rowY = compact ? "h-8" : "h-10";
 
   const normalizedQuery = query.trim().toLowerCase();
   const filtered = useMemo(() => {
@@ -153,7 +241,34 @@ export function TasksTable({
     [filtered, display.orderBy]
   );
 
-  const order = useMemo(() => ordered.map((task) => task.id), [ordered]);
+  // Linear-style grouping: partition the sorted list into status groups (keeping sort order
+  // within each group), dropping empties unless the user opts to see them.
+  const groups = useMemo(() => {
+    const byStatus = new Map<TaskStatus, Task[]>();
+    for (const status of STATUS_ORDER) byStatus.set(status, []);
+    for (const task of ordered) byStatus.get(task.status)?.push(task);
+    return STATUS_ORDER.map((status) => ({ status, tasks: byStatus.get(status) ?? [] })).filter(
+      (group) => group.tasks.length > 0 || display.showEmptyGroups
+    );
+  }, [ordered, display.showEmptyGroups]);
+
+  const toggleGroup = useCallback((status: TaskStatus) => {
+    setCollapsed((current) => {
+      const next = new Set(current);
+      if (next.has(status)) next.delete(status);
+      else next.add(status);
+      return next;
+    });
+  }, []);
+
+  // Keyboard / range selection follows the visible (expanded) grouped order.
+  const order = useMemo(
+    () =>
+      groups
+        .filter((group) => !collapsed.has(group.status))
+        .flatMap((group) => group.tasks.map((task) => task.id)),
+    [groups, collapsed]
+  );
 
   const tasksById = useMemo(() => {
     const map = new Map<string, Task>();
@@ -204,6 +319,7 @@ export function TasksTable({
 
   const total = tasks.data?.length ?? 0;
   const showingCount = filtered.length;
+  const today = new Date().toISOString().slice(0, 10);
 
   return (
     <div className="flex flex-col gap-4">
@@ -287,7 +403,7 @@ export function TasksTable({
       {tasks.isPending ? (
         <div className="flex flex-col gap-2">
           {Array.from({ length: 6 }, (_, i) => (
-            <Skeleton key={i} className="h-11 w-full" />
+            <Skeleton key={i} className="h-10 w-full" />
           ))}
         </div>
       ) : tasks.isError ? (
@@ -310,145 +426,160 @@ export function TasksTable({
           }
         />
       ) : (
-        <div className="max-h-[calc(100dvh-16rem)] overflow-auto rounded-lg border border-border shadow-xs">
-          <table className="w-full text-small">
-            <thead className="sticky top-0 z-10">
-              <tr className="border-b border-border bg-muted text-left text-caption uppercase tracking-wide text-muted-foreground">
-                <th scope="col" className="w-full px-4 py-2.5 font-medium">Task</th>
-                {show.status ? (
-                  <th scope="col" className="px-4 py-2.5 font-medium">Status</th>
-                ) : null}
-                {show.priority ? (
-                  <th scope="col" className="px-4 py-2.5 font-medium">Priority</th>
-                ) : null}
-                {show.assignee ? (
-                  <th scope="col" className="px-4 py-2.5 font-medium">Assignee</th>
-                ) : null}
-                {show.labels ? (
-                  <th scope="col" className="px-4 py-2.5 font-medium">Labels</th>
-                ) : null}
-                {show.due ? (
-                  <th scope="col" className="px-4 py-2.5 font-medium">Due</th>
-                ) : null}
-                {show.progress ? (
-                  <th scope="col" className="px-4 py-2.5 font-medium">Progress</th>
-                ) : null}
-                {show.createdBy ? (
-                  <th scope="col" className="px-4 py-2.5 font-medium">Created by</th>
-                ) : null}
-                {show.updated ? (
-                  <th scope="col" className="px-4 py-2.5 font-medium">Updated</th>
-                ) : null}
-              </tr>
-            </thead>
-            <tbody>
-              {ordered.map((task) => {
-                const selected = surface.selection.isSelected(task.id);
-                const focused = surface.selection.isFocused(task.id);
-                return (
-                <tr
-                  key={task.id}
-                  role="option"
-                  aria-selected={selected}
-                  tabIndex={focused ? 0 : -1}
-                  data-task-item={task.id}
-                  onClick={(event) => surface.onCardSelect(task.id, event)}
-                  onDoubleClick={() => surface.setOpenTaskId(task.id)}
-                  className={cn(
-                    "group relative cursor-pointer border-b border-border bg-surface transition-colors duration-150 last:border-b-0 hover:bg-muted/50",
-                    "before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-accent before:opacity-0 before:transition-opacity hover:before:opacity-100",
-                    selected && "bg-accent/10 hover:bg-accent/15",
-                    focused && "outline-none ring-2 ring-inset ring-ring"
-                  )}
-                >
-                  <td className={cn("w-full px-4", cellY)}>
-                    <div className="flex min-w-0 items-center gap-2.5">
-                      {show.identifier ? (
-                        <span className={cn(hierarchy.meta, "shrink-0")}>{task.identifier}</span>
-                      ) : null}
-                      {display.showBlocked && task.kind === "bug" ? <BugGlyph /> : null}
-                      <span className={cn(hierarchy.headline, "truncate font-medium")}>{task.title}</span>
-                      {display.showBlocked && task.blocked ? <BlockedBadge className="shrink-0" /> : null}
-                      {display.showBlocked && task.kind === "bug" && task.severity !== null ? (
-                        <span className="shrink-0">
-                          <SeverityBadge severity={task.severity} />
-                        </span>
-                      ) : null}
-                      {display.showSubtasks && task.subtask_total > 0 ? (
-                        <SubtaskProgressPill
-                          done={task.subtask_done}
-                          total={task.subtask_total}
-                          className="shrink-0"
-                        />
-                      ) : null}
-                    </div>
-                  </td>
-                  {show.status ? (
-                    <td className={cn("px-4", cellY)}>
-                      <span className="flex items-center gap-2 text-muted-foreground">
-                        <StatusDot status={task.status} />
-                        {STATUS_LABELS[task.status]}
-                      </span>
-                    </td>
-                  ) : null}
-                  {show.priority ? (
-                    <td className={cn("px-4", cellY)}>
-                      <span className="flex items-center gap-2 text-muted-foreground">
-                        <PriorityIcon priority={task.priority} />
-                        {PRIORITY_LABELS[task.priority]}
-                      </span>
-                    </td>
-                  ) : null}
-                  {show.assignee ? (
-                    <td className={cn("px-4", cellY)}>
-                      {task.assignee_id ? (
-                        <span className="flex items-center gap-2 text-foreground">
-                          <Avatar name={memberName.get(task.assignee_id) ?? "?"} size="xs" />
-                          <span className="truncate">{memberName.get(task.assignee_id) ?? "Unknown"}</span>
-                        </span>
-                      ) : (
-                        <span className="text-muted-foreground">Unassigned</span>
+        <div className="max-h-[calc(100dvh-16rem)] overflow-auto rounded-lg border border-border text-small shadow-xs">
+          {groups.map((group) => {
+            const isCollapsed = collapsed.has(group.status);
+            return (
+              <section
+                key={group.status}
+                aria-label={STATUS_LABELS[group.status]}
+                className="group/group"
+              >
+                <div className="sticky top-0 z-10 flex h-9 items-center gap-2 border-b border-border bg-muted px-4">
+                  <button
+                    type="button"
+                    onClick={() => toggleGroup(group.status)}
+                    aria-expanded={!isCollapsed}
+                    className="flex items-center gap-2 rounded text-small font-medium text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    <ChevronRight
+                      aria-hidden="true"
+                      className={cn(
+                        "size-3.5 text-muted-foreground transition-transform duration-150",
+                        !isCollapsed && "rotate-90"
                       )}
-                    </td>
-                  ) : null}
-                  {show.labels ? (
-                    <td className={cn("px-4", cellY)}>
-                      {(task.labels?.length ?? 0) > 0 ? (
-                        <span className="inline-flex items-center gap-1 text-caption text-muted-foreground">
-                          <Tag className="size-3" aria-hidden="true" />
-                          {task.labels.length}
-                        </span>
-                      ) : (
-                        <span className="text-muted-foreground">—</span>
-                      )}
-                    </td>
-                  ) : null}
-                  {show.due ? (
-                    <td className={cn("whitespace-nowrap px-4 text-caption text-muted-foreground tabular", cellY)}>
-                      {task.due_date ? formatDate(task.due_date) : "—"}
-                    </td>
-                  ) : null}
-                  {show.progress ? (
-                    <td className={cn("px-4", cellY)}>
-                      {progressOf(task) ?? <span className="text-muted-foreground">—</span>}
-                    </td>
-                  ) : null}
-                  {show.createdBy ? (
-                    <td className={cn("whitespace-nowrap px-4 text-caption text-muted-foreground", cellY)}>
-                      {memberName.get(task.created_by) ?? "Unknown"}
-                    </td>
-                  ) : null}
-                  {show.updated ? (
-                    <td className={cn("whitespace-nowrap px-4 text-caption text-muted-foreground tabular", cellY)}>
-                      {formatRelative(task.updated_at)}
-                    </td>
-                  ) : null}
-                </tr>
-                );
-              })}
-              <InlineTableAdd orgId={orgId} projectId={projectId} colSpan={99} />
-            </tbody>
-          </table>
+                    />
+                    <StatusIcon status={group.status} />
+                    <span>{STATUS_LABELS[group.status]}</span>
+                    <span className="text-muted-foreground tabular-nums">{group.tasks.length}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (isCollapsed) toggleGroup(group.status);
+                      setComposing(group.status);
+                    }}
+                    aria-label={`Add task to ${STATUS_LABELS[group.status]}`}
+                    className="ml-auto flex size-5 items-center justify-center rounded text-muted-foreground opacity-0 transition-opacity hover:text-foreground focus-visible:opacity-100 group-hover/group:opacity-100"
+                  >
+                    <Plus className="size-4" aria-hidden="true" />
+                  </button>
+                </div>
+
+                {isCollapsed ? null : (
+                  <>
+                    {group.tasks.map((task) => {
+                      const selected = surface.selection.isSelected(task.id);
+                      const focused = surface.selection.isFocused(task.id);
+                      const assigneeName = task.assignee_id
+                        ? memberName.get(task.assignee_id) ?? "Unknown"
+                        : null;
+                      const overdue =
+                        !!task.due_date &&
+                        task.due_date < today &&
+                        task.status !== "done" &&
+                        task.status !== "cancelled";
+                      return (
+                        <div
+                          key={task.id}
+                          role="option"
+                          aria-selected={selected}
+                          tabIndex={focused ? 0 : -1}
+                          data-task-item={task.id}
+                          onClick={(event) => surface.onCardSelect(task.id, event)}
+                          onDoubleClick={() => surface.setOpenTaskId(task.id)}
+                          className={cn(
+                            "relative flex cursor-pointer items-center gap-2.5 border-b border-border bg-surface px-4 transition-colors duration-150 last:border-b-0 hover:bg-muted/50",
+                            "before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-accent before:opacity-0 before:transition-opacity hover:before:opacity-100",
+                            rowY,
+                            selected && "bg-accent/10 hover:bg-accent/15",
+                            focused && "outline-none ring-2 ring-inset ring-ring"
+                          )}
+                        >
+                          {show.priority ? <PriorityIcon priority={task.priority} /> : null}
+                          {show.identifier ? (
+                            <span className={cn(hierarchy.meta, "shrink-0")}>{task.identifier}</span>
+                          ) : null}
+                          {show.status ? <StatusIcon status={task.status} /> : null}
+                          {display.showBlocked && task.kind === "bug" ? <BugGlyph /> : null}
+                          <span className={cn(hierarchy.headline, "min-w-0 flex-1 truncate font-medium")}>
+                            {task.title}
+                          </span>
+                          {display.showBlocked && task.blocked ? (
+                            <BlockedBadge className="shrink-0" />
+                          ) : null}
+                          {display.showBlocked && task.kind === "bug" && task.severity !== null ? (
+                            <span className="hidden shrink-0 sm:inline-flex">
+                              <SeverityBadge severity={task.severity} />
+                            </span>
+                          ) : null}
+                          {display.showSubtasks && task.subtask_total > 0 ? (
+                            <SubtaskProgressPill
+                              done={task.subtask_done}
+                              total={task.subtask_total}
+                              className="shrink-0"
+                            />
+                          ) : null}
+                          {show.labels && task.labels.length > 0 ? (
+                            <RowLabels labels={task.labels} />
+                          ) : null}
+                          {show.progress ? <span className="shrink-0">{progressOf(task)}</span> : null}
+                          {show.due && task.due_date ? (
+                            <span
+                              className={cn(
+                                "hidden shrink-0 whitespace-nowrap text-caption tabular sm:inline",
+                                overdue ? "text-danger" : "text-muted-foreground"
+                              )}
+                            >
+                              <span className="sr-only">Due{overdue ? " (overdue)" : ""}: </span>
+                              {formatDate(task.due_date)}
+                            </span>
+                          ) : null}
+                          {show.createdBy ? (
+                            <span className="hidden shrink-0 max-w-[9rem] truncate whitespace-nowrap text-caption text-muted-foreground lg:inline">
+                              <span className="sr-only">Created by: </span>
+                              {memberName.get(task.created_by) ?? "Unknown"}
+                            </span>
+                          ) : null}
+                          {show.updated ? (
+                            <span className="hidden shrink-0 whitespace-nowrap text-caption tabular text-muted-foreground md:inline">
+                              <span className="sr-only">Updated: </span>
+                              {formatRelative(task.updated_at)}
+                            </span>
+                          ) : null}
+                          {show.assignee ? (
+                            assigneeName ? (
+                              <Avatar
+                                name={assigneeName}
+                                size="xs"
+                                className="shrink-0"
+                                aria-label={assigneeName}
+                              />
+                            ) : (
+                              <span
+                                aria-label="Unassigned"
+                                title="Unassigned"
+                                className="size-5 shrink-0 rounded-full border border-dashed border-border"
+                              />
+                            )
+                          ) : null}
+                        </div>
+                      );
+                    })}
+                    {composing === group.status ? (
+                      <GroupComposer
+                        orgId={orgId}
+                        projectId={projectId}
+                        status={group.status}
+                        rowY={rowY}
+                        onClose={() => setComposing(null)}
+                      />
+                    ) : null}
+                  </>
+                )}
+              </section>
+            );
+          })}
         </div>
       )}
 
