@@ -58,6 +58,83 @@ export function StatusDot({
   );
 }
 
+const STATUS_ICON_COLORS: Record<TaskStatus, string> = {
+  backlog: "text-muted-foreground/60",
+  todo: "text-muted-foreground",
+  in_progress: "text-warning",
+  in_review: "text-accent",
+  done: "text-success",
+  cancelled: "text-muted-foreground",
+};
+
+/** Linear-style status glyph: a progress ring that fills as the task moves through its lifecycle. */
+export function StatusIcon({
+  status,
+  className,
+}: {
+  status: TaskStatus;
+  className?: string;
+}) {
+  const filled = status === "done" || status === "cancelled";
+  return (
+    <span
+      aria-hidden="true"
+      className={cn("inline-flex shrink-0", STATUS_ICON_COLORS[status], className)}
+    >
+      <svg viewBox="0 0 14 14" className="size-3.5" fill="none">
+        {filled ? (
+          <>
+            <circle cx="7" cy="7" r="7" fill="currentColor" />
+            {status === "done" ? (
+              <path
+                d="M4.3 7.1l1.9 1.9 3.5-3.9"
+                fill="none"
+                stroke="#fff"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            ) : (
+              <path
+                d="M5 5l4 4M9 5l-4 4"
+                fill="none"
+                stroke="#fff"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+            )}
+          </>
+        ) : (
+          <>
+            <circle
+              cx="7"
+              cy="7"
+              r="6"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeDasharray={status === "backlog" ? "2.6 2.4" : undefined}
+            />
+            {status === "in_progress" || status === "in_review" ? (
+              <circle
+                cx="7"
+                cy="7"
+                r="3"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="6"
+                pathLength={100}
+                strokeDasharray={status === "in_progress" ? "50 100" : "66 100"}
+                transform="rotate(-90 7 7)"
+              />
+            ) : null}
+          </>
+        )}
+      </svg>
+    </span>
+  );
+}
+
 export function CategoryDot({
   category,
   className,
