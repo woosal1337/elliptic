@@ -1,0 +1,45 @@
+# Production overlay for zero-downtime deploys on ct104.
+#
+# Used as a third compose file on top of docker-compose.yml + the host's
+# docker-compose.override.yml. It fronts the API with a tiny always-up Caddy
+# reverse proxy so the API container can be recreated blue-green without ever
+# dropping the public endpoint:
+#
+#   cloudflared (host) --> :${API_PORT} (Caddy) --> api:8000 (1..N replicas)
+#
+# The API no longer publishes a host port here (Caddy owns it), which also lets
+# the api service scale to >1 replica during a rolling deploy. See
+# scripts/deploy-ct104.sh for the blue-green flow.
+#
+# Local development does NOT use this file, so `docker compose up` still exposes
+# the API directly on ${API_PORT:-8000} as before.
+
+services:
+  api:
+    # Caddy fronts the API in prod; drop the direct host-port publish so the
+    # service can run multiple replicas during a rolling deploy without a
+    # host-port collision. `!reset` clears the list inherited from the base file.
+    ports: !reset []
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      # The port cloudflared already targets on the host — unchanged.
+      - "${API_PORT:-8100}:80"
+    volumes:
+      - ./deploy/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - companyos_caddy_data:/data
+      - companyos_caddy_config:/config
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:80/healthz"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 10s
+
+volumes:
+  companyos_caddy_data:
+  companyos_caddy_config:

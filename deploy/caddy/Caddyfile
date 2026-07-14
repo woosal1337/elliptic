@@ -1,0 +1,38 @@
+# Edge proxy for the CompanyOS API on ct104.
+#
+# cloudflared targets this on the host port; Caddy load-balances across the
+# api service's replicas, discovered via Docker's embedded DNS. During a
+# blue-green deploy the api scales 1 -> 2 -> 1; Caddy picks up the change within
+# `refresh` and retries any in-flight request against a healthy replica, so the
+# public endpoint never drops.
+
+{
+	admin off
+	auto_https off
+}
+
+:80 {
+	# Caddy's own liveness endpoint (container healthcheck hits this).
+	handle /healthz {
+		respond "ok" 200
+	}
+
+	handle {
+		reverse_proxy {
+			# Re-resolve the api replicas frequently so scale up/down during a
+			# deploy is reflected almost immediately.
+			dynamic a {
+				name api
+				port 8000
+				refresh 2s
+				resolvers 127.0.0.11
+			}
+			lb_policy round_robin
+			# If a replica is mid-drain (refusing/erroring), transparently retry
+			# the request against another one within this window.
+			lb_try_duration 15s
+			lb_try_interval 250ms
+			fail_duration 10s
+		}
+	}
+}
