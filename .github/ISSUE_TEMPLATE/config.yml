@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions & ideas
+    url: https://github.com/woosal1337/companyos/discussions
+    about: Ask questions, share ideas, and discuss with the community.
+  - name: Documentation
+    url: https://docs.company.chele.bi
+    about: Read the CompanyOS docs before filing an issue.
+  - name: Report a security vulnerability
+    url: https://github.com/woosal1337/companyos/security/advisories/new
+    about: Please disclose security issues privately, not as a public issue.

@@ -80,6 +80,10 @@ const TAB_VALUES = [
   "settings",
 ];
 
+// Board is the primary working surface, so a project opens on it by default
+// (and Board owns the param-less URL). Overview stays reachable via ?tab=overview.
+const DEFAULT_TAB = "board";
+
 function ProjectDetailContent() {
   const { orgId, projectId } = useParams<{ orgId: string; projectId: string }>();
   const router = useRouter();
@@ -89,14 +93,14 @@ function ProjectDetailContent() {
 
   const initialTab = (() => {
     const t = searchParams.get("tab");
-    return t && TAB_VALUES.includes(t) ? t : "overview";
+    return t && TAB_VALUES.includes(t) ? t : DEFAULT_TAB;
   })();
   const [activeTab, setActiveTabState] = useState(initialTab);
 
   const setActiveTab = useCallback((value: string) => {
     setActiveTabState(value);
     const url = new URL(window.location.href);
-    if (value === "overview") url.searchParams.delete("tab");
+    if (value === DEFAULT_TAB) url.searchParams.delete("tab");
     else url.searchParams.set("tab", value);
     window.history.pushState(window.history.state, "", url);
   }, []);
@@ -104,7 +108,7 @@ function ProjectDetailContent() {
   useEffect(() => {
     const syncFromUrl = () => {
       const t = new URLSearchParams(window.location.search).get("tab");
-      setActiveTabState(t && TAB_VALUES.includes(t) ? t : "overview");
+      setActiveTabState(t && TAB_VALUES.includes(t) ? t : DEFAULT_TAB);
     };
     window.addEventListener("popstate", syncFromUrl);
     return () => window.removeEventListener("popstate", syncFromUrl);

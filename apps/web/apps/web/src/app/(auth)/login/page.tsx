@@ -10,7 +10,7 @@ import { Button, Input, Label, toast } from "@companyos/ui";
 import { Lock, Mail } from "lucide-react";
 import { useLogin, useResendVerification } from "@/hooks/use-auth-queries";
 import { ApiError, api } from "@/lib/api";
-import { usePublicProviders } from "@/hooks/use-auth-provider-queries";
+import { OAuthSignIn } from "@/components/auth/oauth-sign-in";
 
 const loginSchema = z.object({
   email: z.string().min(1, "Email is required").pipe(z.email("Enter a valid email")),
@@ -185,38 +185,4 @@ function SsoSignIn() {
 }
 
 
-function OAuthSignIn() {
-  const providers = usePublicProviders();
-  const [loading, setLoading] = useState<string | null>(null);
-
-  const start = async (provider: "google" | "github") => {
-    setLoading(provider);
-    try {
-      const result = await api.get<{ authorization_url: string }>(
-        `/api/v1/auth/oauth/${provider}/start`
-      );
-      window.location.assign(result.authorization_url);
-    } catch {
-      toast.error(`${provider} sign-in is unavailable`);
-      setLoading(null);
-    }
-  };
-
-  if (!providers.data?.google && !providers.data?.github) return null;
-
-  return (
-    <div className="flex flex-col gap-2">
-      {providers.data?.google ? (
-        <Button type="button" variant="outline" loading={loading === "google"} onClick={() => void start("google")}>
-          Continue with Google
-        </Button>
-      ) : null}
-      {providers.data?.github ? (
-        <Button type="button" variant="outline" loading={loading === "github"} onClick={() => void start("github")}>
-          Continue with GitHub
-        </Button>
-      ) : null}
-    </div>
-  );
-}
 

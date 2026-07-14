@@ -123,6 +123,20 @@ export const SETTINGS_SECTIONS: SettingsSection[] = [
   },
 ];
 
+// The handful of sections surfaced in the nav by default. Everything else lives
+// under a collapsible "More" so the settings page stays uncrowded. Search still
+// reaches every section, and deep-linking an overflow tab auto-expands "More".
+export const PRIMARY_SETTINGS: ReadonlySet<string> = new Set([
+  "general",
+  "appearance",
+  "notifications",
+  "members",
+  "teams",
+  "connectors",
+  "webhooks",
+  "ai",
+]);
+
 export function settingsSectionPath(orgId: string, value: string): string {
   return `/app/${orgId}/settings?tab=${value}`;
 }

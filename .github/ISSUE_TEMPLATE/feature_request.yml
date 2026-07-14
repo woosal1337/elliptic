@@ -1,0 +1,51 @@
+name: Feature request
+description: Suggest a feature, improvement, or a gap to fill
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping shape CompanyOS. For large or architectural changes,
+        please open the request first so we can align before code is written.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem are you trying to solve?
+      description: Describe the user need or pain point, not just the solution.
+      placeholder: As a project lead, I can't … which means …
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: What would you like to see happen?
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Other approaches you weighed, and why you set them aside.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Web dashboard
+        - API / backend
+        - Mobile app
+        - MCP server / agents
+        - Auth / sign-in
+        - Deployment / self-hosting
+        - Other
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues and discussions and this is not a duplicate.
+          required: true
