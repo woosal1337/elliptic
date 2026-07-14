@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { Search } from "lucide-react";
+import { ChevronRight, Search } from "lucide-react";
 import {
   cn,
   Input,
@@ -44,17 +44,32 @@ import { AuditLogSettings } from "@/components/settings/audit-log-settings";
 import { RbacAuditSettings } from "@/components/settings/rbac-audit-settings";
 import { RolesSettings } from "@/components/settings/roles-settings";
 import { NotificationSettings } from "@/components/settings/notification-settings";
-import { SETTINGS_GROUPS, SETTINGS_SECTIONS } from "@/lib/settings-sections";
+import {
+  PRIMARY_SETTINGS,
+  SETTINGS_GROUPS,
+  SETTINGS_SECTIONS,
+  type SettingsSection,
+} from "@/lib/settings-sections";
+
+function groupSections(items: SettingsSection[]) {
+  return SETTINGS_GROUPS.map((group) => ({
+    group,
+    items: items.filter((section) => section.group === group),
+  })).filter((entry) => entry.items.length > 0);
+}
 
 export default function SettingsPage() {
   const { orgId } = useParams<{ orgId: string }>();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [query, setQuery] = useState("");
+  const [showMore, setShowMore] = useState(false);
 
   const tabFromUrl = searchParams.get("tab");
   const active =
     tabFromUrl && SETTINGS_SECTIONS.some((s) => s.value === tabFromUrl) ? tabFromUrl : "general";
+
+  const searching = query.trim().length > 0;
 
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -66,18 +81,51 @@ export default function SettingsPage() {
     );
   }, [query]);
 
-  const groupedVisible = useMemo(
-    () =>
-      SETTINGS_GROUPS.map((group) => ({
-        group,
-        items: visible.filter((section) => section.group === group),
-      })).filter((entry) => entry.items.length > 0),
-    [visible]
+  const groupedVisible = useMemo(() => groupSections(visible), [visible]);
+  const groupedPrimary = useMemo(
+    () => groupSections(SETTINGS_SECTIONS.filter((s) => PRIMARY_SETTINGS.has(s.value))),
+    []
   );
+  const overflowSections = useMemo(
+    () => SETTINGS_SECTIONS.filter((s) => !PRIMARY_SETTINGS.has(s.value)),
+    []
+  );
+  const groupedOverflow = useMemo(() => groupSections(overflowSections), [overflowSections]);
+
+  // Reveal "More" automatically when a hidden section is the active tab (deep link).
+  const moreOpen = showMore || !PRIMARY_SETTINGS.has(active);
 
   const setTab = (value: string) => {
     router.replace(`/app/${orgId}/settings?tab=${value}`, { scroll: false });
   };
+
+  const renderGroups = (grouped: { group: string; items: SettingsSection[] }[]) =>
+    grouped.map(({ group, items }) => (
+      <div key={group} className="flex flex-col gap-0.5">
+        <p className="px-2.5 pb-1 text-caption font-medium uppercase tracking-wider text-muted-foreground/70">
+          {group}
+        </p>
+        {items.map((section) => {
+          const isActive = section.value === active;
+          return (
+            <button
+              key={section.value}
+              type="button"
+              onClick={() => setTab(section.value)}
+              aria-current={isActive ? "page" : undefined}
+              className={cn(
+                "flex items-center rounded-md px-2.5 py-2 text-left text-small font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40",
+                isActive
+                  ? "bg-accent-muted text-accent"
+                  : "text-nav-foreground hover:bg-muted hover:text-foreground"
+              )}
+            >
+              {section.label}
+            </button>
+          );
+        })}
+      </div>
+    ));
 
   return (
     <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-6 py-8">
@@ -121,37 +169,41 @@ export default function SettingsPage() {
               />
             </div>
             <nav aria-label="Settings" className="flex flex-col gap-4">
-              {groupedVisible.length === 0 ? (
-                <p className="px-2.5 py-2 text-small text-muted-foreground">
-                  No settings match “{query.trim()}”.
-                </p>
+              {searching ? (
+                groupedVisible.length === 0 ? (
+                  <p className="px-2.5 py-2 text-small text-muted-foreground">
+                    No settings match “{query.trim()}”.
+                  </p>
+                ) : (
+                  renderGroups(groupedVisible)
+                )
               ) : (
-                groupedVisible.map(({ group, items }) => (
-                  <div key={group} className="flex flex-col gap-0.5">
-                    <p className="px-2.5 pb-1 text-caption font-medium uppercase tracking-wider text-muted-foreground/70">
-                      {group}
-                    </p>
-                    {items.map((section) => {
-                      const isActive = section.value === active;
-                      return (
-                        <button
-                          key={section.value}
-                          type="button"
-                          onClick={() => setTab(section.value)}
-                          aria-current={isActive ? "page" : undefined}
+                <>
+                  {renderGroups(groupedPrimary)}
+                  {groupedOverflow.length > 0 ? (
+                    <div className="flex flex-col gap-0.5">
+                      <button
+                        type="button"
+                        aria-expanded={moreOpen}
+                        onClick={() => setShowMore((open) => !open)}
+                        className="flex w-full items-center gap-1.5 rounded-md px-2.5 py-1 text-caption font-medium uppercase tracking-wider text-muted-foreground/70 transition-colors duration-150 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
+                      >
+                        <ChevronRight
+                          aria-hidden="true"
                           className={cn(
-                            "flex items-center rounded-md px-2.5 py-2 text-left text-small font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40",
-                            isActive
-                              ? "bg-accent-muted text-accent"
-                              : "text-nav-foreground hover:bg-muted hover:text-foreground"
+                            "size-3.5 transition-transform duration-150",
+                            moreOpen && "rotate-90"
                           )}
-                        >
-                          {section.label}
-                        </button>
-                      );
-                    })}
-                  </div>
-                ))
+                        />
+                        More
+                        <span className="text-muted-foreground/50">{overflowSections.length}</span>
+                      </button>
+                      {moreOpen ? (
+                        <div className="mt-1 flex flex-col gap-4">{renderGroups(groupedOverflow)}</div>
+                      ) : null}
+                    </div>
+                  ) : null}
+                </>
               )}
             </nav>
           </div>

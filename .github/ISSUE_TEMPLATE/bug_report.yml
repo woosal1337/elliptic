@@ -1,0 +1,81 @@
+name: Bug report
+description: Report something that is broken or behaving unexpectedly
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug. A clear, reproducible report
+        is the fastest path to a fix. Please **do not** report security
+        vulnerabilities here — see [SECURITY.md](../blob/main/SECURITY.md).
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you see, and what did you expect to see instead?
+      placeholder: When I click Invite with no projects, "No Project" is selectable and the invite still sends…
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: The smallest sequence of steps that triggers the bug.
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. See error
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      description: Which part of CompanyOS is affected?
+      options:
+        - Web dashboard
+        - API / backend
+        - Mobile app
+        - MCP server / agents
+        - Auth / sign-in
+        - Deployment / self-hosting
+        - Other / not sure
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit
+      description: The release tag or commit SHA you're running.
+      placeholder: v1.4.0 or 11a86e7
+  - type: dropdown
+    id: how-running
+    attributes:
+      label: How are you running it?
+      options:
+        - Docker compose (full stack)
+        - App directly (uv / bun)
+        - Hosted instance
+        - Other
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Browser + OS, or server OS, as relevant.
+      placeholder: Chrome 126 on macOS 15
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs, screenshots, or evidence
+      description: Console/server logs, the failing request/response, or screenshots. Redact any secrets.
+      render: shell
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues and this is not a duplicate.
+          required: true
+        - label: I am not reporting a security vulnerability (those go through SECURITY.md).
+          required: true

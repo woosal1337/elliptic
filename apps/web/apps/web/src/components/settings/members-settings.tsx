@@ -3,7 +3,7 @@
 import { SeatUsageCard } from "@/components/settings/seat-usage-card";
 import { EditionCard } from "@/components/settings/edition-card";
 import { useState } from "react";
-import { Copy, Mail, Trash2, UserX } from "lucide-react";
+import { Copy, Mail, Trash2, UserX, X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -85,6 +85,7 @@ function InviteForm({ orgId }: { orgId: string }) {
   });
 
   const projectOptions = projects.data ?? [];
+  const hasProjects = projectOptions.length > 0;
 
   return (
     <div className="flex flex-col gap-3">
@@ -113,19 +114,33 @@ function InviteForm({ orgId }: { orgId: string }) {
             ))}
           </SelectContent>
         </Select>
-        <Select value={projectId} onValueChange={setProjectId}>
-          <SelectTrigger className="w-48" aria-label="Add to project (optional)">
-            <SelectValue placeholder="Add to project (optional)" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value={NO_PROJECT}>No project</SelectItem>
-            {projectOptions.map((project) => (
-              <SelectItem key={project.id} value={project.id}>
-                {project.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <div className="flex items-center gap-1">
+          <Select value={projectId} onValueChange={setProjectId} disabled={!hasProjects}>
+            <SelectTrigger className="w-48" aria-label="Add to project (optional)">
+              <SelectValue
+                placeholder={hasProjects ? "Add to project (optional)" : "No projects yet"}
+              />
+            </SelectTrigger>
+            <SelectContent>
+              {projectOptions.map((project) => (
+                <SelectItem key={project.id} value={project.id}>
+                  {project.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          {projectId !== NO_PROJECT ? (
+            <IconButton
+              type="button"
+              aria-label="Clear project"
+              size="sm"
+              variant="ghost"
+              onClick={() => setProjectId(NO_PROJECT)}
+            >
+              <X />
+            </IconButton>
+          ) : null}
+        </div>
         <Button type="submit" loading={createInvite.isPending}>
           <Mail className="size-4" />
           Invite

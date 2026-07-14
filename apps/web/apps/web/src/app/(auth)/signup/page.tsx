@@ -9,6 +9,7 @@ import { z } from "zod";
 import { Button, Input, Label } from "@companyos/ui";
 import { Lock, Mail, User } from "lucide-react";
 import { useSignup } from "@/hooks/use-auth-queries";
+import { OAuthSignIn } from "@/components/auth/oauth-sign-in";
 
 const signupSchema = z.object({
   full_name: z.string().min(2, "Enter your full name"),
@@ -99,6 +100,9 @@ function SignupForm() {
           Create account
         </Button>
       </form>
+
+      <OAuthSignIn />
+
       <p className="text-center text-small text-muted-foreground">
         Already have an account?{" "}
         <Link href="/login" className="font-medium text-accent transition-colors hover:text-foreground">
