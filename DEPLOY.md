@@ -22,7 +22,7 @@ self-migrate.
 | Workflow | Trigger | What it does |
 |---|---|---|
 | `ci.yml` | push to `main`, PRs | lint / typecheck / test (api + web) |
-| `deploy.yml` | after CI passes on `main`; manual dispatch | on the ct104 self-hosted runner: `git fetch` + `reset --hard` to the built SHA, `docker compose up -d --build api`, wait for `/api/v1/health` |
+| `deploy.yml` | after CI passes on `main`; manual dispatch | on the ct104 self-hosted runner: `git fetch` + `reset --hard` to the built SHA, then `scripts/deploy-ct104.sh` — a **blue-green** roll of the api behind Caddy (build → start new replica → health-check → drain old), so deploys never drop connections |
 | `release.yml` | `v*` tags | publish semver images to GHCR (unchanged) |
 
 ## One-time host setup
@@ -65,6 +65,55 @@ A bare origin (`https://api-company.chele.bi`) makes the OAuth flow fail with
 curl -s https://api-company.chele.bi/.well-known/oauth-protected-resource/api/v1/mcp
 # "resource" must read https://api-company.chele.bi/api/v1/mcp
 ```
+
+## Zero-downtime deploys (why deploys no longer log everyone out)
+
+Previously a deploy ran `docker compose up -d --build api`, which **stops the old
+api container and starts a new one**. That severed every live connection (MCP
+streams, in-flight web/dashboard requests) and returned 502 for the boot+migrate
+window — so every push *looked* like it logged everyone out. It never actually
+was: `JWT_SECRET_KEY`/`COMPANYOS_KEK` are pinned in the host `.env` (stable across
+deploys) and Postgres (grants, refresh tokens, the OAuth signing key) is never
+recreated. The disruption was purely the api container being torn down.
+
+The fix: the API runs behind an always-up **Caddy** proxy and is rolled
+**blue-green**.
+
+```
+cloudflared (host) ──▶ :API_PORT (Caddy) ──▶ api:8000  (1 replica, 2 during a deploy)
+```
+
+- `docker-compose.prod.yml` adds Caddy and makes the api internal-only (so it can
+  run >1 replica). Caddy discovers replicas via Docker DNS and retries in-flight
+  requests against a healthy one.
+- `scripts/deploy-ct104.sh` builds the new image, starts a **second** api replica
+  on it, waits until it is docker-healthy, then drains and removes the old one.
+- Because the old replica keeps serving until the new one is healthy, the public
+  endpoint never drops. cloudflared still targets the same host port — it points
+  at Caddy now instead of the api container.
+
+**Migrations must be backward-compatible (expand/contract).** During a roll, the
+new replica runs `alembic upgrade head` on boot while the *old* code still serves
+traffic, so a migration must not break the running old version. Do additive
+changes first; drop/rename columns in a later deploy once no old code references
+them.
+
+### One-time cutover (already done on ct104)
+
+The first switch to this model is the only deploy with a brief blip, because the
+api has to be recreated to release the host port before Caddy can take it:
+
+```bash
+cd /opt/companyos
+git pull   # get docker-compose.prod.yml + deploy/caddy/Caddyfile + scripts/
+C="docker compose -f docker-compose.yml -f docker-compose.override.yml -f docker-compose.prod.yml"
+$C up -d --no-deps api      # recreate api WITHOUT the host port (frees API_PORT)
+$C up -d --no-deps caddy    # Caddy takes API_PORT and proxies to api:8000
+curl -s https://api-company.chele.bi/api/v1/health   # verify through the edge
+```
+
+After this, every `deploy.yml` run (and manual `scripts/deploy-ct104.sh`) is
+zero-downtime.
 
 ## Rollback
 
