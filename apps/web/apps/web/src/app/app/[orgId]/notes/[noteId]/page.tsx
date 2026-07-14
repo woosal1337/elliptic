@@ -158,14 +158,21 @@ export default function NoteEditorPage() {
   }
 
   const saving = updateNote.isPending || dirty;
+  const sidecarOpen = showAttachments || showAi || showWorkItems || showComments;
 
   return (
     <div
       className={cn(
-        "mx-auto flex flex-col gap-4 px-6 py-8 transition-[max-width]",
-        fullWidth ? "max-w-6xl" : "max-w-3xl"
+        "mx-auto flex w-full justify-center gap-8 px-6 py-8 transition-[max-width]",
+        focusMode ? "max-w-3xl" : "max-w-6xl"
       )}
     >
+      <div
+        className={cn(
+          "flex min-w-0 flex-col gap-4",
+          fullWidth ? "flex-1" : "w-full max-w-3xl"
+        )}
+      >
       {focusMode ? (
         <div className="flex justify-end">
           <Button size="sm" variant="outline" onClick={() => setFocusMode(false)}>
@@ -369,7 +376,7 @@ export default function NoteEditorPage() {
             </>
           )}
         </div>
-        {!focusMode ? (
+        {!focusMode && sidecarOpen ? (
           <div className="sticky top-8 hidden h-fit lg:block">
             {showAttachments ? (
               <NoteAttachments orgId={orgId} noteId={noteId} />
@@ -386,14 +393,18 @@ export default function NoteEditorPage() {
                 noteId={noteId}
                 projectId={note.data?.project_id ?? null}
               />
-            ) : showComments ? (
-              <NoteComments orgId={orgId} noteId={noteId} />
             ) : (
-              <NoteOutline content={body} />
+              <NoteComments orgId={orgId} noteId={noteId} />
             )}
           </div>
         ) : null}
       </div>
+      </div>
+      {!focusMode ? (
+        <aside className="sticky top-8 hidden h-fit w-56 shrink-0 xl:block">
+          <NoteOutline content={body} />
+        </aside>
+      ) : null}
     </div>
   );
 }
