@@ -124,6 +124,83 @@ async def test_full_http_authorization_flow(client: AsyncClient) -> None:
     assert after.json()["data"] == []
 
 
+async def test_full_flow_without_resource_parameter(client: AsyncClient) -> None:
+    """Clients that lag RFC 8707 omit ``resource`` entirely; the flow must still work."""
+    auth = await register_and_login(client)
+    org = await create_org(client, auth["headers"])
+    verifier, challenge = _pkce_pair()
+    registration = await client.post(
+        "/api/v1/oauth/register",
+        json={"client_name": "JetBrains Air", "redirect_uris": [_REDIRECT]},
+    )
+    client_id = registration.json()["client_id"]
+
+    authorize = await client.get(
+        "/api/v1/oauth/authorize",
+        params={
+            "response_type": "code",
+            "client_id": client_id,
+            "redirect_uri": _REDIRECT,
+            "code_challenge": challenge,
+            "code_challenge_method": "S256",
+            "scope": "tasks:read",
+        },
+        headers=auth["headers"],
+    )
+    assert authorize.status_code == 302, authorize.text
+    request_id = parse_qs(urlparse(authorize.headers["location"]).query)["request_id"][0]
+
+    decision = await client.post(
+        "/api/v1/oauth/authorize/decision",
+        json={
+            "request_id": request_id,
+            "decision": "allow",
+            "org_id": org["id"],
+            "scopes": ["tasks:read"],
+        },
+        headers=auth["headers"],
+    )
+    code = parse_qs(urlparse(decision.json()["data"]["redirect_to"]).query)["code"][0]
+
+    token = await client.post(
+        "/api/v1/oauth/token",
+        data={
+            "grant_type": "authorization_code",
+            "client_id": client_id,
+            "code": code,
+            "code_verifier": verifier,
+            "redirect_uri": _REDIRECT,
+        },
+    )
+    assert token.status_code == 200, token.text
+    assert token.json()["access_token"]
+
+
+async def test_authorize_rejects_foreign_resource(client: AsyncClient) -> None:
+    auth = await register_and_login(client)
+    await create_org(client, auth["headers"])
+    _verifier, challenge = _pkce_pair()
+    registration = await client.post(
+        "/api/v1/oauth/register",
+        json={"client_name": "Claude Code", "redirect_uris": [_REDIRECT]},
+    )
+    client_id = registration.json()["client_id"]
+    authorize = await client.get(
+        "/api/v1/oauth/authorize",
+        params={
+            "response_type": "code",
+            "client_id": client_id,
+            "redirect_uri": _REDIRECT,
+            "code_challenge": challenge,
+            "code_challenge_method": "S256",
+            "scope": "tasks:read",
+            "resource": "https://attacker.example.com/api/v1/mcp",
+        },
+        headers=auth["headers"],
+    )
+    assert authorize.status_code == 400
+
+
 async def test_decision_rejects_non_member_org(client: AsyncClient) -> None:
     auth = await register_and_login(client)
     await create_org(client, auth["headers"])

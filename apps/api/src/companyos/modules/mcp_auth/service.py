@@ -111,7 +111,6 @@ async def validate_authorize_request(
     redirect_uri: str,
     code_challenge: str,
     code_challenge_method: str,
-    resource: str,
 ) -> OAuthClient:
     """Validate an authorization request before any consent is shown."""
     client = await load_active_client(session, client_id)
@@ -119,9 +118,21 @@ async def validate_authorize_request(
         raise BadRequestError("redirect_uri does not match a registered value")
     if code_challenge_method != "S256" or not code_challenge:
         raise BadRequestError("PKCE S256 is required")
-    if resource.rstrip("/") != get_settings().mcp_resource_base.rstrip("/"):
-        raise BadRequestError("resource must equal the canonical MCP URI")
     return client
+
+
+def resolve_resource(resource: str | None) -> str:
+    """Resolve the RFC 8707 resource indicator to the canonical MCP resource URI.
+
+    A provided value must equal the canonical URI so a code minted here cannot be
+    replayed against another audience. An omitted value falls back to the canonical
+    URI from this server's own protected-resource metadata: OAuth clients that lag
+    the MCP auth spec send no ``resource`` at all, and rejecting them would break
+    their entire connect flow before the consent screen renders."""
+    canonical = get_settings().mcp_resource_base.rstrip("/")
+    if resource is not None and resource.rstrip("/") != canonical:
+        raise BadRequestError("resource must equal the canonical MCP URI")
+    return canonical
 
 
 def sign_authorization_request(

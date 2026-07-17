@@ -65,7 +65,7 @@ async def authorize(
     client_id: str,
     redirect_uri: str,
     code_challenge: str,
-    resource: str,
+    resource: str | None = None,
     response_type: str = "code",
     code_challenge_method: str = "S256",
     scope: str | None = None,
@@ -75,7 +75,11 @@ async def authorize(
     request id. This endpoint is public: it carries no user identity (the browser's
     CompanyOS session lives on the web app's domain, not the API's). The consent page
     enforces login, and the user is established at the /consent and /decision steps,
-    which the frontend calls through its own origin with the session cookie."""
+    which the frontend calls through its own origin with the session cookie.
+
+    ``resource`` is optional for compatibility with OAuth clients that predate
+    RFC 8707 resource indicators; when omitted it defaults to the canonical MCP
+    resource URI this server advertises in its own metadata."""
     if response_type != "code":
         raise BadRequestError("Only response_type=code is supported")
     await service.validate_authorize_request(
@@ -84,7 +88,6 @@ async def authorize(
         redirect_uri=redirect_uri,
         code_challenge=code_challenge,
         code_challenge_method=code_challenge_method,
-        resource=resource,
     )
     request_id = service.sign_authorization_request(
         client_id=client_id,
@@ -92,7 +95,7 @@ async def authorize(
         code_challenge=code_challenge,
         code_challenge_method=code_challenge_method,
         scope=service.normalize_requested_scopes(scope),
-        resource=resource,
+        resource=service.resolve_resource(resource),
         state=state,
     )
     consent_url = f"{get_settings().app_base_url}/authorize?{urlencode({'request_id': request_id})}"

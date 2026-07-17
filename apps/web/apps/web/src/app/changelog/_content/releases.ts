@@ -10,6 +10,24 @@ export interface Release {
 
 export const RELEASES: Release[] = [
   {
+    version: "1.1.1",
+    date: "2026-07-17",
+    blocks: [
+      {
+        type: "p",
+        text: "A compatibility fix for connecting MCP clients: the OAuth authorization server no longer requires the RFC 8707 resource indicator.",
+      },
+      { type: "h3", text: "MCP OAuth" },
+      {
+        type: "ul",
+        items: [
+          "The `resource` parameter is now optional on the authorize request. When a client omits it, the server binds the request to the canonical MCP resource URI from its own metadata, so clients that predate resource indicators in the MCP auth spec (for example JetBrains Air's MCP settings) can complete the consent flow.",
+          "A provided `resource` must still equal the canonical MCP URI, so audience binding is unchanged: a code minted for this server cannot be replayed against another one.",
+        ],
+      },
+    ],
+  },
+  {
     version: "1.1.0",
     date: "2026-06-28",
     blocks: [

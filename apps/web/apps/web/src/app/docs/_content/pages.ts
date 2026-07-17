@@ -6662,7 +6662,7 @@ export const DOC_PAGES: DocPage[] = [
         "items": [
           "**Dynamic client registration (RFC 7591).** Clients self-register at the registration endpoint as public PKCE clients. There is no manual app setup, and each registered client gets a generated `client_id`.",
           "**PKCE with S256.** The authorization-code flow requires a `code_challenge` using the `S256` method. Other methods and a missing challenge are rejected, which keeps the flow safe for public and native clients.",
-          "**Canonical resource binding.** The `resource` parameter on the authorize and token requests must equal the canonical MCP resource URI, so a code minted for this server cannot be replayed against another audience.",
+          "**Canonical resource binding.** A `resource` parameter (RFC 8707) on the authorize and token requests must equal the canonical MCP resource URI, so a code minted for this server cannot be replayed against another audience. Clients that omit `resource` still work: the server binds the request to the canonical URI from its own metadata.",
           "**Short-lived codes, rotating refresh.** Authorization codes are single-use and expire after 60 seconds. Refresh tokens rotate on every use, and reusing a consumed refresh token revokes the whole token family.",
           "**Signed request envelope.** The validated authorize parameters are signed into a request id that the consent page cannot tamper with. It is valid for 10 minutes."
         ]
