@@ -176,6 +176,110 @@ async def test_full_flow_without_resource_parameter(client: AsyncClient) -> None
     assert token.json()["access_token"]
 
 
+async def test_consent_grants_writes_when_client_requests_no_scope(client: AsyncClient) -> None:
+    """MCP clients send no ``scope`` parameter; the user's consent decision is the grant."""
+    auth = await register_and_login(client)
+    org = await create_org(client, auth["headers"])
+    verifier, challenge = _pkce_pair()
+    registration = await client.post(
+        "/api/v1/oauth/register",
+        json={"client_name": "Claude Code", "redirect_uris": [_REDIRECT]},
+    )
+    client_id = registration.json()["client_id"]
+
+    authorize = await client.get(
+        "/api/v1/oauth/authorize",
+        params={
+            "response_type": "code",
+            "client_id": client_id,
+            "redirect_uri": _REDIRECT,
+            "code_challenge": challenge,
+            "code_challenge_method": "S256",
+            "resource": _RESOURCE,
+        },
+        headers=auth["headers"],
+    )
+    request_id = parse_qs(urlparse(authorize.headers["location"]).query)["request_id"][0]
+
+    decision = await client.post(
+        "/api/v1/oauth/authorize/decision",
+        json={
+            "request_id": request_id,
+            "decision": "allow",
+            "org_id": org["id"],
+            "scopes": ["tasks:read", "tasks:write", "comments:write", "not-a-real-scope"],
+        },
+        headers=auth["headers"],
+    )
+    assert decision.status_code == 200, decision.text
+    code = parse_qs(urlparse(decision.json()["data"]["redirect_to"]).query)["code"][0]
+
+    token = await client.post(
+        "/api/v1/oauth/token",
+        data={
+            "grant_type": "authorization_code",
+            "client_id": client_id,
+            "code": code,
+            "code_verifier": verifier,
+            "redirect_uri": _REDIRECT,
+        },
+    )
+    assert token.status_code == 200, token.text
+    assert set(token.json()["scope"].split()) == {"tasks:read", "tasks:write", "comments:write"}
+
+
+async def test_explicit_scope_request_caps_the_grant(client: AsyncClient) -> None:
+    auth = await register_and_login(client)
+    org = await create_org(client, auth["headers"])
+    verifier, challenge = _pkce_pair()
+    registration = await client.post(
+        "/api/v1/oauth/register",
+        json={"client_name": "Claude Code", "redirect_uris": [_REDIRECT]},
+    )
+    client_id = registration.json()["client_id"]
+
+    authorize = await client.get(
+        "/api/v1/oauth/authorize",
+        params={
+            "response_type": "code",
+            "client_id": client_id,
+            "redirect_uri": _REDIRECT,
+            "code_challenge": challenge,
+            "code_challenge_method": "S256",
+            "scope": "tasks:read",
+            "resource": _RESOURCE,
+        },
+        headers=auth["headers"],
+    )
+    request_id = parse_qs(urlparse(authorize.headers["location"]).query)["request_id"][0]
+
+    decision = await client.post(
+        "/api/v1/oauth/authorize/decision",
+        json={
+            "request_id": request_id,
+            "decision": "allow",
+            "org_id": org["id"],
+            "scopes": ["tasks:read", "tasks:write", "comments:write"],
+        },
+        headers=auth["headers"],
+    )
+    assert decision.status_code == 200, decision.text
+    code = parse_qs(urlparse(decision.json()["data"]["redirect_to"]).query)["code"][0]
+
+    token = await client.post(
+        "/api/v1/oauth/token",
+        data={
+            "grant_type": "authorization_code",
+            "client_id": client_id,
+            "code": code,
+            "code_verifier": verifier,
+            "redirect_uri": _REDIRECT,
+        },
+    )
+    assert token.status_code == 200, token.text
+    assert token.json()["scope"] == "tasks:read"
+
+
 async def test_authorize_rejects_foreign_resource(client: AsyncClient) -> None:
     auth = await register_and_login(client)
     await create_org(client, auth["headers"])

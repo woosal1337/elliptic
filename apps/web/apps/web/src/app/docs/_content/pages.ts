@@ -6677,7 +6677,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Consent is the only place permissions are decided. The token the client receives carries exactly the scopes you ticked, intersected with what the client requested, and nothing the client does later can widen them without a fresh consent."
+        "text": "Consent is the only place permissions are decided. The token the client receives carries exactly the scopes you ticked. A client that requested specific scopes caps the grant at its request; a client that requested none (most MCP clients) receives precisely your selection. Nothing the client does later can widen the grant without a fresh consent."
       },
       {
         "type": "callout",

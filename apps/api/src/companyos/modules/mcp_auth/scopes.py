@@ -122,3 +122,15 @@ def intersect_scopes(granted: list[str], requested: list[str]) -> list[str]:
     granted_set = set(granted)
     requested_set = set(requested)
     return [d.scope for d in SCOPE_CATALOG if d.scope in granted_set and d.scope in requested_set]
+
+
+def resolve_granted_scopes(selected: list[str], requested: list[str]) -> list[str]:
+    """Return the scopes a consent decision grants, in catalog order.
+
+    A client that requested specific scopes caps the grant at that request. A
+    client that requested none left the grant to the user, so the decision is
+    exactly the known scopes the user selected on the consent screen."""
+    if requested:
+        return intersect_scopes(selected, requested)
+    selected_set = set(selected)
+    return [d.scope for d in SCOPE_CATALOG if d.scope in selected_set]

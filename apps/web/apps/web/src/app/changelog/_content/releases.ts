@@ -10,6 +10,24 @@ export interface Release {
 
 export const RELEASES: Release[] = [
   {
+    version: "1.1.2",
+    date: "2026-07-17",
+    blocks: [
+      {
+        type: "p",
+        text: "A second MCP OAuth compatibility patch: your choices on the consent screen now decide the grant for clients that request no scopes.",
+      },
+      { type: "h3", text: "MCP OAuth" },
+      {
+        type: "ul",
+        items: [
+          "Fixed write access for MCP clients. Clients like Claude Code send no `scope` parameter on the authorize request, and the server silently reduced every consent decision — including Root / Admin — to the read-only baseline. The selection you make on the consent screen is now exactly the grant.",
+          "Clients that request explicit scopes are unchanged: the grant is still capped at what the client requested.",
+        ],
+      },
+    ],
+  },
+  {
     version: "1.1.1",
     date: "2026-07-17",
     blocks: [

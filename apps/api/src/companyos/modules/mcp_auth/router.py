@@ -162,7 +162,7 @@ async def decision(
     if body.decision != "allow":
         params = {"error": "access_denied", "state": request.get("state") or ""}
         return ok(DecisionResponse(redirect_to=f"{request['redirect_uri']}?{urlencode(params)}"))
-    granted = scope_catalog.intersect_scopes(body.scopes, request.get("scope", []))
+    granted = scope_catalog.resolve_granted_scopes(body.scopes, request.get("scope", []))
     if not granted:
         raise BadRequestError("No valid scopes granted")
     if body.all_orgs:

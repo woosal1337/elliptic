@@ -433,13 +433,12 @@ async def revoke_token(session: AsyncSession, *, token: str) -> None:
 
 
 def normalize_requested_scopes(raw: str | None) -> list[str]:
-    """Return known requested scopes, defaulting to the baseline read set."""
-    requested = scope_catalog.parse_scope(raw)
-    if not requested:
-        return [
-            definition.scope for definition in scope_catalog.SCOPE_CATALOG if definition.baseline
-        ]
-    return requested
+    """Return the known scopes the client requested.
+
+    An empty result means the client sent no ``scope`` parameter (MCP clients
+    generally do not): the request carries no cap, and the user's consent
+    decision alone determines the grant."""
+    return scope_catalog.parse_scope(raw)
 
 
 async def list_grants(
