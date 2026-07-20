@@ -4,8 +4,9 @@ import { useState } from "react";
 import { Button, toast } from "@companyos/ui";
 import { api } from "@/lib/api";
 import { usePublicProviders } from "@/hooks/use-auth-provider-queries";
+import { OAUTH_NEXT_KEY, type OAuthProvider } from "@/lib/oauth";
 
-type Provider = "google" | "github";
+type Provider = OAuthProvider;
 
 /**
  * One-click sign-in / sign-up buttons for the configured social providers.
@@ -21,6 +22,16 @@ export function OAuthSignIn() {
   const start = async (provider: Provider) => {
     setLoading(provider);
     try {
+      // Carry the intended destination across the round-trip to the provider so
+      // the callback can return the user to where they were headed.
+      const next = new URLSearchParams(window.location.search).get("next");
+      try {
+        if (next) window.sessionStorage.setItem(OAUTH_NEXT_KEY, next);
+        else window.sessionStorage.removeItem(OAUTH_NEXT_KEY);
+      } catch {
+        // sessionStorage may be unavailable (private mode); the callback
+        // falls back to /app.
+      }
       const result = await api.get<{ authorization_url: string }>(
         `/api/v1/auth/oauth/${provider}/start`
       );

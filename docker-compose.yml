@@ -27,6 +27,15 @@ services:
       ENV: ${ENV:-development}
       CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000}
       APP_BASE_URL: ${APP_BASE_URL:-http://localhost:3000}
+      # Social sign-in (optional). Only the variable names live in the repo; the
+      # values come from the host .env in prod. Empty defaults keep the
+      # "Continue with Google/GitHub" buttons hidden until credentials are set.
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
+      GOOGLE_REDIRECT_URI: ${GOOGLE_REDIRECT_URI:-}
+      GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID:-}
+      GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET:-}
+      GITHUB_REDIRECT_URI: ${GITHUB_REDIRECT_URI:-}
     ports:
       - "${API_PORT:-8000}:8000"
     healthcheck:
