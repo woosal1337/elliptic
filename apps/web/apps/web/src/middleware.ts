@@ -31,7 +31,14 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  const hasSession = request.cookies.has("access_token");
+  // Gate on the refresh token, not the access token. The access_token cookie
+  // expires after ACCESS_TOKEN_EXPIRE_MINUTES (30 min) and the browser drops it,
+  // while the refresh_token cookie lives for REFRESH_TOKEN_EXPIRE_DAYS (30 days).
+  // The client (lib/api.ts) silently mints a fresh access token from the refresh
+  // token on the first 401, so a present refresh token means the session is still
+  // alive. Gating on access_token bounced idle users back to /login every 30
+  // minutes even though their 30-day session was still valid.
+  const hasSession = request.cookies.has("refresh_token");
   const isProtected = pathname.startsWith("/app") || pathname === "/authorize";
 
   if (isProtected && !hasSession) {
