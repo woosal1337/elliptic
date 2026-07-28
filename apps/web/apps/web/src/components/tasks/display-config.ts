@@ -72,6 +72,11 @@ const PRIORITY_RANK = new Map<string, number>(
   PRIORITY_SORT.map((priority, index) => [priority, index])
 );
 
+/** Most recently touched first — the tie-break for every order but manual. */
+function byRecency(a: Task, b: Task): number {
+  return b.updated_at.localeCompare(a.updated_at);
+}
+
 export function sortTasksBy<T extends Task>(tasks: readonly T[], orderBy: OrderBy): T[] {
   const sorted = [...tasks];
   switch (orderBy) {
@@ -79,22 +84,23 @@ export function sortTasksBy<T extends Task>(tasks: readonly T[], orderBy: OrderB
       return sorted.sort(
         (a, b) =>
           (PRIORITY_RANK.get(a.priority) ?? PRIORITY_SORT.length) -
-            (PRIORITY_RANK.get(b.priority) ?? PRIORITY_SORT.length) || a.sort_order - b.sort_order
+            (PRIORITY_RANK.get(b.priority) ?? PRIORITY_SORT.length) || byRecency(a, b)
       );
     case "due":
       return sorted.sort(
         (a, b) =>
-          (a.due_date ?? "9999-12-31").localeCompare(b.due_date ?? "9999-12-31") ||
-          a.sort_order - b.sort_order
+          (a.due_date ?? "9999-12-31").localeCompare(b.due_date ?? "9999-12-31") || byRecency(a, b)
       );
     case "created":
       return sorted.sort((a, b) => b.created_at.localeCompare(a.created_at));
     case "updated":
-      return sorted.sort((a, b) => b.updated_at.localeCompare(a.updated_at));
+      return sorted.sort(byRecency);
     case "title":
       return sorted.sort((a, b) => a.title.localeCompare(b.title));
     case "manual":
     default:
+      // The one order that stays oldest-first: sort_order is the board's own
+      // hand-arranged sequence, not a recency signal.
       return sorted.sort((a, b) => a.sort_order - b.sort_order);
   }
 }
@@ -114,15 +120,19 @@ const COMPACT_DEFAULT: Record<DisplayProperty, boolean> = {
 function defaults(surface: TaskSurfaceKind): DisplayConfig {
   return {
     properties: { ...COMPACT_DEFAULT, updated: surface === "table" },
-    orderBy: "manual",
+    // Whatever was touched last leads: a task that was just created, moved, or
+    // completed shows up at the top of its column instead of at the bottom.
+    orderBy: "updated",
     showEmptyGroups: false,
     showSubtasks: true,
     showBlocked: true,
   };
 }
 
+// v2 = the "updated" default above. Bumped so surfaces that already stored the
+// old manual-order default pick the new one up instead of silently keeping it.
 function storageKey(orgId: string, projectId: string, surface: TaskSurfaceKind): string {
-  return `companyos:task-display:${surface}:${orgId}:${projectId}`;
+  return `companyos:task-display:v2:${surface}:${orgId}:${projectId}`;
 }
 
 function isProperty(value: unknown): value is DisplayProperty {
