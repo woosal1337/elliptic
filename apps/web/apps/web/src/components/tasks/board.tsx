@@ -74,6 +74,7 @@ import { useTaskViews, type BoardViewConfig, type SavedView } from "./task-views
 import { taskCardContext, taskSubtaskProgress } from "./task-context";
 import { rangeToId, selectId, toggleId } from "./use-task-selection";
 import { useTaskSurface } from "./use-task-surface";
+import { useAvailableHeight } from "./use-available-height";
 import { SegmentedToggle } from "./task-view-toolbar";
 import { ShortcutTooltip } from "@/components/command/shortcut-tooltip";
 import type { Swimlane } from "./task-view-prefs";
@@ -339,7 +340,9 @@ function BoardColumn({
         aria-label={`${STATUS_LABELS[status]} tasks`}
         aria-multiselectable="true"
         className={cn(
-          "flex min-h-28 flex-col gap-2 rounded-lg border bg-muted/40 p-2 transition-colors duration-150",
+          // Fills the height the row allows and scrolls its own cards, so one
+          // long column can't stretch the board past the fold.
+          "flex min-h-28 flex-1 flex-col gap-2 overflow-y-auto rounded-lg border bg-muted/40 p-2 transition-colors duration-150",
           isOver ? "border-accent/60 bg-accent/5" : "border-border/60"
         )}
       >
@@ -411,6 +414,9 @@ export function Board({
   const [query, setQuery] = useState<string>("");
   const [activeViewId, setActiveViewId] = useState<string | null>(null);
   const filterRef = useRef<HTMLInputElement>(null);
+  const columnsRef = useRef<HTMLDivElement>(null);
+  // 32px gutter = the page's bottom padding, the only thing under the board.
+  const columnsHeight = useAvailableHeight(columnsRef, { gutter: 32 });
 
   const effectiveSwimlane = swimlaneOverride ?? swimlane;
 
@@ -704,8 +710,19 @@ export function Board({
     const statuses = display.showEmptyGroups
       ? STATUS_ORDER
       : STATUS_ORDER.filter((status) => (laneTasks.get(status)?.length ?? 0) > 0);
+    const inLane = laneKey !== undefined;
     return (
-      <div className="flex gap-4 overflow-x-auto pb-4">
+      <div
+        ref={inLane ? undefined : columnsRef}
+        className={cn(
+          "flex gap-4 overflow-x-auto pb-4",
+          // Ungrouped: the inline style below caps the row at the fold, and this
+          // is only the pre-measurement guess. Grouped: lanes stack, so each one
+          // caps lower and the page scrolls between lanes.
+          inLane ? "max-h-[60dvh]" : "max-h-[calc(100dvh-20rem)]"
+        )}
+        style={inLane ? undefined : { maxHeight: columnsHeight ?? undefined }}
+      >
         {statuses.map((status) => (
           <BoardColumn
             key={status}
