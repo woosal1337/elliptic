@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 #
-# Zero-downtime (blue-green) deploy of the CompanyOS API on ct104.
+# LEGACY: manual zero-downtime (blue-green) compose deploy of the CompanyOS
+# API. Production now deploys via Coolify on igris (see DEPLOY.md); this script
+# is kept as a reference for compose-based self-hosting without Coolify.
 #
 # The API sits behind an always-up Caddy proxy (docker-compose.prod.yml). A
 # deploy builds the new image, starts a SECOND api replica on it alongside the

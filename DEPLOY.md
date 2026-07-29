@@ -1,61 +1,53 @@
-# Deploying CompanyOS (ct104)
+# Deploying CompanyOS (igris / Coolify)
 
-Production runs on the self-hosted **ct104** server (Tailscale
-`ct104-apps.minotaur-banded.ts.net`), fronted by **Cloudflare** →
-`api-company.chele.bi`. ct104 serves the **API + Postgres**; the **web app is
-deployed via Vercel**, so only the api image is built here (building Next.js on
-this 4 GB box OOMs, and would duplicate Vercel). The stack is a **git checkout
-at `/opt/companyos`** that **builds the api image locally** (`companyos-api:local`)
-via `docker-compose.yml` plus two host-managed, git-ignored files:
-
-- `docker-compose.override.yml` — restart policies + prod `OAUTH_ISSUER` /
-  `MCP_RESOURCE_BASE`.
-- `.env` — secrets + `API_PORT` (8100) / `WEB_PORT` (3100), which cloudflared targets.
-
-Both are untracked, so `git reset --hard` during a deploy never touches them.
-Postgres (`companyos-postgres-1`, volume `companyos_companyos_pgdata`) stays
-internal. The api image runs `alembic upgrade head` on start, so deploys
-self-migrate.
+Production runs on the self-hosted **igris** box (reachable only over
+Tailscale), managed by **Coolify**. The dashboard URL, host address and other
+host specifics are deliberately kept out of this public doc. Cloudflare
+terminates public TLS at its edge and a cloudflared tunnel hands requests
+to Coolify's Traefik proxy
+(`coolify-proxy`), which routes `api-company.chele.bi` to the api container.
+igris serves the **API + Postgres**; the **web app is deployed via Vercel**
+(`company.chele.bi`), so only the api is built here.
 
 ## CI/CD
 
-| Workflow | Trigger | What it does |
+| Stage | Trigger | What it does |
 |---|---|---|
 | `ci.yml` | push to `main`, PRs | lint / typecheck / test (api + web) |
-| `deploy.yml` | after CI passes on `main`; manual dispatch | on the ct104 self-hosted runner: `git fetch` + `reset --hard` to the built SHA, then `scripts/deploy-ct104.sh` — a **blue-green** roll of the api behind Caddy (build → start new replica → health-check → drain old), so deploys never drop connections |
+| Coolify auto-deploy | push to `main` (GitHub webhook) | builds `apps/api` from its Dockerfile, tags the image with the commit SHA, rolls it out behind a healthcheck |
 | `release.yml` | `v*` tags | publish semver images to GHCR (unchanged) |
 
-## One-time host setup
+**Auto-deploy is a GitHub webhook, not a workflow.** The repo has a push
+webhook (admins: Settings → Webhooks) pointed at the Coolify instance;
+deliveries are HMAC-signed with a shared secret, and Coolify deploys `main`
+on every push. The old `deploy.yml` workflow and the ct104 self-hosted runner
+are gone — there is nothing deploy-related left in `.github/workflows/`.
 
-### Self-hosted runner (label `ct104`)
+## The Coolify application
 
-Installed at `/opt/actions-runner`, registered against
-`woosal1337/companyos` with label `ct104`, running as a service. Re-install:
+Coolify project **companyos** → environment **production** → application
+**companyos-api**:
 
-```bash
-cd /opt/actions-runner
-# get a fresh registration token (repo owner):
-#   gh api -X POST repos/woosal1337/companyos/actions/runners/registration-token -q .token
-RUNNER_ALLOW_RUNASROOT=1 ./config.sh --url https://github.com/woosal1337/companyos \
-  --token <REG_TOKEN> --labels ct104 --name ct104-apps --unattended --replace
-./svc.sh install && ./svc.sh start
-```
+- **Source:** `woosal1337/companyos.git`, branch `main`, base directory
+  `/apps/api`, Dockerfile build pack.
+- **Domain:** `api-company.chele.bi` → Traefik → container port 8000.
+- **Database:** the Coolify-managed **companyos-postgres** resource
+  (`postgres:17-alpine`), internal to the `coolify` Docker network — never
+  published on a host port. The app reaches it via the `DATABASE_URL` env var.
+- **Env vars** (secrets, `OAUTH_ISSUER`, `MCP_RESOURCE_BASE`, `CORS_ORIGINS`,
+  …) live in the Coolify UI under the application's Environment Variables.
+  There is no host `.env` or `docker-compose.override.yml` in this setup.
 
-The deploy job targets `runs-on: [self-hosted, ct104]` — the label must match.
-
-### The `/opt/companyos` checkout
-
-Already present, on `main`, remote `https://github.com/woosal1337/companyos.git`.
-The runner deploys into it directly. Nothing else to configure — `.env` and
-`docker-compose.override.yml` are already in place.
+Deploys stay logged-in-safe for the same reason as before:
+`JWT_SECRET_KEY` / `COMPANYOS_KEK` are pinned in Coolify's env (stable across
+deploys) and Postgres is a separate resource that deploys never recreate.
 
 ## Config note (the MCP OAuth fix)
 
 `MCP_RESOURCE_BASE` **must** be the full URL including the path:
 
-```yaml
-# /opt/companyos/docker-compose.override.yml
-    MCP_RESOURCE_BASE: https://api-company.chele.bi/api/v1/mcp
+```
+MCP_RESOURCE_BASE=https://api-company.chele.bi/api/v1/mcp
 ```
 
 A bare origin (`https://api-company.chele.bi`) makes the OAuth flow fail with
@@ -66,61 +58,34 @@ curl -s https://api-company.chele.bi/.well-known/oauth-protected-resource/api/v1
 # "resource" must read https://api-company.chele.bi/api/v1/mcp
 ```
 
-## Zero-downtime deploys (why deploys no longer log everyone out)
+## Zero-downtime deploys and migrations
 
-Previously a deploy ran `docker compose up -d --build api`, which **stops the old
-api container and starts a new one**. That severed every live connection (MCP
-streams, in-flight web/dashboard requests) and returned 502 for the boot+migrate
-window — so every push *looked* like it logged everyone out. It never actually
-was: `JWT_SECRET_KEY`/`COMPANYOS_KEK` are pinned in the host `.env` (stable across
-deploys) and Postgres (grants, refresh tokens, the OAuth signing key) is never
-recreated. The disruption was purely the api container being torn down.
+Coolify does a health-checked rolling update: it builds the new image, starts
+the new container alongside the old one, waits until the healthcheck
+(`GET /api/v1/health`) passes, then swaps Traefik over and removes the old
+container. The old container keeps serving until the new one is healthy, so
+the public endpoint never drops.
 
-The fix: the API runs behind an always-up **Caddy** proxy and is rolled
-**blue-green**.
-
-```
-cloudflared (host) ──▶ :API_PORT (Caddy) ──▶ api:8000  (1 replica, 2 during a deploy)
-```
-
-- `docker-compose.prod.yml` adds Caddy and makes the api internal-only (so it can
-  run >1 replica). Caddy discovers replicas via Docker DNS and retries in-flight
-  requests against a healthy one.
-- `scripts/deploy-ct104.sh` builds the new image, starts a **second** api replica
-  on it, waits until it is docker-healthy, then drains and removes the old one.
-- Because the old replica keeps serving until the new one is healthy, the public
-  endpoint never drops. cloudflared still targets the same host port — it points
-  at Caddy now instead of the api container.
-
-**Migrations must be backward-compatible (expand/contract).** During a roll, the
-new replica runs `alembic upgrade head` on boot while the *old* code still serves
-traffic, so a migration must not break the running old version. Do additive
-changes first; drop/rename columns in a later deploy once no old code references
-them.
-
-### One-time cutover (already done on ct104)
-
-The first switch to this model is the only deploy with a brief blip, because the
-api has to be recreated to release the host port before Caddy can take it:
-
-```bash
-cd /opt/companyos
-git pull   # get docker-compose.prod.yml + deploy/caddy/Caddyfile + scripts/
-C="docker compose -f docker-compose.yml -f docker-compose.override.yml -f docker-compose.prod.yml"
-$C up -d --no-deps api      # recreate api WITHOUT the host port (frees API_PORT)
-$C up -d --no-deps caddy    # Caddy takes API_PORT and proxies to api:8000
-curl -s https://api-company.chele.bi/api/v1/health   # verify through the edge
-```
-
-After this, every `deploy.yml` run (and manual `scripts/deploy-ct104.sh`) is
-zero-downtime.
+**Migrations must be backward-compatible (expand/contract).** The image runs
+`alembic upgrade head` on start, while the *old* code is still serving — a
+migration must not break the running old version. Do additive changes first;
+drop/rename columns in a later deploy once no old code references them.
 
 ## Rollback
 
-On the host, redeploy any prior commit and rebuild:
+In the Coolify UI: **companyos-api → Deployments**, pick an earlier successful
+deployment and redeploy it. Images are tagged with the commit SHA and kept on
+igris, so rolling back does not rebuild.
 
-```bash
-cd /opt/companyos
-git reset --hard <older-sha>
-docker compose up -d --build
-```
+## Legacy (pre-Coolify)
+
+- **ct104 is decommissioned** — no runner, no `/opt/companyos` checkout, no
+  cloudflared pointing at it.
+- The interim manual compose stack on igris (the ct104 → igris migration
+  stopgap, an untracked checkout driven by a `docker-compose.igris.yml`
+  overlay) may still be running but serves no
+  public traffic; its Postgres volume holds the pre-migration data. Tear it
+  down once a final backup is confirmed.
+- `docker-compose.prod.yml`, `deploy/caddy/` and `scripts/deploy-ct104.sh` are
+  that legacy manual blue-green path. They are kept as a reference for
+  compose-based self-hosting without Coolify; production no longer uses them.

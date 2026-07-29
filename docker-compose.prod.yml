@@ -1,4 +1,6 @@
-# Production overlay for zero-downtime deploys on ct104.
+# LEGACY: manual compose overlay for zero-downtime blue-green deploys.
+# Production now deploys via Coolify on igris (see DEPLOY.md); this file is
+# kept as a reference for compose-based self-hosting without Coolify.
 #
 # Used as a third compose file on top of docker-compose.yml + the host's
 # docker-compose.override.yml. It fronts the API with a tiny always-up Caddy

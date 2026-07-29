@@ -1,4 +1,5 @@
-# Edge proxy for the CompanyOS API on ct104.
+# LEGACY: edge proxy for the manual compose deploy (see DEPLOY.md — production
+# now deploys via Coolify on igris and does not use this file).
 #
 # cloudflared targets this on the host port; Caddy load-balances across the
 # api service's replicas, discovered via Docker's embedded DNS. During a
