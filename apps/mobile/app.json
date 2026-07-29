@@ -1,0 +1,69 @@
+{
+  "name": "CompanyOS",
+  "slug": "CompanyOS",
+  "scheme": "companyos",
+  "version": "1.0.0",
+  "orientation": "portrait",
+  "userInterfaceStyle": "automatic",
+  "icon": "./assets/images/app-icon.png",
+  "updates": {
+    "fallbackToCacheTimeout": 0
+  },
+  "newArchEnabled": true,
+  "jsEngine": "hermes",
+  "assetBundlePatterns": [
+    "**/*"
+  ],
+  "android": {
+    "icon": "./assets/images/app-icon.png",
+    "package": "com.companyos",
+    "adaptiveIcon": {
+      "foregroundImage": "./assets/images/app-icon.png",
+      "backgroundColor": "#0E0E11"
+    },
+    "allowBackup": false,
+    "edgeToEdgeEnabled": true
+  },
+  "ios": {
+    "icon": "./assets/images/app-icon.png",
+    "supportsTablet": true,
+    "bundleIdentifier": "com.companyos"
+  },
+  "web": {
+    "favicon": "./assets/images/app-icon-web-favicon.png",
+    "bundler": "metro"
+  },
+  "plugins": [
+    "expo-localization",
+    "expo-font",
+    [
+      "expo-splash-screen",
+      {
+        "image": "./assets/images/splash-icon.png",
+        "imageWidth": 160,
+        "resizeMode": "contain",
+        "backgroundColor": "#0E0E11"
+      }
+    ],
+    [
+      "react-native-edge-to-edge",
+      {
+        "android": {
+          "parentTheme": "Light",
+          "enforceNavigationBarContrast": false
+        }
+      }
+    ],
+    "expo-build-properties",
+    "expo-notifications",
+    "@react-native-community/datetimepicker"
+  ],
+  "experiments": {
+    "tsconfigPaths": true
+  },
+  "extra": {
+    "ignite": {
+      "version": "11.5.0"
+    }
+  }
+}

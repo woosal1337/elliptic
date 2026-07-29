@@ -1,0 +1,21 @@
+# Reference capture: Linear (Android) onboarding + sign-in.
+# Linear is our UX north star. This flow walks its cold-start onboarding so we
+# can redesign CompanyOS's Login/Register + first-run to the same bar.
+#
+# Run:  scripts/maestro.sh android .maestro/reference/linear-onboarding.yaml
+appId: app.linear
+---
+- launchApp:
+    clearState: false
+- waitForAnimationToEnd
+- takeScreenshot: .maestro/output/linear/00-welcome
+- tapOn:
+    text: "Get started"
+    optional: true
+- waitForAnimationToEnd
+- takeScreenshot: .maestro/output/linear/01-signin-options
+- tapOn:
+    text: ".*Continue with email.*|.*email.*"
+    optional: true
+- waitForAnimationToEnd
+- takeScreenshot: .maestro/output/linear/02-email-entry
