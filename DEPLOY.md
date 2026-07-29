@@ -86,6 +86,6 @@ igris, so rolling back does not rebuild.
   overlay) may still be running but serves no
   public traffic; its Postgres volume holds the pre-migration data. Tear it
   down once a final backup is confirmed.
-- `docker-compose.prod.yml`, `deploy/caddy/` and `scripts/deploy-ct104.sh` are
-  that legacy manual blue-green path. They are kept as a reference for
-  compose-based self-hosting without Coolify; production no longer uses them.
+- The legacy manual blue-green files (`docker-compose.prod.yml`,
+  `deploy/caddy/`, `scripts/deploy-ct104.sh`) have been removed; if a
+  compose-based reference is ever needed, they live in git history at v1.2.0.
