@@ -1,6 +1,9 @@
 """Auth-provider config + Google/GitHub OAuth login (COS-209)."""
 
+import base64
+import hashlib
 import secrets
+import uuid
 from typing import Any
 from urllib.parse import urlencode
 
@@ -17,6 +20,8 @@ from companyos.modules.auth_providers.models import AuthProviderConfig
 from companyos.modules.users.models import User
 
 _STATE_TTL = 600
+# The handoff code only has to survive the redirect back into the app.
+_NATIVE_CODE_TTL = 120
 _HTTP_ERROR_STATUS = 400
 
 _ENDPOINTS = {
@@ -75,8 +80,10 @@ async def update_config(
     return config
 
 
-async def exchange_code(provider: str, code: str) -> str:
-    client_id, client_secret, redirect_uri = _creds(provider)
+async def exchange_code(provider: str, code: str, redirect_uri: str | None = None) -> str:
+    client_id, client_secret, default_redirect = _creds(provider)
+    # Providers require the token call to repeat the authorize call's redirect.
+    redirect_uri = redirect_uri or default_redirect
     ep = _ENDPOINTS[provider]
     async with httpx.AsyncClient(timeout=8.0) as http:
         resp = await http.post(
@@ -115,42 +122,108 @@ async def fetch_identity(provider: str, access_token: str) -> tuple[str, str]:
     return email.strip().lower(), name
 
 
-def _sign_state(provider: str) -> str:
+def _sign_state(provider: str, challenge: str | None = None) -> str:
     import time  # noqa: PLC0415
 
-    payload = {"p": provider, "exp": int(time.time()) + _STATE_TTL}
+    payload: dict[str, Any] = {"p": provider, "exp": int(time.time()) + _STATE_TTL}
+    if challenge:
+        payload["c"] = challenge
     return jwt.encode(payload, get_settings().jwt_secret_key, algorithm="HS256")
 
 
-def _verify_state(state: str, provider: str) -> None:
+def _verify_state(state: str, provider: str) -> dict[str, Any]:
     try:
-        payload = jwt.decode(state, get_settings().jwt_secret_key, algorithms=["HS256"])
+        payload: dict[str, Any] = jwt.decode(
+            state, get_settings().jwt_secret_key, algorithms=["HS256"]
+        )
     except jwt.InvalidTokenError as exc:
         raise UnauthorizedError("Invalid or expired OAuth state") from exc
     if payload.get("p") != provider:
         raise UnauthorizedError("OAuth state/provider mismatch")
+    return payload
 
 
-def authorization_url(provider: str) -> str:
+def verify_state(state: str, provider: str) -> dict[str, Any]:
+    """Public wrapper: validate an OAuth state and return its payload."""
+    return _verify_state(state, provider)
+
+
+def native_redirect_uri(provider: str) -> str:
+    """Where the provider sends a native sign-in back — this API, not the web app."""
+    return f"{get_settings().oauth_issuer.rstrip('/')}/api/v1/auth/oauth/{provider}/native/callback"
+
+
+def native_app_url(query: str) -> str:
+    """The app's deep link that ends the in-app browser session."""
+    return f"{get_settings().native_app_scheme}://auth/callback?{query}"
+
+
+def _challenge_for(verifier: str) -> str:
+    digest = hashlib.sha256(verifier.encode()).digest()
+    return base64.urlsafe_b64encode(digest).decode().rstrip("=")
+
+
+def issue_native_code(user_id: uuid.UUID, challenge: str) -> str:
+    """A short-lived, single-purpose code the app trades for real tokens.
+
+    Tokens themselves never travel in the custom-scheme redirect: another app
+    could claim `companyos://`, and this code is worthless without the verifier
+    that only the app that started the flow holds.
+    """
+    import time  # noqa: PLC0415
+
+    payload = {
+        "sub": str(user_id),
+        "c": challenge,
+        "typ": "native_oauth",
+        "exp": int(time.time()) + _NATIVE_CODE_TTL,
+    }
+    return jwt.encode(payload, get_settings().jwt_secret_key, algorithm="HS256")
+
+
+def verify_native_code(code: str, verifier: str) -> uuid.UUID:
+    """Validate a handoff code against its verifier and return the user id."""
+    try:
+        payload = jwt.decode(code, get_settings().jwt_secret_key, algorithms=["HS256"])
+    except jwt.InvalidTokenError as exc:
+        raise UnauthorizedError("Invalid or expired sign-in code") from exc
+    if payload.get("typ") != "native_oauth":
+        raise UnauthorizedError("Invalid sign-in code")
+    if not secrets.compare_digest(_challenge_for(verifier), str(payload.get("c", ""))):
+        raise UnauthorizedError("Sign-in code does not match this device")
+    return uuid.UUID(str(payload["sub"]))
+
+
+def authorization_url(provider: str, challenge: str | None = None) -> str:
+    """Authorization URL for the web flow, or for a native app when `challenge` is set."""
     if provider not in _ENDPOINTS:
         raise BadRequestError("Unknown provider")
     client_id, _secret, redirect_uri = _creds(provider)
     if not client_id:
         raise BadRequestError(f"{provider} sign-in is not configured")
+    if challenge:
+        redirect_uri = native_redirect_uri(provider)
     ep = _ENDPOINTS[provider]
     params = {
         "response_type": "code",
         "client_id": client_id,
         "redirect_uri": redirect_uri,
         "scope": ep["scope"],
-        "state": _sign_state(provider),
+        "state": _sign_state(provider, challenge),
     }
     return f"{ep['authorize']}?{urlencode(params)}"
 
 
-async def complete_login(session: AsyncSession, provider: str, code: str, state: str) -> User:
+async def complete_login(
+    session: AsyncSession, provider: str, code: str, state: str, native: bool = False
+) -> User:
     _verify_state(state, provider)
-    token = await exchange_code(provider, code)
+    # The web path keeps its two-argument call so the redirect stays implicit.
+    token = (
+        await exchange_code(provider, code, native_redirect_uri(provider))
+        if native
+        else await exchange_code(provider, code)
+    )
     email, name = await fetch_identity(provider, token)
     if not email:
         raise UnauthorizedError("The provider did not return a verified email")

@@ -1,6 +1,6 @@
 """Auth-provider schemas (COS-209)."""
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class AuthProviderConfigOut(BaseModel):
@@ -30,3 +30,10 @@ class PublicProvidersOut(BaseModel):
     magic_code: bool = True
     google: bool = False
     github: bool = False
+
+
+class NativeExchangeIn(BaseModel):
+    """Handoff code from the native callback plus the verifier that unlocks it."""
+
+    code: str = Field(min_length=1, max_length=4096)
+    verifier: str = Field(min_length=32, max_length=256)

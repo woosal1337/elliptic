@@ -60,6 +60,8 @@ class Settings(BaseSettings):
     github_redirect_uri: str = ""
 
     app_base_url: str = "http://localhost:3000"
+    # URL scheme of the mobile app, used to hand a native sign-in back to it.
+    native_app_scheme: str = "companyos"
     instance_admin_emails: str = ""
 
     resend_api_key: str = ""
