@@ -41,6 +41,8 @@ const palette = {
   angry500: "#DB2B33",
 
   overlay20: "rgba(2, 2, 2, 0.4)",
+  // Translucent fill over the blurred tab bar so icons keep contrast.
+  tabBarFill: "rgba(20, 20, 22, 0.55)",
   overlay50: "rgba(2, 2, 2, 0.7)",
 } as const
 

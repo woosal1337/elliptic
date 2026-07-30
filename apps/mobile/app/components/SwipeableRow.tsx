@@ -69,6 +69,7 @@ const ActionButton: FC<{ action: SwipeAction; onDone: () => void }> = ({ action,
   const fg = action.foreground ?? colors.onError
   return (
     <Pressable
+      testID={`swipe-action-${action.key}`}
       onPress={() => {
         action.onPress()
         onDone()

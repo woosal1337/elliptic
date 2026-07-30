@@ -1,9 +1,10 @@
 import { ComponentType, FC, useState } from "react"
-import { Pressable, View, ViewStyle } from "react-native"
+import { Pressable, TextStyle, View, ViewStyle } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 
 import { Button } from "@/components/Button"
 import { Screen } from "@/components/Screen"
+import { SocialSignIn } from "@/components/SocialSignIn"
 import { Text } from "@/components/Text"
 import { TextField, TextFieldAccessoryProps } from "@/components/TextField"
 import { useAuth } from "@/context/AuthContext"
@@ -28,7 +29,11 @@ export const LoginScreen: FC<LoginScreenProps> = ({ navigation }) => {
 
   const PwToggle: ComponentType<TextFieldAccessoryProps> = (props) => (
     <Pressable onPress={() => setShowPw((s) => !s)} hitSlop={8} style={props.style}>
-      <Ionicons name={showPw ? "eye-off-outline" : "eye-outline"} size={20} color={colors.textDim} />
+      <Ionicons
+        name={showPw ? "eye-off-outline" : "eye-outline"}
+        size={20}
+        color={colors.textDim}
+      />
     </Pressable>
   )
 
@@ -64,13 +69,10 @@ export const LoginScreen: FC<LoginScreenProps> = ({ navigation }) => {
 
       {error ? (
         <View
-          style={[
-            $errorPill,
-            { backgroundColor: colors.errorBackground, borderRadius: radius.md },
-          ]}
+          style={[$errorPill, { backgroundColor: colors.errorBackground, borderRadius: radius.md }]}
         >
           <Ionicons name="alert-circle" size={16} color={colors.error} />
-          <Text text={error} size="xs" style={{ color: colors.error, flexShrink: 1 }} />
+          <Text text={error} size="xs" style={[$errorText, { color: colors.error }]} />
         </View>
       ) : null}
 
@@ -81,6 +83,8 @@ export const LoginScreen: FC<LoginScreenProps> = ({ navigation }) => {
         onPress={onSubmit}
         style={{ marginTop: spacing.md }}
       />
+      <SocialSignIn />
+
       <Button
         preset="default"
         text="Create an account"
@@ -92,6 +96,7 @@ export const LoginScreen: FC<LoginScreenProps> = ({ navigation }) => {
 }
 
 const $gap: ViewStyle = { marginBottom: 16 }
+const $errorText: TextStyle = { flexShrink: 1 }
 const $errorPill: ViewStyle = {
   flexDirection: "row",
   alignItems: "center",

@@ -5,16 +5,16 @@ import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs"
 import { EmptyState } from "@/components/EmptyState"
 import { Screen } from "@/components/Screen"
 import { SectionHeader } from "@/components/SectionHeader"
-import { Skeleton } from "@/components/Skeleton"
+import { TaskListSkeleton } from "@/components/Skeleton"
 import { TaskRow } from "@/components/TaskRow"
 import { useOrg } from "@/context/OrgContext"
 import type { HomeStackScreenProps, MainTabParamList } from "@/navigators/navigationTypes"
 import { api } from "@/services/api"
 import type { Task } from "@/services/api/types"
-import { useAppTheme } from "@/theme/context"
+import { queryKeys } from "@/services/query"
 import { openEntity } from "@/utils/openEntity"
 import { prettyLabel, STATUS_OPTIONS } from "@/utils/taskOptions"
-import { useCachedList } from "@/utils/useCachedList"
+import { useListQuery } from "@/utils/useListQuery"
 
 const ORDER = ["in_progress", "in_review", "todo", "backlog", "done", "cancelled"]
 
@@ -24,15 +24,12 @@ export const ProjectDetailScreen: FC<HomeStackScreenProps<"ProjectDetail">> = ({
 }) => {
   const { projectId } = route.params
   const { activeOrg } = useOrg()
-  const {
-    theme: { spacing },
-  } = useAppTheme()
   const fetcher = useCallback(
     () => (activeOrg ? api.listProjectTasks(activeOrg.id, projectId) : Promise.resolve<Task[]>([])),
     [activeOrg, projectId],
   )
-  const { data, loading } = useCachedList<Task>(
-    activeOrg ? `ptasks:${activeOrg.id}:${projectId}` : null,
+  const { data, loading } = useListQuery<Task>(
+    activeOrg ? queryKeys.projectTasks(activeOrg.id, projectId) : null,
     fetcher,
   )
 
@@ -49,10 +46,8 @@ export const ProjectDetailScreen: FC<HomeStackScreenProps<"ProjectDetail">> = ({
 
   if (loading) {
     return (
-      <Screen preset="fixed" contentContainerStyle={{ padding: spacing.lg, gap: spacing.md }}>
-        {[0, 1, 2, 3].map((i) => (
-          <Skeleton key={i} height={44} />
-        ))}
+      <Screen preset="fixed">
+        <TaskListSkeleton rows={4} />
       </Screen>
     )
   }
@@ -65,10 +60,18 @@ export const ProjectDetailScreen: FC<HomeStackScreenProps<"ProjectDetail">> = ({
         stickySectionHeadersEnabled={false}
         contentContainerStyle={sections.length === 0 ? $flex : undefined}
         renderSectionHeader={({ section }) => (
-          <SectionHeader status={section.status} title={section.title} count={section.data.length} />
+          <SectionHeader
+            status={section.status}
+            title={section.title}
+            count={section.data.length}
+          />
         )}
         ListEmptyComponent={
-          <EmptyState icon="cube-outline" title="No tasks yet" caption="Tasks in this project will show up here." />
+          <EmptyState
+            icon="cube-outline"
+            title="No tasks yet"
+            caption="Tasks in this project will show up here."
+          />
         }
         renderItem={({ item }) => <TaskRow task={item} onPress={() => open(item)} />}
       />

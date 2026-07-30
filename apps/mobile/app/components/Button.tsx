@@ -1,5 +1,6 @@
 import { ComponentType } from "react"
 import {
+  ActivityIndicator,
   Pressable,
   PressableProps,
   PressableStateCallbackType,
@@ -11,10 +12,11 @@ import {
 import { useAppTheme } from "@/theme/context"
 import { $styles } from "@/theme/styles"
 import type { ThemedStyle, ThemedStyleArray } from "@/theme/types"
+import { hapticSelection } from "@/utils/haptics"
 
 import { Text, TextProps } from "./Text"
 
-type Presets = "default" | "filled" | "reversed"
+type Presets = "default" | "filled" | "reversed" | "destructive"
 
 export interface ButtonAccessoryProps {
   style: StyleProp<any>
@@ -83,6 +85,15 @@ export interface ButtonProps extends PressableProps {
    * An optional style override for the disabled state
    */
   disabledStyle?: StyleProp<ViewStyle>
+  /**
+   * Swaps the label for a spinner and blocks presses — for in-flight writes.
+   */
+  loading?: boolean
+  /**
+   * Fire a selection tick on press. On by default; turn it off for buttons that
+   * already trigger their own feedback.
+   */
+  haptic?: boolean
 }
 
 /**
@@ -114,10 +125,17 @@ export function Button(props: ButtonProps) {
     LeftAccessory,
     disabled,
     disabledStyle: $disabledViewStyleOverride,
+    loading,
+    haptic = true,
+    onPress,
     ...rest
   } = props
 
-  const { themed } = useAppTheme()
+  const {
+    themed,
+    theme: { colors },
+  } = useAppTheme()
+  const isDisabled = !!disabled || !!loading
 
   const preset: Presets = props.preset ?? "default"
   /**
@@ -129,8 +147,11 @@ export function Button(props: ButtonProps) {
     return [
       themed($viewPresets[preset]),
       $viewStyleOverride,
-      !!pressed && themed([$pressedViewPresets[preset], $pressedViewStyleOverride]),
-      !!disabled && $disabledViewStyleOverride,
+      !!pressed && [
+        $pressedScale,
+        themed([$pressedViewPresets[preset], $pressedViewStyleOverride]),
+      ],
+      isDisabled && $disabledViewStyleOverride,
     ]
   }
   /**
@@ -143,7 +164,7 @@ export function Button(props: ButtonProps) {
       themed($textPresets[preset]),
       $textStyleOverride,
       !!pressed && themed([$pressedTextPresets[preset], $pressedTextStyleOverride]),
-      !!disabled && $disabledTextStyleOverride,
+      isDisabled && $disabledTextStyleOverride,
     ]
   }
 
@@ -151,23 +172,38 @@ export function Button(props: ButtonProps) {
     <Pressable
       style={$viewStyle}
       accessibilityRole="button"
-      accessibilityState={{ disabled: !!disabled }}
+      accessibilityState={{ disabled: isDisabled, busy: !!loading }}
       {...rest}
-      disabled={disabled}
+      disabled={isDisabled}
+      onPress={(e) => {
+        if (haptic) hapticSelection()
+        onPress?.(e)
+      }}
     >
       {(state) => (
         <>
           {!!LeftAccessory && (
-            <LeftAccessory style={$leftAccessoryStyle} pressableState={state} disabled={disabled} />
+            <LeftAccessory
+              style={themed($leftAccessoryStyle)}
+              pressableState={state}
+              disabled={disabled}
+            />
           )}
 
-          <Text tx={tx} text={text} txOptions={txOptions} style={$textStyle(state)}>
-            {children}
-          </Text>
+          {loading ? (
+            <ActivityIndicator
+              size="small"
+              color={preset === "default" ? colors.text : colors.onTint}
+            />
+          ) : (
+            <Text tx={tx} text={text} txOptions={txOptions} style={$textStyle(state)}>
+              {children}
+            </Text>
+          )}
 
           {!!RightAccessory && (
             <RightAccessory
-              style={$rightAccessoryStyle}
+              style={themed($rightAccessoryStyle)}
               pressableState={state}
               disabled={disabled}
             />
@@ -222,22 +258,30 @@ const $viewPresets: Record<Presets, ThemedStyleArray<ViewStyle>> = {
   filled: [$styles.row, $baseViewStyle, ({ colors }) => ({ backgroundColor: colors.tint })],
   // high-contrast foreground button
   reversed: [$styles.row, $baseViewStyle, ({ colors }) => ({ backgroundColor: colors.primary })],
+  // irreversible actions — delete, decline, sign out
+  destructive: [$styles.row, $baseViewStyle, ({ colors }) => ({ backgroundColor: colors.error })],
 }
 
 const $textPresets: Record<Presets, ThemedStyleArray<TextStyle>> = {
   default: [$baseTextStyle, ({ colors }) => ({ color: colors.text })],
   filled: [$baseTextStyle, ({ colors }) => ({ color: colors.onTint })],
   reversed: [$baseTextStyle, ({ colors }) => ({ color: colors.onPrimary })],
+  destructive: [$baseTextStyle, ({ colors }) => ({ color: colors.onError })],
 }
+
+// Every preset also shrinks a touch on press — the tactile bit of B13.
+const $pressedScale: ViewStyle = { transform: [{ scale: 0.98 }] }
 
 const $pressedViewPresets: Record<Presets, ThemedStyle<ViewStyle>> = {
   default: ({ colors }) => ({ backgroundColor: colors.muted }),
   filled: () => ({ opacity: 0.9 }),
   reversed: () => ({ opacity: 0.9 }),
+  destructive: () => ({ opacity: 0.9 }),
 }
 
 const $pressedTextPresets: Record<Presets, ThemedStyle<TextStyle>> = {
   default: () => ({ opacity: 0.9 }),
   filled: () => ({ opacity: 1 }),
   reversed: () => ({ opacity: 1 }),
+  destructive: () => ({ opacity: 1 }),
 }

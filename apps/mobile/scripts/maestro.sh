@@ -15,8 +15,23 @@
 # Env overrides:
 #   IOS_DEVICE      iOS simulator UDID (default: booted iPhone 17 Pro)
 #   ANDROID_DEVICE  adb device id      (default: emulator-5554)
+#   JAVA_HOME       JDK for Maestro    (default: whatever this host has)
 #
 set -euo pipefail
+
+# Maestro runs on the JVM. macOS ships no JRE, so fall back to a Homebrew JDK
+# instead of failing with "Unable to locate a Java Runtime".
+if [ -z "${JAVA_HOME:-}" ]; then
+  JAVA_HOME="$(/usr/libexec/java_home 2>/dev/null || true)"
+  if [ -z "$JAVA_HOME" ]; then
+    for jdk in /opt/homebrew/opt/openjdk /opt/homebrew/opt/openjdk@17; do
+      [ -x "$jdk/libexec/openjdk.jdk/Contents/Home/bin/java" ] || continue
+      JAVA_HOME="$jdk/libexec/openjdk.jdk/Contents/Home"
+      break
+    done
+  fi
+  [ -n "$JAVA_HOME" ] && export JAVA_HOME
+fi
 
 MAESTRO_BIN="${MAESTRO_BIN:-$HOME/.maestro/bin/maestro}"
 ADB="${ADB:-$HOME/Library/Android/sdk/platform-tools/adb}"
@@ -38,12 +53,13 @@ case "$cmd" in
     flow="$1"; shift || true
     [ -z "${IOS_DEVICE:-}" ] && { echo "No booted iOS simulator. Boot one first."; exit 1; }
     echo "▶ iOS  ($IOS_DEVICE) :: $flow"
-    cd "$ROOT" && "$MAESTRO_BIN" --device "$IOS_DEVICE" test "$flow" "$@"
+    # Extra args (e.g. -e KEY=value) must precede the flow file.
+    cd "$ROOT" && "$MAESTRO_BIN" --device "$IOS_DEVICE" test "$@" "$flow"
     ;;
   android)
     flow="$1"; shift || true
     echo "▶ Android ($ANDROID_DEVICE) :: $flow"
-    cd "$ROOT" && "$MAESTRO_BIN" --device "$ANDROID_DEVICE" test "$flow" "$@"
+    cd "$ROOT" && "$MAESTRO_BIN" --device "$ANDROID_DEVICE" test "$@" "$flow"
     ;;
   *)
     echo "usage: scripts/maestro.sh {ios|android|devices} <flow.yaml> [args]"

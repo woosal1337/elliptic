@@ -7,6 +7,18 @@ appId: com.companyos
 ---
 - launchApp
 - waitForAnimationToEnd
+# Dismiss first-launch overlays if present (dev-client onboarding, save-password).
+- runFlow:
+    when:
+      visible: "Continue"
+    commands:
+      - tapOn: "Continue"
+- runFlow:
+    when:
+      visible: "Not Now"
+    commands:
+      - tapOn: "Not Now"
+- waitForAnimationToEnd
 - takeScreenshot: .maestro/output/companyos/00-home
 - tapOn:
     text: "Tasks, tab.*"

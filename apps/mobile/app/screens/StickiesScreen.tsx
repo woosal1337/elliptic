@@ -1,22 +1,24 @@
-import { FC, useCallback, useState } from "react"
+import { FC, useCallback, useLayoutEffect, useState } from "react"
 import { FlatList, Pressable, RefreshControl, View, ViewStyle } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 
 import { Button } from "@/components/Button"
-import { Fab } from "@/components/Fab"
+import { EmptyState } from "@/components/EmptyState"
 import { Screen } from "@/components/Screen"
 import { Sheet } from "@/components/Sheet"
-import { Skeleton } from "@/components/Skeleton"
+import { ListSkeleton } from "@/components/Skeleton"
 import { Text } from "@/components/Text"
 import { TextField } from "@/components/TextField"
 import { useOrg } from "@/context/OrgContext"
+import { TAB_BAR_CLEARANCE } from "@/navigators/FloatingTabBar"
 import type { ProfileStackScreenProps } from "@/navigators/navigationTypes"
 import { api } from "@/services/api"
 import type { Sticky } from "@/services/api/types"
+import { invalidate, queryKeys } from "@/services/query"
 import { useAppTheme } from "@/theme/context"
-import { useCachedList } from "@/utils/useCachedList"
+import { useListQuery } from "@/utils/useListQuery"
 
-export const StickiesScreen: FC<ProfileStackScreenProps<"Stickies">> = () => {
+export const StickiesScreen: FC<ProfileStackScreenProps<"Stickies">> = ({ navigation }) => {
   const { activeOrg } = useOrg()
   const {
     theme: { colors, spacing },
@@ -25,8 +27,8 @@ export const StickiesScreen: FC<ProfileStackScreenProps<"Stickies">> = () => {
     () => (activeOrg ? api.listStickies(activeOrg.id) : Promise.resolve<Sticky[]>([])),
     [activeOrg],
   )
-  const { data, loading, refreshing, refresh } = useCachedList<Sticky>(
-    activeOrg ? `stickies:${activeOrg.id}` : null,
+  const { data, loading, refreshing, refresh } = useListQuery<Sticky>(
+    activeOrg ? queryKeys.stickies(activeOrg.id) : null,
     fetcher,
   )
   const [editing, setEditing] = useState<Sticky | "new" | null>(null)
@@ -36,6 +38,25 @@ export const StickiesScreen: FC<ProfileStackScreenProps<"Stickies">> = () => {
     setText("")
     setEditing("new")
   }
+  // Stickies keeps the native stack header, so Create lives in headerRight —
+  // the same "create is always in the header" rule as the ScreenHeader screens.
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () =>
+        activeOrg ? (
+          <Pressable
+            testID="header-action-create"
+            accessibilityRole="button"
+            accessibilityLabel="New sticky"
+            hitSlop={8}
+            onPress={openNew}
+          >
+            <Ionicons name="add" size={24} color={colors.tint} />
+          </Pressable>
+        ) : null,
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [navigation, activeOrg, colors.tint])
   const openEdit = (s: Sticky) => {
     setText(s.content)
     setEditing(s)
@@ -48,21 +69,24 @@ export const StickiesScreen: FC<ProfileStackScreenProps<"Stickies">> = () => {
       await api.updateSticky(activeOrg.id, editing.id, text.trim())
     }
     setEditing(null)
-    refresh()
+    invalidate(activeOrg.id, "stickies")
   }
   const del = (s: Sticky) => {
-    if (activeOrg) void api.deleteSticky(activeOrg.id, s.id).then(refresh)
+    if (!activeOrg) return
+    void api.deleteSticky(activeOrg.id, s.id).then(() => invalidate(activeOrg.id, "stickies"))
   }
   const convert = (s: Sticky) => {
-    if (activeOrg) void api.convertSticky(activeOrg.id, s.id).then(refresh)
+    if (!activeOrg) return
+    void api.convertSticky(activeOrg.id, s.id).then(() => {
+      invalidate(activeOrg.id, "stickies")
+      invalidate(activeOrg.id, "tasks") // the converted sticky shows up as a task
+    })
   }
 
   if (loading) {
     return (
-      <Screen preset="fixed" contentContainerStyle={{ padding: spacing.lg, gap: spacing.md }}>
-        {[0, 1, 2].map((i) => (
-          <Skeleton key={i} height={72} />
-        ))}
+      <Screen preset="fixed">
+        <ListSkeleton rows={3} height={72} />
       </Screen>
     )
   }
@@ -72,14 +96,19 @@ export const StickiesScreen: FC<ProfileStackScreenProps<"Stickies">> = () => {
       <FlatList
         data={data}
         keyExtractor={(s) => s.id}
-        contentContainerStyle={{ padding: spacing.lg, gap: spacing.md }}
+        contentContainerStyle={[
+          { padding: spacing.lg, gap: spacing.md },
+          data.length === 0 ? $grow : $bottomClearance,
+        ]}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={colors.tint} />
         }
         ListEmptyComponent={
-          <View style={$empty}>
-            <Text text="No stickies yet." style={{ color: colors.textDim }} />
-          </View>
+          <EmptyState
+            icon="reader-outline"
+            title="No stickies yet"
+            caption="Jot a quick thought and convert it into a task later."
+          />
         }
         renderItem={({ item }) => (
           <Pressable onPress={() => openEdit(item)} style={[$card, { borderColor: colors.border }]}>
@@ -96,8 +125,6 @@ export const StickiesScreen: FC<ProfileStackScreenProps<"Stickies">> = () => {
           </Pressable>
         )}
       />
-
-      {activeOrg ? <Fab onPress={openNew} /> : null}
 
       <Sheet
         visible={editing !== null}
@@ -120,7 +147,9 @@ export const StickiesScreen: FC<ProfileStackScreenProps<"Stickies">> = () => {
 }
 
 const $flex: ViewStyle = { flex: 1 }
-const $empty: ViewStyle = { padding: 48, alignItems: "center" }
+const $grow: ViewStyle = { flexGrow: 1 }
+// Let the last card scroll clear of the floating tab bar and any toast.
+const $bottomClearance: ViewStyle = { paddingBottom: TAB_BAR_CLEARANCE }
 const $card: ViewStyle = { borderWidth: 1, borderRadius: 12, padding: 14, gap: 10 }
 const $actions: ViewStyle = { flexDirection: "row", justifyContent: "flex-end", gap: 16 }
 const $action: ViewStyle = { flexDirection: "row", alignItems: "center", gap: 4 }

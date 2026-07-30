@@ -5,17 +5,19 @@ import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs"
 
 import { OrgSwitcher } from "@/components/OrgSwitcher"
 import { Screen } from "@/components/Screen"
-import { Skeleton } from "@/components/Skeleton"
+import { TaskListSkeleton } from "@/components/Skeleton"
 import { TaskRow } from "@/components/TaskRow"
 import { Text } from "@/components/Text"
 import { useAuth } from "@/context/AuthContext"
 import { useOrg } from "@/context/OrgContext"
+import { TAB_BAR_CLEARANCE } from "@/navigators/FloatingTabBar"
 import type { HomeStackScreenProps, MainTabParamList } from "@/navigators/navigationTypes"
 import { api } from "@/services/api"
 import type { Task } from "@/services/api/types"
+import { queryKeys } from "@/services/query"
 import { useAppTheme } from "@/theme/context"
 import { openEntity } from "@/utils/openEntity"
-import { useCachedList } from "@/utils/useCachedList"
+import { useListQuery } from "@/utils/useListQuery"
 import { useOfflineQueue } from "@/utils/useOfflineQueue"
 import { useUnreadCount } from "@/utils/useUnreadCount"
 
@@ -31,7 +33,10 @@ const QuickLink: FC<{
   return (
     <Pressable
       onPress={onPress}
-      style={[$quick, { borderColor: colors.border, borderRadius: radius.lg, backgroundColor: colors.surface }]}
+      style={[
+        $quick,
+        { borderColor: colors.border, borderRadius: radius.lg, backgroundColor: colors.surface },
+      ]}
     >
       <Ionicons name={icon} size={22} color={colors.tint} />
       <Text text={label} size="xs" weight="medium" />
@@ -59,7 +64,9 @@ export const HomeScreen: FC<HomeStackScreenProps<"HomeMain">> = ({ navigation })
     loading,
     refreshing,
     refresh,
-  } = useCachedList<Task>(activeOrg ? `home:${activeOrg.id}` : null, fetcher)
+  } = useListQuery<Task>(activeOrg ? queryKeys.tasks(activeOrg.id, "assigned") : null, fetcher)
+  // Home surfaces actionable work only; closed tasks live in the Tasks tab.
+  const activeTasks = tasks.filter((t) => t.status !== "done" && t.status !== "cancelled")
   const unread = useUnreadCount(activeOrg?.id)
   const pending = useOfflineQueue()
   const [triage, setTriage] = useState(0)
@@ -73,7 +80,7 @@ export const HomeScreen: FC<HomeStackScreenProps<"HomeMain">> = ({ navigation })
   return (
     <Screen
       preset="scroll"
-      contentContainerStyle={{ padding: spacing.lg }}
+      contentContainerStyle={{ padding: spacing.lg, paddingBottom: TAB_BAR_CLEARANCE }}
       safeAreaEdges={["top"]}
       ScrollViewProps={{
         refreshControl: (
@@ -103,7 +110,12 @@ export const HomeScreen: FC<HomeStackScreenProps<"HomeMain">> = ({ navigation })
         onPress={() => navigation.navigate("Search")}
         style={[
           $search,
-          { borderColor: colors.inputBorder, backgroundColor: colors.surface, borderRadius: radius.lg, marginTop: spacing.md },
+          {
+            borderColor: colors.inputBorder,
+            backgroundColor: colors.surface,
+            borderRadius: radius.lg,
+            marginTop: spacing.md,
+          },
         ]}
       >
         <Ionicons name="search" size={18} color={colors.textDim} />
@@ -111,8 +123,16 @@ export const HomeScreen: FC<HomeStackScreenProps<"HomeMain">> = ({ navigation })
       </Pressable>
 
       <View style={[$quickRow, { marginTop: spacing.md }]}>
-        <QuickLink icon="folder-outline" label="Projects" onPress={() => navigation.navigate("Projects")} />
-        <QuickLink icon="sparkles-outline" label="Assistant" onPress={() => navigation.navigate("Chat")} />
+        <QuickLink
+          icon="folder-outline"
+          label="Projects"
+          onPress={() => navigation.navigate("Projects")}
+        />
+        <QuickLink
+          icon="sparkles-outline"
+          label="Assistant"
+          onPress={() => navigation.navigate("Chat")}
+        />
         <QuickLink
           icon="file-tray-outline"
           label="Triage"
@@ -127,19 +147,22 @@ export const HomeScreen: FC<HomeStackScreenProps<"HomeMain">> = ({ navigation })
         />
       </View>
 
-      <Text preset="subheading" text="Your tasks" style={{ marginTop: spacing.xl, marginBottom: spacing.xs }} />
+      <Text
+        preset="subheading"
+        text="Your tasks"
+        style={{ marginTop: spacing.xl, marginBottom: spacing.xs }}
+      />
       {loading ? (
-        <View style={{ gap: spacing.sm, marginTop: spacing.sm }}>
-          {[0, 1, 2].map((i) => (
-            <Skeleton key={i} height={44} />
-          ))}
-        </View>
-      ) : tasks.length === 0 ? (
-        <Text text="Nothing assigned to you." style={{ color: colors.textDim, marginTop: spacing.sm }} />
+        <TaskListSkeleton rows={3} padded={false} />
+      ) : activeTasks.length === 0 ? (
+        <Text
+          text="Nothing assigned to you."
+          style={{ color: colors.textDim, marginTop: spacing.sm }}
+        />
       ) : (
         // Full-bleed the rows so TaskRow's own padding lines up with the screen edge.
         <View style={{ marginHorizontal: -spacing.lg }}>
-          {tasks.slice(0, 8).map((t) => (
+          {activeTasks.slice(0, 8).map((t) => (
             <TaskRow key={t.id} task={t} onPress={() => openTask(t)} />
           ))}
         </View>

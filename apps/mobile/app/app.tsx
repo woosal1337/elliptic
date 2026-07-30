@@ -21,6 +21,8 @@ import "./utils/gestureHandler"
 import { useEffect, useState } from "react"
 import { useFonts } from "expo-font"
 import * as Linking from "expo-linking"
+import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client"
+import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { KeyboardProvider } from "react-native-keyboard-controller"
 import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context"
 
@@ -33,6 +35,7 @@ import { OrgProvider } from "./context/OrgContext"
 import { initI18n } from "./i18n"
 import { AppNavigator } from "./navigators/AppNavigator"
 import { useNavigationPersistence } from "./navigators/navigationUtilities"
+import { persistOptions, queryClient } from "./services/query"
 import { ThemeProvider } from "./theme/context"
 import { customFontsToLoad } from "./theme/typography"
 import { loadDateFnsLocale } from "./utils/formatDate"
@@ -95,25 +98,31 @@ export function App() {
 
   // otherwise, we're ready to render the app
   return (
-    <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-      <KeyboardProvider>
-        <AuthProvider>
-          <ThemeProvider>
-            <ToastProvider>
-              <OrgProvider>
-                <AppNavigator
-                  linking={linking}
-                  initialState={initialNavigationState}
-                  onStateChange={onNavigationStateChange}
-                />
-                <PushRegistrar />
-                <OfflineSync />
-              </OrgProvider>
-              <PrivacyOverlay />
-            </ToastProvider>
-          </ThemeProvider>
-        </AuthProvider>
-      </KeyboardProvider>
-    </SafeAreaProvider>
+    <GestureHandlerRootView style={$root}>
+      <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+        <KeyboardProvider>
+          <AuthProvider>
+            <ThemeProvider>
+              <ToastProvider>
+                <PersistQueryClientProvider client={queryClient} persistOptions={persistOptions}>
+                  <OrgProvider>
+                    <AppNavigator
+                      linking={linking}
+                      initialState={initialNavigationState}
+                      onStateChange={onNavigationStateChange}
+                    />
+                    <PushRegistrar />
+                    <OfflineSync />
+                  </OrgProvider>
+                </PersistQueryClientProvider>
+                <PrivacyOverlay />
+              </ToastProvider>
+            </ThemeProvider>
+          </AuthProvider>
+        </KeyboardProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   )
 }
+
+const $root = { flex: 1 }

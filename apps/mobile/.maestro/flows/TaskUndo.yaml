@@ -1,0 +1,61 @@
+#flow: TaskUndo
+#intent: toast behaviour on task writes — undo restores the previous status, and a
+#        second write queues behind the first instead of replacing it.
+#        Every write it makes is undone, so the QA fixture ends where it started.
+appId: com.companyos
+---
+- launchApp
+- waitForAnimationToEnd
+- runFlow:
+    when:
+      visible: "Continue"
+    commands:
+      - tapOn: "Continue"
+- tapOn:
+    text: "Tasks, tab.*"
+- waitForAnimationToEnd
+
+# --- undo restores the previous status -------------------------------------
+- swipe:
+    from:
+      text: ".*Day-group the inbox feed.*"
+    direction: RIGHT
+- takeScreenshot: .maestro/output/companyos/05-swipe-reveal
+- tapOn:
+    id: "swipe-action-done"
+- waitForAnimationToEnd
+- assertVisible:
+    id: "toast"
+- takeScreenshot: .maestro/output/companyos/07-toast-undo
+- tapOn:
+    id: "toast-action"
+- extendedWaitUntil:
+    notVisible:
+      id: "toast"
+    timeout: 8000
+- takeScreenshot: .maestro/output/companyos/08-after-undo
+
+# --- two writes in a row: the second toast waits its turn -------------------
+- swipe:
+    from:
+      text: ".*Streaming assistant responses.*"
+    direction: RIGHT
+- tapOn:
+    id: "swipe-action-done"
+- swipe:
+    from:
+      text: ".*Secure token storage via Keychain.*"
+    direction: RIGHT
+- tapOn:
+    id: "swipe-action-done"
+- assertVisible: "MOB-7 .* Done"
+- takeScreenshot: .maestro/output/companyos/09-toast-queue
+- tapOn:
+    id: "toast-action"
+- assertVisible: "MOB-6 .* Done"
+- tapOn:
+    id: "toast-action"
+- extendedWaitUntil:
+    notVisible:
+      id: "toast"
+    timeout: 8000

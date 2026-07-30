@@ -25,6 +25,11 @@ jest.doMock("react-native", () => {
   )
 })
 
+// theme/timing.ts imports Easing at module scope; the native worklets runtime
+// doesn't exist under Jest, so both packages need their shipped mocks.
+jest.mock("react-native-worklets", () => require("react-native-worklets/src/mock"))
+jest.mock("react-native-reanimated", () => require("react-native-reanimated/mock"))
+
 jest.mock("i18next", () => ({
   currentLocale: "en",
   t: (key: string, params: Record<string, string>) => {

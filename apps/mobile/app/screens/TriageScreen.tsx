@@ -3,56 +3,70 @@ import { FlatList, View, ViewStyle } from "react-native"
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs"
 
 import { Button } from "@/components/Button"
+import { EmptyState } from "@/components/EmptyState"
 import { Screen } from "@/components/Screen"
 import { Sheet } from "@/components/Sheet"
-import { Skeleton } from "@/components/Skeleton"
+import { TaskListSkeleton } from "@/components/Skeleton"
 import { SwipeableRow } from "@/components/SwipeableRow"
 import { TaskRow } from "@/components/TaskRow"
-import { Text } from "@/components/Text"
 import { TextField } from "@/components/TextField"
+import { useToast } from "@/components/Toast"
 import { useOrg } from "@/context/OrgContext"
+import { TAB_BAR_CLEARANCE } from "@/navigators/FloatingTabBar"
 import type { InboxStackScreenProps, MainTabParamList } from "@/navigators/navigationTypes"
 import { api } from "@/services/api"
 import type { Task } from "@/services/api/types"
+import { invalidate, queryKeys } from "@/services/query"
 import { useAppTheme } from "@/theme/context"
-import { hapticSuccess } from "@/utils/haptics"
 import { openEntity } from "@/utils/openEntity"
-import { useCachedList } from "@/utils/useCachedList"
+import { useListQuery } from "@/utils/useListQuery"
 
 export const TriageScreen: FC<InboxStackScreenProps<"Triage">> = ({ navigation }) => {
   const { activeOrg } = useOrg()
   const {
     theme: { colors, spacing },
   } = useAppTheme()
-  const cacheKey = activeOrg ? `triage:${activeOrg.id}` : null
+  const cacheKey = activeOrg ? queryKeys.triage(activeOrg.id) : null
   const fetcher = useCallback(
     () => (activeOrg ? api.listTriage(activeOrg.id) : Promise.resolve<Task[]>([])),
     [activeOrg],
   )
-  const { data: items, loading, refreshing, refresh } = useCachedList<Task>(cacheKey, fetcher)
+  const { data: items, loading, refreshing, refresh } = useListQuery<Task>(cacheKey, fetcher)
+  const toast = useToast()
   const [declineFor, setDeclineFor] = useState<Task | null>(null)
   const [reason, setReason] = useState("")
 
   const accept = (t: Task) => {
     if (activeOrg) {
-      hapticSuccess()
-      void api.acceptTriage(activeOrg.id, t.id).then(refresh)
+      void api.acceptTriage(activeOrg.id, t.id).then((ok) => {
+        refresh()
+        invalidate(activeOrg.id, "tasks") // accepted work lands in assigned lists
+        if (ok) toast(`${t.identifier} accepted`, { variant: "success" })
+        else toast("Couldn't accept that task", { variant: "error" })
+      })
     }
   }
   const snooze = (t: Task) => {
     if (!activeOrg) return
     const until = new Date()
     until.setDate(until.getDate() + 7)
-    void api.snoozeTriage(activeOrg.id, t.id, until.toISOString()).then(refresh)
+    void api.snoozeTriage(activeOrg.id, t.id, until.toISOString()).then((ok) => {
+      refresh()
+      if (ok) toast("Snoozed for a week", { variant: "success" })
+      else toast("Couldn't snooze that task", { variant: "error" })
+    })
   }
   const confirmDecline = () => {
     if (!activeOrg || !declineFor) return
+    const identifier = declineFor.identifier
     void api
       .declineTriage(activeOrg.id, declineFor.id, reason.trim() || "Declined on mobile")
-      .then(() => {
+      .then((ok) => {
         setDeclineFor(null)
         setReason("")
         refresh()
+        if (ok) toast(`${identifier} declined`, { variant: "success" })
+        else toast("Couldn't decline that task", { variant: "error" })
       })
   }
   const openTask = (t: Task) => {
@@ -63,29 +77,20 @@ export const TriageScreen: FC<InboxStackScreenProps<"Triage">> = ({ navigation }
   return (
     <Screen preset="fixed" contentContainerStyle={[$flex, { paddingTop: spacing.sm }]}>
       {loading ? (
-        <View style={{ paddingHorizontal: spacing.lg, gap: spacing.md }}>
-          {[0, 1, 2].map((i) => (
-            <Skeleton key={i} height={56} />
-          ))}
-        </View>
+        <TaskListSkeleton rows={3} />
       ) : (
         <FlatList
           data={items}
           keyExtractor={(t) => t.id}
           refreshing={refreshing}
           onRefresh={refresh}
+          contentContainerStyle={items.length === 0 ? $grow : $bottomClearance}
           ListEmptyComponent={
-            <View style={$empty}>
-              <Text
-                preset="subheading"
-                text="Nothing to triage"
-                style={{ color: colors.text, marginBottom: 4 }}
-              />
-              <Text
-                text="Incoming work will land here for you to accept."
-                style={{ color: colors.textDim, textAlign: "center" }}
-              />
-            </View>
+            <EmptyState
+              icon="albums-outline"
+              title="Nothing to triage"
+              caption="Incoming work will land here for you to accept."
+            />
           }
           renderItem={({ item }) => (
             <SwipeableRow
@@ -137,4 +142,5 @@ export const TriageScreen: FC<InboxStackScreenProps<"Triage">> = ({ navigation }
 }
 
 const $flex: ViewStyle = { flex: 1 }
-const $empty: ViewStyle = { paddingTop: 80, paddingHorizontal: 48, alignItems: "center" }
+const $bottomClearance: ViewStyle = { paddingBottom: TAB_BAR_CLEARANCE }
+const $grow: ViewStyle = { flexGrow: 1 }

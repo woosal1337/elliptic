@@ -1,9 +1,10 @@
 import { FC, useState } from "react"
-import { View, ViewStyle } from "react-native"
+import { TextStyle, View, ViewStyle } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 
 import { Button } from "@/components/Button"
 import { Screen } from "@/components/Screen"
+import { SocialSignIn } from "@/components/SocialSignIn"
 import { Text } from "@/components/Text"
 import { TextField } from "@/components/TextField"
 import { useAuth } from "@/context/AuthContext"
@@ -60,11 +61,15 @@ export const RegisterScreen: FC<AppStackScreenProps<"Register">> = ({ navigation
       />
 
       {error ? (
-        <View style={[$errorPill, { backgroundColor: colors.errorBackground, borderRadius: radius.md }]}>
+        <View
+          style={[$errorPill, { backgroundColor: colors.errorBackground, borderRadius: radius.md }]}
+        >
           <Ionicons name="alert-circle" size={16} color={colors.error} />
-          <Text text={error} size="xs" style={{ color: colors.error, flexShrink: 1 }} />
+          <Text text={error} size="xs" style={[$errorText, { color: colors.error }]} />
         </View>
       ) : null}
+
+      <SocialSignIn />
 
       <Button
         preset="filled"
@@ -84,6 +89,7 @@ export const RegisterScreen: FC<AppStackScreenProps<"Register">> = ({ navigation
 }
 
 const $gap: ViewStyle = { marginBottom: 16 }
+const $errorText: TextStyle = { flexShrink: 1 }
 const $errorPill: ViewStyle = {
   flexDirection: "row",
   alignItems: "center",

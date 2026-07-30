@@ -4,6 +4,7 @@ import { View, ViewStyle } from "react-native"
 import { Button } from "@/components/Button"
 import { DatePickerSheet } from "@/components/DatePickerSheet"
 import { FieldRow } from "@/components/FieldRow"
+import { LabelPickerSheet } from "@/components/LabelPickerSheet"
 import { Option, OptionSheet } from "@/components/OptionSheet"
 import { Sheet } from "@/components/Sheet"
 import { Text } from "@/components/Text"
@@ -11,6 +12,7 @@ import { TextField } from "@/components/TextField"
 import { useAuth } from "@/context/AuthContext"
 import { api } from "@/services/api"
 import type { Member, Project } from "@/services/api/types"
+import { invalidate } from "@/services/query"
 import { useAppTheme } from "@/theme/context"
 import {
   cap,
@@ -27,7 +29,7 @@ export const CreateTaskSheet: FC<{
   orgId: string
   visible: boolean
   onClose: () => void
-  onCreated: () => void
+  onCreated?: () => void
 }> = ({ orgId, visible, onClose, onCreated }) => {
   const { user } = useAuth()
   const {
@@ -46,6 +48,8 @@ export const CreateTaskSheet: FC<{
   const [error, setError] = useState<string | null>(null)
   const [picker, setPicker] = useState<Picker | null>(null)
   const [showDatePicker, setShowDatePicker] = useState(false)
+  const [labelIds, setLabelIds] = useState<string[]>([])
+  const [showLabels, setShowLabels] = useState(false)
 
   useEffect(() => {
     if (!visible) return
@@ -73,6 +77,7 @@ export const CreateTaskSheet: FC<{
       priority,
       assignee_id: assigneeId,
       due_date: due || null,
+      label_ids: labelIds,
     })
     setSaving(false)
     if (task) {
@@ -81,7 +86,9 @@ export const CreateTaskSheet: FC<{
       setStatus("backlog")
       setPriority("none")
       setDue("")
-      onCreated()
+      setLabelIds([])
+      invalidate(orgId, "tasks")
+      onCreated?.()
       onClose()
     } else {
       setError("Couldn't create the task. Try again.")
@@ -122,6 +129,12 @@ export const CreateTaskSheet: FC<{
           <FieldRow label="Priority" value={cap(priority)} onPress={() => setPicker("priority")} />
           <FieldRow label="Assignee" value={assigneeName} onPress={() => setPicker("assignee")} />
           <FieldRow label="Due" value={dueLabel} onPress={() => setPicker("due")} />
+          <FieldRow
+            label="Labels"
+            value={labelIds.length ? `${labelIds.length} selected` : "None"}
+            muted={labelIds.length === 0}
+            onPress={() => setShowLabels(true)}
+          />
           {error ? (
             <Text text={error} size="xs" style={{ color: colors.error, marginTop: spacing.xs }} />
           ) : null}
@@ -174,6 +187,13 @@ export const CreateTaskSheet: FC<{
         options={DUE_OPTIONS}
         selected={due}
         onSelect={(v) => (v === CUSTOM_DUE ? setShowDatePicker(true) : setDue(v))}
+      />
+      <LabelPickerSheet
+        visible={showLabels}
+        onClose={() => setShowLabels(false)}
+        orgId={orgId}
+        value={labelIds}
+        onChange={setLabelIds}
       />
       <DatePickerSheet
         visible={showDatePicker}

@@ -1,13 +1,31 @@
 #flow: Login
-#intent:
-# Open up our app and use the default credentials to login
-# and navigate to the demo screen
-
-appId: ${MAESTRO_APP_ID} # the app id of the app we want to test
-# You can find the appId of an Ignite app in the `app.json` file
-# as the "package" under the "android" section and "bundleIdentifier" under the "ios" section
-onFlowStart:
-  - runFlow: ../shared/_OnFlowStart.yaml
+#intent: sign into CompanyOS with credentials injected via env (never hardcoded).
+# Run: MAESTRO_EMAIL=... MAESTRO_PASSWORD=... scripts/maestro.sh ios .maestro/flows/Login.yaml
+appId: com.companyos
 ---
-- runFlow: ../shared/_Login.yaml
-
+- launchApp
+- waitForAnimationToEnd
+# First launch of the Expo dev client shows a dev-menu onboarding sheet.
+- runFlow:
+    when:
+      visible: "Continue"
+    commands:
+      - tapOn: "Continue"
+- assertVisible: "Sign in to your workspace"
+- tapOn:
+    text: "Email, you@company.com"
+- inputText: ${MAESTRO_EMAIL}
+- tapOn:
+    text: "Password, .*"
+- inputText: ${MAESTRO_PASSWORD}
+# hideKeyboard is flaky on iOS; the button is reachable with the keyboard up.
+- tapOn: "Sign in"
+- extendedWaitUntil:
+    visible: "Home, tab.*"
+    timeout: 15000
+# iOS may offer to save the typed password; decline so runs stay deterministic.
+- runFlow:
+    when:
+      visible: "Not Now"
+    commands:
+      - tapOn: "Not Now"

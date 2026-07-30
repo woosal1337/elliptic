@@ -12,7 +12,9 @@ import { useMMKVString } from "react-native-mmkv"
 
 import { api } from "@/services/api"
 import type { User } from "@/services/api/types"
-import { loadString, saveString } from "@/utils/storage"
+import { currentTokens, hydrateTokens, setTokens } from "@/services/secureTokens"
+import { signInWithProvider, type SocialProvider } from "@/services/socialAuth"
+import { loadString } from "@/utils/storage"
 
 export type AuthContextType = {
   isAuthenticated: boolean
@@ -21,38 +23,78 @@ export type AuthContextType = {
   error?: string
   login: (email: string, password: string) => Promise<boolean>
   register: (email: string, password: string, fullName: string) => Promise<boolean>
+  /** Google/GitHub sign-in through the in-app browser (COS-209). */
+  loginWithProvider: (provider: SocialProvider) => Promise<boolean>
   logout: () => void
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null)
 
+/** Read the persisted profile outside React (MMKV is synchronous). */
+const storedUser = () => loadString("auth.user")
+
 export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
-  const [accessToken, setAccessToken] = useMMKVString("auth.accessToken")
-  const [, setRefreshToken] = useMMKVString("auth.refreshToken")
+  // Tokens live in the Keychain (E3); the profile is not secret and stays in MMKV.
+  const [accessToken, setAccessToken] = useState<string | undefined>(undefined)
+  const [hydrated, setHydrated] = useState(false)
   const [userJson, setUserJson] = useMMKVString("auth.user")
   const [signingIn, setSigningIn] = useState(false)
   const [error, setError] = useState<string | undefined>(undefined)
+
+  // Read the Keychain once, before anything renders, so a signed-in user never
+  // sees a flash of the login screen on cold start.
+  useEffect(() => {
+    void hydrateTokens().then((tokens) => {
+      // The profile is written synchronously (MMKV) and the tokens are not, so
+      // tokens without a profile mean a sign-out that was killed mid-write —
+      // finish it rather than resurrecting the session.
+      if (tokens.access && !storedUser()) {
+        void setTokens({})
+        setAccessToken(undefined)
+      } else {
+        setAccessToken(tokens.access)
+      }
+      setHydrated(true)
+    })
+  }, [])
 
   useEffect(() => {
     api.setToken(accessToken)
   }, [accessToken])
 
-  // Let the API client self-refresh on 401 (read live from storage to avoid stale closures).
+  const clearSession = useCallback(() => {
+    api.setToken(undefined)
+    // Drop the profile first: it is the synchronous marker that says signed out.
+    setUserJson(undefined)
+    setAccessToken(undefined)
+    void setTokens({})
+  }, [setUserJson])
+
+  // Let the API client self-refresh on 401. It calls these synchronously, which
+  // is why secureTokens keeps an in-memory mirror.
   useEffect(() => {
     api.setAuthHandlers({
-      getRefreshToken: () => loadString("auth.refreshToken") ?? undefined,
+      getRefreshToken: () => currentTokens().refresh,
       onRefreshed: (tokens) => {
-        saveString("auth.accessToken", tokens.access_token)
-        if (tokens.refresh_token) saveString("auth.refreshToken", tokens.refresh_token)
+        setTokens({
+          access: tokens.access_token,
+          refresh: tokens.refresh_token ?? currentTokens().refresh,
+        })
+        setAccessToken(tokens.access_token)
       },
-      onAuthFailure: () => {
-        api.setToken(undefined)
-        setAccessToken(undefined)
-        setRefreshToken(undefined)
-        setUserJson(undefined)
-      },
+      onAuthFailure: clearSession,
     })
-  }, [setAccessToken, setRefreshToken, setUserJson])
+  }, [clearSession])
+
+  const startSession = useCallback(
+    (user: User, tokens: { access_token: string; refresh_token: string }) => {
+      api.setToken(tokens.access_token)
+      void setTokens({ access: tokens.access_token, refresh: tokens.refresh_token })
+      setAccessToken(tokens.access_token)
+      setUserJson(JSON.stringify(user))
+    },
+    [setUserJson],
+  )
 
   const login = useCallback(
     async (email: string, password: string): Promise<boolean> => {
@@ -64,13 +106,10 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
         setError(res.error)
         return false
       }
-      api.setToken(res.tokens.access_token)
-      setAccessToken(res.tokens.access_token)
-      setRefreshToken(res.tokens.refresh_token)
-      setUserJson(JSON.stringify(res.user))
+      startSession(res.user, res.tokens)
       return true
     },
-    [setAccessToken, setRefreshToken, setUserJson],
+    [startSession],
   )
 
   const register = useCallback(
@@ -91,12 +130,24 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     [login],
   )
 
-  const logout = useCallback(() => {
-    api.setToken(undefined)
-    setAccessToken(undefined)
-    setRefreshToken(undefined)
-    setUserJson(undefined)
-  }, [setAccessToken, setRefreshToken, setUserJson])
+  const loginWithProvider = useCallback(
+    async (provider: SocialProvider): Promise<boolean> => {
+      setSigningIn(true)
+      setError(undefined)
+      const res = await signInWithProvider(provider)
+      setSigningIn(false)
+      if ("cancelled" in res) return false
+      if ("error" in res) {
+        setError(res.error)
+        return false
+      }
+      startSession(res.user, res.tokens)
+      return true
+    },
+    [startSession],
+  )
+
+  const logout = useCallback(() => clearSession(), [clearSession])
 
   const user = useMemo<User | undefined>(
     () => (userJson ? (JSON.parse(userJson) as User) : undefined),
@@ -110,8 +161,12 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     error,
     login,
     register,
+    loginWithProvider,
     logout,
   }
+
+  // Hydration is a Keychain read (single-digit ms); the app's own splash covers it.
+  if (!hydrated) return null
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

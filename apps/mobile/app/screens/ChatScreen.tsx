@@ -1,14 +1,9 @@
 import { FC, useEffect, useLayoutEffect, useRef, useState } from "react"
-import {
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  ScrollView,
-  View,
-  ViewStyle,
-} from "react-native"
+import { Pressable, ScrollView, View, ViewStyle } from "react-native"
 import * as ImagePicker from "expo-image-picker"
 import { Ionicons } from "@expo/vector-icons"
+import { KeyboardStickyView } from "react-native-keyboard-controller"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { Option, OptionSheet } from "@/components/OptionSheet"
 import { Screen } from "@/components/Screen"
@@ -16,6 +11,7 @@ import { Text } from "@/components/Text"
 import { TextField } from "@/components/TextField"
 import { useOrg } from "@/context/OrgContext"
 import type { HomeStackScreenProps } from "@/navigators/navigationTypes"
+import { useHideTabBar } from "@/navigators/useHideTabBar"
 import { api } from "@/services/api"
 import type { ChatMessage } from "@/services/api/types"
 import { uploadAsset } from "@/services/upload"
@@ -27,6 +23,9 @@ export const ChatScreen: FC<HomeStackScreenProps<"Chat">> = ({ navigation }) => 
   const {
     theme: { colors, spacing },
   } = useAppTheme()
+  const insets = useSafeAreaInsets()
+  // The message input owns the bottom of the window here.
+  useHideTabBar()
   const [convId, setConvId] = useState<string | null>(null)
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [input, setInput] = useState("")
@@ -133,8 +132,13 @@ export const ChatScreen: FC<HomeStackScreenProps<"Chat">> = ({ navigation }) => 
   }
 
   return (
-    <KeyboardAvoidingView style={$flex} behavior={Platform.OS === "ios" ? "padding" : undefined}>
-      <Screen preset="fixed" contentContainerStyle={$flex}>
+    <>
+      <Screen
+        preset="fixed"
+        contentContainerStyle={$flex}
+        // KeyboardStickyView lifts the input; Screen's avoider would double it.
+        KeyboardAvoidingViewProps={{ enabled: false }}
+      >
         <ScrollView
           ref={scrollRef}
           onContentSizeChange={() => scrollRef.current?.scrollToEnd({ animated: true })}
@@ -160,31 +164,45 @@ export const ChatScreen: FC<HomeStackScreenProps<"Chat">> = ({ navigation }) => 
           {sending ? <Text text="Thinking…" style={{ color: colors.textDim }} /> : null}
         </ScrollView>
 
-        {pending.length > 0 || uploading ? (
-          <View style={$pendingRow}>
-            <Ionicons name="image" size={14} color={colors.tint} />
-            <Text
-              text={uploading ? "Uploading…" : `${pending.length} image(s) attached`}
-              size="xs"
-              style={{ color: colors.textDim }}
+        <KeyboardStickyView offset={{ closed: 0, opened: insets.bottom }}>
+          {pending.length > 0 || uploading ? (
+            <View style={[$pendingRow, { backgroundColor: colors.background }]}>
+              <Ionicons name="image" size={14} color={colors.tint} />
+              <Text
+                text={uploading ? "Uploading…" : `${pending.length} image(s) attached`}
+                size="xs"
+                style={{ color: colors.textDim }}
+              />
+            </View>
+          ) : null}
+          <View
+            style={[
+              $inputRow,
+              {
+                borderTopColor: colors.separator,
+                backgroundColor: colors.background,
+                paddingBottom: insets.bottom || 8,
+              },
+            ]}
+          >
+            <Pressable onPress={() => void pickImage()} style={$attach}>
+              <Ionicons name="add" size={24} color={colors.textDim} />
+            </Pressable>
+            <TextField
+              value={input}
+              onChangeText={setInput}
+              placeholder="Message the assistant…"
+              multiline
+              containerStyle={$grow}
             />
+            <Pressable
+              onPress={() => void send()}
+              style={[$send, { backgroundColor: colors.tint }]}
+            >
+              <Ionicons name="arrow-up" size={20} color={colors.palette.neutral100} />
+            </Pressable>
           </View>
-        ) : null}
-        <View style={[$inputRow, { borderTopColor: colors.separator }]}>
-          <Pressable onPress={() => void pickImage()} style={$attach}>
-            <Ionicons name="add" size={24} color={colors.textDim} />
-          </Pressable>
-          <TextField
-            value={input}
-            onChangeText={setInput}
-            placeholder="Message the assistant…"
-            multiline
-            containerStyle={$grow}
-          />
-          <Pressable onPress={() => void send()} style={[$send, { backgroundColor: colors.tint }]}>
-            <Ionicons name="arrow-up" size={20} color={colors.palette.neutral100} />
-          </Pressable>
-        </View>
+        </KeyboardStickyView>
       </Screen>
 
       <OptionSheet
@@ -195,7 +213,7 @@ export const ChatScreen: FC<HomeStackScreenProps<"Chat">> = ({ navigation }) => 
         selected={convId}
         onSelect={resume}
       />
-    </KeyboardAvoidingView>
+    </>
   )
 }
 

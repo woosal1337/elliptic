@@ -11,6 +11,7 @@ import { useToast } from "@/components/Toast"
 import { useOrg } from "@/context/OrgContext"
 import type { NotesStackScreenProps } from "@/navigators/navigationTypes"
 import { api } from "@/services/api"
+import { invalidate } from "@/services/query"
 import { useAppTheme } from "@/theme/context"
 
 export const NoteDetailScreen: FC<NotesStackScreenProps<"NoteDetail">> = ({
@@ -60,8 +61,13 @@ export const NoteDetailScreen: FC<NotesStackScreenProps<"NoteDetail">> = ({
       if (okTitle) setSavedTitle(title.trim())
     }
     setSaving(false)
-    if (okContent && okTitle) setDirty(false)
-    else toast("Couldn't save note", { variant: "error" })
+    invalidate(activeOrg.id, "notes") // the list shows title + snippet
+    if (okContent && okTitle) {
+      setDirty(false)
+      toast("Note saved", { variant: "success" })
+    } else {
+      toast("Couldn't save note", { variant: "error" })
+    }
   }
 
   const remove = () => {
@@ -73,6 +79,7 @@ export const NoteDetailScreen: FC<NotesStackScreenProps<"NoteDetail">> = ({
         style: "destructive",
         onPress: () =>
           void api.deleteNote(activeOrg.id, noteId).then((ok) => {
+            invalidate(activeOrg.id, "notes")
             if (ok) navigation.goBack()
             else toast("Couldn't delete note", { variant: "error" })
           }),

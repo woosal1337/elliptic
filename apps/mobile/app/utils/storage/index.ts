@@ -73,6 +73,17 @@ export function remove(key: string): void {
 }
 
 /**
+ * Compact the store. MMKV keeps the bytes of deleted keys around until it is
+ * trimmed, so anything sensitive that was removed (e.g. tokens migrated into
+ * the Keychain) is only really gone after this.
+ */
+export function trim(): void {
+  try {
+    storage.trim()
+  } catch {}
+}
+
+/**
  * Burn it all to the ground.
  */
 export function clear(): void {

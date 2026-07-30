@@ -21,6 +21,7 @@ import type {
   SearchResult,
   Sticky,
   Task,
+  TaskLabel,
   User,
 } from "./types"
 
@@ -337,6 +338,7 @@ export class Api {
       priority?: string
       due_date?: string | null
       parent_task_id?: string
+      label_ids?: string[]
     },
   ): Promise<Task | null> {
     const path = `/orgs/${orgId}/projects/${projectId}/tasks`
@@ -370,6 +372,7 @@ export class Api {
       priority?: string
       due_date?: string | null
       status?: string
+      label_ids?: string[]
     },
   ): Promise<Task | null> {
     const path = `/orgs/${orgId}/tasks/${taskId}`
@@ -395,6 +398,45 @@ export class Api {
 
   async listSubtasks(orgId: string, taskId: string): Promise<Task[]> {
     const res = await this.apisauce.get<Envelope<Task[]>>(`/orgs/${orgId}/tasks/${taskId}/subtasks`)
+    return res.ok && res.data ? res.data.data : []
+  }
+
+  // ---- Social sign-in (COS-209) ----
+  /** Which social providers this instance offers on the sign-in screen. */
+  async authProviders(): Promise<{ google: boolean; github: boolean }> {
+    const res =
+      await this.apisauce.get<Envelope<{ google: boolean; github: boolean }>>("/auth/providers")
+    if (!res.ok || !res.data) return { google: false, github: false }
+    const d = res.data.data
+    return { google: !!d.google, github: !!d.github }
+  }
+
+  /** Authorization URL for a native sign-in, bound to this device's challenge. */
+  async oauthAuthorizationUrl(provider: string, challenge: string): Promise<string | null> {
+    const res = await this.apisauce.get<Envelope<{ authorization_url: string }>>(
+      `/auth/oauth/${provider}/native/start`,
+      { challenge },
+    )
+    return res.ok && res.data ? res.data.data.authorization_url : null
+  }
+
+  /** Trade the callback's handoff code for real tokens. */
+  async exchangeOAuthCode(
+    code: string,
+    verifier: string,
+  ): Promise<{ user: User; tokens: AuthTokens } | { error: string }> {
+    const res = await this.apisauce.post<Envelope<{ user: User; tokens: AuthTokens }>>(
+      "/auth/oauth/native/exchange",
+      { code, verifier },
+    )
+    if (!res.ok || !res.data?.data?.tokens) {
+      return { error: res.data?.message ?? "Could not finish signing in." }
+    }
+    return res.data.data
+  }
+
+  async listLabels(orgId: string): Promise<TaskLabel[]> {
+    const res = await this.apisauce.get<Envelope<TaskLabel[]>>(`/orgs/${orgId}/labels`)
     return res.ok && res.data ? res.data.data : []
   }
 
@@ -462,6 +504,16 @@ export class Api {
   async markAllNotificationsRead(orgId: string): Promise<boolean> {
     const res = await this.apisauce.post(`/orgs/${orgId}/notifications/read-all`, {})
     return res.ok
+  }
+
+  async archiveNotification(orgId: string, notificationId: string): Promise<boolean> {
+    return this.writeOrQueue("post", `/orgs/${orgId}/notifications/${notificationId}/archive`, {})
+  }
+
+  async snoozeNotification(orgId: string, notificationId: string, until: string): Promise<boolean> {
+    return this.writeOrQueue("post", `/orgs/${orgId}/notifications/${notificationId}/snooze`, {
+      until,
+    })
   }
 
   // ---- Search ----

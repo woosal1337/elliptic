@@ -1,22 +1,26 @@
 import { FC, useCallback, useMemo, useState } from "react"
-import { RefreshControl, SectionList, View, ViewStyle } from "react-native"
+import { RefreshControl, SectionList, ViewStyle } from "react-native"
 
 import { CreateTaskSheet } from "@/components/CreateTaskSheet"
 import { EmptyState } from "@/components/EmptyState"
-import { Fab } from "@/components/Fab"
 import { Screen } from "@/components/Screen"
+import { ScreenHeader } from "@/components/ScreenHeader"
 import { SectionHeader } from "@/components/SectionHeader"
 import { SegmentedControl } from "@/components/SegmentedControl"
-import { Skeleton } from "@/components/Skeleton"
+import { TaskListSkeleton } from "@/components/Skeleton"
+import { SwipeableRow } from "@/components/SwipeableRow"
 import { TaskRow } from "@/components/TaskRow"
-import { Text } from "@/components/Text"
+import { useToast } from "@/components/Toast"
 import { useOrg } from "@/context/OrgContext"
+import { TAB_BAR_CLEARANCE } from "@/navigators/FloatingTabBar"
 import type { TasksStackScreenProps } from "@/navigators/navigationTypes"
 import { api } from "@/services/api"
 import type { Task } from "@/services/api/types"
+import { invalidate, queryKeys } from "@/services/query"
 import { useAppTheme } from "@/theme/context"
+import { hapticSuccess } from "@/utils/haptics"
 import { prettyLabel, STATUS_OPTIONS } from "@/utils/taskOptions"
-import { useCachedList } from "@/utils/useCachedList"
+import { useListQuery } from "@/utils/useListQuery"
 
 type Scope = "assigned" | "created"
 const SCOPES: { key: Scope; label: string }[] = [
@@ -30,16 +34,42 @@ const STATUS_ORDER = ["in_progress", "in_review", "todo", "backlog", "done", "ca
 export const TasksScreen: FC<TasksStackScreenProps<"TasksList">> = ({ navigation }) => {
   const { activeOrg } = useOrg()
   const {
-    theme: { colors, spacing },
+    theme: { colors },
   } = useAppTheme()
   const [scope, setScope] = useState<Scope>("assigned")
   const [showCreate, setShowCreate] = useState(false)
-  const cacheKey = activeOrg ? `tasks:${activeOrg.id}:${scope}` : null
+  const cacheKey = activeOrg ? queryKeys.tasks(activeOrg.id, scope) : null
   const fetcher = useCallback(
     () => (activeOrg ? api.listTasks(activeOrg.id, scope) : Promise.resolve<Task[]>([])),
     [activeOrg, scope],
   )
-  const { data: tasks, loading, refreshing, refresh } = useCachedList<Task>(cacheKey, fetcher)
+  const { data: tasks, loading, refreshing, refresh } = useListQuery<Task>(cacheKey, fetcher)
+  const toast = useToast()
+
+  const transition = (t: Task, status: string) => {
+    if (!activeOrg) return
+    const orgId = activeOrg.id
+    const previous = t.status
+    hapticSuccess()
+    void api.transitionTaskStatus(orgId, t.id, status).then((updated) => {
+      invalidate(orgId, "tasks")
+      if (!updated) {
+        toast("Couldn't update that task", { variant: "error" })
+        return
+      }
+      toast(`${t.identifier} → ${prettyLabel(status, STATUS_OPTIONS)}`, {
+        variant: "success",
+        action: {
+          label: "Undo",
+          onPress: () => {
+            void api
+              .transitionTaskStatus(orgId, t.id, previous)
+              .then(() => invalidate(orgId, "tasks"))
+          },
+        },
+      })
+    })
+  }
 
   const sections = useMemo(() => {
     const groups = new Map<string, Task[]>()
@@ -56,23 +86,28 @@ export const TasksScreen: FC<TasksStackScreenProps<"TasksList">> = ({ navigation
   }, [tasks])
 
   return (
-    <Screen
-      preset="fixed"
-      contentContainerStyle={[$flex, { paddingTop: spacing.md }]}
-      safeAreaEdges={["top"]}
-    >
-      <Text preset="heading" text="Tasks" style={{ paddingHorizontal: spacing.lg }} />
-
-      <View style={{ paddingHorizontal: spacing.lg, marginTop: spacing.sm, marginBottom: spacing.xs }}>
+    <Screen preset="fixed" contentContainerStyle={$flex} safeAreaEdges={["top"]}>
+      <ScreenHeader
+        title="Tasks"
+        actions={
+          activeOrg
+            ? [
+                {
+                  key: "create",
+                  icon: "add",
+                  label: "New task",
+                  emphasis: true,
+                  onPress: () => setShowCreate(true),
+                },
+              ]
+            : []
+        }
+      >
         <SegmentedControl segments={SCOPES} value={scope} onChange={setScope} />
-      </View>
+      </ScreenHeader>
 
       {loading ? (
-        <View style={{ paddingHorizontal: spacing.lg, paddingTop: spacing.md, gap: spacing.md }}>
-          {[0, 1, 2, 3, 4].map((i) => (
-            <Skeleton key={i} height={44} />
-          ))}
-        </View>
+        <TaskListSkeleton />
       ) : (
         <SectionList
           sections={sections}
@@ -81,7 +116,7 @@ export const TasksScreen: FC<TasksStackScreenProps<"TasksList">> = ({ navigation
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={colors.tint} />
           }
-          contentContainerStyle={sections.length === 0 ? $grow : undefined}
+          contentContainerStyle={sections.length === 0 ? $grow : $bottomClearance}
           ListEmptyComponent={
             <EmptyState
               icon="checkmark-done-outline"
@@ -90,29 +125,58 @@ export const TasksScreen: FC<TasksStackScreenProps<"TasksList">> = ({ navigation
             />
           }
           renderSectionHeader={({ section }) => (
-            <SectionHeader status={section.status} title={section.title} count={section.data.length} />
+            <SectionHeader
+              status={section.status}
+              title={section.title}
+              count={section.data.length}
+            />
           )}
           renderItem={({ item }) => (
-            <TaskRow
-              task={item}
-              onPress={() =>
-                navigation.navigate("TaskDetail", { taskId: item.id, title: item.identifier })
+            <SwipeableRow
+              leftActions={
+                item.status === "done"
+                  ? []
+                  : [
+                      {
+                        key: "done",
+                        label: "Done",
+                        icon: "checkmark",
+                        background: colors.statusDone,
+                        onPress: () => transition(item, "done"),
+                      },
+                    ]
               }
-            />
+              rightActions={
+                item.status === "in_progress"
+                  ? []
+                  : [
+                      {
+                        key: "start",
+                        label: "Start",
+                        icon: "play",
+                        background: colors.statusInProgress,
+                        onPress: () => transition(item, "in_progress"),
+                      },
+                    ]
+              }
+            >
+              <TaskRow
+                task={item}
+                onPress={() =>
+                  navigation.navigate("TaskDetail", { taskId: item.id, title: item.identifier })
+                }
+              />
+            </SwipeableRow>
           )}
         />
       )}
 
       {activeOrg ? (
-        <>
-          <Fab onPress={() => setShowCreate(true)} />
-          <CreateTaskSheet
-            orgId={activeOrg.id}
-            visible={showCreate}
-            onClose={() => setShowCreate(false)}
-            onCreated={refresh}
-          />
-        </>
+        <CreateTaskSheet
+          orgId={activeOrg.id}
+          visible={showCreate}
+          onClose={() => setShowCreate(false)}
+        />
       ) : null}
     </Screen>
   )
@@ -120,3 +184,5 @@ export const TasksScreen: FC<TasksStackScreenProps<"TasksList">> = ({ navigation
 
 const $flex: ViewStyle = { flex: 1 }
 const $grow: ViewStyle = { flexGrow: 1 }
+// Let the last row scroll clear of the floating tab bar and any toast.
+const $bottomClearance: ViewStyle = { paddingBottom: TAB_BAR_CLEARANCE }

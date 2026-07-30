@@ -1,0 +1,50 @@
+#flow: TaskDetail
+#intent: task detail behaviours — the label picker round-trips, and the pinned
+#        composer stays reachable with the keyboard up (it used to sit behind it).
+#        Labels are toggled on and back off, so only the posted comment persists.
+appId: com.companyos
+---
+- launchApp
+- waitForAnimationToEnd
+- runFlow:
+    when:
+      visible: "Continue"
+    commands:
+      - tapOn: "Continue"
+- tapOn:
+    text: "Tasks, tab.*"
+- waitForAnimationToEnd
+- tapOn:
+    text: ".*Day-group the inbox feed.*"
+- waitForAnimationToEnd
+
+# --- label picker ----------------------------------------------------------
+- tapOn:
+    id: "prop-labels"
+- waitForAnimationToEnd
+- assertVisible:
+    id: "label-option-ux"
+- tapOn:
+    id: "label-option-ux"
+- tapOn:
+    id: "label-option-ux"
+- swipe:
+    from:
+      text: "Labels"
+    direction: DOWN
+- waitForAnimationToEnd
+
+# --- mention chip + pinned composer ---------------------------------------
+- tapOn: "Mention someone"
+- waitForAnimationToEnd
+- tapOn: "Mobile E2E"
+- assertVisible: "Remove mention of Mobile E2E"
+- tapOn: "Add a comment…"
+- inputText: "Pinned composer smoke test"
+- waitForAnimationToEnd
+- takeScreenshot: .maestro/output/companyos/16-composer-keyboard
+# Tapping Send only works if the composer cleared the keyboard.
+- tapOn: "Send comment"
+- extendedWaitUntil:
+    visible: ".*Pinned composer smoke test.*"
+    timeout: 10000

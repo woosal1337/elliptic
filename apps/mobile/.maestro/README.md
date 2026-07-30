@@ -15,8 +15,20 @@ scripts/maestro.sh ios     .maestro/capture/companyos-tour.yaml
 scripts/maestro.sh android .maestro/reference/linear-onboarding.yaml
 ```
 
-Env overrides: `IOS_DEVICE` (UDID), `ANDROID_DEVICE` (adb id), `MAESTRO_BIN`, `ADB`.
-Screenshots land under `.maestro/output/<app>/…` (git-ignored).
+Env overrides: `IOS_DEVICE` (UDID), `ANDROID_DEVICE` (adb id), `MAESTRO_BIN`, `ADB`,
+`JAVA_HOME`. The runner resolves a JDK itself (Homebrew `openjdk` if macOS has no
+JRE), so no export is needed. Screenshots land under `.maestro/output/<app>/…`
+(git-ignored).
+
+## E2E account
+
+Flows sign in as `mobile-e2e@chele.bi` (org **Maestro QA**, project **MOB** —
+seeded fixtures, isolated from real workspaces). The password is never stored
+anywhere: generate a fresh one and reset it via the API container on the prod
+host (hash with `companyos.core.security.hash_password`, `UPDATE users SET
+password_hash=… WHERE email='mobile-e2e@chele.bi'`), then pass it to flows as
+`MAESTRO_EMAIL` / `MAESTRO_PASSWORD` env vars. `flows/Login.yaml` handles the
+dev-client onboarding sheet and the iOS save-password dialog.
 
 ## Layout
 
@@ -26,9 +38,15 @@ Screenshots land under `.maestro/output/<app>/…` (git-ignored).
     linear-onboarding.yaml
   capture/       # flows that tour CompanyOS itself (before/after redesign diffs)
     companyos-tour.yaml
-  flows/         # functional test flows (Login, …)
+  flows/         # functional test flows
+    Login.yaml       # sign in with MAESTRO_EMAIL / MAESTRO_PASSWORD
+    TaskUndo.yaml    # swipe → Done, toast undo, toast queueing (undoes its writes)
+    TaskDetail.yaml  # label picker round-trip + pinned composer (appends a comment)
   output/        # captured screenshots (git-ignored)
 ```
+
+Functional flows assert on `testID`s (`swipe-action-<key>`, `toast`,
+`toast-action`) rather than on visible copy, so wording changes don't break them.
 
 ## Maestro MCP (agent-driven)
 
@@ -37,7 +55,7 @@ devices directly (`list_devices`, `inspect_screen`, `take_screenshot`, `run`):
 
 ```bash
 claude mcp add maestro --scope user \
-  --env JAVA_HOME=/opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home \
+  --env JAVA_HOME=/opt/homebrew/opt/openjdk/libexec/openjdk.jdk/Contents/Home \
   -- ~/.maestro/bin/maestro mcp
 ```
 
@@ -53,3 +71,14 @@ claude mcp add maestro --scope user \
 > tab). The stock `Android_1` emulator is not Play-Protect certified, which can
 > block Google sign-in — use Linear's **email magic-link** option instead, or
 > run against a Google-Play-enabled AVD.
+
+## Dev-client Tools button
+
+Expo's dev client floats a **Tools** button over the top-right corner — exactly
+where `ScreenHeader`'s action pill lives — and it swallows taps there, so
+screenshot runs and flows see it, not the app. Turn it off per install:
+
+```bash
+xcrun simctl spawn booted defaults write com.companyos EXDevMenuShowFloatingActionButton -bool false
+# then relaunch the app (dev menu → Tools button toggle does the same thing)
+```

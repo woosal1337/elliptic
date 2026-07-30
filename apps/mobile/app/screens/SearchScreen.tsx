@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react"
+import { FC, useCallback } from "react"
 import { FlatList, Pressable, View, ViewStyle } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs"
@@ -8,11 +8,13 @@ import { Screen } from "@/components/Screen"
 import { SearchBar } from "@/components/SearchBar"
 import { Text } from "@/components/Text"
 import { useOrg } from "@/context/OrgContext"
+import { TAB_BAR_CLEARANCE } from "@/navigators/FloatingTabBar"
 import type { HomeStackScreenProps, MainTabParamList } from "@/navigators/navigationTypes"
 import { api } from "@/services/api"
 import type { SearchResult } from "@/services/api/types"
 import { useAppTheme } from "@/theme/context"
 import { openEntity } from "@/utils/openEntity"
+import { useDebouncedSearch } from "@/utils/useDebouncedSearch"
 
 const TYPE_META: Record<string, { label: string; icon: keyof typeof Ionicons.glyphMap }> = {
   task: { label: "Task", icon: "checkbox-outline" },
@@ -27,24 +29,17 @@ export const SearchScreen: FC<HomeStackScreenProps<"Search">> = ({ navigation })
   const {
     theme: { colors, spacing },
   } = useAppTheme()
-  const [q, setQ] = useState("")
-  const [results, setResults] = useState<SearchResult[]>([])
-  const [searching, setSearching] = useState(false)
-
-  useEffect(() => {
-    if (!activeOrg || q.trim().length < 2) {
-      setResults([])
-      return
-    }
-    setSearching(true)
-    const handle = setTimeout(() => {
-      void api.search(activeOrg.id, q.trim()).then((r) => {
-        setResults(r)
-        setSearching(false)
-      })
-    }, 300)
-    return () => clearTimeout(handle)
-  }, [q, activeOrg])
+  const runSearch = useCallback(
+    (query: string) =>
+      activeOrg ? api.search(activeOrg.id, query) : Promise.resolve<SearchResult[]>([]),
+    [activeOrg],
+  )
+  const {
+    query: q,
+    setQuery: setQ,
+    results,
+    searching,
+  } = useDebouncedSearch<SearchResult>(runSearch)
 
   const open = (r: SearchResult) => {
     if (r.type === "project") {
@@ -57,30 +52,51 @@ export const SearchScreen: FC<HomeStackScreenProps<"Search">> = ({ navigation })
 
   return (
     <Screen preset="fixed" contentContainerStyle={[$flex, { padding: spacing.lg }]}>
-      <SearchBar value={q} onChangeText={setQ} placeholder="Search tasks, notes, projects…" autoFocus />
+      <SearchBar
+        value={q}
+        onChangeText={setQ}
+        placeholder="Search tasks, notes, projects…"
+        autoFocus
+        loading={searching}
+        onCancel={() => navigation.goBack()}
+      />
       <FlatList
         data={results}
         keyExtractor={(r) => `${r.type}:${r.id}`}
         keyboardShouldPersistTaps="handled"
         style={{ marginTop: spacing.sm }}
-        contentContainerStyle={results.length === 0 ? $flex : undefined}
+        contentContainerStyle={results.length === 0 ? $flex : $bottomClearance}
         ListEmptyComponent={
           q.trim().length < 2 ? (
-            <EmptyState icon="search-outline" title="Search everything" caption="Find tasks, notes, and projects across your workspace." />
+            <EmptyState
+              icon="search-outline"
+              title="Search everything"
+              caption="Find tasks, notes, and projects across your workspace."
+            />
           ) : searching ? (
             <EmptyState title="Searching…" />
           ) : (
-            <EmptyState icon="search-outline" title="No results" caption={`Nothing matched "${q.trim()}".`} />
+            <EmptyState
+              icon="search-outline"
+              title="No results"
+              caption={`Nothing matched "${q.trim()}".`}
+            />
           )
         }
         renderItem={({ item }) => {
-          const meta = TYPE_META[item.type] ?? { label: item.type, icon: "ellipse-outline" as const }
+          const meta = TYPE_META[item.type] ?? {
+            label: item.type,
+            icon: "ellipse-outline" as const,
+          }
           return (
             <Pressable
               onPress={() => open(item)}
               style={({ pressed }) => [
                 $row,
-                { backgroundColor: pressed ? colors.muted : colors.background, borderBottomColor: colors.separator },
+                {
+                  backgroundColor: pressed ? colors.muted : colors.background,
+                  borderBottomColor: colors.separator,
+                },
               ]}
             >
               <Ionicons name={meta.icon} size={18} color={colors.textDim} />
@@ -102,6 +118,7 @@ export const SearchScreen: FC<HomeStackScreenProps<"Search">> = ({ navigation })
 }
 
 const $flex: ViewStyle = { flexGrow: 1 }
+const $bottomClearance: ViewStyle = { paddingBottom: TAB_BAR_CLEARANCE }
 const $row: ViewStyle = {
   flexDirection: "row",
   alignItems: "center",
