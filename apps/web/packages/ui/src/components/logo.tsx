@@ -47,7 +47,7 @@ export const Logo = React.forwardRef<HTMLSpanElement, LogoProps>(
       <LogoMark accent={accent} className={markSize[size]} />
       {markOnly ? null : (
         <span className={cn("tracking-[-0.02em]", wordSize[size])}>
-          Company<span className="text-muted-foreground">OS</span>
+          Elliptic
         </span>
       )}
     </span>
