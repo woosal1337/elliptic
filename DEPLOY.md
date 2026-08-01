@@ -31,7 +31,7 @@ Coolify project **elliptic** → environment **production** → application
 - **Source:** `woosal1337/elliptic.git`, branch `main`, base directory
   `/apps/api`, Dockerfile build pack.
 - **Domain:** `api.elliptic.sh` → Traefik → container port 8000.
-- **Database:** the Coolify-managed **companyos-postgres** resource
+- **Database:** the Coolify-managed **elliptic-postgres** resource
   (`postgres:17-alpine`), internal to the `coolify` Docker network — never
   published on a host port. The app reaches it via the `DATABASE_URL` env var.
 - **Env vars** (secrets, `OAUTH_ISSUER`, `MCP_RESOURCE_BASE`, `CORS_ORIGINS`,
@@ -79,7 +79,7 @@ igris, so rolling back does not rebuild.
 
 ## Legacy (pre-Coolify)
 
-- **ct104 is decommissioned** — no runner, no `/opt/companyos` checkout, no
+- **ct104 is decommissioned** — no runner, no `/opt/elliptic` checkout, no
   cloudflared pointing at it.
 - The interim manual compose stack on igris (the ct104 → igris migration
   stopgap, an untracked checkout driven by a `docker-compose.igris.yml`

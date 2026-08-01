@@ -3,7 +3,7 @@
   "configVersion": 0,
   "workspaces": {
     "": {
-      "name": "companyos-mobile",
+      "name": "elliptic-mobile",
       "dependencies": {
         "@bottom-tabs/react-navigation": "^1.4.0",
         "@expo-google-fonts/inter": "^0.4.2",

@@ -2,7 +2,7 @@
 
 Pull, validate, diff, and (dry-run) push an org's declarative configuration.
 
-    export COMPANYOS_TOKEN=cos_pat_...
+    export ELLIPTIC_TOKEN=cos_pat_...
     python -m ops.elliptic_config pull  --org <org_id> --base-url http://localhost:8000
     python -m ops.elliptic_config diff  --org <org_id>
     python -m ops.elliptic_config validate elliptic.yaml
@@ -25,7 +25,7 @@ _STATE = "elliptic.yaml"
 
 
 def _request(method: str, base_url: str, path: str, body: dict | None = None) -> dict:
-    token = os.environ.get("COMPANYOS_TOKEN", "")
+    token = os.environ.get("ELLIPTIC_TOKEN") or os.environ.get("COMPANYOS_TOKEN", "")
     data = json.dumps(body).encode() if body is not None else None
     req = urllib.request.Request(  # noqa: S310
         f"{base_url.rstrip('/')}{path}", data=data, method=method

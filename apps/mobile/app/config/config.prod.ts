@@ -6,5 +6,5 @@
  * https://reactnative.dev/docs/security#storing-sensitive-info
  */
 export default {
-  API_URL: "https://api-company.chele.bi/api/v1",
+  API_URL: "https://api.elliptic.sh/api/v1",
 }
