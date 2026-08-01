@@ -2,7 +2,7 @@
 #intent: toast behaviour on task writes — undo restores the previous status, and a
 #        second write queues behind the first instead of replacing it.
 #        Every write it makes is undone, so the QA fixture ends where it started.
-appId: com.companyos
+appId: bi.chele.companyos
 ---
 - launchApp
 - waitForAnimationToEnd
@@ -11,8 +11,7 @@ appId: com.companyos
       visible: "Continue"
     commands:
       - tapOn: "Continue"
-- tapOn:
-    text: "Tasks, tab.*"
+- tapOn: "Tasks"
 - waitForAnimationToEnd
 
 # --- undo restores the previous status -------------------------------------

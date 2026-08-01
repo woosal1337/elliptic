@@ -2,7 +2,7 @@
 #intent: task detail behaviours — the label picker round-trips, and the pinned
 #        composer stays reachable with the keyboard up (it used to sit behind it).
 #        Labels are toggled on and back off, so only the posted comment persists.
-appId: com.companyos
+appId: bi.chele.companyos
 ---
 - launchApp
 - waitForAnimationToEnd
@@ -11,8 +11,7 @@ appId: com.companyos
       visible: "Continue"
     commands:
       - tapOn: "Continue"
-- tapOn:
-    text: "Tasks, tab.*"
+- tapOn: "Tasks"
 - waitForAnimationToEnd
 - tapOn:
     text: ".*Day-group the inbox feed.*"

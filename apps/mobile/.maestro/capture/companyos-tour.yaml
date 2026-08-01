@@ -3,7 +3,7 @@
 # currently built for iOS; add Android once `expo run:android` is wired.
 #
 # Run:  scripts/maestro.sh ios .maestro/capture/companyos-tour.yaml
-appId: com.companyos
+appId: bi.chele.companyos
 ---
 - launchApp
 - waitForAnimationToEnd
@@ -20,19 +20,15 @@ appId: com.companyos
       - tapOn: "Not Now"
 - waitForAnimationToEnd
 - takeScreenshot: .maestro/output/companyos/00-home
-- tapOn:
-    text: "Tasks, tab.*"
+- tapOn: "Tasks"
 - waitForAnimationToEnd
 - takeScreenshot: .maestro/output/companyos/01-tasks
-- tapOn:
-    text: "Notes, tab.*"
+- tapOn: "Notes"
 - waitForAnimationToEnd
 - takeScreenshot: .maestro/output/companyos/02-notes
-- tapOn:
-    text: "Inbox, tab.*"
+- tapOn: "Inbox"
 - waitForAnimationToEnd
 - takeScreenshot: .maestro/output/companyos/03-inbox
-- tapOn:
-    text: "Profile, tab.*"
+- tapOn: "Profile"
 - waitForAnimationToEnd
 - takeScreenshot: .maestro/output/companyos/04-profile

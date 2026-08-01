@@ -79,6 +79,6 @@ where `ScreenHeader`'s action pill lives — and it swallows taps there, so
 screenshot runs and flows see it, not the app. Turn it off per install:
 
 ```bash
-xcrun simctl spawn booted defaults write com.companyos EXDevMenuShowFloatingActionButton -bool false
+xcrun simctl spawn booted defaults write bi.chele.companyos EXDevMenuShowFloatingActionButton -bool false
 # then relaunch the app (dev menu → Tools button toggle does the same thing)
 ```
