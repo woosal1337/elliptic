@@ -34,7 +34,7 @@ const ROWS: FeatureRowData[] = [
       "One stream behind boards, notes, and inboxes",
     ],
     visual: (
-      <BrowserFrame url="app.companyos.com/activity" className="bg-surface shadow-xl">
+      <BrowserFrame url="app.elliptic.com/activity" className="bg-surface shadow-xl">
         <ActivityMockup />
       </BrowserFrame>
     ),
@@ -137,7 +137,7 @@ export default function ActivityPage() {
         secondary={{ label: "Read the docs", href: "https://docs.elliptic.sh/activity-calendar-inbox" }}
         visual={
           <BrowserFrame
-            url="app.companyos.com/activity"
+            url="app.elliptic.com/activity"
             className="w-full min-w-[64rem] border-border-strong shadow-xl"
           >
             <ActivityMockup />

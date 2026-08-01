@@ -6,7 +6,7 @@ import { useSetMeetingProject, useSuggestMeetingProject } from "@/hooks/use-meet
 import { FilingSuggestion } from "@/components/ai/filing-suggestion";
 import type { Meeting } from "@/lib/types";
 
-const DISMISS_KEY = "companyos:meeting-filing-dismissed";
+const DISMISS_KEY = "elliptic:meeting-filing-dismissed";
 
 function dismissedSet(): Set<string> {
   if (typeof window === "undefined") return new Set();

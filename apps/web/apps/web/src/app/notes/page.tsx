@@ -34,7 +34,7 @@ const ROWS: FeatureRowData[] = [
       "Concurrent edits merge cleanly, offline then online",
     ],
     visual: (
-      <BrowserFrame url="app.companyos.com/wiki/launch-runbook" className="bg-surface shadow-xl">
+      <BrowserFrame url="app.elliptic.com/wiki/launch-runbook" className="bg-surface shadow-xl">
         <NotesMockup />
       </BrowserFrame>
     ),
@@ -141,7 +141,7 @@ export default function NotesPage() {
         secondary={{ label: "Read the docs", href: "https://docs.elliptic.sh/notes-wiki-pages" }}
         visual={
           <BrowserFrame
-            url="app.companyos.com/wiki/launch-runbook"
+            url="app.elliptic.com/wiki/launch-runbook"
             className="w-full min-w-[64rem] border-border-strong shadow-xl"
           >
             <NotesMockup />

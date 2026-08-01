@@ -28,7 +28,7 @@ services:
         condition: service_healthy
     environment:
       DATABASE_URL: postgresql+asyncpg://companyos:companyos@postgres:5432/companyos
-      ELLIPTIC_KEK: ${ELLIPTIC_KEK:-6TTRiEDAMzSkS6g3YKCQCjbqx9mUnCO3Rsop01k0FSY=}
+      ELLIPTIC_KEK: ${ELLIPTIC_KEK:-${COMPANYOS_KEK:-6TTRiEDAMzSkS6g3YKCQCjbqx9mUnCO3Rsop01k0FSY=}}
       JWT_SECRET_KEY: ${JWT_SECRET_KEY:-local-dev-jwt-secret-change-in-production}
       ENV: development
       CORS_ORIGINS: http://localhost:3000

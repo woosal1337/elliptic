@@ -6775,7 +6775,7 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "code",
         "lang": "bash",
-        "code": "claude mcp add --transport http companyos https://api.elliptic.sh/api/v1/mcp\n\n# then, inside Claude Code:\n/mcp        # opens the Elliptic consent screen in your browser"
+        "code": "claude mcp add --transport http elliptic https://api.elliptic.sh/api/v1/mcp\n\n# then, inside Claude Code:\n/mcp        # opens the Elliptic consent screen in your browser"
       },
       {
         "type": "h3",
@@ -6788,7 +6788,7 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "code",
         "lang": "json",
-        "code": "{\n  \"mcpServers\": {\n    \"companyos\": {\n      \"url\": \"https://api.elliptic.sh/api/v1/mcp\"\n    }\n  }\n}"
+        "code": "{\n  \"mcpServers\": {\n    \"elliptic\": {\n      \"url\": \"https://api.elliptic.sh/api/v1/mcp\"\n    }\n  }\n}"
       },
       {
         "type": "p",
@@ -6805,7 +6805,7 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "code",
         "lang": "json",
-        "code": "{\n  \"mcpServers\": {\n    \"companyos\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"mcp-remote\", \"https://api.elliptic.sh/api/v1/mcp\"]\n    }\n  }\n}"
+        "code": "{\n  \"mcpServers\": {\n    \"elliptic\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"mcp-remote\", \"https://api.elliptic.sh/api/v1/mcp\"]\n    }\n  }\n}"
       },
       {
         "type": "callout",
@@ -7362,7 +7362,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "info",
         "title": "Project-scoped, nothing global",
-        "text": "Everything the setup writes lives inside the project directory: `.mcp.json`, a marked block in `CLAUDE.md`, and `.claude/skills/companyos/SKILL.md`. Nothing is installed at the user or machine level, so unrelated projects never see Elliptic and your agent never reaches for it where you did not ask it to."
+        "text": "Everything the setup writes lives inside the project directory: `.mcp.json`, a marked block in `CLAUDE.md`, and `.claude/skills/elliptic/SKILL.md`. Nothing is installed at the user or machine level, so unrelated projects never see Elliptic and your agent never reaches for it where you did not ask it to."
       },
       {
         "type": "h2",
@@ -7375,7 +7375,7 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "code",
         "lang": "bash",
-        "code": "# from the root of a project you want connected\ncd your-project\ncurl -fsSL https://elliptic.sh/companyos-agent-init.sh -o companyos-agent-init.sh\nbash companyos-agent-init.sh"
+        "code": "# from the root of a project you want connected\ncd your-project\ncurl -fsSL https://elliptic.sh/elliptic-agent-init.sh -o elliptic-agent-init.sh\nbash elliptic-agent-init.sh"
       },
       {
         "type": "p",
@@ -7399,12 +7399,12 @@ export const DOC_PAGES: DocPage[] = [
         "rows": [
           [
             "`--endpoint URL`",
-            "the `COMPANYOS_MCP_URL` env var, else `http://localhost:8000/api/v1/mcp`",
+            "the `ELLIPTIC_MCP_URL` env var, else `http://localhost:8000/api/v1/mcp`",
             "The MCP endpoint written into `.mcp.json`. Point it at your Elliptic API's `/api/v1/mcp` path. On the hosted instance that is `https://api.elliptic.sh/api/v1/mcp`."
           ],
           [
-            "`--name companyos`",
-            "`companyos`",
+            "`--name elliptic`",
+            "`elliptic`",
             "The MCP server name. It becomes the key in `.mcp.json` and the `mcp__<name>__*` tool prefix the agent calls, so change it only if you are wiring more than one Elliptic workspace into the same project."
           ]
         ]
@@ -7412,7 +7412,7 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "code",
         "lang": "bash",
-        "code": "# point at the hosted instance explicitly\nbash companyos-agent-init.sh --endpoint https://api.elliptic.sh/api/v1/mcp\n\n# or set it once in the environment\nexport COMPANYOS_MCP_URL=https://api.elliptic.sh/api/v1/mcp\nbash companyos-agent-init.sh"
+        "code": "# point at the hosted instance explicitly\nbash elliptic-agent-init.sh --endpoint https://api.elliptic.sh/api/v1/mcp\n\n# or set it once in the environment\nexport ELLIPTIC_MCP_URL=https://api.elliptic.sh/api/v1/mcp\nbash elliptic-agent-init.sh"
       },
       {
         "type": "callout",
@@ -7439,11 +7439,11 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "code",
         "lang": "json",
-        "code": "{\n  \"mcpServers\": {\n    \"companyos\": {\n      \"type\": \"http\",\n      \"url\": \"https://api.elliptic.sh/api/v1/mcp\"\n    }\n  }\n}"
+        "code": "{\n  \"mcpServers\": {\n    \"elliptic\": {\n      \"type\": \"http\",\n      \"url\": \"https://api.elliptic.sh/api/v1/mcp\"\n    }\n  }\n}"
       },
       {
         "type": "p",
-        "text": "If a `.mcp.json` already exists and already defines a `companyos` server, the script leaves it alone. If the file exists without that server, the script will not edit it for you, to avoid corrupting your config. Instead it prints the exact server entry to paste into your existing `mcpServers` object."
+        "text": "If a `.mcp.json` already exists and already defines a `elliptic` server, the script leaves it alone. If the file exists without that server, the script will not edit it for you, to avoid corrupting your config. Instead it prints the exact server entry to paste into your existing `mcpServers` object."
       },
       {
         "type": "h3",
@@ -7451,12 +7451,12 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "The script adds a marked **Elliptic (company brain)** block to `CLAUDE.md`, the file your agent reads as project instructions. The block is wrapped in `<!-- companyos:start -->` and `<!-- companyos:end -->` markers and is fully idempotent. Re-running drops the old block and appends a fresh one, keeping everything else in the file in place. The block tells the agent three things."
+        "text": "The script adds a marked **Elliptic (company brain)** block to `CLAUDE.md`, the file your agent reads as project instructions. The block is wrapped in `<!-- elliptic:start -->` and `<!-- elliptic:end -->` markers and is fully idempotent. Re-running drops the old block and appends a fresh one, keeping everything else in the file in place. The block tells the agent three things."
       },
       {
         "type": "ul",
         "items": [
-          "**Search first.** Before answering anything about the company, a project, a task, a person, a meeting, or a deadline, query Elliptic (`mcp__companyos__*`) instead of guessing or relying only on local files.",
+          "**Search first.** Before answering anything about the company, a project, a task, a person, a meeting, or a deadline, query Elliptic (`mcp__elliptic__*`) instead of guessing or relying only on local files.",
           "**Save there.** When asked to create or track work, a task, note, decision, or follow-up, write it to Elliptic, not just to local memory.",
           "**It is authoritative.** Treat Elliptic as the source of truth. Local memory and notes should point to it, not duplicate it."
         ]
@@ -7471,7 +7471,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "The script writes `.claude/skills/companyos/SKILL.md`, a skill the agent loads on demand rather than keeping in context all the time. Its description triggers whenever you ask to find, search, look up, check the status of, create, update, or save anything about the company, a project, a task, a meeting, a note, a person, or a deadline, and routes those requests to the company brain. Inside, it maps the request to the right tools so the agent does not have to guess."
+        "text": "The script writes `.claude/skills/elliptic/SKILL.md`, a skill the agent loads on demand rather than keeping in context all the time. Its description triggers whenever you ask to find, search, look up, check the status of, create, update, or save anything about the company, a project, a task, a meeting, a note, a person, or a deadline, and routes those requests to the company brain. Inside, it maps the request to the right tools so the agent does not have to guess."
       },
       {
         "type": "ul",
@@ -7502,11 +7502,11 @@ export const DOC_PAGES: DocPage[] = [
         "steps": [
           {
             "title": "Open the project",
-            "text": "Open it in Claude Code (or your MCP client). It detects `.mcp.json` and offers to approve the `companyos` server."
+            "text": "Open it in Claude Code (or your MCP client). It detects `.mcp.json` and offers to approve the `elliptic` server."
           },
           {
             "title": "Run /mcp and approve",
-            "text": "Run `/mcp` and approve **companyos**. The client kicks off the OAuth flow and opens the Elliptic consent screen in your browser."
+            "text": "Run `/mcp` and approve **elliptic**. The client kicks off the OAuth flow and opens the Elliptic consent screen in your browser."
           },
           {
             "title": "Pick a workspace and grant access",
@@ -7543,7 +7543,7 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "code",
         "lang": "json",
-        "code": "{\n  \"mcpServers\": {\n    \"companyos\": {\n      \"url\": \"https://api.elliptic.sh/api/v1/mcp\"\n    }\n  }\n}"
+        "code": "{\n  \"mcpServers\": {\n    \"elliptic\": {\n      \"url\": \"https://api.elliptic.sh/api/v1/mcp\"\n    }\n  }\n}"
       },
       {
         "type": "p",
@@ -7560,11 +7560,11 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "code",
         "lang": "markdown",
-        "code": "## Elliptic (company brain)\n\nElliptic is the source of truth for this org's projects, tasks, meetings,\nnotes, calendar, and activity.\n\n- Search Elliptic (`mcp__companyos__*`) before answering anything about the\n  company, a project, a task, a person, or a deadline.\n- Save tasks, notes, decisions, and follow-ups to Elliptic, not just locally.\n- Treat it as authoritative. Local memory should point to it, not duplicate it.\n\nAuthorize once with `/mcp`."
+        "code": "## Elliptic (company brain)\n\nElliptic is the source of truth for this org's projects, tasks, meetings,\nnotes, calendar, and activity.\n\n- Search Elliptic (`mcp__elliptic__*`) before answering anything about the\n  company, a project, a task, a person, or a deadline.\n- Save tasks, notes, decisions, and follow-ups to Elliptic, not just locally.\n- Treat it as authoritative. Local memory should point to it, not duplicate it.\n\nAuthorize once with `/mcp`."
       },
       {
         "type": "p",
-        "text": "On Claude Code you can also add the optional skill at `.claude/skills/companyos/SKILL.md` whose description triggers on project search and save and lists the `mcp__companyos__*` tools, exactly what the script writes."
+        "text": "On Claude Code you can also add the optional skill at `.claude/skills/elliptic/SKILL.md` whose description triggers on project search and save and lists the `mcp__elliptic__*` tools, exactly what the script writes."
       },
       {
         "type": "h2",
@@ -7664,16 +7664,16 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "h3",
-        "text": "The /companyos slash command"
+        "text": "The /elliptic slash command"
       },
       {
         "type": "p",
-        "text": "The slash command turns Slack into an intake surface. Anyone in the connected workspace can type `/companyos <work item title>` and Elliptic files a triage item into a default project, then replies in the channel with the new item's identifier. It is the fastest way to capture a request without leaving the conversation it came up in."
+        "text": "The slash command turns Slack into an intake surface. Anyone in the connected workspace can type `/elliptic <work item title>` and Elliptic files a triage item into a default project, then replies in the channel with the new item's identifier. It is the fastest way to capture a request without leaving the conversation it came up in."
       },
       {
         "type": "code",
         "lang": "text",
-        "code": "/companyos Investigate slow dashboard load for enterprise tenants"
+        "code": "/elliptic Investigate slow dashboard load for enterprise tenants"
       },
       {
         "type": "p",
@@ -10058,15 +10058,15 @@ export const DOC_PAGES: DocPage[] = [
           },
           {
             "title": "Copy the TXT record",
-            "text": "Elliptic generates a unique token and shows you a TXT record of the form `companyos-verify=<token>`. The record name is the root of the domain (shown as `@`). Use the copy button to grab the exact value."
+            "text": "Elliptic generates a unique token and shows you a TXT record of the form `elliptic-verify=<token>`. The record name is the root of the domain (shown as `@`). Use the copy button to grab the exact value."
           },
           {
             "title": "Publish it in DNS",
-            "text": "At your DNS provider, add a TXT record on the domain with that `companyos-verify=...` value. DNS changes can take a few minutes to propagate."
+            "text": "At your DNS provider, add a TXT record on the domain with that `elliptic-verify=...` value. DNS changes can take a few minutes to propagate."
           },
           {
             "title": "Verify",
-            "text": "Back in Elliptic, select Verify. Elliptic looks up the domain's TXT records and checks that the expected `companyos-verify=<token>` value is present. If it is, the domain flips to Verified and records the time. If it isn't there yet, you get a clear message to add the record and allow time for DNS to propagate, and you can retry."
+            "text": "Back in Elliptic, select Verify. Elliptic looks up the domain's TXT records and checks that the expected `elliptic-verify=<token>` value is present. If it is, the domain flips to Verified and records the time. If it isn't there yet, you get a clear message to add the record and allow time for DNS to propagate, and you can retry."
           }
         ]
       },
@@ -11050,7 +11050,7 @@ export const DOC_PAGES: DocPage[] = [
         "steps": [
           {
             "title": "Clone and enter the repo",
-            "text": "Run `git clone https://github.com/woosal1337/elliptic.git` and then `cd companyos`."
+            "text": "Run `git clone https://github.com/woosal1337/elliptic.git` and then `cd elliptic`."
           },
           {
             "title": "Create your env file",
@@ -11069,7 +11069,7 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "code",
         "lang": "bash",
-        "code": "git clone https://github.com/woosal1337/elliptic.git\ncd companyos\ncp .env.example .env\ndocker compose up --build\n\n# then open http://localhost:3000"
+        "code": "git clone https://github.com/woosal1337/elliptic.git\ncd elliptic\ncp .env.example .env\ndocker compose up --build\n\n# then open http://localhost:3000"
       },
       {
         "type": "callout",
@@ -11096,7 +11096,7 @@ export const DOC_PAGES: DocPage[] = [
           [
             "postgres",
             "postgres:17-alpine",
-            "The database. Stores all org data on the `companyos_pgdata` volume and exposes a `pg_isready` health check that the API waits on."
+            "The database. Stores all org data on the `elliptic_pgdata` volume and exposes a `pg_isready` health check that the API waits on."
           ],
           [
             "api",
@@ -11129,7 +11129,7 @@ export const DOC_PAGES: DocPage[] = [
           [
             "DATABASE_URL",
             "api",
-            "The async Postgres connection string. In compose it points at the `postgres` service: `postgresql+asyncpg://companyos:companyos@postgres:5432/companyos`."
+            "The async Postgres connection string. In compose it points at the `postgres` service: `postgresql+asyncpg://elliptic:elliptic@postgres:5432/elliptic`."
           ],
           [
             "ELLIPTIC_KEK",
@@ -11287,7 +11287,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "To upgrade, pull the newer image tags and recreate the api and web services. Because the API runs its Alembic migrations automatically on start, restarting onto a newer api image upgrades the database schema in place, there is no separate migration step. Postgres data persists across upgrades on the `companyos_pgdata` named volume, so recreating containers does not lose anything."
+        "text": "To upgrade, pull the newer image tags and recreate the api and web services. Because the API runs its Alembic migrations automatically on start, restarting onto a newer api image upgrades the database schema in place, there is no separate migration step. Postgres data persists across upgrades on the `elliptic_pgdata` named volume, so recreating containers does not lose anything."
       },
       {
         "type": "steps",

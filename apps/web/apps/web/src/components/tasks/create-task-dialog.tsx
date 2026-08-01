@@ -51,7 +51,7 @@ interface TaskDraft {
 }
 
 function draftKey(orgId: string, projectId: string): string {
-  return `companyos:task-draft:${orgId}:${projectId}`;
+  return `elliptic:task-draft:${orgId}:${projectId}`;
 }
 
 function readDraft(orgId: string, projectId: string): TaskDraft | null {

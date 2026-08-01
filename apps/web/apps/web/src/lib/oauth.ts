@@ -8,7 +8,7 @@
  */
 
 /** sessionStorage key holding the post-login destination across the OAuth hop. */
-export const OAUTH_NEXT_KEY = "companyos.oauth.next";
+export const OAUTH_NEXT_KEY = "elliptic.oauth.next";
 
 /** Sign-in providers the instance can be configured to offer. */
 export type OAuthProvider = "google" | "github";

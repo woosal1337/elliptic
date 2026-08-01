@@ -38,7 +38,7 @@ interface ViewsState<TConfig extends ViewConfig> {
 const EMPTY: ViewsState<ViewConfig> = { views: [], defaultId: null };
 
 function storageKey(orgId: string, projectId: string, surface: TaskSurfaceKind): string {
-  return `companyos:task-views:${surface}:${orgId}:${projectId}`;
+  return `elliptic:task-views:${surface}:${orgId}:${projectId}`;
 }
 
 function createId(): string {

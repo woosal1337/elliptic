@@ -19,10 +19,10 @@ import {
 } from "@elliptic/ui";
 import { useCommandMenu } from "@/components/command/command-menu-provider";
 
-const DOCS_URL = "https://docs.companyos.dev";
+const DOCS_URL = "https://docs.elliptic.dev";
 const API_DOCS_PATH = "/api/v1/docs";
-const SUPPORT_EMAIL = "support@companyos.dev";
-const ISSUES_URL = "https://github.com/woosal1337/elliptic-api/issues/new";
+const SUPPORT_EMAIL = "support@elliptic.dev";
+const ISSUES_URL = "https://github.com/woosal1337/elliptic/issues/new";
 
 export function HelpMenu() {
   const command = useCommandMenu();

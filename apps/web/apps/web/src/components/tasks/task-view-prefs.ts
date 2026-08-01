@@ -31,7 +31,7 @@ function isSwimlane(value: unknown): value is Swimlane {
 }
 
 function storageKey(orgId: string, projectId: string): string {
-  return `companyos:task-view:${orgId}:${projectId}`;
+  return `elliptic:task-view:${orgId}:${projectId}`;
 }
 
 function read(orgId: string, projectId: string): TaskViewPrefs {

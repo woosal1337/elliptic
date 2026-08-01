@@ -62,7 +62,7 @@ The fastest path — Postgres, API, and web, with migrations applied automatical
 
 ```bash
 git clone https://github.com/woosal1337/elliptic.git
-cd companyos
+cd elliptic
 cp .env.example .env
 docker compose up --build
 ```
@@ -83,7 +83,7 @@ Useful when you're iterating on one side and want hot reload.
 cd apps/api
 uv sync --all-groups
 uv run alembic upgrade head          # apply migrations (needs Postgres)
-uv run uvicorn companyos.main:app --reload
+uv run uvicorn elliptic.main:app --reload
 ```
 
 **Web** (`apps/web`)
@@ -104,7 +104,7 @@ Elliptic is a Bun + Turborepo monorepo with three apps:
 companyos/
 ├── apps/
 │   ├── api/                  # Python / FastAPI backend
-│   │   ├── src/companyos/
+│   │   ├── src/elliptic/
 │   │   │   ├── core/         # config, security, deps, shared plumbing
 │   │   │   └── modules/      # one folder per domain: router · service · schemas · models
 │   │   ├── alembic/          # database migrations
@@ -116,7 +116,7 @@ companyos/
 │   │   │       ├── components/
 │   │   │       ├── hooks/    # TanStack Query hooks: use-*-queries.ts
 │   │   │       └── lib/      # api client, i18n, keyboard, etc.
-│   │   └── packages/ui/      # @companyos/ui — shared design system (raw TS source)
+│   │   └── packages/ui/      # @elliptic/ui — shared design system (raw TS source)
 │   └── mobile/               # Expo / React Native app
 └── .github/workflows/        # CI, deploy, release
 ```
@@ -157,7 +157,7 @@ Mirror that shape when you add one.
 ## Coding standards
 
 **Web** — TypeScript strict, no `any`. Shared visual primitives live only in
-`@companyos/ui`; apps never duplicate them or hardcode brand colors, radii, or
+`@elliptic/ui`; apps never duplicate them or hardcode brand colors, radii, or
 fonts (tokens live in `packages/ui/src/styles.css`). Server state goes through
 TanStack Query hooks (`src/hooks/use-*-queries.ts`), never raw `fetch` in a
 component. Forms use `react-hook-form` + `zod`. Every async surface handles

@@ -79,7 +79,7 @@ export default function AboutPage() {
         secondary={{ label: "View on GitHub", href: "https://github.com/woosal1337/elliptic" }}
         visual={
           <BrowserFrame
-            url="app.companyos.com/q3-platform"
+            url="app.elliptic.com/q3-platform"
             className="w-full min-w-[64rem] border-border-strong shadow-xl"
           >
             <ProductMockup />
@@ -127,7 +127,7 @@ export default function AboutPage() {
         <CodeShowcase
           caption="quickstart"
           code={`git clone https://github.com/woosal1337/elliptic.git
-cd companyos
+cd elliptic
 cp .env.example .env
 docker compose up --build
 

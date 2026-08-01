@@ -8,7 +8,7 @@ export interface BrowserFrameProps extends React.HTMLAttributes<HTMLDivElement> 
 }
 
 export const BrowserFrame = React.forwardRef<HTMLDivElement, BrowserFrameProps>(
-  ({ className, url = "app.companyos.com", hideDots = false, bodyClassName, children, ...props }, ref) => (
+  ({ className, url = "app.elliptic.com", hideDots = false, bodyClassName, children, ...props }, ref) => (
     <div
       ref={ref}
       className={cn(

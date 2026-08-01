@@ -8,16 +8,16 @@
 #
 # Usage:
 #   cd your-project
-#   bash companyos-agent-init.sh [--endpoint URL] [--name companyos]
+#   bash elliptic-agent-init.sh [--endpoint URL] [--name elliptic]
 #
 # It writes (or idempotently updates):
 #   .mcp.json                          project-scoped MCP connection (OAuth)
 #   CLAUDE.md                          a marked Elliptic routing block
-#   .claude/skills/companyos/SKILL.md  an on-demand skill for the agent
+#   .claude/skills/elliptic/SKILL.md  an on-demand skill for the agent
 set -euo pipefail
 
-ENDPOINT="${COMPANYOS_MCP_URL:-http://localhost:8000/api/v1/mcp}"
-NAME="companyos"
+ENDPOINT="${ELLIPTIC_MCP_URL:-${COMPANYOS_MCP_URL:-http://localhost:8000/api/v1/mcp}}"
+NAME="elliptic"
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -26,7 +26,7 @@ while [ $# -gt 0 ]; do
     --name) NAME="$2"; shift 2 ;;
     --name=*) NAME="${1#*=}"; shift ;;
     -h|--help)
-      echo "Usage: companyos-agent-init.sh [--endpoint URL] [--name companyos]"
+      echo "Usage: elliptic-agent-init.sh [--endpoint URL] [--name elliptic]"
       exit 0 ;;
     *) echo "Unknown option: $1" >&2; exit 1 ;;
   esac
@@ -65,10 +65,14 @@ fi
 
 # 2) CLAUDE.md routing block (idempotent, between markers) ---------------------
 CLAUDE_MD="$ROOT/CLAUDE.md"
-START="<!-- companyos:start -->"
-END="<!-- companyos:end -->"
+START="<!-- elliptic:start -->"
+END="<!-- elliptic:end -->"
+# Blocks written before the rename carry the old markers. Recognise them so a
+# re-run refreshes that block instead of appending a second one.
+LEGACY_START="<!-- companyos:start -->"
+LEGACY_END="<!-- companyos:end -->"
 HAD_BLOCK=0
-if [ -f "$CLAUDE_MD" ] && grep -qF "$START" "$CLAUDE_MD"; then HAD_BLOCK=1; fi
+if [ -f "$CLAUDE_MD" ] && grep -qF -e "$START" -e "$LEGACY_START" "$CLAUDE_MD"; then HAD_BLOCK=1; fi
 
 BLOCK_FILE="$(mktemp)"
 cat > "$BLOCK_FILE" <<EOF
@@ -93,9 +97,9 @@ EOF
 TMP="$(mktemp)"
 if [ -f "$CLAUDE_MD" ]; then
   # Drop any previous managed block, keep everything else in order.
-  awk -v s="$START" -v e="$END" '
-    $0==s {inblk=1}
-    inblk && $0==e {inblk=0; next}
+  awk -v s="$START" -v e="$END" -v ls="$LEGACY_START" -v le="$LEGACY_END" '
+    $0==s || $0==ls {inblk=1}
+    inblk && ($0==e || $0==le) {inblk=0; next}
     !inblk {print}
   ' "$CLAUDE_MD" > "$TMP"
 fi

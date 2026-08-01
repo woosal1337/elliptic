@@ -70,7 +70,7 @@ Requires [Docker](https://docs.docker.com/get-docker/) with the Compose plugin.
 
 ```bash
 git clone https://github.com/woosal1337/elliptic.git
-cd companyos
+cd elliptic
 cp .env.example .env
 docker compose up --build
 ```
@@ -133,7 +133,7 @@ Tagged releases publish container images to GHCR:
 
 Each app can be run and developed on its own:
 
-- **Backend** — [`apps/api`](apps/api) (uv, ruff, mypy, pytest; `uv run uvicorn companyos.main:app`)
+- **Backend** — [`apps/api`](apps/api) (uv, ruff, mypy, pytest; `uv run uvicorn elliptic.main:app`)
 - **Web** — [`apps/web`](apps/web) (Bun, Turborepo; `bun run dev`)
 
 See each app's `README.md` and `CONVENTIONS.md` for the project rules. The web app

@@ -1,6 +1,6 @@
 export type Theme = "light" | "dark" | "system";
 
-export const THEME_STORAGE_KEY = "companyos:theme";
+export const THEME_STORAGE_KEY = "elliptic:theme";
 
 export function isTheme(value: string | null): value is Theme {
   return value === "light" || value === "dark" || value === "system";

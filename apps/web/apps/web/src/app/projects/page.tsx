@@ -34,7 +34,7 @@ const ROWS: FeatureRowData[] = [
       "Sub-tasks, labels, priorities, and assignees in sync",
     ],
     visual: (
-      <BrowserFrame url="app.companyos.com/q3-platform" className="bg-surface shadow-xl">
+      <BrowserFrame url="app.elliptic.com/q3-platform" className="bg-surface shadow-xl">
         <ProductMockup />
       </BrowserFrame>
     ),
@@ -145,7 +145,7 @@ export default function ProjectsPage() {
         secondary={{ label: "Read the docs", href: "https://docs.elliptic.sh/projects-and-tasks" }}
         visual={
           <BrowserFrame
-            url="app.companyos.com/q3-platform"
+            url="app.elliptic.com/q3-platform"
             className="w-full min-w-[64rem] border-border-strong shadow-xl"
           >
             <ProductMockup />

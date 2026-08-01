@@ -5,8 +5,8 @@ services:
       dockerfile: Dockerfile
       args:
         BACKEND_ORIGIN: ${BACKEND_ORIGIN:-http://host.docker.internal:8001}
-    image: companyos-web:local
-    container_name: companyos-web
+    image: elliptic-web:local
+    container_name: elliptic-web
     ports:
       - "3000:3000"
     extra_hosts:

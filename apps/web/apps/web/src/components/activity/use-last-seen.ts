@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-const STORAGE_PREFIX = "companyos:activity:last-seen";
+const STORAGE_PREFIX = "elliptic:activity:last-seen";
 
 function storageKey(orgId: string): string {
   return `${STORAGE_PREFIX}:${orgId}`;

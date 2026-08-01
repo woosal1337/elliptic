@@ -34,7 +34,7 @@ const ROWS: FeatureRowData[] = [
       "The recording lives next to the project it belongs to",
     ],
     visual: (
-      <BrowserFrame url="app.companyos.com/meetings/weekly-sync" className="bg-surface shadow-xl">
+      <BrowserFrame url="app.elliptic.com/meetings/weekly-sync" className="bg-surface shadow-xl">
         <MeetingMockup />
       </BrowserFrame>
     ),
@@ -140,7 +140,7 @@ export default function MeetingsPage() {
         secondary={{ label: "Read the docs", href: "https://docs.elliptic.sh/meetings" }}
         visual={
           <BrowserFrame
-            url="app.companyos.com/meetings/weekly-sync"
+            url="app.elliptic.com/meetings/weekly-sync"
             className="w-full min-w-[64rem] border-border-strong shadow-xl"
           >
             <MeetingMockup />

@@ -2,7 +2,7 @@ import type { BlogPost } from "./types";
 
 export const POSTS: BlogPost[] = [
   {
-    "slug": "introducing-companyos",
+    "slug": "introducing-elliptic",
     "title": "Introducing Elliptic",
     "description": "Jira for your agents. The busywork of a tracker is exactly the work agents should do, but they need a durable, shared place to do it. That place is Elliptic.",
     "date": "2026-06-28",
@@ -134,7 +134,7 @@ export const POSTS: BlogPost[] = [
       {
         "type": "code",
         "lang": "bash",
-        "code": "git clone https://github.com/woosal1337/elliptic.git\ncd companyos\ncp .env.example .env\ndocker compose up --build"
+        "code": "git clone https://github.com/woosal1337/elliptic.git\ncd elliptic\ncp .env.example .env\ndocker compose up --build"
       },
       {
         "type": "p",
@@ -268,7 +268,7 @@ export const POSTS: BlogPost[] = [
       {
         "type": "code",
         "lang": "bash",
-        "code": "git clone https://github.com/woosal1337/elliptic.git\ncd companyos\ncp .env.example .env\ndocker compose up --build"
+        "code": "git clone https://github.com/woosal1337/elliptic.git\ncd elliptic\ncp .env.example .env\ndocker compose up --build"
       },
       {
         "type": "p",

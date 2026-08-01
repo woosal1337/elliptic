@@ -59,7 +59,7 @@ function defaults(): SidebarPrefs {
   };
 }
 
-const STORAGE_KEY = "companyos:sidebar";
+const STORAGE_KEY = "elliptic:sidebar";
 // Bump when the curated default changes so existing installs migrate once.
 const PREFS_VERSION = 2;
 

@@ -1,5 +1,5 @@
-const LAST_ORG_KEY = "companyos:last-org-id";
-const RECENT_COMMANDS_KEY = "companyos:recent-commands";
+const LAST_ORG_KEY = "elliptic:last-org-id";
+const RECENT_COMMANDS_KEY = "elliptic:recent-commands";
 const MAX_RECENT_COMMANDS = 5;
 
 export function getRecentCommandIds(): string[] {

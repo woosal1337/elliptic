@@ -51,7 +51,7 @@ export function Hero() {
         <div className="relative mt-20 mask-fade-b sm:mt-24">
           <div className="relative -mr-6 overflow-hidden md:-mr-16 lg:-mr-32 xl:-mr-48">
             <BrowserFrame
-              url="app.companyos.com/q3-platform"
+              url="app.elliptic.com/q3-platform"
               className="w-full min-w-[64rem] border-border-strong shadow-xl"
             >
               <ProductMockup />

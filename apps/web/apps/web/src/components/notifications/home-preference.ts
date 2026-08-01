@@ -14,7 +14,7 @@ export const DEFAULT_HOME_OPTIONS: readonly DefaultHomeOption[] = [
 
 export const FALLBACK_DEFAULT_HOME: DefaultHome = "projects";
 
-const STORAGE_KEY = "companyos:default-home";
+const STORAGE_KEY = "elliptic:default-home";
 
 const VALID_VALUES = new Set<DefaultHome>(
   DEFAULT_HOME_OPTIONS.map((option) => option.value)

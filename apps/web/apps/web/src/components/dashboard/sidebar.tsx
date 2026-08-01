@@ -75,7 +75,7 @@ const SECTION_LABELS: Record<SidebarSection, string> = {
 
 const SECTION_ORDER: readonly SidebarSection[] = ["personal", "team"];
 
-const COLLAPSE_KEY = "companyos:sidebar-collapsed";
+const COLLAPSE_KEY = "elliptic:sidebar-collapsed";
 
 export function Sidebar({
   orgId,

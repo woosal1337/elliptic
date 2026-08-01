@@ -29,13 +29,13 @@ bun run build
 docker compose up -d --build      # web on http://localhost:3000
 ```
 
-The image is a Next.js standalone build served by Node. The `/api` rewrite target is baked at build time from the `BACKEND_ORIGIN` build arg (declared in `turbo.json` so Turborepo's strict env mode passes it through), defaulting to `http://host.docker.internal:8001` to reach the API container that the `companyos-api` repo publishes on host port 8001. Override for a different backend:
+The image is a Next.js standalone build served by Node. The `/api` rewrite target is baked at build time from the `BACKEND_ORIGIN` build arg (declared in `turbo.json` so Turborepo's strict env mode passes it through), defaulting to `http://host.docker.internal:8001` to reach the API container that the `elliptic-api` repo publishes on host port 8001. Override for a different backend:
 
 ```bash
 BACKEND_ORIGIN=http://host.docker.internal:8000 docker compose up -d --build
 ```
 
-Run the `companyos-api` stack first (`docker compose up -d --build` there), then this.
+Run the `elliptic-api` stack first (`docker compose up -d --build` there), then this.
 
 ## Structure
 

@@ -20,6 +20,16 @@ const nextConfig: NextConfig = {
   env: {
     NEXT_PUBLIC_REALTIME_URL: realtimeUrl,
   },
+  // The blog slug changed with the rename; keep the published URL working.
+  async redirects() {
+    return [
+      {
+        source: "/blog/introducing-companyos",
+        destination: "/blog/introducing-elliptic",
+        permanent: true,
+      },
+    ];
+  },
   async rewrites() {
     return [
       {

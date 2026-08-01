@@ -132,7 +132,7 @@ function defaults(surface: TaskSurfaceKind): DisplayConfig {
 // v2 = the "updated" default above. Bumped so surfaces that already stored the
 // old manual-order default pick the new one up instead of silently keeping it.
 function storageKey(orgId: string, projectId: string, surface: TaskSurfaceKind): string {
-  return `companyos:task-display:v2:${surface}:${orgId}:${projectId}`;
+  return `elliptic:task-display:v2:${surface}:${orgId}:${projectId}`;
 }
 
 function isProperty(value: unknown): value is DisplayProperty {

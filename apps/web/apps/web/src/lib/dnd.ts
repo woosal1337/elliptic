@@ -1,4 +1,4 @@
-export const ENTITY_DND_MIME = "application/x-companyos-entity";
+export const ENTITY_DND_MIME = "application/x-elliptic-entity";
 
 export type EntityRefKind = "task" | "meeting" | "note" | "decision";
 

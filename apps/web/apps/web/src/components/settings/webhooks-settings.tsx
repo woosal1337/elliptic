@@ -60,7 +60,7 @@ export function WebhooksSettings({ orgId }: { orgId: string }) {
           <Input
             value={url}
             onChange={(event) => setUrl(event.target.value)}
-            placeholder="https://example.com/webhooks/companyos"
+            placeholder="https://example.com/webhooks/elliptic"
           />
           <Input
             value={types}

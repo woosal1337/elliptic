@@ -1,7 +1,7 @@
 import type { DocBlock } from "@/app/docs/_content/types";
 
 export interface BlogPost {
-  /** URL slug, e.g. "introducing-companyos" -> /blog/introducing-companyos */
+  /** URL slug, e.g. "introducing-elliptic" -> /blog/introducing-elliptic */
   slug: string;
   title: string;
   description: string;
