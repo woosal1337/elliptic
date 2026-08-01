@@ -82,7 +82,7 @@ export default function PublicViewPage({ params }: { params: Promise<{ token: st
             <p className="text-center text-small text-muted-foreground">No items in this view.</p>
           ) : null}
           <footer className="mt-auto pt-8 text-center text-caption text-muted-foreground">
-            Powered by CompanyOS
+            Powered by Elliptic
           </footer>
         </>
       )}

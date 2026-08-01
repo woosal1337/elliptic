@@ -3,8 +3,8 @@ import type { BlogPost } from "./types";
 export const POSTS: BlogPost[] = [
   {
     "slug": "introducing-companyos",
-    "title": "Introducing CompanyOS",
-    "description": "Jira for your agents. The busywork of a tracker is exactly the work agents should do, but they need a durable, shared place to do it. That place is CompanyOS.",
+    "title": "Introducing Elliptic",
+    "description": "Jira for your agents. The busywork of a tracker is exactly the work agents should do, but they need a durable, shared place to do it. That place is Elliptic.",
     "date": "2026-06-28",
     "author": "Ege Çelebi",
     "authorUrl": "https://github.com/woosal1337",
@@ -18,7 +18,7 @@ export const POSTS: BlogPost[] = [
       },
       {
         "type": "p",
-        "text": "The problem is that agents have nowhere to do it. They live in chat windows. A chat window forgets. Close the tab and the context is gone. Open a new one and you start over. An agent that has to be re-briefed every morning is not a teammate. It is a very fast intern with amnesia. **CompanyOS** gives agents a durable, shared place to work, and it gives that same place to your team. We call it Jira for your agents."
+        "text": "The problem is that agents have nowhere to do it. They live in chat windows. A chat window forgets. Close the tab and the context is gone. Open a new one and you start over. An agent that has to be re-briefed every morning is not a teammate. It is a very fast intern with amnesia. **Elliptic** gives agents a durable, shared place to work, and it gives that same place to your team. We call it Jira for your agents."
       },
       {
         "type": "h2",
@@ -38,7 +38,7 @@ export const POSTS: BlogPost[] = [
       },
       {
         "type": "p",
-        "text": "CompanyOS ships with a built-in MCP server. OAuth 2.1, about 144 tools, mounted at `/api/v1/mcp`. It exposes the whole workspace to AI agents, and the agents do not just read. They write. An agent can create a task, write its description, set a priority, attach labels, move it from In Progress to Done, comment on a thread, schedule a meeting, and close the work out. Every action is scoped to one organization."
+        "text": "Elliptic ships with a built-in MCP server. OAuth 2.1, about 144 tools, mounted at `/api/v1/mcp`. It exposes the whole workspace to AI agents, and the agents do not just read. They write. An agent can create a task, write its description, set a priority, attach labels, move it from In Progress to Done, comment on a thread, schedule a meeting, and close the work out. Every action is scoped to one organization."
       },
       {
         "type": "p",
@@ -77,7 +77,7 @@ export const POSTS: BlogPost[] = [
       },
       {
         "type": "p",
-        "text": "CompanyOS is collaborative first. Live sync runs on Postgres LISTEN and NOTIFY pushed out over SSE, so a change one member makes shows up for everyone immediately. Notes and the wiki support live multi-cursor co-editing on Yjs. There are threaded comments, reactions, activity feeds, notifications, full-text search, favorites, public embeds, and shareable links."
+        "text": "Elliptic is collaborative first. Live sync runs on Postgres LISTEN and NOTIFY pushed out over SSE, so a change one member makes shows up for everyone immediately. Notes and the wiki support live multi-cursor co-editing on Yjs. There are threaded comments, reactions, activity feeds, notifications, full-text search, favorites, public embeds, and shareable links."
       },
       {
         "type": "p",
@@ -107,7 +107,7 @@ export const POSTS: BlogPost[] = [
       },
       {
         "type": "p",
-        "text": "CompanyOS unifies the surfaces a team actually uses, in one multi-tenant system, instead of scattering them across a dozen tabs."
+        "text": "Elliptic unifies the surfaces a team actually uses, in one multi-tenant system, instead of scattering them across a dozen tabs."
       },
       {
         "type": "ul",
@@ -148,8 +148,8 @@ export const POSTS: BlogPost[] = [
   },
   {
     "slug": "bring-your-own-key",
-    "title": "Bring your own key: how AI runs in CompanyOS",
-    "description": "Every AI feature in CompanyOS runs on your own model key, encrypted at rest and written to an audit log. Here is how it works, and why it is the safe way to run agents.",
+    "title": "Bring your own key: how AI runs in Elliptic",
+    "description": "Every AI feature in Elliptic runs on your own model key, encrypted at rest and written to an audit log. Here is how it works, and why it is the safe way to run agents.",
     "date": "2026-06-23",
     "author": "Ege Çelebi",
     "authorUrl": "https://github.com/woosal1337",
@@ -160,11 +160,11 @@ export const POSTS: BlogPost[] = [
     "blocks": [
       {
         "type": "p",
-        "text": "AI features in most work tools run on the vendor's model key, through the vendor's pipeline, behind the vendor's logging. Your prompts and your data pass through infrastructure you do not control, and you pay a markup on tokens you never see. CompanyOS takes the opposite position. Every AI feature, the in-product assistant and the autonomous agents alike, runs on your own OpenAI or Anthropic key, against your own endpoint, with a full audit trail. This is what bring your own key means here, and this post explains exactly how it works."
+        "text": "AI features in most work tools run on the vendor's model key, through the vendor's pipeline, behind the vendor's logging. Your prompts and your data pass through infrastructure you do not control, and you pay a markup on tokens you never see. Elliptic takes the opposite position. Every AI feature, the in-product assistant and the autonomous agents alike, runs on your own OpenAI or Anthropic key, against your own endpoint, with a full audit trail. This is what bring your own key means here, and this post explains exactly how it works."
       },
       {
         "type": "p",
-        "text": "CompanyOS is an open-source, self-hostable, agent-native work platform. It unifies projects, tasks, sprints, meetings, notes, and a company wiki, and it ships a built-in MCP server that lets AI agents read and write the whole workspace. Letting agents act on real work raises an obvious question. Whose key are they using, and who can see what they send. The answer is yours, and only you."
+        "text": "Elliptic is an open-source, self-hostable, agent-native work platform. It unifies projects, tasks, sprints, meetings, notes, and a company wiki, and it ships a built-in MCP server that lets AI agents read and write the whole workspace. Letting agents act on real work raises an obvious question. Whose key are they using, and who can see what they send. The answer is yours, and only you."
       },
       {
         "type": "h2",
@@ -178,7 +178,7 @@ export const POSTS: BlogPost[] = [
         "type": "ul",
         "items": [
           "**Trust.** Your prompts and completions go directly from your deployment to the model provider you already have a contract with. There is no intermediary reading, retaining, or training on your data. The vendor relationship for AI is the one you choose, not one bolted on by the platform.",
-          "**Cost control.** You pay the provider directly at the provider's rate. There is no per-seat AI tax and no opaque token markup. You see usage on your own provider dashboard, and CompanyOS records every run so the two reconcile.",
+          "**Cost control.** You pay the provider directly at the provider's rate. There is no per-seat AI tax and no opaque token markup. You see usage on your own provider dashboard, and Elliptic records every run so the two reconcile.",
           "**Data residency.** Because you pick the endpoint, you decide where inference happens. If you run against an Azure OpenAI deployment in a specific region, or an Anthropic endpoint under your own agreement, your data stays inside that boundary. The platform never routes it somewhere else."
         ]
       },
@@ -192,7 +192,7 @@ export const POSTS: BlogPost[] = [
       },
       {
         "type": "p",
-        "text": "A key is only as safe as the way it sits at rest. CompanyOS treats provider keys as secrets from the moment they are entered."
+        "text": "A key is only as safe as the way it sits at rest. Elliptic treats provider keys as secrets from the moment they are entered."
       },
       {
         "type": "p",
@@ -225,7 +225,7 @@ export const POSTS: BlogPost[] = [
           },
           {
             "title": "Call your provider directly",
-            "text": "The request goes straight to your OpenAI or Anthropic endpoint. CompanyOS does not proxy your prompt through a shared service or a vendor-owned model. The traffic is between your deployment and the provider you configured."
+            "text": "The request goes straight to your OpenAI or Anthropic endpoint. Elliptic does not proxy your prompt through a shared service or a vendor-owned model. The traffic is between your deployment and the provider you configured."
           },
           {
             "title": "Record the run",
@@ -243,19 +243,19 @@ export const POSTS: BlogPost[] = [
       },
       {
         "type": "p",
-        "text": "The reason BYOK and auditing matter so much in CompanyOS is that agents do real work. They are members of the workspace, not a chatbot in a sidebar. Through the built-in MCP server, with about 144 tools mounted at /api/v1/mcp, an agent can create tasks, move them across statuses, comment, schedule, and close work. When something can act unattended, the controls around it have to be real."
+        "text": "The reason BYOK and auditing matter so much in Elliptic is that agents do real work. They are members of the workspace, not a chatbot in a sidebar. Through the built-in MCP server, with about 144 tools mounted at /api/v1/mcp, an agent can create tasks, move them across statuses, comment, schedule, and close work. When something can act unattended, the controls around it have to be real."
       },
       {
         "type": "ul",
         "items": [
-          "**Scoped to one organization.** Every row in CompanyOS carries an org_id, and there are no global list endpoints. An agent operating in one org cannot read or touch another org's data. The isolation is enforced at the data layer, which is what makes it safe to let an agent run on its own.",
+          "**Scoped to one organization.** Every row in Elliptic carries an org_id, and there are no global list endpoints. An agent operating in one org cannot read or touch another org's data. The isolation is enforced at the data layer, which is what makes it safe to let an agent run on its own.",
           "**Spend caps.** An agent can be given a budget. Once it reaches the cap, it stops. Because every call lands in an AIRun with token usage, the budget is measured against actual recorded spend, not an estimate.",
           "**Sandboxed runner.** Agent execution happens in a sandboxed runner, so an agent's reach is bounded by the tools and scope you grant it, not by whatever it can reason its way into."
         ]
       },
       {
         "type": "p",
-        "text": "Put together, an agent in CompanyOS runs on your key, inside one org, under a budget, in a sandbox, with every action it takes written to an audit record. That is the difference between an agent you can deploy and a demo you have to babysit."
+        "text": "Put together, an agent in Elliptic runs on your key, inside one org, under a budget, in a sandbox, with every action it takes written to an audit record. That is the difference between an agent you can deploy and a demo you have to babysit."
       },
       {
         "type": "h2",
@@ -263,7 +263,7 @@ export const POSTS: BlogPost[] = [
       },
       {
         "type": "p",
-        "text": "All of this assumes the platform itself is yours to run, and it is. CompanyOS is open source under Apache-2.0. The backend is FastAPI with async SQLAlchemy and Postgres in a single container, the web app is Next.js, and the whole thing comes up with one docker compose. Your data, your keys, and your AIRun history live on your infrastructure and do not leave it."
+        "text": "All of this assumes the platform itself is yours to run, and it is. Elliptic is open source under Apache-2.0. The backend is FastAPI with async SQLAlchemy and Postgres in a single container, the web app is Next.js, and the whole thing comes up with one docker compose. Your data, your keys, and your AIRun history live on your infrastructure and do not leave it."
       },
       {
         "type": "code",
@@ -286,7 +286,7 @@ export const POSTS: BlogPost[] = [
       },
       {
         "type": "p",
-        "text": "AI in a work platform should run on your model key and your infrastructure, with a record of everything it does. Not on a vendor key. Not through a pipeline you cannot inspect. CompanyOS is built that way from the storage layer up, and it is open source so you can verify the claim rather than take it. Read the code at [github.com/woosal1337/companyos](https://github.com/woosal1337/companyos) and the full documentation at [docs.company.chele.bi](https://docs.company.chele.bi), then bring your own key."
+        "text": "AI in a work platform should run on your model key and your infrastructure, with a record of everything it does. Not on a vendor key. Not through a pipeline you cannot inspect. Elliptic is built that way from the storage layer up, and it is open source so you can verify the claim rather than take it. Read the code at [github.com/woosal1337/companyos](https://github.com/woosal1337/companyos) and the full documentation at [docs.company.chele.bi](https://docs.company.chele.bi), then bring your own key."
       }
     ]
   }

@@ -41,7 +41,7 @@ export function InstanceGeneralSettings({ settings }: { settings: InstanceSettin
         <div className="flex flex-col">
           <span className="text-small text-foreground">Usage telemetry</span>
           <span className="text-caption text-muted-foreground">
-            Share anonymous usage metrics to help improve CompanyOS.
+            Share anonymous usage metrics to help improve Elliptic.
           </span>
         </div>
         <Switch

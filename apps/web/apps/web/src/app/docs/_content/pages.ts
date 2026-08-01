@@ -4,19 +4,19 @@ export const DOC_PAGES: DocPage[] = [
   {
     "title": "Overview & Getting Started",
     "slug": "overview-getting-started",
-    "description": "What CompanyOS is, the one BYOK rule, and how to create an account, start or join a workspace, run the get-started checklist, and find your way around.",
+    "description": "What Elliptic is, the one BYOK rule, and how to create an account, start or join a workspace, run the get-started checklist, and find your way around.",
     "blocks": [
       {
         "type": "h2",
-        "text": "What CompanyOS is"
+        "text": "What Elliptic is"
       },
       {
         "type": "p",
-        "text": "CompanyOS is an agent-native work platform. The shortest way to describe it is **Jira for your agents and your team**: humans and AI agents share the same projects, tasks, board, notes, meetings, and the same connected history of everything that happened. There is no separate AI bolt-on and no second tool for the bots. An agent picks up a task, moves it across the board, writes a note, or answers a question over exactly the same surfaces you do."
+        "text": "Elliptic is an agent-native work platform. The shortest way to describe it is **Jira for your agents and your team**: humans and AI agents share the same projects, tasks, board, notes, meetings, and the same connected history of everything that happened. There is no separate AI bolt-on and no second tool for the bots. An agent picks up a task, moves it across the board, writes a note, or answers a question over exactly the same surfaces you do."
       },
       {
         "type": "p",
-        "text": "Instead of scattering work across a project tracker, a notes app, a meeting recorder, and a chat tool, CompanyOS keeps your projects, tasks, notes, meetings, calendar, and a complete activity feed in one connected system. Every item keeps its context, so when you open a task you can see the meeting it came from, the note that referenced it, and everything that has happened to it since."
+        "text": "Instead of scattering work across a project tracker, a notes app, a meeting recorder, and a chat tool, Elliptic keeps your projects, tasks, notes, meetings, calendar, and a complete activity feed in one connected system. Every item keeps its context, so when you open a task you can see the meeting it came from, the note that referenced it, and everything that has happened to it since."
       },
       {
         "type": "p",
@@ -26,7 +26,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "info",
         "title": "Agents are first-class members",
-        "text": "An agent in CompanyOS is not a chatbot in a corner. It is a member that operates the real product, the same board, notes, meetings, and search, through the **company-brain MCP**. That is what agent-native means here: the same surfaces, the same rules, the same audit trail, whether a person or an agent did the work. See **Company-Brain MCP** and **Set up your agent** when you are ready to give an agent its own seat."
+        "text": "An agent in Elliptic is not a chatbot in a corner. It is a member that operates the real product, the same board, notes, meetings, and search, through the **company-brain MCP**. That is what agent-native means here: the same surfaces, the same rules, the same audit trail, whether a person or an agent did the work. See **Company-Brain MCP** and **Set up your agent** when you are ready to give an agent its own seat."
       },
       {
         "type": "h2",
@@ -34,11 +34,11 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "There is one rule that shapes every AI feature in CompanyOS: **bring your own key (BYOK)**. Every AI feature runs on your organization's own model key. You store an OpenAI or Anthropic API key once, at the organization level, and all AI work, meeting summaries, asking a meeting, the company brain, and your agents, runs on that key."
+        "text": "There is one rule that shapes every AI feature in Elliptic: **bring your own key (BYOK)**. Every AI feature runs on your organization's own model key. You store an OpenAI or Anthropic API key once, at the organization level, and all AI work, meeting summaries, asking a meeting, the company brain, and your agents, runs on that key."
       },
       {
         "type": "p",
-        "text": "There is no hidden pooled model and no shared bill. CompanyOS never quietly routes your prompts through a model account you do not control. The cost lands on your own provider invoice, the data stays under your control, and you decide which provider and which model your organization uses."
+        "text": "There is no hidden pooled model and no shared bill. Elliptic never quietly routes your prompts through a model account you do not control. The cost lands on your own provider invoice, the data stays under your control, and you decide which provider and which model your organization uses."
       },
       {
         "type": "callout",
@@ -71,7 +71,7 @@ export const DOC_PAGES: DocPage[] = [
           },
           {
             "title": "Create the account",
-            "text": "Select Create account. If your instance has email sending configured, CompanyOS sends a 6-digit verification code and takes you to the Verify your email page. If email is not configured, your account is verified automatically and you go straight to choosing a workspace."
+            "text": "Select Create account. If your instance has email sending configured, Elliptic sends a 6-digit verification code and takes you to the Verify your email page. If email is not configured, your account is verified automatically and you go straight to choosing a workspace."
           }
         ]
       },
@@ -81,18 +81,18 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Email verification turns on automatically whenever your instance has an email provider configured. When it is on, CompanyOS emails you a **6-digit code** right after sign-up and you confirm it before you can use the account."
+        "text": "Email verification turns on automatically whenever your instance has an email provider configured. When it is on, Elliptic emails you a **6-digit code** right after sign-up and you confirm it before you can use the account."
       },
       {
         "type": "steps",
         "steps": [
           {
             "title": "Read the code",
-            "text": "Open the email from CompanyOS and copy the 6-digit code. The code is valid for a limited time, so use it promptly."
+            "text": "Open the email from Elliptic and copy the 6-digit code. The code is valid for a limited time, so use it promptly."
           },
           {
             "title": "Enter it",
-            "text": "On the Verify your email page, type the 6 digits and select Verify. CompanyOS signs you in and continues to the workspace chooser."
+            "text": "On the Verify your email page, type the 6 digits and select Verify. Elliptic signs you in and continues to the workspace chooser."
           },
           {
             "title": "Need a new code?",
@@ -108,7 +108,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Already have an account? Use the **Sign in** link instead. You enter your email and password, and CompanyOS drops you back into your most recent workspace. Sessions are kept in secure cookies, so you do not re-enter your password every visit."
+        "text": "Already have an account? Use the **Sign in** link instead. You enter your email and password, and Elliptic drops you back into your most recent workspace. Sessions are kept in secure cookies, so you do not re-enter your password every visit."
       },
       {
         "type": "p",
@@ -143,17 +143,17 @@ export const DOC_PAGES: DocPage[] = [
           },
           {
             "title": "Name it",
-            "text": "Enter a name such as Acme Inc. The name must be at least 2 characters. CompanyOS generates a URL-friendly slug from the name automatically, you never set one by hand."
+            "text": "Enter a name such as Acme Inc. The name must be at least 2 characters. Elliptic generates a URL-friendly slug from the name automatically, you never set one by hand."
           },
           {
             "title": "Create",
-            "text": "Select Create. You become the owner, CompanyOS seeds a default task workflow for the org, and it takes you straight into your projects with the first-project dialog open, so you can start working immediately."
+            "text": "Select Create. You become the owner, Elliptic seeds a default task workflow for the org, and it takes you straight into your projects with the first-project dialog open, so you can start working immediately."
           }
         ]
       },
       {
         "type": "p",
-        "text": "The slug is derived from your name, for example Acme Inc becomes `acme-inc`. Slugs are unique across the instance, so if your name produces one that is already taken, CompanyOS appends a short random suffix automatically (for example `acme-inc-4f9a2c`). The slug is stable, renaming your org later does not change it."
+        "text": "The slug is derived from your name, for example Acme Inc becomes `acme-inc`. Slugs are unique across the instance, so if your name produces one that is already taken, Elliptic appends a short random suffix automatically (for example `acme-inc-4f9a2c`). The slug is stable, renaming your org later does not change it."
       },
       {
         "type": "h3",
@@ -176,7 +176,7 @@ export const DOC_PAGES: DocPage[] = [
           },
           {
             "title": "Accept",
-            "text": "Once you are signed in with the matching email, CompanyOS accepts the invite for you and drops you into the organization's projects. If your email needs verification first, finish that step before accepting."
+            "text": "Once you are signed in with the matching email, Elliptic accepts the invite for you and drops you into the organization's projects. If your email needs verification first, finish that step before accepting."
           }
         ]
       },
@@ -203,7 +203,7 @@ export const DOC_PAGES: DocPage[] = [
           },
           {
             "title": "Pick another org",
-            "text": "Choose any organization from the list. A checkmark marks the one you are in. CompanyOS switches you over and opens that org's projects."
+            "text": "Choose any organization from the list. A checkmark marks the one you are in. Elliptic switches you over and opens that org's projects."
           },
           {
             "title": "Or create a new one",
@@ -214,8 +214,8 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "callout",
         "variant": "tip",
-        "title": "CompanyOS remembers where you left off",
-        "text": "Your most recently used organization is remembered on your device, so the next time you open CompanyOS it takes you right back to it. If you belong to exactly one organization, you skip the chooser entirely and land straight in your workspace."
+        "title": "Elliptic remembers where you left off",
+        "text": "Your most recently used organization is remembered on your device, so the next time you open Elliptic it takes you right back to it. If you belong to exactly one organization, you skip the chooser entirely and land straight in your workspace."
       },
       {
         "type": "h2",
@@ -223,7 +223,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "A brand-new workspace shows a **get-started checklist** on your home view. It is not a static tour, each item flips to done automatically as CompanyOS detects the matching thing in your org, computed from live counts. The card shows your progress and disappears on its own once every step is complete (you can also dismiss it). Here is what it tracks:"
+        "text": "A brand-new workspace shows a **get-started checklist** on your home view. It is not a static tour, each item flips to done automatically as Elliptic detects the matching thing in your org, computed from live counts. The card shows your progress and disappears on its own once every step is complete (you can also dismiss it). Here is what it tracks:"
       },
       {
         "type": "table",
@@ -427,15 +427,15 @@ export const DOC_PAGES: DocPage[] = [
   {
     "title": "Core concepts",
     "slug": "core-concepts",
-    "description": "The building blocks that make up CompanyOS, from accounts and organizations to work items, planning layers, knowledge surfaces, and the agents that operate it all over the company-brain MCP.",
+    "description": "The building blocks that make up Elliptic, from accounts and organizations to work items, planning layers, knowledge surfaces, and the agents that operate it all over the company-brain MCP.",
     "blocks": [
       {
         "type": "h2",
-        "text": "The shape of CompanyOS"
+        "text": "The shape of Elliptic"
       },
       {
         "type": "p",
-        "text": "CompanyOS is built from a small set of building blocks that fit together the same way for everyone. Once you can picture how they nest, every screen in the product reads as a different view onto the same few things. This page is the map. It names each concept, says what it is, and points you to the guide that covers it in depth."
+        "text": "Elliptic is built from a small set of building blocks that fit together the same way for everyone. Once you can picture how they nest, every screen in the product reads as a different view onto the same few things. This page is the map. It names each concept, says what it is, and points you to the guide that covers it in depth."
       },
       {
         "type": "p",
@@ -469,7 +469,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Your **account** is your personal, global identity: your full name, your email, and your password. It is the one thing in CompanyOS that is not scoped to an organization. The same account follows you across every org you belong to, and you switch between them from the organization switcher in the sidebar without logging out."
+        "text": "Your **account** is your personal, global identity: your full name, your email, and your password. It is the one thing in Elliptic that is not scoped to an organization. The same account follows you across every org you belong to, and you switch between them from the organization switcher in the sidebar without logging out."
       },
       {
         "type": "h3",
@@ -477,7 +477,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "An **organization** (or org, or workspace) is a shared, fully isolated home for one company or team. It has a name you choose and a unique URL-friendly **slug** that CompanyOS generates from that name. Every project, task, note, meeting, person, model key, and agent lives inside exactly one organization, and people you invite see only the org they were invited to."
+        "text": "An **organization** (or org, or workspace) is a shared, fully isolated home for one company or team. It has a name you choose and a unique URL-friendly **slug** that Elliptic generates from that name. Every project, task, note, meeting, person, model key, and agent lives inside exactly one organization, and people you invite see only the org they were invited to."
       },
       {
         "type": "p",
@@ -496,7 +496,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "tip",
         "title": "Switching orgs is free",
-        "text": "Because your account is global, belonging to several organizations is normal. CompanyOS remembers the org you used last and drops you back into it, and if you belong to exactly one org it skips the chooser entirely. See [Organizations & Members](/docs/organizations-teams-members) for the full setup."
+        "text": "Because your account is global, belonging to several organizations is normal. Elliptic remembers the org you used last and drops you back into it, and if you belong to exactly one org it skips the chooser entirely. See [Organizations & Members](/docs/organizations-teams-members) for the full setup."
       },
       {
         "type": "h2",
@@ -550,7 +550,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "This is the concept that makes CompanyOS different from a normal tracker. An **agent** (an AI user) is not a chatbot pinned to the corner of the screen, it is a real member of your organization with its own identity. An agent has a name, a provider, a specific model, and a **system prompt** that fixes its behavior, and it shows up wherever members show up."
+        "text": "This is the concept that makes Elliptic different from a normal tracker. An **agent** (an AI user) is not a chatbot pinned to the corner of the screen, it is a real member of your organization with its own identity. An agent has a name, a provider, a specific model, and a **system prompt** that fixes its behavior, and it shows up wherever members show up."
       },
       {
         "type": "p",
@@ -851,15 +851,15 @@ export const DOC_PAGES: DocPage[] = [
   {
     "title": "Projects & tasks",
     "slug": "projects-and-tasks",
-    "description": "How projects contain and shape work, and how work items move through CompanyOS: permanent keys, statuses and immutable categories, kinds and conversion, relations, the board and list and calendar, Your Work, and the agent-native surfaces behind all of it.",
+    "description": "How projects contain and shape work, and how work items move through Elliptic: permanent keys, statuses and immutable categories, kinds and conversion, relations, the board and list and calendar, Your Work, and the agent-native surfaces behind all of it.",
     "blocks": [
       {
         "type": "h2",
-        "text": "Projects and tasks: the core of CompanyOS"
+        "text": "Projects and tasks: the core of Elliptic"
       },
       {
         "type": "p",
-        "text": "Projects are how you group a stream of work, and work items (tasks) are the individual pieces of it. Together they are the spine that everything else in CompanyOS hangs off: meetings turn into tasks, notes spin off tasks, the activity log records every status change, and your inbox is driven by tasks you are assigned to or watching. If you have used Linear, the model will feel familiar. Every work item gets a short, human identifier like `WEB-42`, moves through a small set of statuses, and lives on a board you can drag work across."
+        "text": "Projects are how you group a stream of work, and work items (tasks) are the individual pieces of it. Together they are the spine that everything else in Elliptic hangs off: meetings turn into tasks, notes spin off tasks, the activity log records every status change, and your inbox is driven by tasks you are assigned to or watching. If you have used Linear, the model will feel familiar. Every work item gets a short, human identifier like `WEB-42`, moves through a small set of statuses, and lives on a board you can drag work across."
       },
       {
         "type": "callout",
@@ -1179,7 +1179,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "A bug must always carry a **severity**: **Low**, **Medium**, **High**, or **Critical**. You cannot save a bug without one, and converting a bug to a plain task clears it. Severity does real work. If a bug has no explicit due date, CompanyOS derives one automatically as an SLA from the severity:"
+        "text": "A bug must always carry a **severity**: **Low**, **Medium**, **High**, or **Critical**. You cannot save a bug without one, and converting a bug to a plain task clears it. Severity does real work. If a bug has no explicit due date, Elliptic derives one automatically as an SLA from the severity:"
       },
       {
         "type": "table",
@@ -1381,7 +1381,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "When you create or look at a work item, CompanyOS can surface likely **duplicate candidates** in the same project by token overlap against other open items, each with a similarity score, so you catch a re-filed issue before it becomes a second copy. If a suggestion is wrong, mark the pair **not a duplicate** and that pairing is suppressed from future suggestions, so the same false match does not keep resurfacing. When something genuinely is a duplicate, fold it into the original and its status becomes Duplicate."
+        "text": "When you create or look at a work item, Elliptic can surface likely **duplicate candidates** in the same project by token overlap against other open items, each with a similarity score, so you catch a re-filed issue before it becomes a second copy. If a suggestion is wrong, mark the pair **not a duplicate** and that pairing is suppressed from future suggestions, so the same false match does not keep resurfacing. When something genuinely is a duplicate, fold it into the original and its status becomes Duplicate."
       },
       {
         "type": "h2",
@@ -1462,7 +1462,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Tasks can be created with **provenance**, a link back to the meeting or note they came from. You can batch-create several at once from a list of text lines (for example, action items extracted from a meeting), all sharing the same source. When a meeting-derived task is later marked **Done**, CompanyOS records that back on the meeting and notifies the attendees, closing the loop."
+        "text": "Tasks can be created with **provenance**, a link back to the meeting or note they came from. You can batch-create several at once from a list of text lines (for example, action items extracted from a meeting), all sharing the same source. When a meeting-derived task is later marked **Done**, Elliptic records that back on the meeting and notifies the attendees, closing the loop."
       },
       {
         "type": "h3",
@@ -1471,7 +1471,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Beyond meeting batches, you can paste a **CSV** to bulk-create work items in one click, a one-shot migration path from a spreadsheet or another tracker. The importer reads common column names (title, summary, status, priority, description, and their synonyms), maps foreign status and priority words onto CompanyOS values, treats a type of \"bug\" or \"defect\" as a Bug (defaulting its severity to Medium), and reports how many items it created, how many it skipped, and any per-row errors."
+        "text": "Beyond meeting batches, you can paste a **CSV** to bulk-create work items in one click, a one-shot migration path from a spreadsheet or another tracker. The importer reads common column names (title, summary, status, priority, description, and their synonyms), maps foreign status and priority words onto Elliptic values, treats a type of \"bug\" or \"defect\" as a Bug (defaulting its severity to Medium), and reports how many items it created, how many it skipped, and any per-row errors."
       },
       {
         "type": "h3",
@@ -1624,15 +1624,15 @@ export const DOC_PAGES: DocPage[] = [
   {
     "title": "Workflows & transitions",
     "slug": "workflows-statuses-transitions",
-    "description": "How statuses, immutable categories, transition guardrails, and conditions shape the way work moves through CompanyOS, for your team and your agents alike.",
+    "description": "How statuses, immutable categories, transition guardrails, and conditions shape the way work moves through Elliptic, for your team and your agents alike.",
     "blocks": [
       {
         "type": "h2",
-        "text": "What a workflow is in CompanyOS"
+        "text": "What a workflow is in Elliptic"
       },
       {
         "type": "p",
-        "text": "Every work item in CompanyOS moves through a workflow: a row of statuses you drag it across, like **Backlog**, **Todo**, **In Progress**, **In Review**, **Done**, and **Cancelled**. That part is yours to shape. Underneath those labels sits a smaller, fixed structure, a set of five categories that never change. The statuses are the words your team reads. The categories are the spine the system reads. Keeping the two separate is what lets you rename a column to whatever your team actually calls it without breaking a single chart, progress bar, or AI summary."
+        "text": "Every work item in Elliptic moves through a workflow: a row of statuses you drag it across, like **Backlog**, **Todo**, **In Progress**, **In Review**, **Done**, and **Cancelled**. That part is yours to shape. Underneath those labels sits a smaller, fixed structure, a set of five categories that never change. The statuses are the words your team reads. The categories are the spine the system reads. Keeping the two separate is what lets you rename a column to whatever your team actually calls it without breaking a single chart, progress bar, or AI summary."
       },
       {
         "type": "p",
@@ -1644,7 +1644,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "A work item always has a status. Out of the box CompanyOS ships seven: **Backlog**, **Todo**, **In Progress**, **In Review**, **Done**, **Cancelled**, and **Duplicate**. The first six appear as columns on the board. **Duplicate** is a resolution applied from triage rather than a board column, so it never shows up as a lane you drag into."
+        "text": "A work item always has a status. Out of the box Elliptic ships seven: **Backlog**, **Todo**, **In Progress**, **In Review**, **Done**, **Cancelled**, and **Duplicate**. The first six appear as columns on the board. **Duplicate** is a resolution applied from triage rather than a board column, so it never shows up as a lane you drag into."
       },
       {
         "type": "p",
@@ -1689,11 +1689,11 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "info",
         "title": "Why the categories are locked",
-        "text": "Categories are the stable spine that progress math, ordering, and AI summaries all read, regardless of how a team renames its statuses. When CompanyOS computes a parent's progress, it counts items in the **Completed** category and excludes the **Cancelled** category, never raw status strings. So whether you call your shipping column **Done**, **Shipped**, or **Closed**, the percentage stays correct and comparable across every team in the org. This is also why two started statuses, **In Progress** and **In Review**, both live in the same **Started** band: to the analytics they are both \"in flight\", even though your team tracks them as distinct steps."
+        "text": "Categories are the stable spine that progress math, ordering, and AI summaries all read, regardless of how a team renames its statuses. When Elliptic computes a parent's progress, it counts items in the **Completed** category and excludes the **Cancelled** category, never raw status strings. So whether you call your shipping column **Done**, **Shipped**, or **Closed**, the percentage stays correct and comparable across every team in the org. This is also why two started statuses, **In Progress** and **In Review**, both live in the same **Started** band: to the analytics they are both \"in flight\", even though your team tracks them as distinct steps."
       },
       {
         "type": "p",
-        "text": "The categories are also ranked, from **Backlog** through **Unstarted**, **Started**, **Completed**, with **Cancelled** sitting outside that forward line. That ranking is what lets CompanyOS tell a forward move from a backward one, which matters for regression handling further down this page."
+        "text": "The categories are also ranked, from **Backlog** through **Unstarted**, **Started**, **Completed**, with **Cancelled** sitting outside that forward line. That ranking is what lets Elliptic tell a forward move from a backward one, which matters for regression handling further down this page."
       },
       {
         "type": "h2",
@@ -1764,14 +1764,14 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "You can remove a status you no longer need, but CompanyOS will not strand the work sitting in it. If the status is empty, it deletes immediately. If any items are in it, you must name a **transfer-to** status, and every item moves to that target as part of the delete."
+        "text": "You can remove a status you no longer need, but Elliptic will not strand the work sitting in it. If the status is empty, it deletes immediately. If any items are in it, you must name a **transfer-to** status, and every item moves to that target as part of the delete."
       },
       {
         "type": "steps",
         "steps": [
           {
             "title": "Check the count",
-            "text": "CompanyOS reports how many work items currently sit in the status you want to remove."
+            "text": "Elliptic reports how many work items currently sit in the status you want to remove."
           },
           {
             "title": "Pick a transfer-to status",
@@ -1833,7 +1833,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Attach a **required role** to a transition and CompanyOS checks the mover's project role before letting it through. Project roles run, from least to most, **Viewer**, **Commenter**, **Member**, **Admin**. Setting a required role of **Admin** on the move into **Done**, for example, means only project admins can mark work complete, while anyone can still progress it through the earlier statuses. If the mover lacks the role, the move is refused."
+        "text": "Attach a **required role** to a transition and Elliptic checks the mover's project role before letting it through. Project roles run, from least to most, **Viewer**, **Commenter**, **Member**, **Admin**. Setting a required role of **Admin** on the move into **Done**, for example, means only project admins can mark work complete, while anyone can still progress it through the earlier statuses. If the mover lacks the role, the move is refused."
       },
       {
         "type": "callout",
@@ -1847,7 +1847,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Where a transition decides whether a move is allowed at all, a **condition** decides whether the item is ready for it. Conditions are blocking pre-checks attached to a specific from-status to to-status pair. Before the move goes through, CompanyOS evaluates them in order, and if any one fails, the move is blocked and the reason is shown."
+        "text": "Where a transition decides whether a move is allowed at all, a **condition** decides whether the item is ready for it. Conditions are blocking pre-checks attached to a specific from-status to to-status pair. Before the move goes through, Elliptic evaluates them in order, and if any one fails, the move is blocked and the reason is shown."
       },
       {
         "type": "p",
@@ -1899,7 +1899,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Work does not only move forward. Sometimes an item in review needs to go back to in progress, or a done item reopens. CompanyOS treats these **backward** moves as meaningful, not silent. A move counts as backward when the target sits in an earlier category than the current one, for example **In Review** (Started) back to **Todo** (Unstarted). Moves into the **Cancelled** category are never treated as backward, since cancelling is a resolution, not a regression."
+        "text": "Work does not only move forward. Sometimes an item in review needs to go back to in progress, or a done item reopens. Elliptic treats these **backward** moves as meaningful, not silent. A move counts as backward when the target sits in an earlier category than the current one, for example **In Review** (Started) back to **Todo** (Unstarted). Moves into the **Cancelled** category are never treated as backward, since cancelling is a resolution, not a regression."
       },
       {
         "type": "h3",
@@ -1907,7 +1907,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "When an item moves backward across categories, CompanyOS automatically posts a comment on it recording the regression, noting which status it moved back from and to. Nobody has to remember to explain it. The history of why an item slipped is captured on the item itself, where the next person looking at it will see it."
+        "text": "When an item moves backward across categories, Elliptic automatically posts a comment on it recording the regression, noting which status it moved back from and to. Nobody has to remember to explain it. The history of why an item slipped is captured on the item itself, where the next person looking at it will see it."
       },
       {
         "type": "h3",
@@ -1923,7 +1923,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Because every status change is recorded as an activity event, each work item carries its own transition history. CompanyOS turns that history into a readable timeline with dwell times, so you can see not just where an item is, but how long it lingered at each step along the way."
+        "text": "Because every status change is recorded as an activity event, each work item carries its own transition history. Elliptic turns that history into a readable timeline with dwell times, so you can see not just where an item is, but how long it lingered at each step along the way."
       },
       {
         "type": "ul",
@@ -1943,7 +1943,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "CompanyOS is Jira for your agents, and agents are first-class members of the org. An agent moving a work item over the company-brain MCP, with the `transition_task_status` tool, goes through the exact same service path a person does in the web app. There is no separate, looser door for automation."
+        "text": "Elliptic is Jira for your agents, and agents are first-class members of the org. An agent moving a work item over the company-brain MCP, with the `transition_task_status` tool, goes through the exact same service path a person does in the web app. There is no separate, looser door for automation."
       },
       {
         "type": "p",
@@ -1969,7 +1969,7 @@ export const DOC_PAGES: DocPage[] = [
   {
     "title": "Cycles, milestones, initiatives & releases",
     "slug": "cycles-milestones-initiatives-releases",
-    "description": "The planning layer of CompanyOS: time-boxed cycles, date-anchored milestones, module workstreams, org-level initiatives, versioned releases with a changelog, and the timeline and insights that tie them together.",
+    "description": "The planning layer of Elliptic: time-boxed cycles, date-anchored milestones, module workstreams, org-level initiatives, versioned releases with a changelog, and the timeline and insights that tie them together.",
     "blocks": [
       {
         "type": "h2",
@@ -1977,7 +1977,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Tasks are the unit of work in CompanyOS, but real planning happens above a single task. You run work in time-boxed iterations, you commit to dated checkpoints, you group features into workstreams, you roll several projects up under one strategic bet, and you bundle finished work into versioned releases. This page covers all of those, plus the timeline and insights that show whether the plan is holding. Every surface here is also reachable by your agents over the [company-brain MCP](/docs/company-brain-mcp), so an agent can plan a cycle or tag a release the same way you do, on your organization's own model key."
+        "text": "Tasks are the unit of work in Elliptic, but real planning happens above a single task. You run work in time-boxed iterations, you commit to dated checkpoints, you group features into workstreams, you roll several projects up under one strategic bet, and you bundle finished work into versioned releases. This page covers all of those, plus the timeline and insights that show whether the plan is holding. Every surface here is also reachable by your agents over the [company-brain MCP](/docs/company-brain-mcp), so an agent can plan a cycle or tag a release the same way you do, on your organization's own model key."
       },
       {
         "type": "table",
@@ -2451,7 +2451,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "A project board shows everything in the project. Most of the time you only care about a slice of it: the open work, the items assigned to you, the high-priority tasks, the bugs in one module. CompanyOS gives you three layers for getting to that slice. **Filters** narrow what you are looking at right now. **Saved views** remember an arrangement so you can return to it with one click. And **PQL**, the CompanyOS Query Language, lets you express anything filters cannot, in a precise expression you run on the Query page or ask for in plain English."
+        "text": "A project board shows everything in the project. Most of the time you only care about a slice of it: the open work, the items assigned to you, the high-priority tasks, the bugs in one module. Elliptic gives you three layers for getting to that slice. **Filters** narrow what you are looking at right now. **Saved views** remember an arrangement so you can return to it with one click. And **PQL**, the Elliptic Query Language, lets you express anything filters cannot, in a precise expression you run on the Query page or ask for in plain English."
       },
       {
         "type": "p",
@@ -2578,15 +2578,15 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "info",
         "title": "How saved views are scoped under the hood",
-        "text": "Every saved view has exactly one scope, and the scope decides who can change it. A **personal** view belongs to one user and only that user may edit it. A **team** view is shared org-wide and only an org admin or owner may edit it. A **teamspace** view is tied to one team and may be edited by any member of that team or by an org admin. Teamspace views, with their cross-project union and public links, are the kind you create and manage in the app today, from the team's Views tab. If you try to edit a view you have no rights to, CompanyOS declines rather than silently failing."
+        "text": "Every saved view has exactly one scope, and the scope decides who can change it. A **personal** view belongs to one user and only that user may edit it. A **team** view is shared org-wide and only an org admin or owner may edit it. A **teamspace** view is tied to one team and may be edited by any member of that team or by an org admin. Teamspace views, with their cross-project union and public links, are the kind you create and manage in the app today, from the team's Views tab. If you try to edit a view you have no rights to, Elliptic declines rather than silently failing."
       },
       {
         "type": "h2",
-        "text": "PQL, the CompanyOS Query Language"
+        "text": "PQL, the Elliptic Query Language"
       },
       {
         "type": "p",
-        "text": "**PQL** is a small, precise filter language for work items. Where the board filters cover the common cases, PQL reaches every queryable field, combines conditions with boolean logic, and adds a handful of functions for the questions that come up most. A PQL query is filter-only. It describes which items match, and CompanyOS returns the list. You write and run PQL on the **Query** page in your workspace."
+        "text": "**PQL** is a small, precise filter language for work items. Where the board filters cover the common cases, PQL reaches every queryable field, combines conditions with boolean logic, and adds a handful of functions for the questions that come up most. A PQL query is filter-only. It describes which items match, and Elliptic returns the list. You write and run PQL on the **Query** page in your workspace."
       },
       {
         "type": "h3",
@@ -2748,7 +2748,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Open the **Query** page from your workspace. Type a query into the editor, then run it. CompanyOS first **validates** the query, parsing it and checking that every field and function is one it knows, and then **executes** it across your org's items. The page shows the result count and a list of matching items, each with its identifier, title, priority, and status. Click any result to jump straight to that item on its project board. A few example queries sit under the editor as one-click starting points, and you can run with the **Run** button or with Cmd/Ctrl+Enter."
+        "text": "Open the **Query** page from your workspace. Type a query into the editor, then run it. Elliptic first **validates** the query, parsing it and checking that every field and function is one it knows, and then **executes** it across your org's items. The page shows the result count and a list of matching items, each with its identifier, title, priority, and status. Click any result to jump straight to that item on its project board. A few example queries sit under the editor as one-click starting points, and you can run with the **Run** button or with Cmd/Ctrl+Enter."
       },
       {
         "type": "callout",
@@ -2762,7 +2762,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "You do not have to know the grammar to use PQL. At the top of the Query page there is an **Ask in plain English** box. Type a request the way you would say it, like \"overdue bugs nobody is working on\" or \"high priority items in review\", and CompanyOS turns it into PQL for you. This translation runs on your organization's own model key (BYOK), the same key behind every other AI feature."
+        "text": "You do not have to know the grammar to use PQL. At the top of the Query page there is an **Ask in plain English** box. Type a request the way you would say it, like \"overdue bugs nobody is working on\" or \"high priority items in review\", and Elliptic turns it into PQL for you. This translation runs on your organization's own model key (BYOK), the same key behind every other AI feature."
       },
       {
         "type": "steps",
@@ -2773,7 +2773,7 @@ export const DOC_PAGES: DocPage[] = [
           },
           {
             "title": "Generate the query",
-            "text": "CompanyOS sends your request to your org's model, gets back a PQL query, and validates it before showing it to you."
+            "text": "Elliptic sends your request to your org's model, gets back a PQL query, and validates it before showing it to you."
           },
           {
             "title": "Review and run",
@@ -2783,7 +2783,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Because the result is real PQL, you keep the precision of the query language with the ease of natural language. If the model produces something that does not parse, CompanyOS tells you so and asks you to rephrase, rather than running a broken query. This is also how an agent can take a request like \"show me everything blocking the launch\" and turn it into a query it can actually execute over the company brain."
+        "text": "Because the result is real PQL, you keep the precision of the query language with the ease of natural language. If the model produces something that does not parse, Elliptic tells you so and asks you to rephrase, rather than running a broken query. This is also how an agent can take a request like \"show me everything blocking the launch\" and turn it into a query it can actually execute over the company brain."
       },
       {
         "type": "h2",
@@ -2796,7 +2796,7 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "ul",
         "items": [
-          "**Publish** a view from the team's Views tab to create its public link. CompanyOS mints a single unguessable token, and the link is copied to your clipboard so you can hand it out.",
+          "**Publish** a view from the team's Views tab to create its public link. Elliptic mints a single unguessable token, and the link is copied to your clipboard so you can hand it out.",
           "**Visit** the link to see the current snapshot. It shows the union across the team's linked projects, the same as inside the app, minus triage and archived items.",
           "**Revoke** the link at any time. Once revoked, the token stops working immediately and the view is private again. Publishing later mints a fresh token."
         ]
@@ -2809,7 +2809,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Published views sit alongside the other read-only links in CompanyOS, like public project boards and shared notes. Each is a single unguessable token you can revoke at any time, and each exposes only a minimal, read-only snapshot of the underlying work, never write access or the rest of your workspace."
+        "text": "Published views sit alongside the other read-only links in Elliptic, like public project boards and shared notes. Each is a single unguessable token you can revoke at any time, and each exposes only a minimal, read-only snapshot of the underlying work, never write access or the rest of your workspace."
       }
     ]
   },
@@ -2824,13 +2824,13 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Not all work starts as a clean task on the board. Requests arrive from outside the team, from people without an account, from forms, from AI, and from your other tools. CompanyOS funnels all of it into one place called **triage**, a single inbox of untriaged inbound work that you process one item at a time. This page covers the triage queue itself, the intake channels that feed it (a public link, in-app member requests, and custom forms), and recurring rules that create work on a schedule. The AI side of triage, the automations and skills that label and route items, is covered on the [AI, Brain & Automations](/docs/ai-brain-automations) page."
+        "text": "Not all work starts as a clean task on the board. Requests arrive from outside the team, from people without an account, from forms, from AI, and from your other tools. Elliptic funnels all of it into one place called **triage**, a single inbox of untriaged inbound work that you process one item at a time. This page covers the triage queue itself, the intake channels that feed it (a public link, in-app member requests, and custom forms), and recurring rules that create work on a schedule. The AI side of triage, the automations and skills that label and route items, is covered on the [AI, Brain & Automations](/docs/ai-brain-automations) page."
       },
       {
         "type": "callout",
         "variant": "info",
         "title": "Triage is agent-shaped too",
-        "text": "Triage is a normal CompanyOS surface, so your AI members can work it over the company-brain MCP, on your org's own key. An agent can read the queue, accept an item into its project, or decline one with a reason, through the same tasks the web app acts on. That is what makes triage automation possible, rather than a bolted-on rules engine. Marking duplicates, snoozing, and accepting into a specific status are web actions today, not exposed as agent tools."
+        "text": "Triage is a normal Elliptic surface, so your AI members can work it over the company-brain MCP, on your org's own key. An agent can read the queue, accept an item into its project, or decline one with a reason, through the same tasks the web app acts on. That is what makes triage automation possible, rather than a bolted-on rules engine. Marking duplicates, snoozing, and accepting into a specific status are web actions today, not exposed as agent tools."
       },
       {
         "type": "h2",
@@ -2876,7 +2876,7 @@ export const DOC_PAGES: DocPage[] = [
           [
             "Mark duplicate",
             "2",
-            "Resolves the item as a duplicate. Its status becomes **Duplicate** and it leaves the queue. If you point it at the original task, CompanyOS records a duplicate relation between the two."
+            "Resolves the item as a duplicate. Its status becomes **Duplicate** and it leaves the queue. If you point it at the original task, Elliptic records a duplicate relation between the two."
           ],
           [
             "Decline",
@@ -2924,7 +2924,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Triage drives count badges so you always know how much is waiting. CompanyOS tracks an org-wide total of open triage items plus a per-project breakdown, and these counts feed the badges in the navigation. The counts only include items that are genuinely actionable right now: snoozed items and already-resolved items are excluded, so the number you see is the real size of the decision backlog, not a running tally of everything that ever arrived."
+        "text": "Triage drives count badges so you always know how much is waiting. Elliptic tracks an org-wide total of open triage items plus a per-project breakdown, and these counts feed the badges in the navigation. The counts only include items that are genuinely actionable right now: snoozed items and already-resolved items are excluded, so the number you see is the real size of the decision backlog, not a running tally of everything that ever arrived."
       },
       {
         "type": "callout",
@@ -2938,7 +2938,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "A public intake form gives a project a link that anyone can use to submit a request, with no CompanyOS account required. It is how you collect bug reports, feature requests, or support asks from customers and outsiders without giving them access to your workspace. Every submission lands in the project's triage queue as a new item, tagged with the `form` channel, so it flows through the same one-key process as everything else."
+        "text": "A public intake form gives a project a link that anyone can use to submit a request, with no Elliptic account required. It is how you collect bug reports, feature requests, or support asks from customers and outsiders without giving them access to your workspace. Every submission lands in the project's triage queue as a new item, tagged with the `form` channel, so it flows through the same one-key process as everything else."
       },
       {
         "type": "h3",
@@ -2949,7 +2949,7 @@ export const DOC_PAGES: DocPage[] = [
         "steps": [
           {
             "title": "Enable intake for the project",
-            "text": "An admin turns on the public intake form for a specific project. Enabling is project-scoped: each project has its own form and its own link. The first time you enable it, CompanyOS mints a unique, hard-to-guess public token for that project."
+            "text": "An admin turns on the public intake form for a specific project. Enabling is project-scoped: each project has its own form and its own link. The first time you enable it, Elliptic mints a unique, hard-to-guess public token for that project."
           },
           {
             "title": "Share the link",
@@ -2967,7 +2967,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "The public form collects a required **title** and an optional **description**, plus an optional **name** and **email** for the submitter. When a name or email is provided, CompanyOS appends a short \"Submitted via intake form by ...\" line to the item's description so you can follow up. The new item starts in Backlog, in the triage queue, waiting for a decision."
+        "text": "The public form collects a required **title** and an optional **description**, plus an optional **name** and **email** for the submitter. When a name or email is provided, Elliptic appends a short \"Submitted via intake form by ...\" line to the item's description so you can follow up. The new item starts in Backlog, in the triage queue, waiting for a decision."
       },
       {
         "type": "h3",
@@ -2975,7 +2975,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "After a successful submission, the form returns a **reference** to the submitter, the work item's identifier in `PROJECT-NUMBER` form (for example `WEB-142`). This is the same identifier the item carries inside CompanyOS, so a submitter can quote it when they follow up, and you can find the exact item they mean. The submitter also sees a short confirmation that the request was received."
+        "text": "After a successful submission, the form returns a **reference** to the submitter, the work item's identifier in `PROJECT-NUMBER` form (for example `WEB-142`). This is the same identifier the item carries inside Elliptic, so a submitter can quote it when they follow up, and you can find the exact item they mean. The submitter also sees a short confirmation that the request was received."
       },
       {
         "type": "h3",
@@ -2999,7 +2999,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "In-app intake is the inside-the-workspace counterpart to the public form. When an admin enables it for a project, members of the organization, including **guests**, can submit a request straight into that project's triage queue from within CompanyOS, without needing edit access to the board itself. The item is tagged with the `in_app` channel so you can tell it apart from public submissions."
+        "text": "In-app intake is the inside-the-workspace counterpart to the public form. When an admin enables it for a project, members of the organization, including **guests**, can submit a request straight into that project's triage queue from within Elliptic, without needing edit access to the board itself. The item is tagged with the `in_app` channel so you can tell it apart from public submissions."
       },
       {
         "type": "p",
@@ -3055,7 +3055,7 @@ export const DOC_PAGES: DocPage[] = [
         "steps": [
           {
             "title": "Create the form",
-            "text": "Give the form a name and add its fields in order, choosing a type and a required flag for each, plus options for any select fields. CompanyOS mints a public token for the form when you create it."
+            "text": "Give the form a name and add its fields in order, choosing a type and a required flag for each, plus options for any select fields. Elliptic mints a public token for the form when you create it."
           },
           {
             "title": "Edit it as needs change",
@@ -3113,7 +3113,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "The cadence is a plain day interval: every 7 days, every 14, every 30, and so on. You can also set when the rule should first run, which defaults to now. CompanyOS advances the next run time forward by the interval after each firing, so the rhythm stays steady even if a run happens a little late."
+        "text": "The cadence is a plain day interval: every 7 days, every 14, every 30, and so on. You can also set when the rule should first run, which defaults to now. Elliptic advances the next run time forward by the interval after each firing, so the rhythm stays steady even if a run happens a little late."
       },
       {
         "type": "h3",
@@ -3135,7 +3135,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "The forms on this page are intake you build inside CompanyOS, but plenty of inbound work originates in your other tools and in AI. Those paths all converge on the same triage queue."
+        "text": "The forms on this page are intake you build inside Elliptic, but plenty of inbound work originates in your other tools and in AI. Those paths all converge on the same triage queue."
       },
       {
         "type": "h3",
@@ -3143,7 +3143,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Triage does not have to be all manual. You can attach **automations** and AI **skills** that label, route, assign, prioritize, or pre-classify incoming items, and run a skill on the focused item from the triage card. These are configured on the [AI, Brain & Automations](/docs/ai-brain-automations) page, and like every AI feature in CompanyOS they execute on your organization's own model key."
+        "text": "Triage does not have to be all manual. You can attach **automations** and AI **skills** that label, route, assign, prioritize, or pre-classify incoming items, and run a skill on the focused item from the triage card. These are configured on the [AI, Brain & Automations](/docs/ai-brain-automations) page, and like every AI feature in Elliptic they execute on your organization's own model key."
       },
       {
         "type": "h3",
@@ -3151,7 +3151,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Inbound items can also flow in from outside CompanyOS: **GitHub** issues and pull requests, **Sentry** alerts, inbound **email**, and a **Slack** slash command for filing requests without leaving chat. Each of these lands in triage tagged with its source channel (`github`, `sentry`, `email`, or `slack`), so it is handled with the same one-key flow as a form submission."
+        "text": "Inbound items can also flow in from outside Elliptic: **GitHub** issues and pull requests, **Sentry** alerts, inbound **email**, and a **Slack** slash command for filing requests without leaving chat. Each of these lands in triage tagged with its source channel (`github`, `sentry`, `email`, or `slack`), so it is handled with the same one-key flow as a form submission."
       }
     ]
   },
@@ -3166,11 +3166,11 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "CompanyOS has two small, separate systems that both live on a task and both deal with sign-off. **Time tracking** records how long work took, as worklogs measured in minutes against a work item. **Approvals** gate a task's move to a new status behind an approver's decision. They are independent: a project can require approval of logged time without using status approvals, and a task can use status approvals without anyone logging a minute. This page walks through both, plus how to export logged time to a spreadsheet."
+        "text": "Elliptic has two small, separate systems that both live on a task and both deal with sign-off. **Time tracking** records how long work took, as worklogs measured in minutes against a work item. **Approvals** gate a task's move to a new status behind an approver's decision. They are independent: a project can require approval of logged time without using status approvals, and a task can use status approvals without anyone logging a minute. This page walks through both, plus how to export logged time to a spreadsheet."
       },
       {
         "type": "p",
-        "text": "Both systems are ordinary CompanyOS surfaces, which means an agent that is a member of your organization can use them too. An agent can log the time a run took, request a status move and wait for a human to approve it, or sit on the approver side and clear a queue. It operates the same endpoints you do over the company-brain MCP, on your organization's own key."
+        "text": "Both systems are ordinary Elliptic surfaces, which means an agent that is a member of your organization can use them too. An agent can log the time a run took, request a status move and wait for a human to approve it, or sit on the approver side and clear a queue. It operates the same endpoints you do over the company-brain MCP, on your organization's own key."
       },
       {
         "type": "h2",
@@ -3219,7 +3219,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Beyond the per-task total, CompanyOS keeps a **per-project total**: the sum of all minutes logged across every task in a project. This is what the project's analytics use to show how much time the whole workstream has absorbed. Where a task total answers \"how long did this item take\", the project total answers \"how much time has this project consumed so far\"."
+        "text": "Beyond the per-task total, Elliptic keeps a **per-project total**: the sum of all minutes logged across every task in a project. This is what the project's analytics use to show how much time the whole workstream has absorbed. Where a task total answers \"how long did this item take\", the project total answers \"how much time has this project consumed so far\"."
       },
       {
         "type": "h2",
@@ -3419,7 +3419,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Pages in CompanyOS are rich Markdown documents that live next to your tasks, meetings, and activity. They are where decisions, specs, runbooks, and handbooks get written down so the rest of the company, people and agents alike, can find them later. This page walks through creating and organizing pages, the wiki view over them, the block editor, mentions and references, real-time co-editing, version history and access control, templates and reuse, the link between pages and tasks, the on-page AI assistant, comments, your personal surfaces, and how agents work the same pages through the company-brain MCP."
+        "text": "Pages in Elliptic are rich Markdown documents that live next to your tasks, meetings, and activity. They are where decisions, specs, runbooks, and handbooks get written down so the rest of the company, people and agents alike, can find them later. This page walks through creating and organizing pages, the wiki view over them, the block editor, mentions and references, real-time co-editing, version history and access control, templates and reuse, the link between pages and tasks, the on-page AI assistant, comments, your personal surfaces, and how agents work the same pages through the company-brain MCP."
       },
       {
         "type": "callout",
@@ -3673,7 +3673,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Every time a page's title or body changes, CompanyOS snapshots the previous state as a version, attributed to whoever made the edit. You can browse those versions newest-first and restore any one of them. A restore is itself non-destructive: the current state is snapshotted first, then the chosen version is applied, so restoring is always reversible and nothing is ever lost."
+        "text": "Every time a page's title or body changes, Elliptic snapshots the previous state as a version, attributed to whoever made the edit. You can browse those versions newest-first and restore any one of them. A restore is itself non-destructive: the current state is snapshotted first, then the chosen version is applied, so restoring is always reversible and nothing is ever lost."
       },
       {
         "type": "h3",
@@ -3882,14 +3882,14 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "tip",
         "title": "Same surface, two kinds of member",
-        "text": "Because people and agents read and write the same Markdown pages through the same access rules and the same activity log, a page an agent drafts is a page you can pick up and finish, and a page you write is one an agent can summarize, extract tasks from, or keep up to date. That shared surface is the point: CompanyOS is Jira for your agents and your team at once."
+        "text": "Because people and agents read and write the same Markdown pages through the same access rules and the same activity log, a page an agent drafts is a page you can pick up and finish, and a page you write is one an agent can summarize, extract tasks from, or keep up to date. That shared surface is the point: Elliptic is Jira for your agents and your team at once."
       }
     ]
   },
   {
     "title": "Meetings",
     "slug": "meetings",
-    "description": "How to use Meetings in CompanyOS: import or paste transcripts, AI summaries with source anchoring, action items into tasks, templates and recipes, Ask one or all meetings, public sharing, Slack, and the agent-native MCP surface.",
+    "description": "How to use Meetings in Elliptic: import or paste transcripts, AI summaries with source anchoring, action items into tasks, templates and recipes, Ask one or all meetings, public sharing, Slack, and the agent-native MCP surface.",
     "blocks": [
       {
         "type": "h2",
@@ -3897,7 +3897,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "A meeting in CompanyOS is a conversation turned into a searchable, source-anchored record. Bring in a transcript and CompanyOS writes the summary, links every line back to the exact moment it came from, turns action items into tasks, answers follow-up questions, and lets you share the result with people outside the workspace. A meeting can carry a **transcript**, your own **notes**, or both, and everything stays connected to the rest of your org so a task can point back to the meeting it was decided in."
+        "text": "A meeting in Elliptic is a conversation turned into a searchable, source-anchored record. Bring in a transcript and Elliptic writes the summary, links every line back to the exact moment it came from, turns action items into tasks, answers follow-up questions, and lets you share the result with people outside the workspace. A meeting can carry a **transcript**, your own **notes**, or both, and everything stays connected to the rest of your org so a task can point back to the meeting it was decided in."
       },
       {
         "type": "p",
@@ -3907,7 +3907,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "info",
         "title": "The trust contract",
-        "text": "Meetings speak the same trust contract as every other AI surface in CompanyOS. A summary line never cites a transcript moment that does not exist, an asking-across answer tells you how many meetings it **consulted out of how many it scanned**, and a confidence band is derived conservatively from that evidence so thin evidence never reads as high confidence. A link you can click is a link you can trust."
+        "text": "Meetings speak the same trust contract as every other AI surface in Elliptic. A summary line never cites a transcript moment that does not exist, an asking-across answer tells you how many meetings it **consulted out of how many it scanned**, and a confidence band is derived conservatively from that evidence so thin evidence never reads as high confidence. A link you can click is a link you can trust."
       },
       {
         "type": "p",
@@ -3939,11 +3939,11 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "When a meeting is not filed yet, a suggestion banner appears at the top of its page. CompanyOS scores the meeting against your active projects and proposes the best match with a confidence band (a 0-to-1 score under the hood). Accept it to file in one click, choose another active project from the picker, or dismiss the banner to keep the meeting org-wide. If there is not enough signal to guess, the banner skips the suggestion and simply asks you to pick a project. Filing matters because it sets who can see the meeting, and it is required before you can turn action items into tasks, since tasks live inside projects."
+        "text": "When a meeting is not filed yet, a suggestion banner appears at the top of its page. Elliptic scores the meeting against your active projects and proposes the best match with a confidence band (a 0-to-1 score under the hood). Accept it to file in one click, choose another active project from the picker, or dismiss the banner to keep the meeting org-wide. If there is not enough signal to guess, the banner skips the suggestion and simply asks you to pick a project. Filing matters because it sets who can see the meeting, and it is required before you can turn action items into tasks, since tasks live inside projects."
       },
       {
         "type": "h2",
-        "text": "Getting a meeting into CompanyOS"
+        "text": "Getting a meeting into Elliptic"
       },
       {
         "type": "p",
@@ -3953,7 +3953,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "tip",
         "title": "What \"recording\" means here",
-        "text": "CompanyOS does not record audio itself. It is the home for transcripts produced by a recorder like [Folio](https://folio.chele.bi) or any tool that exports text. Record or transcribe wherever you normally do, then import the result. The Paste transcript tab is the fastest path when you already have text."
+        "text": "Elliptic does not record audio itself. It is the home for transcripts produced by a recorder like [Folio](https://folio.chele.bi) or any tool that exports text. Record or transcribe wherever you normally do, then import the result. The Paste transcript tab is the fastest path when you already have text."
       },
       {
         "type": "h3",
@@ -4005,7 +4005,7 @@ export const DOC_PAGES: DocPage[] = [
           },
           {
             "title": "Import",
-            "text": "Click Import meeting. CompanyOS creates the meeting and its transcript segments together, then opens it."
+            "text": "Click Import meeting. Elliptic creates the meeting and its transcript segments together, then opens it."
           }
         ]
       },
@@ -4079,7 +4079,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Click **Summarize** (or pick a template first, then Summarize) and CompanyOS reads the transcript on your org's AI key and produces a structured summary. Each line is grounded: the model returns its summary as discrete lines, each tagged with a section and the transcript **segment ids** that support it. The result is grouped into labelled sections with counts:"
+        "text": "Click **Summarize** (or pick a template first, then Summarize) and Elliptic reads the transcript on your org's AI key and produces a structured summary. Each line is grounded: the model returns its summary as discrete lines, each tagged with a section and the transcript **segment ids** that support it. The result is grouped into labelled sections with counts:"
       },
       {
         "type": "ul",
@@ -4102,7 +4102,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "info",
         "title": "The anti-hallucination guarantee",
-        "text": "When the summarizer returns its lines, CompanyOS checks every cited segment id against the segments the transcript actually contains and **drops any id that does not exist**. So an AI line can never point at a source that was not really said. A link you can click is a link you can trust, and an unlinked line is flagged as something to check yourself."
+        "text": "When the summarizer returns its lines, Elliptic checks every cited segment id against the segments the transcript actually contains and **drops any id that does not exist**. So an AI line can never point at a source that was not really said. A link you can click is a link you can trust, and an unlinked line is flagged as something to check yourself."
       },
       {
         "type": "h3",
@@ -4247,7 +4247,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "The single-meeting Ask panel answers about one conversation. **Ask across meetings** (top-right of the Meetings list) answers about the whole archive. Use it for questions like \"What did we decide about the API redesign this quarter?\" CompanyOS scans your most recent visible meetings (up to 50), ranks them by how well they match your question, pulls the best-matching passages from the strongest few, and answers from those excerpts only."
+        "text": "The single-meeting Ask panel answers about one conversation. **Ask across meetings** (top-right of the Meetings list) answers about the whole archive. Use it for questions like \"What did we decide about the API redesign this quarter?\" Elliptic scans your most recent visible meetings (up to 50), ranks them by how well they match your question, pulls the best-matching passages from the strongest few, and answers from those excerpts only."
       },
       {
         "type": "ul",
@@ -4265,7 +4265,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "There are two ways to get a meeting out to people who are not looking at it inside CompanyOS: a public share link, and a push to Slack."
+        "text": "There are two ways to get a meeting out to people who are not looking at it inside Elliptic: a public share link, and a push to Slack."
       },
       {
         "type": "h3",
@@ -4281,7 +4281,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Once Slack is connected for your org, click **Send to Slack** on the meeting, pick a channel, and CompanyOS posts a tidy message: the title, the latest summary, the action items as a bulleted list, and, when an active share exists, a link teammates can click to ask the AI about the meeting. If Slack is not connected yet, the dialog points you to your org settings to connect it first."
+        "text": "Once Slack is connected for your org, click **Send to Slack** on the meeting, pick a channel, and Elliptic posts a tidy message: the title, the latest summary, the action items as a bulleted list, and, when an active share exists, a link teammates can click to ask the AI about the meeting. If Slack is not connected yet, the dialog points you to your org settings to connect it first."
       },
       {
         "type": "h2",
@@ -4289,7 +4289,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "CompanyOS is Jira for your agents, so everything on this page is available to your AI members over the company-brain MCP, on the same org key. An agent can import a Folio recording (`import_folio_meeting`), summarize on a template (`summarize_meeting`), and read what a person reads: chapters (`list_meeting_chapters`), summaries with their model and provider (`list_meeting_summaries`), and transcript segments (`list_meeting_segments`)."
+        "text": "Elliptic is Jira for your agents, so everything on this page is available to your AI members over the company-brain MCP, on the same org key. An agent can import a Folio recording (`import_folio_meeting`), summarize on a template (`summarize_meeting`), and read what a person reads: chapters (`list_meeting_chapters`), summaries with their model and provider (`list_meeting_summaries`), and transcript segments (`list_meeting_segments`)."
       },
       {
         "type": "p",
@@ -4322,7 +4322,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "info",
         "title": "Agents read and act on the same surfaces",
-        "text": "CompanyOS is Jira for your agents. Everything on this page is also reachable by your AI members over the company-brain MCP, on your org's own key (BYOK): an agent can read the activity feed, manage calendar events, and pull a pre-meeting brief exactly the way you do in the app. The agent-native note at the end lists the tools."
+        "text": "Elliptic is Jira for your agents. Everything on this page is also reachable by your AI members over the company-brain MCP, on your org's own key (BYOK): an agent can read the activity feed, manage calendar events, and pull a pre-meeting brief exactly the way you do in the app. The agent-native note at the end lists the tools."
       },
       {
         "type": "h2",
@@ -4363,7 +4363,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "tip",
         "title": "Since your last visit",
-        "text": "The feed remembers when you last looked. When you return, the page header tells you how many updates landed while you were away (\"3 updates since your last visit.\"), and a divider marks exactly where the new activity begins. This is tracked per-browser in local storage, so it follows your own reading, not the team's. CompanyOS marks the feed seen as soon as it loads, so the next visit measures cleanly from there."
+        "text": "The feed remembers when you last looked. When you return, the page header tells you how many updates landed while you were away (\"3 updates since your last visit.\"), and a divider marks exactly where the new activity begins. This is tracked per-browser in local storage, so it follows your own reading, not the team's. Elliptic marks the feed seen as soon as it loads, so the next visit measures cleanly from there."
       },
       {
         "type": "h3",
@@ -4387,7 +4387,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "The feed is genuinely live. CompanyOS holds an open server-sent events stream to the org's activity stream, and the instant any activity is recorded anywhere in the org, the relevant views refresh on their own, with no reload and no polling. Because the stream also knows what kind of thing changed, it refreshes the matching area too: a new note nudges your notes list, a task change nudges your boards, and so on. You can leave the Activity page open as a true ambient view of the org."
+        "text": "The feed is genuinely live. Elliptic holds an open server-sent events stream to the org's activity stream, and the instant any activity is recorded anywhere in the org, the relevant views refresh on their own, with no reload and no polling. Because the stream also knows what kind of thing changed, it refreshes the matching area too: a new note nudges your notes list, a task change nudges your boards, and so on. You can leave the Activity page open as a true ambient view of the org."
       },
       {
         "type": "h3",
@@ -4546,7 +4546,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "tip",
         "title": "Pick where the app opens",
-        "text": "From the Inbox header, the \"Open on\" control sets which page CompanyOS lands you on when you enter the org: Projects, Inbox, My Tasks, or Activity. It is your personal preference, remembered in your browser. If triage is the first thing you do each morning, set it to Inbox."
+        "text": "From the Inbox header, the \"Open on\" control sets which page Elliptic lands you on when you enter the org: Projects, Inbox, My Tasks, or Activity. It is your personal preference, remembered in your browser. If triage is the first thing you do each morning, set it to Inbox."
       },
       {
         "type": "h2",
@@ -4570,7 +4570,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "For a project, CompanyOS can write a short **what changed** digest from the project's recent activity. It reads the project's most recent activity events, groups related changes, and returns a few concise bullets summarizing what moved while you were away. When nothing has changed recently, it says exactly that rather than inventing activity. Like every AI feature in CompanyOS, this summary runs on your organization's own model key, so the cost lands on your provider bill and your data stays under your control."
+        "text": "For a project, Elliptic can write a short **what changed** digest from the project's recent activity. It reads the project's most recent activity events, groups related changes, and returns a few concise bullets summarizing what moved while you were away. When nothing has changed recently, it says exactly that rather than inventing activity. Like every AI feature in Elliptic, this summary runs on your organization's own model key, so the cost lands on your provider bill and your data stays under your control."
       },
       {
         "type": "h2",
@@ -4619,7 +4619,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "When a trigger fires, CompanyOS resolves your preference by checking the project override first; if you have set one for that project, it wins, otherwise the workspace default applies, and if you have set neither, email defaults to on. This lets you, say, keep email on everywhere but mute a noisy project, or stay quiet by default and turn email back on for one critical project. None of this affects the in-app Inbox, which always receives the notification."
+        "text": "When a trigger fires, Elliptic resolves your preference by checking the project override first; if you have set one for that project, it wins, otherwise the workspace default applies, and if you have set neither, email defaults to on. This lets you, say, keep email on everywhere but mute a noisy project, or stay quiet by default and turn email back on for one critical project. None of this affects the in-app Inbox, which always receives the notification."
       },
       {
         "type": "callout",
@@ -4633,7 +4633,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "CompanyOS can also send push notifications to your registered devices alongside the in-app Inbox. A device registers its push token (Expo push tokens are the default transport), tagged with its platform (iOS, Android, or web), and the registration is kept fresh as the device checks in. When a notification is created for you, CompanyOS fans a push out to your registered devices on a best-effort basis: it runs alongside the in-app notification and never blocks it, and a failed push is logged and shrugged off rather than holding anything up. You can revoke a device's token to stop push to it. Push delivery is gated by a server setting, so it is active only when your deployment has it enabled."
+        "text": "Elliptic can also send push notifications to your registered devices alongside the in-app Inbox. A device registers its push token (Expo push tokens are the default transport), tagged with its platform (iOS, Android, or web), and the registration is kept fresh as the device checks in. When a notification is created for you, Elliptic fans a push out to your registered devices on a best-effort basis: it runs alongside the in-app notification and never blocks it, and a failed push is logged and shrugged off rather than holding anything up. You can revoke a device's token to stop push to it. Push delivery is gated by a server setting, so it is active only when your deployment has it enabled."
       },
       {
         "type": "h2",
@@ -4766,7 +4766,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Open an event and CompanyOS can generate a short **pre-meeting brief**, a handful of bullets of real context pulled from your own CompanyOS data, each with a clickable source. It is deliberately honest: it only surfaces facts it can actually point to, and if there is nothing relevant, it returns an empty brief with zero confidence rather than inventing filler."
+        "text": "Open an event and Elliptic can generate a short **pre-meeting brief**, a handful of bullets of real context pulled from your own Elliptic data, each with a clickable source. It is deliberately honest: it only surfaces facts it can actually point to, and if there is nothing relevant, it returns an empty brief with zero confidence rather than inventing filler."
       },
       {
         "type": "p",
@@ -4796,7 +4796,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Agents are first-class members in CompanyOS, and they operate these surfaces the same way you do, through the company-brain MCP, on your org's own key. An agent can follow what is happening, keep the calendar tidy, and prepare for meetings without a human relaying it. The relevant tools mirror the app:"
+        "text": "Agents are first-class members in Elliptic, and they operate these surfaces the same way you do, through the company-brain MCP, on your org's own key. An agent can follow what is happening, keep the calendar tidy, and prepare for meetings without a human relaying it. The relevant tools mirror the app:"
       },
       {
         "type": "table",
@@ -4840,7 +4840,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Work is not just text. You attach the design file, the spreadsheet, the screenshot that explains the bug. CompanyOS gives you two ways to bring outside content into your workspace: **file attachments**, which upload a real file into your organization's private storage, and **link embeds**, which turn a pasted URL into a playable video, an interactive frame, or a rich preview card. Both are org-scoped, both keep their context, and both are available to your agents on the same surfaces, since agents operate CompanyOS the same way your team does."
+        "text": "Work is not just text. You attach the design file, the spreadsheet, the screenshot that explains the bug. Elliptic gives you two ways to bring outside content into your workspace: **file attachments**, which upload a real file into your organization's private storage, and **link embeds**, which turn a pasted URL into a playable video, an interactive frame, or a rich preview card. Both are org-scoped, both keep their context, and both are available to your agents on the same surfaces, since agents operate Elliptic the same way your team does."
       },
       {
         "type": "p",
@@ -4852,7 +4852,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "When you attach a file in CompanyOS, the file does not pass through the application server. It goes straight from your browser to object storage over a temporary, signed URL. This keeps uploads fast and keeps large files off the API. The flow has three parts: **reserve**, **upload**, and **confirm**."
+        "text": "When you attach a file in Elliptic, the file does not pass through the application server. It goes straight from your browser to object storage over a temporary, signed URL. This keeps uploads fast and keeps large files off the API. The flow has three parts: **reserve**, **upload**, and **confirm**."
       },
       {
         "type": "steps",
@@ -4863,7 +4863,7 @@ export const DOC_PAGES: DocPage[] = [
           },
           {
             "title": "Upload",
-            "text": "Your browser sends the file directly to storage with a single `PUT` to that presigned URL, using the same content type. The bytes never touch the CompanyOS API. If the PUT fails, nothing is attached and the reserved record stays not-yet-uploaded."
+            "text": "Your browser sends the file directly to storage with a single `PUT` to that presigned URL, using the same content type. The bytes never touch the Elliptic API. If the PUT fails, nothing is attached and the reserved record stays not-yet-uploaded."
           },
           {
             "title": "Confirm",
@@ -4914,7 +4914,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Every uploaded file belongs to your organization and is bound to one thing it is attached to. CompanyOS uses a single polymorphic attachment model, so the same upload mechanism works across the product. A file can be attached to a:"
+        "text": "Every uploaded file belongs to your organization and is bound to one thing it is attached to. Elliptic uses a single polymorphic attachment model, so the same upload mechanism works across the product. A file can be attached to a:"
       },
       {
         "type": "ul",
@@ -4945,7 +4945,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Comments attach files by **binding already-uploaded objects**. You upload first, which gives you object IDs, then you create the comment with those IDs in its `attachment_ids`. When the comment is created, CompanyOS binds those objects to it. Binding only succeeds for objects you uploaded yourself, in the same org, that have finished uploading. This two-step pattern, upload then bind, is what lets you stage attachments before the comment exists."
+        "text": "Comments attach files by **binding already-uploaded objects**. You upload first, which gives you object IDs, then you create the comment with those IDs in its `attachment_ids`. When the comment is created, Elliptic binds those objects to it. Binding only succeeds for objects you uploaded yourself, in the same org, that have finished uploading. This two-step pattern, upload then bind, is what lets you stage attachments before the comment exists."
       },
       {
         "type": "h3",
@@ -4953,13 +4953,13 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Files are private. You never get a permanent public link to them. Instead, when you open or download an attachment, CompanyOS mints a fresh **short-lived presigned download link** that points straight at storage and expires in **5 minutes**. Opening the same file later mints a new link. A download is only possible once the file has finished uploading, so a half-finished upload cannot be fetched."
+        "text": "Files are private. You never get a permanent public link to them. Instead, when you open or download an attachment, Elliptic mints a fresh **short-lived presigned download link** that points straight at storage and expires in **5 minutes**. Opening the same file later mints a new link. A download is only possible once the file has finished uploading, so a half-finished upload cannot be fetched."
       },
       {
         "type": "callout",
         "variant": "tip",
         "title": "Links expire on purpose",
-        "text": "Because download links are signed and short-lived, do not paste one into a chat or a doc expecting it to keep working. It is good for a few minutes, not forever. To give a teammate access, point them at the attachment inside CompanyOS, where their own org membership generates a fresh link for them."
+        "text": "Because download links are signed and short-lived, do not paste one into a chat or a doc expecting it to keep working. It is good for a few minutes, not forever. To give a teammate access, point them at the attachment inside Elliptic, where their own org membership generates a fresh link for them."
       },
       {
         "type": "h3",
@@ -4975,7 +4975,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Not everything needs to be uploaded. A lot of your context already lives at a URL: a Loom walkthrough, a Figma frame, a Google Doc, a GitHub pull request. CompanyOS turns a pasted link into one of two things, depending on the provider: an **iframe** you can watch or interact with inline, or a **link card** with a title, description, and thumbnail."
+        "text": "Not everything needs to be uploaded. A lot of your context already lives at a URL: a Loom walkthrough, a Figma frame, a Google Doc, a GitHub pull request. Elliptic turns a pasted link into one of two things, depending on the provider: an **iframe** you can watch or interact with inline, or a **link card** with a title, description, and thumbnail."
       },
       {
         "type": "h3",
@@ -5017,13 +5017,13 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Other providers are rendered as a **link card** rather than an iframe. CompanyOS recognizes Google Docs (`docs.google.com`), Notion (`notion.so`), Airtable (`airtable.com`), and GitHub (`github.com`) by their host, and any other http or https URL is treated as a generic link. For these, CompanyOS fetches the page and reads its **Open Graph** tags to build the card: the `og:title`, `og:description`, and `og:image` become the card's title, description, and thumbnail. If a page has no Open Graph title, CompanyOS falls back to its plain HTML `<title>`. When no preview metadata can be found, the card simply shows the provider name and a link out."
+        "text": "Other providers are rendered as a **link card** rather than an iframe. Elliptic recognizes Google Docs (`docs.google.com`), Notion (`notion.so`), Airtable (`airtable.com`), and GitHub (`github.com`) by their host, and any other http or https URL is treated as a generic link. For these, Elliptic fetches the page and reads its **Open Graph** tags to build the card: the `og:title`, `og:description`, and `og:image` become the card's title, description, and thumbnail. If a page has no Open Graph title, Elliptic falls back to its plain HTML `<title>`. When no preview metadata can be found, the card simply shows the provider name and a link out."
       },
       {
         "type": "callout",
         "variant": "info",
         "title": "Iframes do not need a fetch",
-        "text": "Iframe providers like YouTube, Loom, Vimeo, and Figma are resolved purely from the URL into an embed URL. CompanyOS does not fetch the page to render them, so they work even when outbound page fetching is turned off. Open Graph cards are the only embeds that require fetching the target page."
+        "text": "Iframe providers like YouTube, Loom, Vimeo, and Figma are resolved purely from the URL into an embed URL. Elliptic does not fetch the page to render them, so they work even when outbound page fetching is turned off. Open Graph cards are the only embeds that require fetching the target page."
       },
       {
         "type": "h3",
@@ -5039,7 +5039,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Notes can hold saved embeds. Paste a link into the Embeds section of a note's side panel and press Enter or **Add**, and CompanyOS unfurls the URL and stores the result as a **note embed** with its metadata. Iframes render inline in a video-shaped frame, cards render with their thumbnail, title, and description and a link out to the original. The metadata is cached on the embed when it is created, so the note keeps showing the preview without re-fetching every time you open it. Remove an embed with the trash control on its card."
+        "text": "Notes can hold saved embeds. Paste a link into the Embeds section of a note's side panel and press Enter or **Add**, and Elliptic unfurls the URL and stores the result as a **note embed** with its metadata. Iframes render inline in a video-shaped frame, cards render with their thumbnail, title, and description and a link out to the original. The metadata is cached on the embed when it is created, so the note keeps showing the preview without re-fetching every time you open it. Remove an embed with the trash control on its card."
       },
       {
         "type": "steps",
@@ -5054,7 +5054,7 @@ export const DOC_PAGES: DocPage[] = [
           },
           {
             "title": "Add it",
-            "text": "Press Enter or select Add. CompanyOS unfurls the link, saves it to the note, and renders it inline."
+            "text": "Press Enter or select Add. Elliptic unfurls the link, saves it to the note, and renders it inline."
           }
         ]
       },
@@ -5064,13 +5064,13 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Self-hosted instances can run in a zero-egress **air-gapped mode**. When air-gapped mode is enabled, CompanyOS does not make outbound requests to fetch external pages, so Open Graph unfurling is turned off. In that mode, link cards resolve from the URL alone: you still get the provider and a link out, but there is no fetched title, description, or thumbnail. Iframes are unaffected, because they are built from the URL and never required a fetch in the first place. The hosted instance at company.chele.bi is not air-gapped, so it fetches Open Graph metadata normally."
+        "text": "Self-hosted instances can run in a zero-egress **air-gapped mode**. When air-gapped mode is enabled, Elliptic does not make outbound requests to fetch external pages, so Open Graph unfurling is turned off. In that mode, link cards resolve from the URL alone: you still get the provider and a link out, but there is no fetched title, description, or thumbnail. Iframes are unaffected, because they are built from the URL and never required a fetch in the first place. The hosted instance at company.chele.bi is not air-gapped, so it fetches Open Graph metadata normally."
       },
       {
         "type": "callout",
         "variant": "warning",
         "title": "Embeds load third-party content",
-        "text": "An iframe or a card thumbnail is content served by the provider, YouTube, Loom, Figma, and so on, not by CompanyOS. If your organization needs to guarantee no requests leave your network, that is exactly what air-gapped mode is for. With it off, viewing an embed will reach the provider to play the video or load the thumbnail."
+        "text": "An iframe or a card thumbnail is content served by the provider, YouTube, Loom, Figma, and so on, not by Elliptic. If your organization needs to guarantee no requests leave your network, that is exactly what air-gapped mode is for. With it off, viewing an embed will reach the provider to play the video or load the thumbnail."
       },
       {
         "type": "h2",
@@ -5078,7 +5078,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Attachments and embeds are deliberately different tools. An **attachment** is a real file you own, stored privately in your org, reached only through short-lived signed links. An **embed** is a reference to something that lives elsewhere, rendered as an iframe or a card. Reach for an attachment when the artifact should live in CompanyOS, and an embed when it already has a home and you just want it visible in context."
+        "text": "Attachments and embeds are deliberately different tools. An **attachment** is a real file you own, stored privately in your org, reached only through short-lived signed links. An **embed** is a reference to something that lives elsewhere, rendered as an iframe or a card. Reach for an attachment when the artifact should live in Elliptic, and an embed when it already has a home and you just want it visible in context."
       },
       {
         "type": "ul",
@@ -5093,7 +5093,7 @@ export const DOC_PAGES: DocPage[] = [
   {
     "title": "Dashboards & analytics",
     "slug": "dashboards-analytics",
-    "description": "How CompanyOS turns your work items into numbers, from built-in analytics rollups and forecasts to custom dashboards, PQL-filtered chart widgets, printable exports, and natural-language charts.",
+    "description": "How Elliptic turns your work items into numbers, from built-in analytics rollups and forecasts to custom dashboards, PQL-filtered chart widgets, printable exports, and natural-language charts.",
     "blocks": [
       {
         "type": "h2",
@@ -5101,7 +5101,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "CompanyOS reads your work and turns it into numbers in two complementary ways. **Built-in analytics** are fixed, ready-made views over your tasks: an overview with totals and a completion rate, a flow view, a member workload table, a progress scatter, a throughput forecast, and pivot tables. **Dashboards** are yours to build: a grid of chart widgets you arrange, each pointed at a metric and a breakdown dimension, filtered with PQL, and shareable with your workspace. Both run on the same tasks and the same definitions, so the numbers line up."
+        "text": "Elliptic reads your work and turns it into numbers in two complementary ways. **Built-in analytics** are fixed, ready-made views over your tasks: an overview with totals and a completion rate, a flow view, a member workload table, a progress scatter, a throughput forecast, and pivot tables. **Dashboards** are yours to build: a grid of chart widgets you arrange, each pointed at a metric and a breakdown dimension, filtered with PQL, and shareable with your workspace. Both run on the same tasks and the same definitions, so the numbers line up."
       },
       {
         "type": "callout",
@@ -5111,7 +5111,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Because agents are first-class members in CompanyOS, the work they do shows up in exactly these numbers. An agent that picks up tasks, moves them across statuses, and closes them is reflected in your completion rate, your throughput forecast, and your member workload table the same way a human teammate is, on the org's own model key."
+        "text": "Because agents are first-class members in Elliptic, the work they do shows up in exactly these numbers. An agent that picks up tasks, moves them across statuses, and closes them is reflected in your completion rate, your throughput forecast, and your member workload table the same way a human teammate is, on the org's own model key."
       },
       {
         "type": "h2",
@@ -5294,7 +5294,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "When you save a widget, CompanyOS cleans the configuration and falls back to sane defaults for anything missing or unrecognized: chart type `bar`, metric `count`, dimension `status`. A widget may also carry a **span** of one or two cells, so it can be twice as wide on the grid. New widgets are appended after the ones already there, and you can reorder them later by setting each widget's position."
+        "text": "When you save a widget, Elliptic cleans the configuration and falls back to sane defaults for anything missing or unrecognized: chart type `bar`, metric `count`, dimension `status`. A widget may also carry a **span** of one or two cells, so it can be twice as wide on the grid. New widgets are appended after the ones already there, and you can reorder them later by setting each widget's position."
       },
       {
         "type": "p",
@@ -5306,7 +5306,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "A dashboard can carry a **PQL filter**, the same Projects Query Language used across CompanyOS, written once on the dashboard. Every widget on the dashboard is narrowed by that filter before it counts, so you can build, say, a dashboard scoped to high-priority bugs and have all of its charts respect that without configuring each one. Set the filter when you create the dashboard or edit it later, and clear it to go back to counting everything."
+        "text": "A dashboard can carry a **PQL filter**, the same Projects Query Language used across Elliptic, written once on the dashboard. Every widget on the dashboard is narrowed by that filter before it counts, so you can build, say, a dashboard scoped to high-priority bugs and have all of its charts respect that without configuring each one. Set the filter when you create the dashboard or edit it later, and clear it to go back to counting everything."
       },
       {
         "type": "p",
@@ -5324,7 +5324,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "tip",
         "title": "Filters fail open",
-        "text": "If a PQL filter is blank or does not parse, CompanyOS treats it as no filter rather than erroring or showing nothing. A typo in a query gives you the unfiltered chart, not a broken dashboard, so you are never staring at an empty grid wondering what went wrong."
+        "text": "If a PQL filter is blank or does not parse, Elliptic treats it as no filter rather than erroring or showing nothing. A typo in a query gives you the unfiltered chart, not a broken dashboard, so you are never staring at an empty grid wondering what went wrong."
       },
       {
         "type": "h2",
@@ -5360,7 +5360,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Any dashboard can be exported as a **printable HTML rendering** built for PDF. The export returns a self-contained HTML page of the dashboard's charts that opens the browser print dialog, so you get a real PDF via Save as PDF, which is the simplest way to drop a snapshot into a report or send it to someone outside CompanyOS. Because it is rendered server-side from the live data, the exported page reflects the numbers at the moment you export it."
+        "text": "Any dashboard can be exported as a **printable HTML rendering** built for PDF. The export returns a self-contained HTML page of the dashboard's charts that opens the browser print dialog, so you get a real PDF via Save as PDF, which is the simplest way to drop a snapshot into a report or send it to someone outside Elliptic. Because it is rendered server-side from the live data, the exported page reflects the numbers at the moment you export it."
       },
       {
         "type": "code",
@@ -5373,7 +5373,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "You do not have to know the metric and dimension up front. Describe the chart you want in plain language, like \"how is work split across priorities\" or \"how many open items per person\", and CompanyOS turns that into a real chart. This is natural-language analytics, and it runs on your organization's own model key."
+        "text": "You do not have to know the metric and dimension up front. Describe the chart you want in plain language, like \"how is work split across priorities\" or \"how many open items per person\", and Elliptic turns that into a real chart. This is natural-language analytics, and it runs on your organization's own model key."
       },
       {
         "type": "steps",
@@ -5383,18 +5383,18 @@ export const DOC_PAGES: DocPage[] = [
             "text": "Write a short request describing the chart you want, up to about 500 characters."
           },
           {
-            "title": "CompanyOS picks a spec",
+            "title": "Elliptic picks a spec",
             "text": "The model reads your request and chooses a metric (count, done, or open) and a breakdown dimension (status, priority, kind, assignee, or project), plus a title for the chart."
           },
           {
             "title": "Real numbers are computed",
-            "text": "CompanyOS then runs that exact metric and dimension through the same grouped aggregation as the custom chart and returns real, current counts. The model picks the shape of the question, it never invents the numbers."
+            "text": "Elliptic then runs that exact metric and dimension through the same grouped aggregation as the custom chart and returns real, current counts. The model picks the shape of the question, it never invents the numbers."
           }
         ]
       },
       {
         "type": "p",
-        "text": "The result comes back with the chosen title, the metric, the dimension, the data points, and the id of the AI run that produced it. If the model cannot produce a usable spec, CompanyOS falls back to a safe default: a count of work items broken down by status, titled \"Work items by status\". So you always get a valid, grounded chart, never an error and never a blank."
+        "text": "The result comes back with the chosen title, the metric, the dimension, the data points, and the id of the AI run that produced it. If the model cannot produce a usable spec, Elliptic falls back to a safe default: a count of work items broken down by status, titled \"Work items by status\". So you always get a valid, grounded chart, never an error and never a blank."
       },
       {
         "type": "callout",
@@ -5427,7 +5427,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "**Customers** gives you a light customer record right inside CompanyOS, so the demand side of your company lives next to the work that satisfies it. Each customer is a small account profile: who they are, how big they are, where they sit in your pipeline. Against any customer you capture **requests**, the feature and support asks that come in. And because CompanyOS is Jira for your agents and your team, a request can be **linked to one or more work items**, so a customer ask connects straight to the tasks that deliver it. It is deliberately lightweight: enough to track who is asking for what and whether it is being built, without becoming a full sales CRM."
+        "text": "**Customers** gives you a light customer record right inside Elliptic, so the demand side of your company lives next to the work that satisfies it. Each customer is a small account profile: who they are, how big they are, where they sit in your pipeline. Against any customer you capture **requests**, the feature and support asks that come in. And because Elliptic is Jira for your agents and your team, a request can be **linked to one or more work items**, so a customer ask connects straight to the tasks that deliver it. It is deliberately lightweight: enough to track who is asking for what and whether it is being built, without becoming a full sales CRM."
       },
       {
         "type": "callout",
@@ -5786,13 +5786,13 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "CompanyOS is an agent-native work platform, Jira for your agents and your team, and AI runs through all of it. This page is about the AI you touch directly: the **model key** your org connects, the **on/off switch** that gates it, the **in-product assistant** you chat with, the **web search** and **writing helpers** it gives you, and the **accountability layer** (a run log and per-seat credits) that keeps every call honest. The same key and the same surfaces back the agents that operate CompanyOS over the company-brain MCP, so everything here is one system, not a bolted-on chatbot."
+        "text": "Elliptic is an agent-native work platform, Jira for your agents and your team, and AI runs through all of it. This page is about the AI you touch directly: the **model key** your org connects, the **on/off switch** that gates it, the **in-product assistant** you chat with, the **web search** and **writing helpers** it gives you, and the **accountability layer** (a run log and per-seat credits) that keeps every call honest. The same key and the same surfaces back the agents that operate Elliptic over the company-brain MCP, so everything here is one system, not a bolted-on chatbot."
       },
       {
         "type": "callout",
         "variant": "info",
         "title": "The one rule, restated",
-        "text": "Every AI feature in CompanyOS runs on **your own model key**. There is no hidden CompanyOS model and no shared, pooled inference bill. You connect a key once, and summaries, answers, the assistant, writing helpers, and agents all run on it, on your account, at your cost, with full token visibility. This is what **BYOK** (bring your own key) means everywhere in the product."
+        "text": "Every AI feature in Elliptic runs on **your own model key**. There is no hidden Elliptic model and no shared, pooled inference bill. You connect a key once, and summaries, answers, the assistant, writing helpers, and agents all run on it, on your account, at your cost, with full token visibility. This is what **BYOK** (bring your own key) means everywhere in the product."
       },
       {
         "type": "h2",
@@ -5808,7 +5808,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "CompanyOS speaks to several provider families, so you are not locked into one vendor or one hosting model:"
+        "text": "Elliptic speaks to several provider families, so you are not locked into one vendor or one hosting model:"
       },
       {
         "type": "table",
@@ -5841,7 +5841,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Ollama and custom providers route through the OpenAI-compatible path using the `base_url` you configure, which is how CompanyOS supports local and self-hosted models for air-gapped or privacy-strict deployments."
+        "text": "Ollama and custom providers route through the OpenAI-compatible path using the `base_url` you configure, which is how Elliptic supports local and self-hosted models for air-gapped or privacy-strict deployments."
       },
       {
         "type": "h3",
@@ -5850,8 +5850,8 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "ul",
         "items": [
-          "**Your data, your account.** Each call goes straight from CompanyOS to your provider on your key. The model relationship is yours, never resold through a middleman.",
-          "**Your cost, fully visible.** You pay your provider directly at their rates. CompanyOS records the tokens of every call, so you see real usage, not a bundled markup.",
+          "**Your data, your account.** Each call goes straight from Elliptic to your provider on your key. The model relationship is yours, never resold through a middleman.",
+          "**Your cost, fully visible.** You pay your provider directly at their rates. Elliptic records the tokens of every call, so you see real usage, not a bundled markup.",
           "**Your choice of model.** Because the key is yours, you pick the exact model id, a fast cheap one for triage, a stronger one for summaries. Each key can pin its own default chat model.",
           "**Your hosting model.** Hosted OpenAI or Anthropic, a local Ollama box, or a custom OpenAI-compatible gateway, all behind the same BYOK contract."
         ]
@@ -5881,7 +5881,7 @@ export const DOC_PAGES: DocPage[] = [
           },
           {
             "title": "Save",
-            "text": "Click **Add key**. CompanyOS encrypts the secret, keeps only its last four characters for display, and logs the addition to your activity feed."
+            "text": "Click **Add key**. Elliptic encrypts the secret, keeps only its last four characters for display, and logs the addition to your activity feed."
           }
         ]
       },
@@ -5904,7 +5904,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "When a key is stored, CompanyOS can validate it against the provider with a free models-list call. A `401 Unauthorized` means the provider rejected the key and the save is refused with \"Provider rejected this API key.\" A rate-limited response (`429`) still counts as valid, so a busy account is never wrongly turned away. Validation only applies to the hosted OpenAI and Anthropic endpoints. For Ollama, custom, and Bedrock keys it is skipped and the key is accepted on trust, since there is no universal way to check them."
+        "text": "When a key is stored, Elliptic can validate it against the provider with a free models-list call. A `401 Unauthorized` means the provider rejected the key and the save is refused with \"Provider rejected this API key.\" A rate-limited response (`429`) still counts as valid, so a busy account is never wrongly turned away. Validation only applies to the hosted OpenAI and Anthropic endpoints. For Ollama, custom, and Bedrock keys it is skipped and the key is accepted on trust, since there is no universal way to check them."
       },
       {
         "type": "h3",
@@ -5912,7 +5912,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "A key is encrypted the moment it is saved, using AES-256-GCM authenticated encryption with the organization id bound in as additional authenticated data, so a key encrypted for one org cannot be decrypted in the context of another. The raw secret is write-only: after you save it, only the **last four characters** are ever shown again, and the plaintext cannot be read back out of CompanyOS, not even by you. When a feature actually needs to call the provider, the key is decrypted **just in time** for that single call and never lingers in a readable form."
+        "text": "A key is encrypted the moment it is saved, using AES-256-GCM authenticated encryption with the organization id bound in as additional authenticated data, so a key encrypted for one org cannot be decrypted in the context of another. The raw secret is write-only: after you save it, only the **last four characters** are ever shown again, and the plaintext cannot be read back out of Elliptic, not even by you. When a feature actually needs to call the provider, the key is decrypted **just in time** for that single call and never lingers in a readable form."
       },
       {
         "type": "callout",
@@ -6012,13 +6012,13 @@ export const DOC_PAGES: DocPage[] = [
           },
           {
             "title": "Execute as you",
-            "text": "On confirm, CompanyOS executes the action through the normal RBAC-checked service layer, **as you**. It is exactly as if you had created the item by hand: your role and permissions apply, and the new work item gets its real `KEY-number` identifier."
+            "text": "On confirm, Elliptic executes the action through the normal RBAC-checked service layer, **as you**. It is exactly as if you had created the item by hand: your role and permissions apply, and the new work item gets its real `KEY-number` identifier."
           }
         ]
       },
       {
         "type": "p",
-        "text": "Today the supported Build action is **creating a work item**. The model picks the target project from the projects you actually have, snaps the priority to a valid level (none, low, medium, high, or urgent), and CompanyOS re-validates the project on execution, so a proposal can never land work in a project that does not exist or that you cannot touch. If you have no projects yet, Build mode tells you to create one first."
+        "text": "Today the supported Build action is **creating a work item**. The model picks the target project from the projects you actually have, snaps the priority to a valid level (none, low, medium, high, or urgent), and Elliptic re-validates the project on execution, so a proposal can never land work in a project that does not exist or that you cannot touch. If you have no projects yet, Build mode tells you to create one first."
       },
       {
         "type": "h3",
@@ -6040,7 +6040,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "The assistant can answer from the open web, not just your workspace. Type a question and click the **globe** to run a web search. CompanyOS fetches results, then has your org's model synthesize a concise answer grounded **only** in those results, citing them inline as numbered references `[1]`, `[2]`, and so on. The sources are listed beneath the answer as clickable links, so every claim is traceable back to where it came from. If the search returns nothing useful, the assistant says so plainly instead of inventing an answer."
+        "text": "The assistant can answer from the open web, not just your workspace. Type a question and click the **globe** to run a web search. Elliptic fetches results, then has your org's model synthesize a concise answer grounded **only** in those results, citing them inline as numbered references `[1]`, `[2]`, and so on. The sources are listed beneath the answer as clickable links, so every claim is traceable back to where it came from. If the search returns nothing useful, the assistant says so plainly instead of inventing an answer."
       },
       {
         "type": "callout",
@@ -6133,7 +6133,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "ul",
         "items": [
           "**Natural-language filtering** lets you describe the slice of work you want in plain English and have it translated into a PQL query. See the **Views** page for how to use it.",
-          "**The AI chart** turns a question about your workspace metrics into a real chart: the model chooses a metric and a breakdown dimension from a fixed set, then CompanyOS computes the chart from your actual data rather than letting the model invent numbers. See the **Dashboards** page for how to use it."
+          "**The AI chart** turns a question about your workspace metrics into a real chart: the model chooses a metric and a breakdown dimension from a fixed set, then Elliptic computes the chart from your actual data rather than letting the model invent numbers. See the **Dashboards** page for how to use it."
         ]
       },
       {
@@ -6142,11 +6142,11 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Your organization has its own vocabulary, product names, internal codenames, acronyms, terms of art, and CompanyOS can teach the model that vocabulary so it uses your words instead of generic ones. Each term is a **term plus a definition**, managed under **Settings → Vocabulary** and described in detail on the **AI agents & automations** page."
+        "text": "Your organization has its own vocabulary, product names, internal codenames, acronyms, terms of art, and Elliptic can teach the model that vocabulary so it uses your words instead of generic ones. Each term is a **term plus a definition**, managed under **Settings → Vocabulary** and described in detail on the **AI agents & automations** page."
       },
       {
         "type": "p",
-        "text": "When a meeting is summarized, CompanyOS assembles your terms into a compact glossary block and injects it into the model's system prompt, with an instruction to spell those terms exactly as written and to prefer them over similar-sounding alternatives. The result is that the model gets your internal names right, transcribes your codenames correctly, and stops \"helpfully\" normalizing your jargon into something generic. You maintain the term list in one place, and meeting summaries pick it up automatically."
+        "text": "When a meeting is summarized, Elliptic assembles your terms into a compact glossary block and injects it into the model's system prompt, with an instruction to spell those terms exactly as written and to prefer them over similar-sounding alternatives. The result is that the model gets your internal names right, transcribes your codenames correctly, and stops \"helpfully\" normalizing your jargon into something generic. You maintain the term list in one place, and meeting summaries pick it up automatically."
       },
       {
         "type": "h2",
@@ -6154,7 +6154,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Because the AI spends your money on your provider, CompanyOS keeps an honest ledger of what it did. Two surfaces give you that visibility: a run log of individual calls, and a credit usage view of the monthly total. A guardrail on structured answers keeps the model from corrupting your data when it misbehaves."
+        "text": "Because the AI spends your money on your provider, Elliptic keeps an honest ledger of what it did. Two surfaces give you that visibility: a run log of individual calls, and a credit usage view of the monthly total. A guardrail on structured answers keeps the model from corrupting your data when it misbehaves."
       },
       {
         "type": "h3",
@@ -6203,7 +6203,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Alongside the raw log, CompanyOS tracks AI usage against a simple **per-seat credit pool**. Each AI run counts as one credit, and the org's monthly allowance is **500 credits per billable seat**. The usage view shows credits **used** this calendar month, the **limit** derived from your seat count, and the **remaining** balance (plus a percent-used figure), so you always know how much of the month's AI budget the org has spent. The pool resets at the start of each calendar month."
+        "text": "Alongside the raw log, Elliptic tracks AI usage against a simple **per-seat credit pool**. Each AI run counts as one credit, and the org's monthly allowance is **500 credits per billable seat**. The usage view shows credits **used** this calendar month, the **limit** derived from your seat count, and the **remaining** balance (plus a percent-used figure), so you always know how much of the month's AI budget the org has spent. The pool resets at the start of each calendar month."
       },
       {
         "type": "h3",
@@ -6211,7 +6211,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Several features ask the model for **structured** output rather than prose: a chart spec and a proposed Build action. For these, CompanyOS asks the provider to constrain its reply to a strict schema (using OpenAI's JSON-schema response format or Anthropic's forced tool use) and then validates the reply with Pydantic. If the model still returns something off-spec, CompanyOS **re-asks exactly once** with a pointed correction. If the second attempt is still invalid, the feature falls back to a safe default instead of acting on garbage: the AI chart drops to a sensible default chart, and a proposed action is refused with \"The assistant could not produce a valid action.\" A misbehaving model degrades gracefully. It never corrupts your data."
+        "text": "Several features ask the model for **structured** output rather than prose: a chart spec and a proposed Build action. For these, Elliptic asks the provider to constrain its reply to a strict schema (using OpenAI's JSON-schema response format or Anthropic's forced tool use) and then validates the reply with Pydantic. If the model still returns something off-spec, Elliptic **re-asks exactly once** with a pointed correction. If the second attempt is still invalid, the feature falls back to a safe default instead of acting on garbage: the AI chart drops to a sensible default chart, and a proposed action is refused with \"The assistant could not produce a valid action.\" A misbehaving model degrades gracefully. It never corrupts your data."
       },
       {
         "type": "h2",
@@ -6240,7 +6240,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "CompanyOS is Jira for your agents, and this page is about the agents themselves and everything they operate. It walks through **AI agents** (named members that live in your org), the **budgets** that bound what they cost, **triage automations** and **skills** that sort and route work, a **glossary** that fixes how AI features word things, the **agent runner** for scheduled scripts, the **insight engine** that suggests where work belongs, and the **company brain** that lets an agent catch up the way you would. Every AI feature runs on your org's own model key (**BYOK**), so the cost and the data stay with you."
+        "text": "Elliptic is Jira for your agents, and this page is about the agents themselves and everything they operate. It walks through **AI agents** (named members that live in your org), the **budgets** that bound what they cost, **triage automations** and **skills** that sort and route work, a **glossary** that fixes how AI features word things, the **agent runner** for scheduled scripts, the **insight engine** that suggests where work belongs, and the **company brain** that lets an agent catch up the way you would. Every AI feature runs on your org's own model key (**BYOK**), so the cost and the data stay with you."
       },
       {
         "type": "callout",
@@ -6258,7 +6258,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Because an agent is a member, it does not get a private side door. It runs on your org's BYOK key for its provider, and the actions it takes are the same member actions exposed over the company-brain MCP. Provider calls made through CompanyOS (summaries, chat, and other AI features) are recorded as **AI runs** alongside the rest of your AI usage, each with its provider, model, token counts, and status. That is what makes the AI surface operable and accountable rather than a black box."
+        "text": "Because an agent is a member, it does not get a private side door. It runs on your org's BYOK key for its provider, and the actions it takes are the same member actions exposed over the company-brain MCP. Provider calls made through Elliptic (summaries, chat, and other AI features) are recorded as **AI runs** alongside the rest of your AI usage, each with its provider, model, token counts, and status. That is what makes the AI surface operable and accountable rather than a black box."
       },
       {
         "type": "h3",
@@ -6392,13 +6392,13 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "A single rule can **chain several actions**, so one automation can label, route, and assign in one pass. CompanyOS validates actions when you **save** the rule: a label that does not exist, a project outside your org, or an assign target who is not an org member (or who is a guest) is rejected up front, so a rule cannot silently misfire later. Every time a rule runs against a task, an `automation_applied` event is written to that task's activity, so you can always see exactly what touched it and why. Rules apply their actions defensively, so one bad action never breaks the rest of the pass."
+        "text": "A single rule can **chain several actions**, so one automation can label, route, and assign in one pass. Elliptic validates actions when you **save** the rule: a label that does not exist, a project outside your org, or an assign target who is not an org member (or who is a guest) is rejected up front, so a rule cannot silently misfire later. Every time a rule runs against a task, an `automation_applied` event is written to that task's activity, so you can always see exactly what touched it and why. Rules apply their actions defensively, so one bad action never breaks the rest of the pass."
       },
       {
         "type": "callout",
         "variant": "info",
         "title": "Assign resolves at run time too",
-        "text": "Saving an assign action checks that the target is a member of the org and not a guest. When the rule actually runs, CompanyOS also confirms the target is a member of the task's project before setting the assignee, so an assign to someone outside the project is skipped rather than forced."
+        "text": "Saving an assign action checks that the target is a member of the org and not a guest. When the rule actually runs, Elliptic also confirms the target is a member of the task's project before setting the assignee, so an assign to someone outside the project is skipped rather than forced."
       },
       {
         "type": "h3",
@@ -6484,7 +6484,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "The glossary is not just a reference page. CompanyOS assembles your terms into a system-prompt block that is injected into AI calls, instructing the model to spell these terms exactly as written and to prefer them over similar-sounding alternatives. So once you define a term, AI features stop guessing and start using your vocabulary. The block is built from your terms in alphabetical order."
+        "text": "The glossary is not just a reference page. Elliptic assembles your terms into a system-prompt block that is injected into AI calls, instructing the model to spell these terms exactly as written and to prefer them over similar-sounding alternatives. So once you define a term, AI features stop guessing and start using your vocabulary. The block is built from your terms in alphabetical order."
       },
       {
         "type": "steps",
@@ -6533,7 +6533,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "When a task or meeting needs filing, CompanyOS can suggest the project it most likely belongs to. The routing is a **heuristic**: it scores your active projects by keyword overlap between the item's text and each project's name, key, and description. No model call is involved, which makes it fast and deterministic, and it is honest about thin evidence. When nothing matches, it returns a null suggestion with zero confidence rather than a confident guess; when something does, it returns the project, the route, and a **confidence** value derived from how far the best match leads the runner-up."
+        "text": "When a task or meeting needs filing, Elliptic can suggest the project it most likely belongs to. The routing is a **heuristic**: it scores your active projects by keyword overlap between the item's text and each project's name, key, and description. No model call is involved, which makes it fast and deterministic, and it is honest about thin evidence. When nothing matches, it returns a null suggestion with zero confidence rather than a confident guess; when something does, it returns the project, the route, and a **confidence** value derived from how far the best match leads the runner-up."
       },
       {
         "type": "p",
@@ -6545,7 +6545,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "The brain is a set of cross-project tools that answer the questions you actually have when you sit down: what changed, where did we leave off, and what is on my plate. They read live from your tasks, notes, and activity feed, and they are reachable from any AI client connected to your CompanyOS brain over MCP. This is the surface an agent uses to orient itself before acting, exactly as a person would."
+        "text": "The brain is a set of cross-project tools that answer the questions you actually have when you sit down: what changed, where did we leave off, and what is on my plate. They read live from your tasks, notes, and activity feed, and they are reachable from any AI client connected to your Elliptic brain over MCP. This is the surface an agent uses to orient itself before acting, exactly as a person would."
       },
       {
         "type": "h3",
@@ -6602,7 +6602,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "An agent reaches all of the above through CompanyOS's connection layer, and you stay in control of what any connected app can touch. Access is granted in **narrow scopes**, not all-or-nothing. Read scopes like `brain:read`, `agents:read`, `automation:read`, and `vocabulary:read` are baseline. Most write scopes, including `automation:write` and `vocabulary:write`, are ordinary (granted but not flagged as sensitive), while a few like `agents:write` and `agents:keys` are elevated and granted deliberately. A client only ever gets the intersection of what it asked for and what you allowed."
+        "text": "An agent reaches all of the above through Elliptic's connection layer, and you stay in control of what any connected app can touch. Access is granted in **narrow scopes**, not all-or-nothing. Read scopes like `brain:read`, `agents:read`, `automation:read`, and `vocabulary:read` are baseline. Most write scopes, including `automation:write` and `vocabulary:write`, are ordinary (granted but not flagged as sensitive), while a few like `agents:write` and `agents:keys` are elevated and granted deliberately. A client only ever gets the intersection of what it asked for and what you allowed."
       },
       {
         "type": "p",
@@ -6629,7 +6629,7 @@ export const DOC_PAGES: DocPage[] = [
   {
     "title": "The company-brain MCP",
     "slug": "company-brain-mcp",
-    "description": "Connect Claude Code, Cursor, or any MCP client to operate your CompanyOS workspace as first-class tools, with OAuth 2.1 consent, per-org or all-org tokens, per-domain scopes, and 144 tools across tasks, notes, meetings, calendar, comments, the org, the brain, and AI agents.",
+    "description": "Connect Claude Code, Cursor, or any MCP client to operate your Elliptic workspace as first-class tools, with OAuth 2.1 consent, per-org or all-org tokens, per-domain scopes, and 144 tools across tasks, notes, meetings, calendar, comments, the org, the brain, and AI agents.",
     "blocks": [
       {
         "type": "h2",
@@ -6637,7 +6637,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "The company-brain MCP is a first-party [Model Context Protocol](https://modelcontextprotocol.io) server built directly into the CompanyOS API. It exposes your workspace as a set of callable tools, so an MCP client like Claude Code, Cursor, or Claude Desktop can read and write the same surfaces you use in the app: tasks and boards, projects, notes, meetings and transcripts, calendar, comments, notifications, teams, the org and its members, the activity feed, the brain, and your AI agents. This is the mechanism that makes CompanyOS Jira for your agents. An agent connects as a member and operates the same surfaces you do, on the org's own model key."
+        "text": "The company-brain MCP is a first-party [Model Context Protocol](https://modelcontextprotocol.io) server built directly into the Elliptic API. It exposes your workspace as a set of callable tools, so an MCP client like Claude Code, Cursor, or Claude Desktop can read and write the same surfaces you use in the app: tasks and boards, projects, notes, meetings and transcripts, calendar, comments, notifications, teams, the org and its members, the activity feed, the brain, and your AI agents. This is the mechanism that makes Elliptic Jira for your agents. An agent connects as a member and operates the same surfaces you do, on the org's own model key."
       },
       {
         "type": "p",
@@ -6655,7 +6655,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "The MCP is protected by OAuth 2.1, so you never hand a client a raw API key. The first time a client connects it discovers the authorization server, registers itself, and opens a CompanyOS consent screen in your browser. You pick a workspace and approve a set of permissions, and the client receives a token scoped to that org and those permissions. From then on the client refreshes silently."
+        "text": "The MCP is protected by OAuth 2.1, so you never hand a client a raw API key. The first time a client connects it discovers the authorization server, registers itself, and opens a Elliptic consent screen in your browser. You pick a workspace and approve a set of permissions, and the client receives a token scoped to that org and those permissions. From then on the client refreshes silently."
       },
       {
         "type": "ul",
@@ -6673,7 +6673,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "When a client connects you land on the CompanyOS authorization page. You choose a single workspace, or pick all your organizations, then approve the permissions the client asked for. The screen groups permissions by domain. Every domain's read scope is the baseline set: it shows as **Always on** and stays checked and locked, so the standard read surface is always granted. Write and elevated permissions are an explicit, deliberate opt-in. Approve to connect, or decline to cancel. Either way you are returned to the client."
+        "text": "When a client connects you land on the Elliptic authorization page. You choose a single workspace, or pick all your organizations, then approve the permissions the client asked for. The screen groups permissions by domain. Every domain's read scope is the baseline set: it shows as **Always on** and stays checked and locked, so the standard read surface is always granted. Write and elevated permissions are an explicit, deliberate opt-in. Approve to connect, or decline to cancel. Either way you are returned to the client."
       },
       {
         "type": "p",
@@ -6691,7 +6691,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "If you would rather not run the OAuth flow, the MCP also accepts a CompanyOS personal access token directly. Send your `cos_pat_` token as a `Bearer` header (or as an `x-api-key` header) and the call is authenticated as you. A PAT is treated like a logged-in session: it acts across every organization you belong to and carries the full scope set, so use it only with clients you trust. OAuth with hand-picked scopes is the safer default for third-party agents."
+        "text": "If you would rather not run the OAuth flow, the MCP also accepts a Elliptic personal access token directly. Send your `cos_pat_` token as a `Bearer` header (or as an `x-api-key` header) and the call is authenticated as you. A PAT is treated like a logged-in session: it acts across every organization you belong to and carries the full scope set, so use it only with clients you trust. OAuth with hand-picked scopes is the safer default for third-party agents."
       },
       {
         "type": "h2",
@@ -6712,7 +6712,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "info",
         "title": "Membership is re-checked on every call",
-        "text": "A cross-org token does not bake in your memberships. On each call CompanyOS resolves your live membership of the target org with the same join the single-org path uses. If you have been removed from an org, the token loses access to it immediately, even though it still works for the orgs you remain in. Single-org tokens are re-verified the same way."
+        "text": "A cross-org token does not bake in your memberships. On each call Elliptic resolves your live membership of the target org with the same join the single-org path uses. If you have been removed from an org, the token loses access to it immediately, even though it still works for the orgs you remain in. Single-org tokens are re-verified the same way."
       },
       {
         "type": "h2",
@@ -6775,7 +6775,7 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "code",
         "lang": "bash",
-        "code": "claude mcp add --transport http companyos https://api-company.chele.bi/api/v1/mcp\n\n# then, inside Claude Code:\n/mcp        # opens the CompanyOS consent screen in your browser"
+        "code": "claude mcp add --transport http companyos https://api-company.chele.bi/api/v1/mcp\n\n# then, inside Claude Code:\n/mcp        # opens the Elliptic consent screen in your browser"
       },
       {
         "type": "h3",
@@ -6783,7 +6783,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Cursor speaks MCP natively. Add CompanyOS to `~/.cursor/mcp.json` (global) or `.cursor/mcp.json` (per-project), then open Cursor Settings, MCP, and complete the browser consent on first use:"
+        "text": "Cursor speaks MCP natively. Add Elliptic to `~/.cursor/mcp.json` (global) or `.cursor/mcp.json` (per-project), then open Cursor Settings, MCP, and complete the browser consent on first use:"
       },
       {
         "type": "code",
@@ -6792,7 +6792,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "The first tool call opens the same CompanyOS OAuth consent in your browser. No API key is stored in the file."
+        "text": "The first tool call opens the same Elliptic OAuth consent in your browser. No API key is stored in the file."
       },
       {
         "type": "h3",
@@ -6825,7 +6825,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "warning",
         "title": "The scope catalog is broader than the MCP tool surface",
-        "text": "The consent catalog lists every grantable scope CompanyOS knows about, but not every scope has an MCP tool behind it yet. The **Connected sources** domain (`sources:read`, `sources:write`, `sources:manage`) appears in the catalog and on the consent screen, yet no MCP tool currently requires it, so approving it grants nothing callable over the MCP today. Everything else in the table below is backed by real tools."
+        "text": "The consent catalog lists every grantable scope Elliptic knows about, but not every scope has an MCP tool behind it yet. The **Connected sources** domain (`sources:read`, `sources:write`, `sources:manage`) appears in the catalog and on the consent screen, yet no MCP tool currently requires it, so approving it grants nothing callable over the MCP today. Everything else in the table below is backed by real tools."
       },
       {
         "type": "table",
@@ -7344,7 +7344,7 @@ export const DOC_PAGES: DocPage[] = [
   {
     "title": "Set up your agent",
     "slug": "agent-project-setup",
-    "description": "Wire any project so your AI coding agent (Claude Code, Cursor, Claude Desktop, or any MCP client) reliably treats the CompanyOS company brain as its memory for project search and save, with a one-command, project-scoped, opt-in setup plus the manual equivalents.",
+    "description": "Wire any project so your AI coding agent (Claude Code, Cursor, Claude Desktop, or any MCP client) reliably treats the Elliptic company brain as its memory for project search and save, with a one-command, project-scoped, opt-in setup plus the manual equivalents.",
     "blocks": [
       {
         "type": "h2",
@@ -7352,17 +7352,17 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "CompanyOS is **Jira for your agents**, and this page is how you let one in. It wires a single project so your AI coding agent, Claude Code, Cursor, Claude Desktop, or any MCP client, reaches for the [company-brain MCP](/docs/company-brain-mcp) whenever it looks something up or writes something down about your work. The agent becomes a first-class operator of the same projects, tasks, meetings, and notes your team uses, acting on your organization's own model key (BYOK)."
+        "text": "Elliptic is **Jira for your agents**, and this page is how you let one in. It wires a single project so your AI coding agent, Claude Code, Cursor, Claude Desktop, or any MCP client, reaches for the [company-brain MCP](/docs/company-brain-mcp) whenever it looks something up or writes something down about your work. The agent becomes a first-class operator of the same projects, tasks, meetings, and notes your team uses, acting on your organization's own model key (BYOK)."
       },
       {
         "type": "p",
-        "text": "Setup is **per project and opt-in**. You wire only the directories where you want CompanyOS in the loop, and every other project on your machine stays exactly as it was. The whole thing is one command, and it is safe to run again whenever you like."
+        "text": "Setup is **per project and opt-in**. You wire only the directories where you want Elliptic in the loop, and every other project on your machine stays exactly as it was. The whole thing is one command, and it is safe to run again whenever you like."
       },
       {
         "type": "callout",
         "variant": "info",
         "title": "Project-scoped, nothing global",
-        "text": "Everything the setup writes lives inside the project directory: `.mcp.json`, a marked block in `CLAUDE.md`, and `.claude/skills/companyos/SKILL.md`. Nothing is installed at the user or machine level, so unrelated projects never see CompanyOS and your agent never reaches for it where you did not ask it to."
+        "text": "Everything the setup writes lives inside the project directory: `.mcp.json`, a marked block in `CLAUDE.md`, and `.claude/skills/companyos/SKILL.md`. Nothing is installed at the user or machine level, so unrelated projects never see Elliptic and your agent never reaches for it where you did not ask it to."
       },
       {
         "type": "h2",
@@ -7400,12 +7400,12 @@ export const DOC_PAGES: DocPage[] = [
           [
             "`--endpoint URL`",
             "the `COMPANYOS_MCP_URL` env var, else `http://localhost:8000/api/v1/mcp`",
-            "The MCP endpoint written into `.mcp.json`. Point it at your CompanyOS API's `/api/v1/mcp` path. On the hosted instance that is `https://api-company.chele.bi/api/v1/mcp`."
+            "The MCP endpoint written into `.mcp.json`. Point it at your Elliptic API's `/api/v1/mcp` path. On the hosted instance that is `https://api-company.chele.bi/api/v1/mcp`."
           ],
           [
             "`--name companyos`",
             "`companyos`",
-            "The MCP server name. It becomes the key in `.mcp.json` and the `mcp__<name>__*` tool prefix the agent calls, so change it only if you are wiring more than one CompanyOS workspace into the same project."
+            "The MCP server name. It becomes the key in `.mcp.json` and the `mcp__<name>__*` tool prefix the agent calls, so change it only if you are wiring more than one Elliptic workspace into the same project."
           ]
         ]
       },
@@ -7434,7 +7434,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "At the project root, `.mcp.json` declares the CompanyOS MCP server as an **HTTP** transport pointing at the endpoint. Authentication is OAuth, so the file carries the URL and nothing secret. No API key and no token is written to disk. The agent obtains a token through a browser consent the first time it connects."
+        "text": "At the project root, `.mcp.json` declares the Elliptic MCP server as an **HTTP** transport pointing at the endpoint. Authentication is OAuth, so the file carries the URL and nothing secret. No API key and no token is written to disk. The agent obtains a token through a browser consent the first time it connects."
       },
       {
         "type": "code",
@@ -7447,18 +7447,18 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "h3",
-        "text": "2. The CompanyOS block in CLAUDE.md, the routing rule"
+        "text": "2. The Elliptic block in CLAUDE.md, the routing rule"
       },
       {
         "type": "p",
-        "text": "The script adds a marked **CompanyOS (company brain)** block to `CLAUDE.md`, the file your agent reads as project instructions. The block is wrapped in `<!-- companyos:start -->` and `<!-- companyos:end -->` markers and is fully idempotent. Re-running drops the old block and appends a fresh one, keeping everything else in the file in place. The block tells the agent three things."
+        "text": "The script adds a marked **Elliptic (company brain)** block to `CLAUDE.md`, the file your agent reads as project instructions. The block is wrapped in `<!-- companyos:start -->` and `<!-- companyos:end -->` markers and is fully idempotent. Re-running drops the old block and appends a fresh one, keeping everything else in the file in place. The block tells the agent three things."
       },
       {
         "type": "ul",
         "items": [
-          "**Search first.** Before answering anything about the company, a project, a task, a person, a meeting, or a deadline, query CompanyOS (`mcp__companyos__*`) instead of guessing or relying only on local files.",
-          "**Save there.** When asked to create or track work, a task, note, decision, or follow-up, write it to CompanyOS, not just to local memory.",
-          "**It is authoritative.** Treat CompanyOS as the source of truth. Local memory and notes should point to it, not duplicate it."
+          "**Search first.** Before answering anything about the company, a project, a task, a person, a meeting, or a deadline, query Elliptic (`mcp__companyos__*`) instead of guessing or relying only on local files.",
+          "**Save there.** When asked to create or track work, a task, note, decision, or follow-up, write it to Elliptic, not just to local memory.",
+          "**It is authoritative.** Treat Elliptic as the source of truth. Local memory and notes should point to it, not duplicate it."
         ]
       },
       {
@@ -7506,7 +7506,7 @@ export const DOC_PAGES: DocPage[] = [
           },
           {
             "title": "Run /mcp and approve",
-            "text": "Run `/mcp` and approve **companyos**. The client kicks off the OAuth flow and opens the CompanyOS consent screen in your browser."
+            "text": "Run `/mcp` and approve **companyos**. The client kicks off the OAuth flow and opens the Elliptic consent screen in your browser."
           },
           {
             "title": "Pick a workspace and grant access",
@@ -7514,7 +7514,7 @@ export const DOC_PAGES: DocPage[] = [
           },
           {
             "title": "Done",
-            "text": "The client stores the token and reconnects. Your agent now reaches for CompanyOS on project search and save in this project, and nowhere else."
+            "text": "The client stores the token and reconnects. Your agent now reaches for Elliptic on project search and save in this project, and nowhere else."
           }
         ]
       },
@@ -7555,12 +7555,12 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Paste a CompanyOS block into the client's project rules file (`CLAUDE.md` for Claude Code, your project rules for Cursor, and so on). The wording matters less than the three instructions: search first, save there, treat it as authoritative."
+        "text": "Paste a Elliptic block into the client's project rules file (`CLAUDE.md` for Claude Code, your project rules for Cursor, and so on). The wording matters less than the three instructions: search first, save there, treat it as authoritative."
       },
       {
         "type": "code",
         "lang": "markdown",
-        "code": "## CompanyOS (company brain)\n\nCompanyOS is the source of truth for this org's projects, tasks, meetings,\nnotes, calendar, and activity.\n\n- Search CompanyOS (`mcp__companyos__*`) before answering anything about the\n  company, a project, a task, a person, or a deadline.\n- Save tasks, notes, decisions, and follow-ups to CompanyOS, not just locally.\n- Treat it as authoritative. Local memory should point to it, not duplicate it.\n\nAuthorize once with `/mcp`."
+        "code": "## Elliptic (company brain)\n\nElliptic is the source of truth for this org's projects, tasks, meetings,\nnotes, calendar, and activity.\n\n- Search Elliptic (`mcp__companyos__*`) before answering anything about the\n  company, a project, a task, a person, or a deadline.\n- Save tasks, notes, decisions, and follow-ups to Elliptic, not just locally.\n- Treat it as authoritative. Local memory should point to it, not duplicate it.\n\nAuthorize once with `/mcp`."
       },
       {
         "type": "p",
@@ -7572,13 +7572,13 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "The point of all this is one source of truth. Let CompanyOS hold the data and have your agent's local memory point to it rather than copy it. When the brain is authoritative, you never have to reconcile a stale note against the real task, and any agent or teammate who opens the workspace sees the same current picture."
+        "text": "The point of all this is one source of truth. Let Elliptic hold the data and have your agent's local memory point to it rather than copy it. When the brain is authoritative, you never have to reconcile a stale note against the real task, and any agent or teammate who opens the workspace sees the same current picture."
       },
       {
         "type": "callout",
         "variant": "tip",
         "title": "Write through, read fresh",
-        "text": "When your agent learns something worth keeping, a decision, a follow-up, a status, have it create or update the task, note, or comment in CompanyOS instead of stashing it in a local file. When it needs a fact, have it read the live value with a tool call. That habit keeps the brain and your scattered notes from drifting apart."
+        "text": "When your agent learns something worth keeping, a decision, a follow-up, a status, have it create or update the task, note, or comment in Elliptic instead of stashing it in a local file. When it needs a fact, have it read the live value with a tool call. That habit keeps the brain and your scattered notes from drifting apart."
       },
       {
         "type": "h3",
@@ -7586,7 +7586,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "This page wires your agent to pull *from* and push *into* CompanyOS. The opposite is also available: letting CompanyOS reach *out* to the tools your work already lives in. An admin can add outbound MCP connectors under **Settings → Connectors**, choosing from a curated catalog (GitHub, Linear, Notion, Sentry) or pointing at any custom HTTP or SSE MCP server. Each connector's credential is encrypted at rest, and a test action connects to the remote server and lists its tools so you can confirm it works before relying on it. The **Marketplace** tab next to it gathers connectable apps, agents, and importers in one place."
+        "text": "This page wires your agent to pull *from* and push *into* Elliptic. The opposite is also available: letting Elliptic reach *out* to the tools your work already lives in. An admin can add outbound MCP connectors under **Settings → Connectors**, choosing from a curated catalog (GitHub, Linear, Notion, Sentry) or pointing at any custom HTTP or SSE MCP server. Each connector's credential is encrypted at rest, and a test action connects to the remote server and lists its tools so you can confirm it works before relying on it. The **Marketplace** tab next to it gathers connectable apps, agents, and importers in one place."
       },
       {
         "type": "p",
@@ -7597,11 +7597,11 @@ export const DOC_PAGES: DocPage[] = [
   {
     "title": "Integrations & webhooks",
     "slug": "integrations-webhooks",
-    "description": "How CompanyOS connects to Slack, GitHub, Sentry, and email to file and link work, and how project webhooks and the event outbox push your domain events out to the tools your team already uses.",
+    "description": "How Elliptic connects to Slack, GitHub, Sentry, and email to file and link work, and how project webhooks and the event outbox push your domain events out to the tools your team already uses.",
     "blocks": [
       {
         "type": "p",
-        "text": "CompanyOS is built to sit in the middle of your work, not off to the side. Integrations let the tools your team already lives in feed work straight into your projects, and webhooks let CompanyOS push its own events back out the moment they happen. The same surfaces are open to your agents over the company-brain MCP, so an agent can file, link, and react to work through these channels exactly the way a person does."
+        "text": "Elliptic is built to sit in the middle of your work, not off to the side. Integrations let the tools your team already lives in feed work straight into your projects, and webhooks let Elliptic push its own events back out the moment they happen. The same surfaces are open to your agents over the company-brain MCP, so an agent can file, link, and react to work through these channels exactly the way a person does."
       },
       {
         "type": "p",
@@ -7613,7 +7613,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "The Slack integration connects one Slack workspace to your organization. Once connected, you can post a meeting's summary into a channel with a single click, and your team can file work into CompanyOS from Slack with a slash command. The connection is org-wide: one workspace per organization."
+        "text": "The Slack integration connects one Slack workspace to your organization. Once connected, you can post a meeting's summary into a channel with a single click, and your team can file work into Elliptic from Slack with a slash command. The connection is org-wide: one workspace per organization."
       },
       {
         "type": "h3",
@@ -7621,7 +7621,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Connecting Slack is an admin action. You complete a standard Slack OAuth handshake, and CompanyOS exchanges the authorization code for a bot token. That **bot token is never stored in plaintext**. It is encrypted at rest with your organization's key-encryption key (the same AES-256-GCM custody that protects your BYOK provider keys), bound to your org id, so a leaked database row is useless on its own. CompanyOS keeps the workspace's team id and team name alongside the encrypted token, and records who installed it."
+        "text": "Connecting Slack is an admin action. You complete a standard Slack OAuth handshake, and Elliptic exchanges the authorization code for a bot token. That **bot token is never stored in plaintext**. It is encrypted at rest with your organization's key-encryption key (the same AES-256-GCM custody that protects your BYOK provider keys), bound to your org id, so a leaked database row is useless on its own. Elliptic keeps the workspace's team id and team name alongside the encrypted token, and records who installed it."
       },
       {
         "type": "p",
@@ -7633,7 +7633,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "With a workspace connected, CompanyOS can list that workspace's channels using the stored bot token. This is what populates the channel picker when you go to post a meeting, so you choose a destination by name instead of pasting a channel id."
+        "text": "With a workspace connected, Elliptic can list that workspace's channels using the stored bot token. This is what populates the channel picker when you go to post a meeting, so you choose a destination by name instead of pasting a channel id."
       },
       {
         "type": "h3",
@@ -7641,7 +7641,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "From any meeting you can send its AI summary into a Slack channel. CompanyOS assembles a single formatted message:"
+        "text": "From any meeting you can send its AI summary into a Slack channel. Elliptic assembles a single formatted message:"
       },
       {
         "type": "ul",
@@ -7654,13 +7654,13 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "The Ask link points at the meeting's public share page (`/share/meetings/{token}`), so anyone in the channel can open the meeting and ask questions of it without needing a CompanyOS seat. The link only appears when a share exists and has not been revoked. Posting is recorded in the activity feed as a `slack_posted` event on the meeting, so the share is part of the meeting's history."
+        "text": "The Ask link points at the meeting's public share page (`/share/meetings/{token}`), so anyone in the channel can open the meeting and ask questions of it without needing a Elliptic seat. The link only appears when a share exists and has not been revoked. Posting is recorded in the activity feed as a `slack_posted` event on the meeting, so the share is part of the meeting's history."
       },
       {
         "type": "callout",
         "variant": "info",
         "title": "Answers still run on your key",
-        "text": "Sharing a meeting to Slack shares the summary that was already generated. When someone opens the Ask link and asks a new question, that answer runs on **your organization's own model key**, same as everywhere else in CompanyOS. Nothing about a Slack post moves AI work onto a shared pool."
+        "text": "Sharing a meeting to Slack shares the summary that was already generated. When someone opens the Ask link and asks a new question, that answer runs on **your organization's own model key**, same as everywhere else in Elliptic. Nothing about a Slack post moves AI work onto a shared pool."
       },
       {
         "type": "h3",
@@ -7668,7 +7668,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "The slash command turns Slack into an intake surface. Anyone in the connected workspace can type `/companyos <work item title>` and CompanyOS files a triage item into a default project, then replies in the channel with the new item's identifier. It is the fastest way to capture a request without leaving the conversation it came up in."
+        "text": "The slash command turns Slack into an intake surface. Anyone in the connected workspace can type `/companyos <work item title>` and Elliptic files a triage item into a default project, then replies in the channel with the new item's identifier. It is the fastest way to capture a request without leaving the conversation it came up in."
       },
       {
         "type": "code",
@@ -7677,11 +7677,11 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "The item lands as a triage task in the configured project's backlog, tagged with an intake channel of `slack` so you can tell at a glance where it came from. CompanyOS replies in-channel with a confirmation like `:white_check_mark: Created COS-214 — Investigate slow dashboard load...`. If you send the command with no text, it replies privately with the usage hint."
+        "text": "The item lands as a triage task in the configured project's backlog, tagged with an intake channel of `slack` so you can tell at a glance where it came from. Elliptic replies in-channel with a confirmation like `:white_check_mark: Created COS-214 — Investigate slow dashboard load...`. If you send the command with no text, it replies privately with the usage hint."
       },
       {
         "type": "p",
-        "text": "Every slash-command request is verified before it does anything. CompanyOS reads the raw request body exactly as Slack sent it and checks Slack's signature: it recomputes the `v0` HMAC-SHA256 over `v0:{timestamp}:{body}` with your Slack signing secret and compares it in constant time. Requests whose timestamp is more than **five minutes** off from now are rejected outright, which blocks replayed requests. An invalid or stale signature is refused before any work item is created."
+        "text": "Every slash-command request is verified before it does anything. Elliptic reads the raw request body exactly as Slack sent it and checks Slack's signature: it recomputes the `v0` HMAC-SHA256 over `v0:{timestamp}:{body}` with your Slack signing secret and compares it in constant time. Requests whose timestamp is more than **five minutes** off from now are rejected outright, which blocks replayed requests. An invalid or stale signature is refused before any work item is created."
       },
       {
         "type": "h3",
@@ -7697,7 +7697,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "The GitHub integration connects a repository to a project so that two things happen automatically: new issues become triage tasks, and pull requests or commits that reference a CompanyOS task by its identifier link back to it and close it when they merge. It is set up per project, GitHub-first, and runs entirely through an inbound webhook, so CompanyOS never needs write access to your repo."
+        "text": "The GitHub integration connects a repository to a project so that two things happen automatically: new issues become triage tasks, and pull requests or commits that reference a Elliptic task by its identifier link back to it and close it when they merge. It is set up per project, GitHub-first, and runs entirely through an inbound webhook, so Elliptic never needs write access to your repo."
       },
       {
         "type": "h3",
@@ -7705,7 +7705,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "On a project you add a connection by entering the repository's `owner` and `repo`. CompanyOS mints a unique secret token for that connection and gives you a webhook URL to paste into your repository's settings under Settings, Webhooks:"
+        "text": "On a project you add a connection by entering the repository's `owner` and `repo`. Elliptic mints a unique secret token for that connection and gives you a webhook URL to paste into your repository's settings under Settings, Webhooks:"
       },
       {
         "type": "code",
@@ -7714,7 +7714,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Point GitHub at that URL and choose to send issue, pull request, and push events. CompanyOS reads the `X-GitHub-Event` header to tell them apart. The token in the URL is what authenticates the repo to the right project, so treat it as a secret. A connection can be disabled or removed at any time, which immediately stops it from accepting events."
+        "text": "Point GitHub at that URL and choose to send issue, pull request, and push events. Elliptic reads the `X-GitHub-Event` header to tell them apart. The token in the URL is what authenticates the repo to the right project, so treat it as a secret. A connection can be disabled or removed at any time, which immediately stops it from accepting events."
       },
       {
         "type": "h3",
@@ -7722,7 +7722,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "When an issue is opened or reopened, CompanyOS creates a triage task in the connected project's backlog, carrying the issue title and body. The task is tagged with an intake channel of `github` and remembers the GitHub issue id, so the same issue never produces a duplicate. If GitHub sends a later event for an issue CompanyOS already imported, it updates the existing task's title and description in place instead of creating another."
+        "text": "When an issue is opened or reopened, Elliptic creates a triage task in the connected project's backlog, carrying the issue title and body. The task is tagged with an intake channel of `github` and remembers the GitHub issue id, so the same issue never produces a duplicate. If GitHub sends a later event for an issue Elliptic already imported, it updates the existing task's title and description in place instead of creating another."
       },
       {
         "type": "h3",
@@ -7730,7 +7730,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "CompanyOS scans the title, body, and branch name of a pull request, and the messages of pushed commits, for a closing keyword followed by a task identifier. The recognized keywords are `close`, `closes`, `closed`, `fix`, `fixes`, `fixed`, `resolve`, `resolves`, and `resolved`, and the identifier is your project key plus the task number, like `COS-123`."
+        "text": "Elliptic scans the title, body, and branch name of a pull request, and the messages of pushed commits, for a closing keyword followed by a task identifier. The recognized keywords are `close`, `closes`, `closed`, `fix`, `fixes`, `fixed`, `resolve`, `resolves`, and `resolved`, and the identifier is your project key plus the task number, like `COS-123`."
       },
       {
         "type": "code",
@@ -7739,7 +7739,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "For every identifier it finds, CompanyOS adds a link from that task to the pull request or commit comparison, so the task page shows where the work happened. What differs between events is closing behavior:"
+        "text": "For every identifier it finds, Elliptic adds a link from that task to the pull request or commit comparison, so the task page shows where the work happened. What differs between events is closing behavior:"
       },
       {
         "type": "table",
@@ -7768,7 +7768,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "So a PR that says `closes COS-123` links the task as soon as CompanyOS sees the PR, and only flips it to Done once the PR actually merges. Pushes and unmerged PRs link but never close, which keeps the board honest while work is still in flight."
+        "text": "So a PR that says `closes COS-123` links the task as soon as Elliptic sees the PR, and only flips it to Done once the PR actually merges. Pushes and unmerged PRs link but never close, which keeps the board honest while work is still in flight."
       },
       {
         "type": "h3",
@@ -7776,7 +7776,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "To keep the link working in the other direction, CompanyOS can suggest a git branch name for any task. The suggestion is built from the task's identifier and a slugified title, for example `cos-123-debounce-the-search-input`. Branch off with that name, mention the identifier in your PR, and the auto-link and auto-close behavior above picks it up with no extra setup."
+        "text": "To keep the link working in the other direction, Elliptic can suggest a git branch name for any task. The suggestion is built from the task's identifier and a slugified title, for example `cos-123-debounce-the-search-input`. Branch off with that name, mention the identifier in your PR, and the auto-link and auto-close behavior above picks it up with no extra setup."
       },
       {
         "type": "h2",
@@ -7801,7 +7801,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "When Sentry fires the alert, CompanyOS opens a triage **bug** in the project. It pulls the issue title, the culprit or transaction, and a link back to Sentry into the task, and it maps Sentry's level to a bug severity so triage is already prioritized:"
+        "text": "When Sentry fires the alert, Elliptic opens a triage **bug** in the project. It pulls the issue title, the culprit or transaction, and a link back to Sentry into the task, and it maps Sentry's level to a bug severity so triage is already prioritized:"
       },
       {
         "type": "table",
@@ -7838,7 +7838,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Email intake works the same way, for turning a forwarded email into a task. There is no mail server inside CompanyOS. Instead you point your email provider's inbound-parse webhook at the intake URL, and the provider posts each email to it:"
+        "text": "Email intake works the same way, for turning a forwarded email into a task. There is no mail server inside Elliptic. Instead you point your email provider's inbound-parse webhook at the intake URL, and the provider posts each email to it:"
       },
       {
         "type": "code",
@@ -7847,7 +7847,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "CompanyOS opens a triage **task** using the email's subject as the title, and folds the sender and the message body into the description. Both intakes return the new item's identifier (like `COS-318`) in their response, and both tag the task with an intake channel of `sentry` or `email` so you always know how it arrived."
+        "text": "Elliptic opens a triage **task** using the email's subject as the title, and folds the sender and the message body into the description. Both intakes return the new item's identifier (like `COS-318`) in their response, and both tag the task with an intake channel of `sentry` or `email` so you always know how it arrived."
       },
       {
         "type": "h2",
@@ -7855,7 +7855,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Project webhooks are the outbound half of Slack and Discord: instead of pulling work in, they post a formatted message to a channel whenever something happens in CompanyOS. You subscribe a webhook to the exact events you care about, and CompanyOS pushes a tidy Slack Block Kit message or Discord embed for each one. Managing webhooks is admin-gated, and they are scoped to a project (with a few organization-level events available too)."
+        "text": "Project webhooks are the outbound half of Slack and Discord: instead of pulling work in, they post a formatted message to a channel whenever something happens in Elliptic. You subscribe a webhook to the exact events you care about, and Elliptic pushes a tidy Slack Block Kit message or Discord embed for each one. Managing webhooks is admin-gated, and they are scoped to a project (with a few organization-level events available too)."
       },
       {
         "type": "h3",
@@ -7912,7 +7912,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Creating a webhook returns a **signing secret exactly once**. CompanyOS uses it to sign the deliveries it sends, so the receiving side can verify the message genuinely came from CompanyOS. Copy it when it is shown, because it is never displayed again. Every webhook also has a **Test** action that sends a sample message to the destination right away, so you can confirm the channel and formatting before you depend on it."
+        "text": "Creating a webhook returns a **signing secret exactly once**. Elliptic uses it to sign the deliveries it sends, so the receiving side can verify the message genuinely came from Elliptic. Copy it when it is shown, because it is never displayed again. Every webhook also has a **Test** action that sends a sample message to the destination right away, so you can confirm the channel and formatting before you depend on it."
       },
       {
         "type": "p",
@@ -7938,7 +7938,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Underneath the Slack and Discord webhooks sits a general-purpose delivery backbone. As your organization works, CompanyOS captures domain events into a durable **event outbox**. Generic **HTTP webhook endpoints** then subscribe to those events by type, and a scheduler drains the outbox and delivers each event to every matching endpoint with a signed request. This is the surface to use when you want to drive your own automation off CompanyOS events rather than post into a chat tool."
+        "text": "Underneath the Slack and Discord webhooks sits a general-purpose delivery backbone. As your organization works, Elliptic captures domain events into a durable **event outbox**. Generic **HTTP webhook endpoints** then subscribe to those events by type, and a scheduler drains the outbox and delivers each event to every matching endpoint with a signed request. This is the surface to use when you want to drive your own automation off Elliptic events rather than post into a chat tool."
       },
       {
         "type": "h3",
@@ -7946,7 +7946,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "An admin registers a webhook endpoint on the organization with a destination URL, an optional list of event types to filter on, and a secret. If you do not supply a secret, CompanyOS generates one. An endpoint with an **empty event-type list receives every event**; otherwise it receives only the event types you list. Endpoints are enabled by default and can be deleted when you no longer need them."
+        "text": "An admin registers a webhook endpoint on the organization with a destination URL, an optional list of event types to filter on, and a secret. If you do not supply a secret, Elliptic generates one. An endpoint with an **empty event-type list receives every event**; otherwise it receives only the event types you list. Endpoints are enabled by default and can be deleted when you no longer need them."
       },
       {
         "type": "h3",
@@ -7954,7 +7954,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Each delivery is a JSON POST carrying the event id, event type, entity type, entity id, the initiator type, and any event data. CompanyOS signs the body with HMAC-SHA256 using the endpoint's secret and sends the result in an `X-CompanyOS-Signature` header, so your receiver can verify authenticity. Recompute the same HMAC over the raw request body and compare:"
+        "text": "Each delivery is a JSON POST carrying the event id, event type, entity type, entity id, the initiator type, and any event data. Elliptic signs the body with HMAC-SHA256 using the endpoint's secret and sends the result in an `X-Elliptic-Signature` header, so your receiver can verify authenticity. Recompute the same HMAC over the raw request body and compare:"
       },
       {
         "type": "code",
@@ -7965,7 +7965,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "info",
         "title": "Two webhook surfaces, two signatures",
-        "text": "Generic outbox deliveries put a bare HMAC-SHA256 hex digest of the body in `X-CompanyOS-Signature`. The Slack and Discord project webhooks above use a different scheme: they sign `{timestamp}.{body}` and send `sha256=<hex>` alongside `X-CompanyOS-Timestamp` and `X-CompanyOS-Event` headers. Verify against whichever surface you are receiving from, they are not interchangeable."
+        "text": "Generic outbox deliveries put a bare HMAC-SHA256 hex digest of the body in `X-Elliptic-Signature`. The Slack and Discord project webhooks above use a different scheme: they sign `{timestamp}.{body}` and send `sha256=<hex>` alongside `X-Elliptic-Timestamp` and `X-Elliptic-Event` headers. Verify against whichever surface you are receiving from, they are not interchangeable."
       },
       {
         "type": "h3",
@@ -7985,7 +7985,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "CompanyOS keeps a delivery log of recent outbox events that you can filter by status: **pending**, **delivered**, or **failed**. Each entry shows the event type, attempt count, the last delivery error, and when it was created. From the log you can:"
+        "text": "Elliptic keeps a delivery log of recent outbox events that you can filter by status: **pending**, **delivered**, or **failed**. Each entry shows the event type, attempt count, the last delivery error, and when it was created. From the log you can:"
       },
       {
         "type": "ul",
@@ -8004,7 +8004,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Integrations bring outside tools to CompanyOS through fixed connectors. For installable apps, agents, importers, and outbound MCP connectors that let your agents reach other systems, see the [Marketplace & connectors](/docs/marketplace-connectors) page. For how inbound items land as triage and how you accept or decline them, see [Projects & Tasks](/docs/projects-and-tasks)."
+        "text": "Integrations bring outside tools to Elliptic through fixed connectors. For installable apps, agents, importers, and outbound MCP connectors that let your agents reach other systems, see the [Marketplace & connectors](/docs/marketplace-connectors) page. For how inbound items land as triage and how you accept or decline them, see [Projects & Tasks](/docs/projects-and-tasks)."
       }
     ]
   },
@@ -8019,11 +8019,11 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Most of CompanyOS lives behind a login, scoped to your organization and your project memberships. Public sharing is the deliberate exception: a handful of surfaces you can open up to people who do not have an account, so a board, a page, a saved view, or a meeting can be read by anyone holding the link. Every one of these surfaces works the same way under the hood, which makes the model easy to reason about and easy to undo."
+        "text": "Most of Elliptic lives behind a login, scoped to your organization and your project memberships. Public sharing is the deliberate exception: a handful of surfaces you can open up to people who do not have an account, so a board, a page, a saved view, or a meeting can be read by anyone holding the link. Every one of these surfaces works the same way under the hood, which makes the model easy to reason about and easy to undo."
       },
       {
         "type": "p",
-        "text": "When you publish something, CompanyOS mints a **secrets-based token**, a long, unguessable random string, and that token becomes the public URL. The token is the only thing standing between the world and the content, so the link is the secret. Nothing about the public surface is searchable or listed: the only way in is the link itself. Share it with the people who should see it, and treat it like a password."
+        "text": "When you publish something, Elliptic mints a **secrets-based token**, a long, unguessable random string, and that token becomes the public URL. The token is the only thing standing between the world and the content, so the link is the secret. Nothing about the public surface is searchable or listed: the only way in is the link itself. Share it with the people who should see it, and treat it like a password."
       },
       {
         "type": "p",
@@ -8037,13 +8037,13 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "info",
         "title": "Visibility caveat",
-        "text": "A public link is a capability, not a wall. Anyone who has the URL can open it, and they can forward it. CompanyOS does not log anonymous readers in, so you cannot tell who has visited. If something must never leave the org, do not publish it. If you published and changed your mind, unpublish or revoke immediately. Note that re-publishing the same thing mints a brand-new token, so the previous link stays dead."
+        "text": "A public link is a capability, not a wall. Anyone who has the URL can open it, and they can forward it. Elliptic does not log anonymous readers in, so you cannot tell who has visited. If something must never leave the org, do not publish it. If you published and changed your mind, unpublish or revoke immediately. Note that re-publishing the same thing mints a brand-new token, so the previous link stays dead."
       },
       {
         "type": "callout",
         "variant": "tip",
         "title": "Air-gapped instances",
-        "text": "If your CompanyOS is self-hosted on a private network, public links resolve only to people who can reach that network. A public board on `localhost` or an internal host is public only to those already inside the perimeter. On the hosted instance at company.chele.bi, a published link is reachable from the open internet. Know which one you are on before you share."
+        "text": "If your Elliptic is self-hosted on a private network, public links resolve only to people who can reach that network. A public board on `localhost` or an internal host is public only to those already inside the perimeter. On the hosted instance at company.chele.bi, a published link is reachable from the open internet. Know which one you are on before you share."
       },
       {
         "type": "p",
@@ -8084,7 +8084,7 @@ export const DOC_PAGES: DocPage[] = [
           },
           {
             "title": "Publish the board",
-            "text": "Choose to publish the board. CompanyOS mints a token and gives you a public path of the form `/public/boards/<token>`."
+            "text": "Choose to publish the board. Elliptic mints a token and gives you a public path of the form `/public/boards/<token>`."
           },
           {
             "title": "Pick the visible attributes",
@@ -8150,7 +8150,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Separate from publishing, you can export any note as a file to take it out of CompanyOS. Export does not create a public link, it just downloads or opens the content. There are two formats, plus print-to-PDF:"
+        "text": "Separate from publishing, you can export any note as a file to take it out of Elliptic. Export does not create a public link, it just downloads or opens the content. There are two formats, plus print-to-PDF:"
       },
       {
         "type": "table",
@@ -8223,7 +8223,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "info",
         "title": "Whose key runs the guest answer",
-        "text": "There is no anonymous AI budget. A guest's question runs on **your organization's own model key (BYOK)**, on behalf of the meeting's owner. The guest never sees or supplies a key. Your org pays for, and controls, the model that answers, the same key that powers every other AI feature in CompanyOS."
+        "text": "There is no anonymous AI budget. A guest's question runs on **your organization's own model key (BYOK)**, on behalf of the meeting's owner. The guest never sees or supplies a key. Your org pays for, and controls, the model that answers, the same key that powers every other AI feature in Elliptic."
       },
       {
         "type": "p",
@@ -8238,7 +8238,7 @@ export const DOC_PAGES: DocPage[] = [
           },
           {
             "title": "Create the share",
-            "text": "Mint a public share and decide whether to include the transcript (it is left out by default). CompanyOS generates the `/share/meetings/<token>` link."
+            "text": "Mint a public share and decide whether to include the transcript (it is left out by default). Elliptic generates the `/share/meetings/<token>` link."
           },
           {
             "title": "Send the link",
@@ -8330,13 +8330,13 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "CompanyOS is **Jira for your agents**: people and AI agents work the same surfaces, and agents act over the [company-brain MCP](/docs/company-brain-mcp) on your organization's own model key. This page is about extending that surface outward. Two features live here, both under **Settings**, in the **Integrations** group. The **Marketplace** is a curated, browsable registry of everything you can add to a workspace: apps, AI agents, importers, and connectors. **Connectors** let you wire your org up to remote Model Context Protocol servers, so your agents can reach the tools those servers expose, alongside everything they already do inside CompanyOS."
+        "text": "Elliptic is **Jira for your agents**: people and AI agents work the same surfaces, and agents act over the [company-brain MCP](/docs/company-brain-mcp) on your organization's own model key. This page is about extending that surface outward. Two features live here, both under **Settings**, in the **Integrations** group. The **Marketplace** is a curated, browsable registry of everything you can add to a workspace: apps, AI agents, importers, and connectors. **Connectors** let you wire your org up to remote Model Context Protocol servers, so your agents can reach the tools those servers expose, alongside everything they already do inside Elliptic."
       },
       {
         "type": "callout",
         "variant": "info",
         "title": "Two directions of MCP",
-        "text": "CompanyOS speaks MCP both ways. **Inbound**, the company-brain MCP exposes CompanyOS to outside agents. **Outbound**, connectors let your agents reach into other companies' MCP servers. The last section of this page lays the two side by side."
+        "text": "Elliptic speaks MCP both ways. **Inbound**, the company-brain MCP exposes Elliptic to outside agents. **Outbound**, connectors let your agents reach into other companies' MCP servers. The last section of this page lays the two side by side."
       },
       {
         "type": "h2",
@@ -8344,7 +8344,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "The marketplace is a curated registry of extension points for your workspace. It aggregates four kinds of things into one place, each labeled with its category: **apps** that connect CompanyOS to outside systems, **AI agents** you can add as teammates, **importers** that pull work in from elsewhere, and every **connector** in the connector catalog. You reach it under **Settings, Integrations, Marketplace**."
+        "text": "The marketplace is a curated registry of extension points for your workspace. It aggregates four kinds of things into one place, each labeled with its category: **apps** that connect Elliptic to outside systems, **AI agents** you can add as teammates, **importers** that pull work in from elsewhere, and every **connector** in the connector catalog. You reach it under **Settings, Integrations, Marketplace**."
       },
       {
         "type": "p",
@@ -8400,7 +8400,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Every listing carries an `install_kind` that tells CompanyOS where to take you. Pressing **Set up** on a listing does not perform a generic install. It deep-links you straight to the screen where that thing is actually configured, so setup happens with the proper form and permissions in front of you."
+        "text": "Every listing carries an `install_kind` that tells Elliptic where to take you. Pressing **Set up** on a listing does not perform a generic install. It deep-links you straight to the screen where that thing is actually configured, so setup happens with the proper form and permissions in front of you."
       },
       {
         "type": "ul",
@@ -8415,7 +8415,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Below the heading, the marketplace shows a live summary of what is actually live in this workspace, not just what is available to add. It counts your active AI agents and your configured connectors, rendered as a line like \"2 agents and 1 connector active\". Behind that line, CompanyOS also tracks how many listings exist per category (apps, agents, importers, connectors), so the registry can show you both sides at a glance: what you could add, and what you already have."
+        "text": "Below the heading, the marketplace shows a live summary of what is actually live in this workspace, not just what is available to add. It counts your active AI agents and your configured connectors, rendered as a line like \"2 agents and 1 connector active\". Behind that line, Elliptic also tracks how many listings exist per category (apps, agents, importers, connectors), so the registry can show you both sides at a glance: what you could add, and what you already have."
       },
       {
         "type": "callout",
@@ -8429,7 +8429,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "A connector is your organization's connection to a **remote MCP server** run by someone else. Once a connector is added and enabled, your org's agents can call the tools that remote server exposes. This is how a CompanyOS agent reaches outside its own walls, to read a GitHub pull request, file a Linear issue, search Notion, or pull a Sentry error, using the same Model Context Protocol that powers the company brain."
+        "text": "A connector is your organization's connection to a **remote MCP server** run by someone else. Once a connector is added and enabled, your org's agents can call the tools that remote server exposes. This is how a Elliptic agent reaches outside its own walls, to read a GitHub pull request, file a Linear issue, search Notion, or pull a Sentry error, using the same Model Context Protocol that powers the company brain."
       },
       {
         "type": "p",
@@ -8537,7 +8537,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Connector credentials are encrypted at rest with your organization's key. CompanyOS seals each token with AES-256-GCM under the org **key-encryption key (KEK)**, binding it to this connector's purpose with additional authenticated data of the form `mcp-connector:{org_id}`. That binding means a sealed credential cannot be decrypted in the wrong context, even within the same database. The plaintext token is never returned by the API and never rendered in the UI after you save it."
+        "text": "Connector credentials are encrypted at rest with your organization's key. Elliptic seals each token with AES-256-GCM under the org **key-encryption key (KEK)**, binding it to this connector's purpose with additional authenticated data of the form `mcp-connector:{org_id}`. That binding means a sealed credential cannot be decrypted in the wrong context, even within the same database. The plaintext token is never returned by the API and never rendered in the UI after you save it."
       },
       {
         "type": "h3",
@@ -8556,7 +8556,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "**Test** connects to the remote server right now and lists the tools it exposes. CompanyOS decrypts the stored credential, opens a session to the endpoint using a [fastmcp](https://github.com/jlowin/fastmcp) client, and calls the server's tool listing. On success you see a toast like \"Found 12 tools\" and the tool names render as badges under the connector, each tool's description available on hover. If the server returns no tools, it shows \"No tools discovered.\""
+        "text": "**Test** connects to the remote server right now and lists the tools it exposes. Elliptic decrypts the stored credential, opens a session to the endpoint using a [fastmcp](https://github.com/jlowin/fastmcp) client, and calls the server's tool listing. On success you see a toast like \"Found 12 tools\" and the tool names render as badges under the connector, each tool's description available on hover. If the server returns no tools, it shows \"No tools discovered.\""
       },
       {
         "type": "p",
@@ -8586,12 +8586,12 @@ export const DOC_PAGES: DocPage[] = [
         "rows": [
           [
             "Direction",
-            "Exposes CompanyOS to outside agents and clients",
+            "Exposes Elliptic to outside agents and clients",
             "Lets your org's agents reach into other companies' MCP servers"
           ],
           [
             "Who runs the server",
-            "CompanyOS itself, built into the API",
+            "Elliptic itself, built into the API",
             "A third party, or you, for a custom server"
           ],
           [
@@ -8613,7 +8613,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Put plainly: the **company-brain MCP** is the door in, it is how Claude Code, Cursor, or any agent acts as a first-class member inside your workspace. **Connectors** are the doors out, they are how those same agents, while operating CompanyOS, can also pull from and push to the systems your team already uses. Together they let an agent live inside CompanyOS and still reach the rest of your stack."
+        "text": "Put plainly: the **company-brain MCP** is the door in, it is how Claude Code, Cursor, or any agent acts as a first-class member inside your workspace. **Connectors** are the doors out, they are how those same agents, while operating Elliptic, can also pull from and push to the systems your team already uses. Together they let an agent live inside Elliptic and still reach the rest of your stack."
       },
       {
         "type": "callout",
@@ -8626,7 +8626,7 @@ export const DOC_PAGES: DocPage[] = [
   {
     "title": "Organizations, teams & members",
     "slug": "organizations-teams-members",
-    "description": "How to create and configure organizations, switch workspaces, manage members and invitations, build teamspaces, and find every admin setting in CompanyOS.",
+    "description": "How to create and configure organizations, switch workspaces, manage members and invitations, build teamspaces, and find every admin setting in Elliptic.",
     "blocks": [
       {
         "type": "h2",
@@ -8634,7 +8634,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "An **organization** (org) is the home for everything in CompanyOS: your projects, tasks, notes, meetings, the activity log, your people, and your agents. Every screen in the app lives inside one org, and every org is **fully isolated** from every other one. People you invite see only the org they were invited to, and the same separation holds for agents, which are first-class members that operate the same surfaces over the company-brain MCP on the org's own key. This page covers how to create an org, configure its behavior, switch between workspaces, manage roles and invitations, group people into teams, and find every admin setting."
+        "text": "An **organization** (org) is the home for everything in Elliptic: your projects, tasks, notes, meetings, the activity log, your people, and your agents. Every screen in the app lives inside one org, and every org is **fully isolated** from every other one. People you invite see only the org they were invited to, and the same separation holds for agents, which are first-class members that operate the same surfaces over the company-brain MCP on the org's own key. This page covers how to create an org, configure its behavior, switch between workspaces, manage roles and invitations, group people into teams, and find every admin setting."
       },
       {
         "type": "callout",
@@ -8656,7 +8656,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "When you first sign in, CompanyOS sends you to a workspace picker that lists every org you belong to. If you have exactly one, it takes you straight in. If you have none, it prompts you to create your first one."
+        "text": "When you first sign in, Elliptic sends you to a workspace picker that lists every org you belong to. If you have exactly one, it takes you straight in. If you have none, it prompts you to create your first one."
       },
       {
         "type": "steps",
@@ -8675,7 +8675,7 @@ export const DOC_PAGES: DocPage[] = [
           },
           {
             "title": "Click \"Create\"",
-            "text": "CompanyOS creates the org and drops you straight into a fresh project at `/app/<new-org>/projects?new=1`, so you can start working immediately."
+            "text": "Elliptic creates the org and drops you straight into a fresh project at `/app/<new-org>/projects?new=1`, so you can start working immediately."
           }
         ]
       },
@@ -8683,7 +8683,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "tip",
         "title": "You become the owner automatically",
-        "text": "Whoever creates an org is made its **owner**. CompanyOS also seeds a default task workflow (the set of statuses your work moves through) for the new org so you can create tasks right away, and records a \"created\" entry in the activity log."
+        "text": "Whoever creates an org is made its **owner**. Elliptic also seeds a default task workflow (the set of statuses your work moves through) for the new org so you can create tasks right away, and records a \"created\" entry in the activity log."
       },
       {
         "type": "p",
@@ -8745,7 +8745,7 @@ export const DOC_PAGES: DocPage[] = [
         "rows": [
           [
             "AI enabled",
-            "The org-wide AI kill switch. When off, CompanyOS stops calling AI on this org's behalf across every feature, regardless of any provider key being connected.",
+            "The org-wide AI kill switch. When off, Elliptic stops calling AI on this org's behalf across every feature, regardless of any provider key being connected.",
             "AI panel",
             "On"
           ],
@@ -8807,11 +8807,11 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Because you can belong to many orgs, CompanyOS makes moving between them quick. Everything you do inside an org lives under `/app/<orgId>/…`, where `orgId` is the org's id. Switching workspace simply means routing to a different `orgId`."
+        "text": "Because you can belong to many orgs, Elliptic makes moving between them quick. Everything you do inside an org lives under `/app/<orgId>/…`, where `orgId` is the org's id. Switching workspace simply means routing to a different `orgId`."
       },
       {
         "type": "p",
-        "text": "The workspace picker lists every org you are a member of. CompanyOS remembers the last org you opened: next time you sign in, it sends you straight back there. If you have only a single org, it skips the picker entirely and takes you in. Otherwise you pick one, and your choice is remembered for the next visit. Selecting an org routes you to its projects at `/app/<orgId>/projects`."
+        "text": "The workspace picker lists every org you are a member of. Elliptic remembers the last org you opened: next time you sign in, it sends you straight back there. If you have only a single org, it skips the picker entirely and takes you in. Otherwise you pick one, and your choice is remembered for the next visit. Selecting an org routes you to its projects at `/app/<orgId>/projects`."
       },
       {
         "type": "callout",
@@ -8859,7 +8859,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "CompanyOS enforces roles on the server, so these limits hold no matter what the UI shows. The dividing line is that managing the org (people, teams, invites, projects, settings) requires **admin or higher**, while a handful of sensitive actions are reserved for **owners** only. The detailed permission matrix and any custom roles your org defines live on the **Roles** page under Settings; this page covers the built-in hierarchy and the membership guardrails."
+        "text": "Elliptic enforces roles on the server, so these limits hold no matter what the UI shows. The dividing line is that managing the org (people, teams, invites, projects, settings) requires **admin or higher**, while a handful of sensitive actions are reserved for **owners** only. The detailed permission matrix and any custom roles your org defines live on the **Roles** page under Settings; this page covers the built-in hierarchy and the membership guardrails."
       },
       {
         "type": "callout",
@@ -8942,7 +8942,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "warning",
         "title": "Removal cascades through teams and projects",
-        "text": "When you remove someone from the org, CompanyOS also strips them out of every team and every project they belonged to within that org, in the same step, so nothing is left pointing at a person who no longer has access. The owner protections still apply: only an owner can remove an owner, and the last owner cannot be removed. The removal is logged to activity and the Role audit. Over the MCP, `remove_org_member` requires an explicit confirmation step."
+        "text": "When you remove someone from the org, Elliptic also strips them out of every team and every project they belonged to within that org, in the same step, so nothing is left pointing at a person who no longer has access. The owner protections still apply: only an owner can remove an owner, and the last owner cannot be removed. The removal is logged to activity and the Role audit. Over the MCP, `remove_org_member` requires an explicit confirmation step."
       },
       {
         "type": "h2",
@@ -8950,7 +8950,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "You add people to an org by inviting them by email. They do not need a CompanyOS account yet. When they accept (after signing in or signing up with that same email), they become members. Each invitation carries a role and, optionally, a project to drop the new member straight into."
+        "text": "You add people to an org by inviting them by email. They do not need a Elliptic account yet. When they accept (after signing in or signing up with that same email), they become members. Each invitation carries a role and, optionally, a project to drop the new member straight into."
       },
       {
         "type": "h3",
@@ -8977,7 +8977,7 @@ export const DOC_PAGES: DocPage[] = [
           },
           {
             "title": "Click \"Invite\"",
-            "text": "CompanyOS creates the invitation, emails a link to the address, and shows you a copyable invite link you can share directly."
+            "text": "Elliptic creates the invitation, emails a link to the address, and shows you a copyable invite link you can share directly."
           }
         ]
       },
@@ -9035,7 +9035,7 @@ export const DOC_PAGES: DocPage[] = [
           },
           {
             "title": "Accept",
-            "text": "When you are signed in with the invited email and the invite is still valid, CompanyOS accepts it for you, adds you to the organization (and to the linked project, if the invite had one), and takes you straight to its projects."
+            "text": "When you are signed in with the invited email and the invite is still valid, Elliptic accepts it for you, adds you to the organization (and to the linked project, if the invite had one), and takes you straight to its projects."
           }
         ]
       },
@@ -9056,7 +9056,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "info",
         "title": "Elevated invites are re-validated at accept time",
-        "text": "If you were invited as an admin or owner, CompanyOS re-checks the inviter's standing the moment you accept. If the person who invited you has since been demoted or removed and no longer holds that level of authority, the elevated grant is rejected as stale. The granted role is also capped at owner. This keeps a departed or demoted admin from leaving behind invites that hand out power they no longer have."
+        "text": "If you were invited as an admin or owner, Elliptic re-checks the inviter's standing the moment you accept. If the person who invited you has since been demoted or removed and no longer holds that level of authority, the elevated grant is rejected as stale. The granted role is also capped at owner. This keeps a departed or demoted admin from leaving behind invites that hand out power they no longer have."
       },
       {
         "type": "p",
@@ -9092,7 +9092,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Teams are wired to projects, so membership carries access. When you add someone to a team, CompanyOS walks every project linked to that team and ensures the new member sits at **at least member level** on each one. The grant never downgrades an existing higher role, and guests are skipped to preserve their access ceiling. This means joining a team is enough to start working on everything the team owns, with no per-project invite."
+        "text": "Teams are wired to projects, so membership carries access. When you add someone to a team, Elliptic walks every project linked to that team and ensures the new member sits at **at least member level** on each one. The grant never downgrades an existing higher role, and guests are skipped to preserve their access ceiling. This means joining a team is enough to start working on everything the team owns, with no per-project invite."
       },
       {
         "type": "h2",
@@ -9202,22 +9202,22 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "tip",
         "title": "Agents reach the same surfaces",
-        "text": "CompanyOS is Jira for your agents. An agent added as a member or AI user operates these same surfaces over the company-brain MCP, scoped to its role and the org it belongs to, on the org's own provider key. The guardrails on this page, the owner protections, the seat and access limits, and the residency and compliance posture, apply to agents exactly as they do to people."
+        "text": "Elliptic is Jira for your agents. An agent added as a member or AI user operates these same surfaces over the company-brain MCP, scoped to its role and the org it belongs to, on the org's own provider key. The guardrails on this page, the owner protections, the seat and access limits, and the residency and compliance posture, apply to agents exactly as they do to people."
       }
     ]
   },
   {
     "title": "Roles & permissions",
     "slug": "roles-permissions",
-    "description": "Verified corrected DocPage for roles-permissions against the CompanyOS code.",
+    "description": "Verified corrected DocPage for roles-permissions against the Elliptic code.",
     "blocks": [
       {
         "type": "h2",
-        "text": "How access works in CompanyOS"
+        "text": "How access works in Elliptic"
       },
       {
         "type": "p",
-        "text": "Access in CompanyOS is layered. Every person and every agent in your organization carries one **org role** that sets their baseline across the whole workspace. On top of that, each project can give them a separate **project role** that only applies inside that project. And when those two built-in axes are not specific enough, an admin can define **custom roles** that carry an exact set of permissions, plus a **permission matrix** that narrows access resource by resource and action by action."
+        "text": "Access in Elliptic is layered. Every person and every agent in your organization carries one **org role** that sets their baseline across the whole workspace. On top of that, each project can give them a separate **project role** that only applies inside that project. And when those two built-in axes are not specific enough, an admin can define **custom roles** that carry an exact set of permissions, plus a **permission matrix** that narrows access resource by resource and action by action."
       },
       {
         "type": "p",
@@ -9227,7 +9227,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "info",
         "title": "Agents are members too",
-        "text": "CompanyOS is Jira for your agents, so an agent is a first-class member of your organization with its own org role and project memberships. Everything on this page applies to agents exactly as it applies to people. An agent invited as a **member** with a **viewer** role on one project and a custom role on another is governed by the same rules described here, operating those surfaces over the company-brain MCP on your org's own key."
+        "text": "Elliptic is Jira for your agents, so an agent is a first-class member of your organization with its own org role and project memberships. Everything on this page applies to agents exactly as it applies to people. An agent invited as a **member** with a **viewer** role on one project and a custom role on another is governed by the same rules described here, operating those surfaces over the company-brain MCP on your org's own key."
       },
       {
         "type": "h2",
@@ -9277,7 +9277,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "An organization always keeps at least one owner. CompanyOS enforces this directly: you cannot demote the last remaining owner to a lower role, and you cannot remove the last remaining owner from the org. Only an owner may remove another owner, or grant the owner role to someone else."
+        "text": "An organization always keeps at least one owner. Elliptic enforces this directly: you cannot demote the last remaining owner to a lower role, and you cannot remove the last remaining owner from the org. Only an owner may remove another owner, or grant the owner role to someone else."
       },
       {
         "type": "p",
@@ -9301,7 +9301,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "These rules are also enforced retroactively when someone is downgraded. If you change an existing member into a guest, CompanyOS automatically pulls any of their over-cap project memberships down to **commenter** and clears every work item currently assigned to them, so the guest invariants always hold the moment the role changes."
+        "text": "These rules are also enforced retroactively when someone is downgraded. If you change an existing member into a guest, Elliptic automatically pulls any of their over-cap project memberships down to **commenter** and clears every work item currently assigned to them, so the guest invariants always hold the moment the role changes."
       },
       {
         "type": "callout",
@@ -9434,7 +9434,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Keys outside this catalog are simply ignored. When a role is saved, CompanyOS drops any permission that is not one of the twelve and de-duplicates the rest, so a role always carries a clean, well-formed set."
+        "text": "Keys outside this catalog are simply ignored. When a role is saved, Elliptic drops any permission that is not one of the twelve and de-duplicates the rest, so a role always carries a clean, well-formed set."
       },
       {
         "type": "h3",
@@ -9471,7 +9471,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "At any moment, a caller has a set of **effective permissions**. CompanyOS resolves them like this:"
+        "text": "At any moment, a caller has a set of **effective permissions**. Elliptic resolves them like this:"
       },
       {
         "type": "ul",
@@ -9590,7 +9590,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "When you save a matrix, CompanyOS keeps only the cells that name a known resource, a valid action for that resource, and one of the four valid values. Anything else is dropped, so a role's stored matrix is always well-formed."
+        "text": "When you save a matrix, Elliptic keeps only the cells that name a known resource, a valid action for that resource, and one of the four valid values. Anything else is dropped, so a role's stored matrix is always well-formed."
       },
       {
         "type": "h3",
@@ -9735,7 +9735,7 @@ export const DOC_PAGES: DocPage[] = [
   {
     "title": "Accounts, auth & tokens",
     "slug": "accounts-auth-tokens",
-    "description": "How you sign in to CompanyOS and prove who you are, from password login and two-factor codes to personal access tokens, OAuth bot apps, and social and per-org sign-in methods.",
+    "description": "How you sign in to Elliptic and prove who you are, from password login and two-factor codes to personal access tokens, OAuth bot apps, and social and per-org sign-in methods.",
     "blocks": [
       {
         "type": "h2",
@@ -9743,11 +9743,11 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Your account is a single global identity, your email address and a password, that follows you across every organization you belong to. You sign in once and CompanyOS keeps you in a secure session, so you do not have to re-enter your password on every visit. When you create an account, CompanyOS hashes your password with **argon2id** and never stores the plaintext. Passwords are 8 to 128 characters."
+        "text": "Your account is a single global identity, your email address and a password, that follows you across every organization you belong to. You sign in once and Elliptic keeps you in a secure session, so you do not have to re-enter your password on every visit. When you create an account, Elliptic hashes your password with **argon2id** and never stores the plaintext. Passwords are 8 to 128 characters."
       },
       {
         "type": "p",
-        "text": "On the hosted instance you sign in at [company.chele.bi](https://company.chele.bi). When you submit your email and password, CompanyOS verifies the credentials and starts a session for you."
+        "text": "On the hosted instance you sign in at [company.chele.bi](https://company.chele.bi). When you submit your email and password, Elliptic verifies the credentials and starts a session for you."
       },
       {
         "type": "h3",
@@ -9755,7 +9755,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "When the instance is configured to send email, a brand-new account starts unverified: CompanyOS emails you a 6-digit code, and you confirm it before you can sign in. If your instance has no mail configured, accounts are verified automatically and you can sign in right away. The account-creation walkthrough lives in [Overview & Getting Started](/docs/overview-getting-started). This page focuses on how sign-in and tokens work once you have an account."
+        "text": "When the instance is configured to send email, a brand-new account starts unverified: Elliptic emails you a 6-digit code, and you confirm it before you can sign in. If your instance has no mail configured, accounts are verified automatically and you can sign in right away. The account-creation walkthrough lives in [Overview & Getting Started](/docs/overview-getting-started). This page focuses on how sign-in and tokens work once you have an account."
       },
       {
         "type": "h3",
@@ -9814,7 +9814,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "If the credential starts with `cos_pat_`, CompanyOS treats it as a personal access token and resolves it through the owning user. Otherwise it decodes it as a session access token. Either way the request runs as you, with exactly your permissions."
+        "text": "If the credential starts with `cos_pat_`, Elliptic treats it as a personal access token and resolves it through the owning user. Otherwise it decodes it as a session access token. Either way the request runs as you, with exactly your permissions."
       },
       {
         "type": "p",
@@ -9826,7 +9826,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Two-factor authentication (2FA) adds a second step to sign-in: after your password, you enter a rotating 6-digit code from an authenticator app. CompanyOS uses **TOTP** (time-based one-time passwords), the open standard supported by Google Authenticator, 1Password, Authy, and similar apps. Codes rotate every 30 seconds, and CompanyOS tolerates one period of clock drift in either direction, so a code that just turned over still works."
+        "text": "Two-factor authentication (2FA) adds a second step to sign-in: after your password, you enter a rotating 6-digit code from an authenticator app. Elliptic uses **TOTP** (time-based one-time passwords), the open standard supported by Google Authenticator, 1Password, Authy, and similar apps. Codes rotate every 30 seconds, and Elliptic tolerates one period of clock drift in either direction, so a code that just turned over still works."
       },
       {
         "type": "h3",
@@ -9837,31 +9837,31 @@ export const DOC_PAGES: DocPage[] = [
         "steps": [
           {
             "title": "Start setup",
-            "text": "Begin enrollment from your account security settings. CompanyOS generates a fresh secret and returns it along with an `otpauth://` URI you can render as a QR code."
+            "text": "Begin enrollment from your account security settings. Elliptic generates a fresh secret and returns it along with an `otpauth://` URI you can render as a QR code."
           },
           {
             "title": "Scan the QR code",
-            "text": "Open your authenticator app and scan the QR code, or paste the secret by hand. The app starts showing a new 6-digit code every 30 seconds, labeled `CompanyOS` with your email."
+            "text": "Open your authenticator app and scan the QR code, or paste the secret by hand. The app starts showing a new 6-digit code every 30 seconds, labeled `Elliptic` with your email."
           },
           {
             "title": "Confirm a code to enable",
-            "text": "Enter the current code to finish. CompanyOS verifies it against the pending secret and only then switches 2FA on. This proves your app is set up correctly before you depend on it."
+            "text": "Enter the current code to finish. Elliptic verifies it against the pending secret and only then switches 2FA on. This proves your app is set up correctly before you depend on it."
           }
         ]
       },
       {
         "type": "p",
-        "text": "Once 2FA is enabled, signing in takes one extra field. You submit your email and password as usual, and CompanyOS tells the login screen that a code is required. You enter the current code from your app, and the session starts. Without a valid code, login does not complete."
+        "text": "Once 2FA is enabled, signing in takes one extra field. You submit your email and password as usual, and Elliptic tells the login screen that a code is required. You enter the current code from your app, and the session starts. Without a valid code, login does not complete."
       },
       {
         "type": "p",
-        "text": "To turn 2FA off, confirm one more current code. CompanyOS verifies it, then disables two-factor and discards the stored secret, so re-enabling later starts a fresh enrollment."
+        "text": "To turn 2FA off, confirm one more current code. Elliptic verifies it, then disables two-factor and discards the stored secret, so re-enabling later starts a fresh enrollment."
       },
       {
         "type": "callout",
         "variant": "tip",
         "title": "Keep your authenticator safe",
-        "text": "The secret lives in your authenticator app. CompanyOS does not issue backup codes, so if you lose the device with no backup, you lose your second factor. Use an app that backs up or syncs its codes, or enroll a backup device during setup."
+        "text": "The secret lives in your authenticator app. Elliptic does not issue backup codes, so if you lose the device with no backup, you lose your second factor. Use an app that backs up or syncs its codes, or enroll a backup device during setup."
       },
       {
         "type": "h2",
@@ -9881,7 +9881,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "A **personal access token** (PAT) lets a script, a CI job, or any tool call the CompanyOS API as you, without your password and without a browser session. Every token begins with the prefix `cos_pat_` so it is easy to spot, and you send it exactly like any other credential, as a `Bearer` token or in the `x-api-key` header."
+        "text": "A **personal access token** (PAT) lets a script, a CI job, or any tool call the Elliptic API as you, without your password and without a browser session. Every token begins with the prefix `cos_pat_` so it is easy to spot, and you send it exactly like any other credential, as a `Bearer` token or in the `x-api-key` header."
       },
       {
         "type": "h3",
@@ -9895,7 +9895,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "warning",
         "title": "The plaintext shows exactly once",
-        "text": "When you mint a token, CompanyOS shows the full value a single time, right after creation. Copy it then and store it somewhere safe. It is hashed with SHA-256 before storage, so CompanyOS cannot show it to you again. If you lose it, regenerate or revoke and create a new one."
+        "text": "When you mint a token, Elliptic shows the full value a single time, right after creation. Copy it then and store it somewhere safe. It is hashed with SHA-256 before storage, so Elliptic cannot show it to you again. If you lose it, regenerate or revoke and create a new one."
       },
       {
         "type": "h3",
@@ -9926,11 +9926,11 @@ export const DOC_PAGES: DocPage[] = [
         "steps": [
           {
             "title": "Register the app",
-            "text": "Create the app with a name. CompanyOS returns a `client_id` (it looks like `app-<random>`) and a `client_secret` that begins with `cos_secret_`. The secret is shown once, just like a personal access token, so copy it immediately."
+            "text": "Create the app with a name. Elliptic returns a `client_id` (it looks like `app-<random>`) and a `client_secret` that begins with `cos_secret_`. The secret is shown once, just like a personal access token, so copy it immediately."
           },
           {
             "title": "Exchange credentials for a bot token",
-            "text": "Your automation posts `grant_type=client_credentials` with its `client_id` and `client_secret` to the token endpoint. CompanyOS validates the pair and returns a **bot token** that acts as you, the app's owner. The bot token is itself a personal access token, named `bot:<app name>`, minted on your account."
+            "text": "Your automation posts `grant_type=client_credentials` with its `client_id` and `client_secret` to the token endpoint. Elliptic validates the pair and returns a **bot token** that acts as you, the app's owner. The bot token is itself a personal access token, named `bot:<app name>`, minted on your account."
           },
           {
             "title": "Call the API as the bot",
@@ -9959,7 +9959,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Beyond email and password, CompanyOS can sign you in with **Google** or **GitHub**. Pick the provider on the login screen, approve access on Google's or GitHub's side, and you land back signed in. The first time you sign in this way, CompanyOS provisions your account automatically from the verified email the provider returns (just-in-time provisioning), so there is no separate registration step."
+        "text": "Beyond email and password, Elliptic can sign you in with **Google** or **GitHub**. Pick the provider on the login screen, approve access on Google's or GitHub's side, and you land back signed in. The first time you sign in this way, Elliptic provisions your account automatically from the verified email the provider returns (just-in-time provisioning), so there is no separate registration step."
       },
       {
         "type": "p",
@@ -10010,14 +10010,14 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "info",
         "title": "Single sign-on",
-        "text": "For enterprise identity, the login screen also offers **single sign-on**: enter your company domain and CompanyOS hands you off to your configured SSO provider. SAML or OIDC SSO, SCIM directory provisioning, and LDAP are configured separately from the per-org sign-in toggles above. Reach for SSO and SCIM when you need to centralize identity across the whole company."
+        "text": "For enterprise identity, the login screen also offers **single sign-on**: enter your company domain and Elliptic hands you off to your configured SSO provider. SAML or OIDC SSO, SCIM directory provisioning, and LDAP are configured separately from the per-org sign-in toggles above. Reach for SSO and SCIM when you need to centralize identity across the whole company."
       }
     ]
   },
   {
     "title": "Enterprise identity: SSO, SCIM, LDAP & domains",
     "slug": "enterprise-identity",
-    "description": "Connect your identity provider to CompanyOS: verify a domain, turn on OIDC single sign-on with group sync, automate membership over SCIM 2.0, and authenticate against LDAP or Active Directory.",
+    "description": "Connect your identity provider to Elliptic: verify a domain, turn on OIDC single sign-on with group sync, automate membership over SCIM 2.0, and authenticate against LDAP or Active Directory.",
     "blocks": [
       {
         "type": "h2",
@@ -10025,7 +10025,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "CompanyOS lets you put your own identity provider in front of the workspace. Instead of every person managing a separate CompanyOS password, you connect the directory your company already runs, and membership follows it. There are four building blocks: you **verify a domain** to prove you own it, you connect **single sign-on (OIDC)** so people log in through your IdP, you add **SCIM 2.0** so accounts are created and deactivated automatically, and you can connect **LDAP or Active Directory** to authenticate directly against an on-prem directory. **IdP group sync** rides on top of SSO to turn directory groups into project roles."
+        "text": "Elliptic lets you put your own identity provider in front of the workspace. Instead of every person managing a separate Elliptic password, you connect the directory your company already runs, and membership follows it. There are four building blocks: you **verify a domain** to prove you own it, you connect **single sign-on (OIDC)** so people log in through your IdP, you add **SCIM 2.0** so accounts are created and deactivated automatically, and you can connect **LDAP or Active Directory** to authenticate directly against an on-prem directory. **IdP group sync** rides on top of SSO to turn directory groups into project roles."
       },
       {
         "type": "p",
@@ -10035,7 +10035,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "info",
         "title": "Agents are members too",
-        "text": "CompanyOS is Jira for your agents, and an agent is a first-class member of the org just like a person. Enterprise identity governs how human accounts get into the workspace. Agents operate the same surfaces over the company-brain MCP on your org's own key (BYOK), so they sit alongside the people your IdP provisions rather than going through SSO themselves."
+        "text": "Elliptic is Jira for your agents, and an agent is a first-class member of the org just like a person. Enterprise identity governs how human accounts get into the workspace. Agents operate the same surfaces over the company-brain MCP on your org's own key (BYOK), so they sit alongside the people your IdP provisions rather than going through SSO themselves."
       },
       {
         "type": "h2",
@@ -10043,22 +10043,22 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "A **verified domain** is how you prove to CompanyOS that your organization controls an email domain like `acme.com`. Verifying a domain unlocks domain-gated SSO, and a verified domain is **globally unique**, so one domain can be verified by exactly one workspace."
+        "text": "A **verified domain** is how you prove to Elliptic that your organization controls an email domain like `acme.com`. Verifying a domain unlocks domain-gated SSO, and a verified domain is **globally unique**, so one domain can be verified by exactly one workspace."
       },
       {
         "type": "p",
-        "text": "You add a domain, CompanyOS hands you a DNS TXT record, you publish it at your DNS provider, and then CompanyOS checks for it over DNS. Until the record is found, the domain sits in a **Pending** state."
+        "text": "You add a domain, Elliptic hands you a DNS TXT record, you publish it at your DNS provider, and then Elliptic checks for it over DNS. Until the record is found, the domain sits in a **Pending** state."
       },
       {
         "type": "steps",
         "steps": [
           {
             "title": "Add the domain",
-            "text": "In Settings, open Verified domains, type the domain (for example `acme.com`), and select Add domain. CompanyOS normalizes what you type: it strips any `http://` or `https://` and trailing slash, and if you paste a full email address it keeps only the part after the `@`. The domain is created in the Pending state."
+            "text": "In Settings, open Verified domains, type the domain (for example `acme.com`), and select Add domain. Elliptic normalizes what you type: it strips any `http://` or `https://` and trailing slash, and if you paste a full email address it keeps only the part after the `@`. The domain is created in the Pending state."
           },
           {
             "title": "Copy the TXT record",
-            "text": "CompanyOS generates a unique token and shows you a TXT record of the form `companyos-verify=<token>`. The record name is the root of the domain (shown as `@`). Use the copy button to grab the exact value."
+            "text": "Elliptic generates a unique token and shows you a TXT record of the form `companyos-verify=<token>`. The record name is the root of the domain (shown as `@`). Use the copy button to grab the exact value."
           },
           {
             "title": "Publish it in DNS",
@@ -10066,19 +10066,19 @@ export const DOC_PAGES: DocPage[] = [
           },
           {
             "title": "Verify",
-            "text": "Back in CompanyOS, select Verify. CompanyOS looks up the domain's TXT records and checks that the expected `companyos-verify=<token>` value is present. If it is, the domain flips to Verified and records the time. If it isn't there yet, you get a clear message to add the record and allow time for DNS to propagate, and you can retry."
+            "text": "Back in Elliptic, select Verify. Elliptic looks up the domain's TXT records and checks that the expected `companyos-verify=<token>` value is present. If it is, the domain flips to Verified and records the time. If it isn't there yet, you get a clear message to add the record and allow time for DNS to propagate, and you can retry."
           }
         ]
       },
       {
         "type": "p",
-        "text": "Under the hood CompanyOS resolves the TXT records over **DNS-over-HTTPS** (it queries `https://dns.google/resolve`), so it needs no special network setup and works the same on the hosted instance and a self-hosted one. The lookup reads only TXT records for the exact domain you added."
+        "text": "Under the hood Elliptic resolves the TXT records over **DNS-over-HTTPS** (it queries `https://dns.google/resolve`), so it needs no special network setup and works the same on the hosted instance and a self-hosted one. The lookup reads only TXT records for the exact domain you added."
       },
       {
         "type": "callout",
         "variant": "info",
         "title": "One workspace per domain",
-        "text": "A domain can be verified by only one organization. When you add a domain that another workspace has already verified, CompanyOS refuses it, and verification re-checks this at the moment you verify, so two workspaces can't race to claim the same domain."
+        "text": "A domain can be verified by only one organization. When you add a domain that another workspace has already verified, Elliptic refuses it, and verification re-checks this at the moment you verify, so two workspaces can't race to claim the same domain."
       },
       {
         "type": "p",
@@ -10090,7 +10090,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "**SSO** connects your organization to an **OpenID Connect** identity provider, gated by an email domain. Once it's enabled, anyone whose IdP email is on that domain can sign in through your IdP, and if they don't have a CompanyOS account yet, one is created for them on first login (just-in-time provisioning). CompanyOS ships OIDC today. SAML is a deferred follow-up and is not available yet."
+        "text": "**SSO** connects your organization to an **OpenID Connect** identity provider, gated by an email domain. Once it's enabled, anyone whose IdP email is on that domain can sign in through your IdP, and if they don't have a Elliptic account yet, one is created for them on first login (just-in-time provisioning). Elliptic ships OIDC today. SAML is a deferred follow-up and is not available yet."
       },
       {
         "type": "h3",
@@ -10113,7 +10113,7 @@ export const DOC_PAGES: DocPage[] = [
           ],
           [
             "Issuer URL",
-            "Your IdP's OIDC issuer, for example `https://idp.example.com`. CompanyOS appends `/.well-known/openid-configuration` to discover the authorization, token, and userinfo endpoints automatically, so you don't enter those by hand."
+            "Your IdP's OIDC issuer, for example `https://idp.example.com`. Elliptic appends `/.well-known/openid-configuration` to discover the authorization, token, and userinfo endpoints automatically, so you don't enter those by hand."
           ],
           [
             "Client ID",
@@ -10125,19 +10125,19 @@ export const DOC_PAGES: DocPage[] = [
           ],
           [
             "Redirect URI",
-            "Where the IdP sends users back after they authenticate. CompanyOS pre-fills this with your instance's `/auth/sso/callback` URL. Register the same value in your IdP."
+            "Where the IdP sends users back after they authenticate. Elliptic pre-fills this with your instance's `/auth/sso/callback` URL. Register the same value in your IdP."
           ]
         ]
       },
       {
         "type": "p",
-        "text": "Register an OIDC application in your IdP with the redirect URI above, then paste the issuer, client ID, and client secret into CompanyOS and select Save SSO. The connection carries an enabled flag, and the sign-in flow only works while it is enabled."
+        "text": "Register an OIDC application in your IdP with the redirect URI above, then paste the issuer, client ID, and client secret into Elliptic and select Save SSO. The connection carries an enabled flag, and the sign-in flow only works while it is enabled."
       },
       {
         "type": "callout",
         "variant": "tip",
         "title": "The client secret is encrypted at rest",
-        "text": "Your OIDC client secret is sealed with **AES-256-GCM**, the same key custody CompanyOS uses for your BYOK model keys. It's stored encrypted, never sent back to the browser, and the connection you read from the API returns everything except the secret."
+        "text": "Your OIDC client secret is sealed with **AES-256-GCM**, the same key custody Elliptic uses for your BYOK model keys. It's stored encrypted, never sent back to the browser, and the connection you read from the API returns everything except the secret."
       },
       {
         "type": "h3",
@@ -10152,7 +10152,7 @@ export const DOC_PAGES: DocPage[] = [
         "steps": [
           {
             "title": "Start by domain",
-            "text": "The login surface calls `/auth/sso/start?domain=acme.com`. CompanyOS finds the enabled SSO connection for that domain, reads your IdP's discovery document, and returns the IdP authorization URL with `scope=openid email profile` and a signed `state` value. If no enabled SSO is configured for the domain, it says so."
+            "text": "The login surface calls `/auth/sso/start?domain=acme.com`. Elliptic finds the enabled SSO connection for that domain, reads your IdP's discovery document, and returns the IdP authorization URL with `scope=openid email profile` and a signed `state` value. If no enabled SSO is configured for the domain, it says so."
           },
           {
             "title": "Authenticate at the IdP",
@@ -10160,15 +10160,15 @@ export const DOC_PAGES: DocPage[] = [
           },
           {
             "title": "Exchange and verify",
-            "text": "CompanyOS calls `/auth/sso/callback?code=...&state=...`. It verifies the signed state (which is short-lived, valid for ten minutes), decrypts the client secret, exchanges the code for tokens at the IdP's token endpoint, and fetches the user's profile from the userinfo endpoint."
+            "text": "Elliptic calls `/auth/sso/callback?code=...&state=...`. It verifies the signed state (which is short-lived, valid for ten minutes), decrypts the client secret, exchanges the code for tokens at the IdP's token endpoint, and fetches the user's profile from the userinfo endpoint."
           },
           {
             "title": "Check the email domain",
-            "text": "CompanyOS reads the email from userinfo and requires its domain to match the connection's domain exactly. If the IdP returns no email, or the email is on a different domain, the login is rejected. This is the guardrail that keeps a connection scoped to the company that owns it."
+            "text": "Elliptic reads the email from userinfo and requires its domain to match the connection's domain exactly. If the IdP returns no email, or the email is on a different domain, the login is rejected. This is the guardrail that keeps a connection scoped to the company that owns it."
           },
           {
             "title": "Provision and sign in",
-            "text": "If no CompanyOS account exists for that email, one is created just-in-time, marked email-verified, with the name from the IdP profile. If the user isn't yet a member of the org, they're added as a Member. CompanyOS then issues the session cookies and the user is in."
+            "text": "If no Elliptic account exists for that email, one is created just-in-time, marked email-verified, with the name from the IdP profile. If the user isn't yet a member of the org, they're added as a Member. Elliptic then issues the session cookies and the user is in."
           }
         ]
       },
@@ -10184,7 +10184,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "**Group sync** turns the groups your IdP reports into **project roles** inside CompanyOS. You map an IdP group name to a project plus a role, and when a member signs in via SSO, the groups in their profile are reconciled against those mappings so they land in the right projects with the right access automatically. It's an extension of SSO, configured right below the SSO connection in Settings."
+        "text": "**Group sync** turns the groups your IdP reports into **project roles** inside Elliptic. You map an IdP group name to a project plus a role, and when a member signs in via SSO, the groups in their profile are reconciled against those mappings so they land in the right projects with the right access automatically. It's an extension of SSO, configured right below the SSO connection in Settings."
       },
       {
         "type": "h3",
@@ -10251,7 +10251,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "**SCIM** lets your IdP (Okta, Microsoft Entra ID, and others) create, update, and deactivate CompanyOS members automatically, so org membership tracks your directory without anyone clicking Invite. Where SSO provisions a user the first time they happen to log in, SCIM provisions them up front and deactivates them the moment they're offboarded in your IdP. CompanyOS implements **SCIM 2.0** for users."
+        "text": "**SCIM** lets your IdP (Okta, Microsoft Entra ID, and others) create, update, and deactivate Elliptic members automatically, so org membership tracks your directory without anyone clicking Invite. Where SSO provisions a user the first time they happen to log in, SCIM provisions them up front and deactivates them the moment they're offboarded in your IdP. Elliptic implements **SCIM 2.0** for users."
       },
       {
         "type": "h3",
@@ -10262,11 +10262,11 @@ export const DOC_PAGES: DocPage[] = [
         "steps": [
           {
             "title": "Generate the token",
-            "text": "In Settings under SCIM provisioning, select Generate token. CompanyOS mints a per-org bearer token (it begins with `scim_`) and shows you the raw value once. Copy it immediately, it won't be shown again. Generating again rotates the token: the old one is revoked and a new one is issued."
+            "text": "In Settings under SCIM provisioning, select Generate token. Elliptic mints a per-org bearer token (it begins with `scim_`) and shows you the raw value once. Copy it immediately, it won't be shown again. Generating again rotates the token: the old one is revoked and a new one is issued."
           },
           {
             "title": "Copy the base URL",
-            "text": "CompanyOS shows the SCIM base URL for your org, of the form `/scim/v2/orgs/{org_id}` on your instance. The Settings page renders it as a full URL you can copy."
+            "text": "Elliptic shows the SCIM base URL for your org, of the form `/scim/v2/orgs/{org_id}` on your instance. The Settings page renders it as a full URL you can copy."
           },
           {
             "title": "Configure your IdP",
@@ -10281,7 +10281,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Every SCIM request is authenticated by that bearer token and scoped to your org. A missing or non-matching token is rejected. The Settings page shows whether a token is configured, its non-secret prefix, and when it was last used, so you can confirm your IdP is actually talking to CompanyOS. You can revoke the token to cut the connection off entirely."
+        "text": "Every SCIM request is authenticated by that bearer token and scoped to your org. A missing or non-matching token is rejected. The Settings page shows whether a token is configured, its non-secret prefix, and when it was last used, so you can confirm your IdP is actually talking to Elliptic. You can revoke the token to cut the connection off entirely."
       },
       {
         "type": "h3",
@@ -10289,18 +10289,18 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Your IdP drives the standard SCIM Users endpoints, and CompanyOS maps them onto org membership:"
+        "text": "Your IdP drives the standard SCIM Users endpoints, and Elliptic maps them onto org membership:"
       },
       {
         "type": "table",
         "headers": [
           "SCIM operation",
-          "What CompanyOS does"
+          "What Elliptic does"
         ],
         "rows": [
           [
             "POST /Users (provision)",
-            "Reads the user's email from `userName` (falling back to the first entry in `emails`) and their name. If no CompanyOS account exists for that email, it creates one just-in-time, marked email-verified. If they aren't a member of the org, it adds them as a Member, and records a `scim.user.provisioned` event."
+            "Reads the user's email from `userName` (falling back to the first entry in `emails`) and their name. If no Elliptic account exists for that email, it creates one just-in-time, marked email-verified. If they aren't a member of the org, it adds them as a Member, and records a `scim.user.provisioned` event."
           ],
           [
             "GET /Users, GET /Users/{id}",
@@ -10312,7 +10312,7 @@ export const DOC_PAGES: DocPage[] = [
           ],
           [
             "PATCH /Users/{id}",
-            "Honors the common Azure and Okta 'replace active' patch op: CompanyOS reads the `active` value from the operation whose path is `active` and activates or deactivates accordingly."
+            "Honors the common Azure and Okta 'replace active' patch op: Elliptic reads the `active` value from the operation whose path is `active` and activates or deactivates accordingly."
           ],
           [
             "DELETE /Users/{id}",
@@ -10328,7 +10328,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "warning",
         "title": "The last owner is protected",
-        "text": "CompanyOS refuses to deactivate the **last owner** of an org over SCIM. If a deactivation would remove the only remaining owner, the membership is left in place, so a misconfigured IdP rule can never lock everyone out of the workspace."
+        "text": "Elliptic refuses to deactivate the **last owner** of an org over SCIM. If a deactivation would remove the only remaining owner, the membership is left in place, so a misconfigured IdP rule can never lock everyone out of the workspace."
       },
       {
         "type": "h2",
@@ -10336,7 +10336,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "If you run an on-prem **LDAP** directory or **Active Directory**, you can have CompanyOS authenticate members directly against it. People sign in with their directory username and password, CompanyOS binds to the directory to check the credentials, and provisions them just-in-time on the first successful sign-in. There's one LDAP connection per organization."
+        "text": "If you run an on-prem **LDAP** directory or **Active Directory**, you can have Elliptic authenticate members directly against it. People sign in with their directory username and password, Elliptic binds to the directory to check the credentials, and provisions them just-in-time on the first successful sign-in. There's one LDAP connection per organization."
       },
       {
         "type": "h3",
@@ -10361,7 +10361,7 @@ export const DOC_PAGES: DocPage[] = [
           ],
           [
             "Bind DN",
-            "The service account CompanyOS binds as to search the directory.",
+            "The service account Elliptic binds as to search the directory.",
             "`cn=service,dc=example,dc=com`"
           ],
           [
@@ -10396,7 +10396,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Before you rely on it, use **Test connection**. CompanyOS performs the service bind with your bind DN and password and runs a small sample search against the search base, then returns a plain-language result. On success you get a confirmation that it connected and how many sample entries the search base returned. On failure you get a specific message, for example that the service bind failed (check the bind DN and password) or that the connection itself couldn't be made. This turns directory misconfiguration into a readable diagnostic instead of a failed login later."
+        "text": "Before you rely on it, use **Test connection**. Elliptic performs the service bind with your bind DN and password and runs a small sample search against the search base, then returns a plain-language result. On success you get a confirmation that it connected and how many sample entries the search base returned. On failure you get a specific message, for example that the service bind failed (check the bind DN and password) or that the connection itself couldn't be made. This turns directory misconfiguration into a readable diagnostic instead of a failed login later."
       },
       {
         "type": "h3",
@@ -10404,14 +10404,14 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "When a member signs in with their directory credentials at `/auth/ldap/login`, CompanyOS runs the standard service-bind-then-rebind pattern:"
+        "text": "When a member signs in with their directory credentials at `/auth/ldap/login`, Elliptic runs the standard service-bind-then-rebind pattern:"
       },
       {
         "type": "steps",
         "steps": [
           {
             "title": "Service bind",
-            "text": "CompanyOS binds to the directory as the configured service account (the bind DN and decrypted bind password). If that bind fails, the login is rejected."
+            "text": "Elliptic binds to the directory as the configured service account (the bind DN and decrypted bind password). If that bind fails, the login is rejected."
           },
           {
             "title": "Search for the user",
@@ -10423,7 +10423,7 @@ export const DOC_PAGES: DocPage[] = [
           },
           {
             "title": "Provision and sign in",
-            "text": "On success, CompanyOS reads the email from the directory entry. If no CompanyOS account exists for that email, it creates one just-in-time (email-verified, with the name built from the first and last attributes). If the user isn't a member of the org, it adds them as a Member, then issues the session."
+            "text": "On success, Elliptic reads the email from the directory entry. If no Elliptic account exists for that email, it creates one just-in-time (email-verified, with the name built from the first and last attributes). If the user isn't a member of the org, it adds them as a Member, then issues the session."
           }
         ]
       },
@@ -10442,15 +10442,15 @@ export const DOC_PAGES: DocPage[] = [
     "blocks": [
       {
         "type": "h2",
-        "text": "Compliance and audit in CompanyOS"
+        "text": "Compliance and audit in Elliptic"
       },
       {
         "type": "p",
-        "text": "CompanyOS gives an organization four tools for governance and recordkeeping, all gathered under the **Compliance & Audit** group in **Settings**. You declare your compliance posture, handle GDPR data-subject and right-to-erasure requests, read a filterable audit log of every recorded change, and read a dedicated trail of every membership and role change. These live on the **Compliance**, **Audit log**, and **Role audit** tabs, and they are admin work."
+        "text": "Elliptic gives an organization four tools for governance and recordkeeping, all gathered under the **Compliance & Audit** group in **Settings**. You declare your compliance posture, handle GDPR data-subject and right-to-erasure requests, read a filterable audit log of every recorded change, and read a dedicated trail of every membership and role change. These live on the **Compliance**, **Audit log**, and **Role audit** tabs, and they are admin work."
       },
       {
         "type": "p",
-        "text": "Because agents are first-class members in CompanyOS, the same recordkeeping covers them. When an agent moves a task, files a note, or is added to a project, that lands in the same audit log and, where access changes, the same role audit. Each audit-log entry carries an actor type, so you can see at a glance whether an action came from a person or the system."
+        "text": "Because agents are first-class members in Elliptic, the same recordkeeping covers them. When an agent moves a task, files a note, or is added to a project, that lands in the same audit log and, where access changes, the same role audit. Each audit-log entry carries an actor type, so you can see at a glance whether an action came from a person or the system."
       },
       {
         "type": "callout",
@@ -10528,7 +10528,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "When a member exercises a data-subject access request under GDPR, you assemble a **data-subject export bundle** for them, a single document that gathers what CompanyOS holds about that person inside your organization. You file it from the **Data-subject requests (GDPR)** section on the same **Compliance** tab, and the same section is where you file a right-to-erasure request."
+        "text": "When a member exercises a data-subject access request under GDPR, you assemble a **data-subject export bundle** for them, a single document that gathers what Elliptic holds about that person inside your organization. You file it from the **Data-subject requests (GDPR)** section on the same **Compliance** tab, and the same section is where you file a right-to-erasure request."
       },
       {
         "type": "h3",
@@ -10536,7 +10536,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "The bundle has two parts. The **subject** part is the member's personal data CompanyOS stores: their user id, email, full name, and their role in your organization. The **content** part is a privacy-respecting count of what they have authored, the number of authored tasks, authored notes, and authored comments, rather than the content itself. The bundle is built only for someone who is actually a member of your organization. Asking for a non-member returns a not-found error."
+        "text": "The bundle has two parts. The **subject** part is the member's personal data Elliptic stores: their user id, email, full name, and their role in your organization. The **content** part is a privacy-respecting count of what they have authored, the number of authored tasks, authored notes, and authored comments, rather than the content itself. The bundle is built only for someone who is actually a member of your organization. Asking for a non-member returns a not-found error."
       },
       {
         "type": "steps",
@@ -10547,7 +10547,7 @@ export const DOC_PAGES: DocPage[] = [
           },
           {
             "title": "Export the data",
-            "text": "Click **Export data**. CompanyOS assembles the bundle and downloads it to your machine as a JSON file named `data-subject-<user-id>.json`."
+            "text": "Click **Export data**. Elliptic assembles the bundle and downloads it to your machine as a JSON file named `data-subject-<user-id>.json`."
           },
           {
             "title": "Hand it over",
@@ -10570,7 +10570,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "When a member asks to be erased, you file a **right-to-erasure request**. From the same section, with the member selected, click **Request erasure**. CompanyOS records the request against your organization and returns a status of `pending_review`. The request is logged for review, it does not delete the member or their content on the spot, so an admin makes the deletion decision deliberately rather than as a side effect of a button press."
+        "text": "When a member asks to be erased, you file a **right-to-erasure request**. From the same section, with the member selected, click **Request erasure**. Elliptic records the request against your organization and returns a status of `pending_review`. The request is logged for review, it does not delete the member or their content on the spot, so an admin makes the deletion decision deliberately rather than as a side effect of a button press."
       },
       {
         "type": "callout",
@@ -10584,7 +10584,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "The **audit log** is the org-wide compliance view over everything CompanyOS records: every meaningful change to a task, project, note, comment, or the organization, with the actor who made it, when it happened, and the before/after values. It is the activity history read through a governance lens, on **Settings → Audit log**, and it is admin-only. Each entry tells you who did it, what they touched, what event it was, and what changed."
+        "text": "The **audit log** is the org-wide compliance view over everything Elliptic records: every meaningful change to a task, project, note, comment, or the organization, with the actor who made it, when it happened, and the before/after values. It is the activity history read through a governance lens, on **Settings → Audit log**, and it is admin-only. Each entry tells you who did it, what they touched, what event it was, and what changed."
       },
       {
         "type": "h3",
@@ -10717,7 +10717,7 @@ export const DOC_PAGES: DocPage[] = [
   {
     "title": "Billing, seats & onboarding",
     "slug": "billing-seats-onboarding",
-    "description": "How CompanyOS counts seats, what each plan lists, how the per-seat AI credit pool is sized, and how the get-started checklist drives setup for new workspaces.",
+    "description": "How Elliptic counts seats, what each plan lists, how the per-seat AI credit pool is sized, and how the get-started checklist drives setup for new workspaces.",
     "blocks": [
       {
         "type": "h2",
@@ -10725,7 +10725,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Every organization in CompanyOS has an **edition** (its plan), a **seat count** (who is billable and who is free), a pool of **AI credits**, and, when it is new, a **get-started checklist**. This page is the admin-facing reference for all four. It explains how a seat is counted, how a plan maps to a seat limit and a list of features, how the per-seat AI credit pool is sized, and how the onboarding checklist is computed from your live workspace. Everything here matches what the product actually does, so you can read your numbers with confidence."
+        "text": "Every organization in Elliptic has an **edition** (its plan), a **seat count** (who is billable and who is free), a pool of **AI credits**, and, when it is new, a **get-started checklist**. This page is the admin-facing reference for all four. It explains how a seat is counted, how a plan maps to a seat limit and a list of features, how the per-seat AI credit pool is sized, and how the onboarding checklist is computed from your live workspace. Everything here matches what the product actually does, so you can read your numbers with confidence."
       },
       {
         "type": "p",
@@ -10735,7 +10735,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "info",
         "title": "Agents are members too, and they are free",
-        "text": "CompanyOS is Jira for your agents. Your AI users (agents) operate the same surfaces as people, over the company-brain MCP on your org's own key (BYOK). They count separately from human seats and never consume a billable seat. You will see them broken out as **agents (non-billable)** wherever seats are shown."
+        "text": "Elliptic is Jira for your agents. Your AI users (agents) operate the same surfaces as people, over the company-brain MCP on your org's own key (BYOK). They count separately from human seats and never consume a billable seat. You will see them broken out as **agents (non-billable)** wherever seats are shown."
       },
       {
         "type": "h2",
@@ -10743,7 +10743,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "A **seat** is a membership in your organization. CompanyOS splits seats into billable and free based on the member's role, counts your agents on their own line, and shows the full breakdown by role. Nothing here requires a payment method to read. It is accounting, so you always know where you stand against your plan's limit."
+        "text": "A **seat** is a membership in your organization. Elliptic splits seats into billable and free based on the member's role, counts your agents on their own line, and shows the full breakdown by role. Nothing here requires a payment method to read. It is accounting, so you always know where you stand against your plan's limit."
       },
       {
         "type": "h3",
@@ -10784,7 +10784,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "This is also why guest is the right role for an outside collaborator. A guest joins specific projects with a limited project role (viewer or commenter), takes a free seat, and is not left holding task assignments. When you demote a member to guest, CompanyOS caps their project access to viewer or commenter and clears any task assignments they held. Promoting someone from guest to member is the moment they start consuming a billable seat."
+        "text": "This is also why guest is the right role for an outside collaborator. A guest joins specific projects with a limited project role (viewer or commenter), takes a free seat, and is not left holding task assignments. When you demote a member to guest, Elliptic caps their project access to viewer or commenter and clears any task assignments they held. Promoting someone from guest to member is the moment they start consuming a billable seat."
       },
       {
         "type": "h3",
@@ -10806,7 +10806,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "An **edition** is the plan your organization is on. Every org starts on **Free**. The plan is a single setting that records three things: a billable seat limit, a per-seat AI credit figure shown on the card, and a list of features for that tier. CompanyOS ships four plans."
+        "text": "An **edition** is the plan your organization is on. Every org starts on **Free**. The plan is a single setting that records three things: a billable seat limit, a per-seat AI credit figure shown on the card, and a list of features for that tier. Elliptic ships four plans."
       },
       {
         "type": "table",
@@ -10851,7 +10851,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "warning",
         "title": "Plan features are descriptive, not hard gates",
-        "text": "The plan stores a feature list and the **Plan & licensing** card renders it as badges, but CompanyOS does not currently lock those features behind the plan. Capabilities like dashboards, automations, cycles, the RBAC audit log, and custom roles are available regardless of edition. Treat the feature badges as the catalog for a tier, not a switch that disables functionality on lower plans."
+        "text": "The plan stores a feature list and the **Plan & licensing** card renders it as badges, but Elliptic does not currently lock those features behind the plan. Capabilities like dashboards, automations, cycles, the RBAC audit log, and custom roles are available regardless of edition. Treat the feature badges as the catalog for a tier, not a switch that disables functionality on lower plans."
       },
       {
         "type": "h3",
@@ -10918,7 +10918,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "CompanyOS meters AI work as **AI credits**. One AI action, any single call CompanyOS makes to your model, summarizing a meeting, answering a brain question, an agent acting, uses one credit. The credit pool is sized by your billable seats, so as your team grows, your monthly allowance grows with it. You read it on the **AI credits** card under **Settings → AI**."
+        "text": "Elliptic meters AI work as **AI credits**. One AI action, any single call Elliptic makes to your model, summarizing a meeting, answering a brain question, an agent acting, uses one credit. The credit pool is sized by your billable seats, so as your team grows, your monthly allowance grows with it. You read it on the **AI credits** card under **Settings → AI**."
       },
       {
         "type": "p",
@@ -10938,7 +10938,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "info",
         "title": "Credits meter usage, your key pays the bill",
-        "text": "AI credits are an allowance for how much AI work CompanyOS meters. The actual model cost still runs on your own provider key (BYOK). For the full accounting of AI runs, model spend, and how usage is reported, see [AI, Brain & Automations](/docs/ai-brain-automations)."
+        "text": "AI credits are an allowance for how much AI work Elliptic meters. The actual model cost still runs on your own provider key (BYOK). For the full accounting of AI runs, model spend, and how usage is reported, see [AI, Brain & Automations](/docs/ai-brain-automations)."
       },
       {
         "type": "h2",
@@ -11021,21 +11021,21 @@ export const DOC_PAGES: DocPage[] = [
   {
     "title": "Self-hosting & operations",
     "slug": "self-hosting",
-    "description": "Run your own CompanyOS instance with Docker Compose: the one-command quick start, the compose stack and its environment wiring, secrets and encryption, BYOK on your own keys, releases and upgrades, and air-gapped operation.",
+    "description": "Run your own Elliptic instance with Docker Compose: the one-command quick start, the compose stack and its environment wiring, secrets and encryption, BYOK on your own keys, releases and upgrades, and air-gapped operation.",
     "blocks": [
       {
         "type": "h2",
-        "text": "Running your own CompanyOS"
+        "text": "Running your own Elliptic"
       },
       {
         "type": "p",
-        "text": "CompanyOS is open source and self-hostable, so the whole platform, your projects, tasks, meetings, notes, the activity log, the company brain, and the built-in MCP server your agents connect to, can run entirely on your own infrastructure. The fastest path is **Docker Compose**: one command brings up the database, the API, and the web app together. This page walks through that quick start, the compose stack and how its services are wired, the secrets and encryption you set before any real deployment, how AI runs on your own keys, and how to upgrade. The canonical hosted instance lives at company.chele.bi; everything here is about running the same software yourself."
+        "text": "Elliptic is open source and self-hostable, so the whole platform, your projects, tasks, meetings, notes, the activity log, the company brain, and the built-in MCP server your agents connect to, can run entirely on your own infrastructure. The fastest path is **Docker Compose**: one command brings up the database, the API, and the web app together. This page walks through that quick start, the compose stack and how its services are wired, the secrets and encryption you set before any real deployment, how AI runs on your own keys, and how to upgrade. The canonical hosted instance lives at company.chele.bi; everything here is about running the same software yourself."
       },
       {
         "type": "callout",
         "variant": "info",
         "title": "Two app services and one database",
-        "text": "A CompanyOS deployment is three containers: **postgres** (the only stateful dependency), **api** (Python / FastAPI, which also serves the MCP server and an in-process realtime relay for co-editing), and **web** (Next.js). The browser talks only to the web app, which proxies API calls same-origin under `/api`. Agents reach the workspace over the built-in MCP server on the same API, on your org's own key."
+        "text": "A Elliptic deployment is three containers: **postgres** (the only stateful dependency), **api** (Python / FastAPI, which also serves the MCP server and an in-process realtime relay for co-editing), and **web** (Next.js). The browser talks only to the web app, which proxies API calls same-origin under `/api`. Agents reach the workspace over the built-in MCP server on the same API, on your org's own key."
       },
       {
         "type": "h2",
@@ -11183,7 +11183,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "The `.env.example` defaults are deliberately public and for **local evaluation only**. Before you run CompanyOS for real, you generate two fresh secrets: a key-encryption key (`COMPANYOS_KEK`) and a JWT signing secret (`JWT_SECRET_KEY`). Both are critical, and production mode refuses to start without strong, non-default values for them."
+        "text": "The `.env.example` defaults are deliberately public and for **local evaluation only**. Before you run Elliptic for real, you generate two fresh secrets: a key-encryption key (`COMPANYOS_KEK`) and a JWT signing secret (`JWT_SECRET_KEY`). Both are critical, and production mode refuses to start without strong, non-default values for them."
       },
       {
         "type": "h3",
@@ -11191,7 +11191,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "`COMPANYOS_KEK` is the master key from which CompanyOS encrypts every secret it stores at rest: your BYOK provider keys, your integration credentials, your SSO and LDAP configuration, your connector secrets, and the private signing key behind MCP tokens. Nothing sensitive is written to the database in the clear; it is all sealed with this key. It must be a **32-byte key, urlsafe-base64 encoded**. CompanyOS validates this on startup: if the value does not decode to exactly 32 bytes, the API refuses to boot. Generate one like this:"
+        "text": "`COMPANYOS_KEK` is the master key from which Elliptic encrypts every secret it stores at rest: your BYOK provider keys, your integration credentials, your SSO and LDAP configuration, your connector secrets, and the private signing key behind MCP tokens. Nothing sensitive is written to the database in the clear; it is all sealed with this key. It must be a **32-byte key, urlsafe-base64 encoded**. Elliptic validates this on startup: if the value does not decode to exactly 32 bytes, the API refuses to boot. Generate one like this:"
       },
       {
         "type": "code",
@@ -11258,7 +11258,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Self-hosting changes nothing about how AI is powered: it is always **bring-your-own-key (BYOK)**, per organization. There is no shared, pooled model account anywhere in CompanyOS, not on the hosted instance and not in your own deployment. Every AI feature, meeting summaries, asking the meeting, the company brain, and AI agents acting as first-class members over the MCP server, runs on a provider key (OpenAI or Anthropic, with OpenAI-compatible endpoints also supported) that an owner or admin stores at the organization level. That key is encrypted at rest under your `COMPANYOS_KEK` and decrypted only at call time."
+        "text": "Self-hosting changes nothing about how AI is powered: it is always **bring-your-own-key (BYOK)**, per organization. There is no shared, pooled model account anywhere in Elliptic, not on the hosted instance and not in your own deployment. Every AI feature, meeting summaries, asking the meeting, the company brain, and AI agents acting as first-class members over the MCP server, runs on a provider key (OpenAI or Anthropic, with OpenAI-compatible endpoints also supported) that an owner or admin stores at the organization level. That key is encrypted at rest under your `COMPANYOS_KEK` and decrypted only at call time."
       },
       {
         "type": "p",
@@ -11318,7 +11318,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Docker Compose is the fastest way to run CompanyOS, but it is not the only one. For Kubernetes (a Helm chart or raw manifests), Docker Swarm, and a complete configuration reference, see `apps/api/SELF-HOSTING.md` and the `apps/api/deploy/` directory in the repository (`deploy/helm`, `deploy/k8s`, and `deploy/swarm`). The same two images and the same environment contract described above apply across all of them."
+        "text": "Docker Compose is the fastest way to run Elliptic, but it is not the only one. For Kubernetes (a Helm chart or raw manifests), Docker Swarm, and a complete configuration reference, see `apps/api/SELF-HOSTING.md` and the `apps/api/deploy/` directory in the repository (`deploy/helm`, `deploy/k8s`, and `deploy/swarm`). The same two images and the same environment contract described above apply across all of them."
       },
       {
         "type": "h2",
@@ -11326,7 +11326,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "CompanyOS can run with zero outbound network egress. In **air-gapped mode**, the instance disables the features that would reach the public internet: web search in the company brain is turned off, and outbound link unfurls and embeds (the previews CompanyOS would otherwise fetch when you paste a URL) are suppressed. This lets you run the platform fully inside a closed network. Air-gapped deployments also use **offline licenses**, signed license keys that an instance can verify locally without any phone-home."
+        "text": "Elliptic can run with zero outbound network egress. In **air-gapped mode**, the instance disables the features that would reach the public internet: web search in the company brain is turned off, and outbound link unfurls and embeds (the previews Elliptic would otherwise fetch when you paste a URL) are suppressed. This lets you run the platform fully inside a closed network. Air-gapped deployments also use **offline licenses**, signed license keys that an instance can verify locally without any phone-home."
       },
       {
         "type": "p",
@@ -11345,11 +11345,11 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Most of CompanyOS is scoped to a single organization. Owners and admins manage their own workspace and never touch anyone else's. Instance administration sits one level above that. It is the control plane for the whole deployment, the CompanyOS instance itself, across every organization it hosts. This is where you set the instance name, decide who can create workspaces, turn the deployment fully offline, manage user accounts no matter which orgs they belong to, and activate a license."
+        "text": "Most of Elliptic is scoped to a single organization. Owners and admins manage their own workspace and never touch anyone else's. Instance administration sits one level above that. It is the control plane for the whole deployment, the Elliptic instance itself, across every organization it hosts. This is where you set the instance name, decide who can create workspaces, turn the deployment fully offline, manage user accounts no matter which orgs they belong to, and activate a license."
       },
       {
         "type": "p",
-        "text": "This page is for whoever runs the instance. On the hosted instance at company.chele.bi that is the CompanyOS team. On a self-hosted deployment it is you. Either way the surfaces and rules are identical, and they all live behind a single role."
+        "text": "This page is for whoever runs the instance. On the hosted instance at company.chele.bi that is the Elliptic team. On a self-hosted deployment it is you. Either way the surfaces and rules are identical, and they all live behind a single role."
       },
       {
         "type": "h2",
@@ -11371,7 +11371,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "info",
         "title": "Agents and the instance role",
-        "text": "Instance administration is intentionally human-scoped. Agents in CompanyOS are first-class members of an organization and operate org surfaces over the company-brain MCP on the org's own key, but the instance-admin flag is an account-level grant. Reserve it for the people who actually run the deployment."
+        "text": "Instance administration is intentionally human-scoped. Agents in Elliptic are first-class members of an organization and operate org surfaces over the company-brain MCP on the org's own key, but the instance-admin flag is an account-level grant. Reserve it for the people who actually run the deployment."
       },
       {
         "type": "h3",
@@ -11411,7 +11411,7 @@ export const DOC_PAGES: DocPage[] = [
           [
             "Instance name",
             "The display name for this deployment. Useful for distinguishing a staging instance from production, or for putting your company's name on a self-hosted install.",
-            "CompanyOS"
+            "Elliptic"
           ],
           [
             "Allow workspace creation",
@@ -11420,7 +11420,7 @@ export const DOC_PAGES: DocPage[] = [
           ],
           [
             "Usage telemetry",
-            "Whether the instance shares anonymous usage metrics to help improve CompanyOS. Off by default, so a fresh install reports nothing until you opt in.",
+            "Whether the instance shares anonymous usage metrics to help improve Elliptic. Off by default, so a fresh install reports nothing until you opt in.",
             "Off"
           ],
           [
@@ -11430,7 +11430,7 @@ export const DOC_PAGES: DocPage[] = [
           ],
           [
             "Email from-address",
-            "The from-address CompanyOS uses when it sends email, for example no-reply@example.com. Optional, and left empty by default.",
+            "The from-address Elliptic uses when it sends email, for example no-reply@example.com. Optional, and left empty by default.",
             "Empty"
           ]
         ]
@@ -11445,7 +11445,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Turning off allow-workspace-creation is a real gate, not a cosmetic one. When a user tries to create an organization, CompanyOS checks the instance setting first. If creation is disabled and the user is not an instance admin, the request is refused with a Workspace-creation-is-disabled-on-this-instance error before any org is written. Instance admins are always exempt, so you can still spin up workspaces even when everyone else is locked out. This is the right control for a single-tenant deployment, or for an instance where you want to provision every org centrally."
+        "text": "Turning off allow-workspace-creation is a real gate, not a cosmetic one. When a user tries to create an organization, Elliptic checks the instance setting first. If creation is disabled and the user is not an instance admin, the request is refused with a Workspace-creation-is-disabled-on-this-instance error before any org is written. Instance admins are always exempt, so you can still spin up workspaces even when everyone else is locked out. This is the right control for a single-tenant deployment, or for an instance where you want to provision every org centrally."
       },
       {
         "type": "callout",
@@ -11518,7 +11518,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Air-gapped mode turns the instance into a zero-egress deployment. When it is on, CompanyOS makes no outbound network calls of its own, which is what you want for a fully offline or network-isolated install where data is never allowed to leave the perimeter. You enable it with a single toggle in the General tab, and the setting is read live by every feature that would otherwise reach out."
+        "text": "Air-gapped mode turns the instance into a zero-egress deployment. When it is on, Elliptic makes no outbound network calls of its own, which is what you want for a fully offline or network-isolated install where data is never allowed to leave the perimeter. You enable it with a single toggle in the General tab, and the setting is read live by every feature that would otherwise reach out."
       },
       {
         "type": "p",
@@ -11528,19 +11528,19 @@ export const DOC_PAGES: DocPage[] = [
         "type": "ul",
         "items": [
           "**Web search.** The AI web-search feature, which normally fetches results and has your org's model synthesize a grounded answer, is refused with a Web-search-is-disabled-in-air-gapped-mode error before any outbound request is made.",
-          "**Outbound link unfurls.** When you paste a URL, CompanyOS would normally fetch the page to pull a title, description, and preview image. In air-gapped mode it skips that fetch entirely and returns only the metadata it can derive from the URL itself, so no request leaves the instance. Embeds that render as an iframe are unaffected because they never required a server-side fetch.",
+          "**Outbound link unfurls.** When you paste a URL, Elliptic would normally fetch the page to pull a title, description, and preview image. In air-gapped mode it skips that fetch entirely and returns only the metadata it can derive from the URL itself, so no request leaves the instance. Embeds that render as an iframe are unaffected because they never required a server-side fetch.",
           "**Telemetry.** With zero egress there is no anonymous-usage reporting. Keeping telemetry off is the consistent posture for an air-gapped install."
         ]
       },
       {
         "type": "p",
-        "text": "Air-gapped mode does not break AI. Your organization still runs every AI feature on its own model key, the BYOK rule that holds everywhere in CompanyOS. To stay fully offline you point that key at a local model through a custom base URL, so summaries, answers, agents, and runs all execute inside your network. Web search is the one AI capability that genuinely needs the open internet, which is why it is the feature that gets switched off."
+        "text": "Air-gapped mode does not break AI. Your organization still runs every AI feature on its own model key, the BYOK rule that holds everywhere in Elliptic. To stay fully offline you point that key at a local model through a custom base URL, so summaries, answers, agents, and runs all execute inside your network. Web search is the one AI capability that genuinely needs the open internet, which is why it is the feature that gets switched off."
       },
       {
         "type": "callout",
         "variant": "info",
         "title": "Offline by construction",
-        "text": "Air-gapped mode is read fresh on every gated call, so flipping the toggle takes effect instantly with no restart. Combined with a local model behind a custom base URL and offline licensing below, it lets a CompanyOS instance run with no dependency on the outside network at all."
+        "text": "Air-gapped mode is read fresh on every gated call, so flipping the toggle takes effect instantly with no restart. Combined with a local model behind a custom base URL and offline licensing below, it lets a Elliptic instance run with no dependency on the outside network at all."
       },
       {
         "type": "h2",
@@ -11548,7 +11548,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "CompanyOS licenses are offline by design. There is no phone-home, no license server to reach, and no callback at activation. A license is a signed key that an instance admin pastes in once, and the instance verifies it locally. That is what makes licensing work inside an air-gapped deployment that can never reach a vendor endpoint."
+        "text": "Elliptic licenses are offline by design. There is no phone-home, no license server to reach, and no callback at activation. A license is a signed key that an instance admin pastes in once, and the instance verifies it locally. That is what makes licensing work inside an air-gapped deployment that can never reach a vendor endpoint."
       },
       {
         "type": "p",
@@ -11657,7 +11657,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Instance administration is the small set of levers that govern the deployment as a whole. Grant the instance-admin role to the people who run the instance, and trust the self-protection guards to keep at least one of them in control. Use instance settings to name the deployment, to decide who may create workspaces, and to set the email from-address. Suspend and reinstate accounts to control sign-in everywhere at once, knowing the block is enforced at authentication. And for fully offline operation, pair air-gapped mode with a local model behind a custom base URL and an offline license key, so a CompanyOS instance can run end to end without ever leaving your network."
+        "text": "Instance administration is the small set of levers that govern the deployment as a whole. Grant the instance-admin role to the people who run the instance, and trust the self-protection guards to keep at least one of them in control. Use instance settings to name the deployment, to decide who may create workspaces, and to set the email from-address. Suspend and reinstate accounts to control sign-in everywhere at once, knowing the block is enforced at authentication. And for fully offline operation, pair air-gapped mode with a local model behind a custom base URL and an offline license key, so a Elliptic instance can run end to end without ever leaving your network."
       }
     ]
   },
@@ -11672,7 +11672,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "A reference is a single, unified way to point at something from inside a body of text. You **@-mention** a person, or you **reference** a task or a note, and CompanyOS turns it into a compact chip right where you typed it. The same mechanism works across rich-text surfaces: a **note** page, a **project description**, a **task description**, and a **comment** on a task, meeting, or note. One reference can pull the runbook note a task depends on into its description, name a teammate in a comment, or cite a related task from a page. Work stays connected instead of scattered."
+        "text": "A reference is a single, unified way to point at something from inside a body of text. You **@-mention** a person, or you **reference** a task or a note, and Elliptic turns it into a compact chip right where you typed it. The same mechanism works across rich-text surfaces: a **note** page, a **project description**, a **task description**, and a **comment** on a task, meeting, or note. One reference can pull the runbook note a task depends on into its description, name a teammate in a comment, or cite a related task from a page. Work stays connected instead of scattered."
       },
       {
         "type": "p",
@@ -11711,7 +11711,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "info",
         "title": "Why this matters for agents",
-        "text": "CompanyOS is Jira for your agents. Because every reference is plain Markdown, an agent operating over the **Company-Brain MCP** reads and writes the same chips your teammates do. When an agent embeds a reference in a task description or a comment, it renders as a chip for everyone, and when it reads a description back, the reference is right there in the text as a link it can resolve. References are how humans and agents point at the same things in the same words."
+        "text": "Elliptic is Jira for your agents. Because every reference is plain Markdown, an agent operating over the **Company-Brain MCP** reads and writes the same chips your teammates do. When an agent embeds a reference in a task description or a comment, it renders as a chip for everyone, and when it reads a description back, the reference is right there in the text as a link it can resolve. References are how humans and agents point at the same things in the same words."
       },
       {
         "type": "h2",
@@ -11719,7 +11719,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Type `@` where you want the reference. A picker opens and filters as you type. Pick one with the mouse, or move with the arrow keys and press Enter. CompanyOS inserts the chip and drops a trailing space so you can keep typing."
+        "text": "Type `@` where you want the reference. A picker opens and filters as you type. Pick one with the mouse, or move with the arrow keys and press Enter. Elliptic inserts the chip and drops a trailing space so you can keep typing."
       },
       {
         "type": "p",
@@ -11738,7 +11738,7 @@ export const DOC_PAGES: DocPage[] = [
           },
           {
             "title": "It becomes a chip",
-            "text": "CompanyOS inserts the chip. A task or note chip is clickable right away and opens the referenced item. A person chip names them."
+            "text": "Elliptic inserts the chip. A task or note chip is clickable right away and opens the referenced item. A person chip names them."
           }
         ]
       },
@@ -11804,7 +11804,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "The drag carries a small structured payload over a CompanyOS-specific clipboard type, with a `kind`, an `id`, a `title`, and an `href`. On drop, the editor builds an anchor from it: the link text is the entity's title, the href is the entity's own route, and the anchor also carries `data-entity-kind` and `data-entity-id` attributes so the citation stays identifiable. If the dragged entity has no route, the citation is inserted as the plain title instead of a link."
+        "text": "The drag carries a small structured payload over a Elliptic-specific clipboard type, with a `kind`, an `id`, a `title`, and an `href`. On drop, the editor builds an anchor from it: the link text is the entity's title, the href is the entity's own route, and the anchor also carries `data-entity-kind` and `data-entity-id` attributes so the citation stays identifiable. If the dragged entity has no route, the citation is inserted as the plain title instead of a link."
       },
       {
         "type": "table",
@@ -11843,7 +11843,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Mentioning a person is how you get their attention. The notification path is driven by an explicit `mention_user_ids` field on the create and update payload, not by scanning the body for `/__mention/user/` links. When that field carries member ids, CompanyOS emits a `MENTIONED` notification to each of them. It only notifies ids that are genuine members of the same organization, and it never notifies you about your own mention."
+        "text": "Mentioning a person is how you get their attention. The notification path is driven by an explicit `mention_user_ids` field on the create and update payload, not by scanning the body for `/__mention/user/` links. When that field carries member ids, Elliptic emits a `MENTIONED` notification to each of them. It only notifies ids that are genuine members of the same organization, and it never notifies you about your own mention."
       },
       {
         "type": "ul",

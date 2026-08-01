@@ -45,7 +45,7 @@ export function MeetingList({
       <EmptyState
         icon={<Video />}
         title="No meetings yet"
-        description="Import a transcript and CompanyOS will summarize it, link every claim to its source, and let you ask follow-up questions."
+        description="Import a transcript and Elliptic will summarize it, link every claim to its source, and let you ask follow-up questions."
         action={emptyAction}
       />
     );

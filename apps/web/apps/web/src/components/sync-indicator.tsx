@@ -82,7 +82,7 @@ export function SyncIndicator() {
       <TooltipContent>
         <p className="font-semibold">Syncing latest changes</p>
         <p className="mt-0.5 font-normal text-background/70">
-          Fetching recent changes from CompanyOS.
+          Fetching recent changes from Elliptic.
         </p>
       </TooltipContent>
 

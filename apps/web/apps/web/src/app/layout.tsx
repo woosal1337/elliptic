@@ -30,22 +30,22 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "CompanyOS",
-    template: "%s · CompanyOS",
+    default: "Elliptic",
+    template: "%s · Elliptic",
   },
   description: "Jira for your agents. The agent-native work platform you self-host on your own keys.",
-  applicationName: "CompanyOS",
+  applicationName: "Elliptic",
   openGraph: {
     type: "website",
-    siteName: "CompanyOS",
-    title: "CompanyOS",
+    siteName: "Elliptic",
+    title: "Elliptic",
     description: "Jira for your agents. The agent-native work platform you self-host on your own keys.",
     url: "/",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "CompanyOS",
+    title: "Elliptic",
     description: "Jira for your agents. The agent-native work platform you self-host on your own keys.",
     creator: "@woosal1337",
   },

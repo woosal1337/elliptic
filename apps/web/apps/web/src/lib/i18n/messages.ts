@@ -26,7 +26,7 @@ const en: Catalog = {
   "nav.settings": "Settings",
   "settings.appearance.theme": "Theme",
   "settings.appearance.language": "Language",
-  "settings.appearance.languageHint": "Choose the language for the CompanyOS interface.",
+  "settings.appearance.languageHint": "Choose the language for the Elliptic interface.",
   "home.getStarted": "Get started",
 };
 
@@ -43,7 +43,7 @@ const es: Catalog = {
   "nav.settings": "Ajustes",
   "settings.appearance.theme": "Tema",
   "settings.appearance.language": "Idioma",
-  "settings.appearance.languageHint": "Elige el idioma de la interfaz de CompanyOS.",
+  "settings.appearance.languageHint": "Elige el idioma de la interfaz de Elliptic.",
   "home.getStarted": "Empezar",
 };
 
@@ -60,7 +60,7 @@ const tr: Catalog = {
   "nav.settings": "Ayarlar",
   "settings.appearance.theme": "Tema",
   "settings.appearance.language": "Dil",
-  "settings.appearance.languageHint": "CompanyOS arayüzü için dili seçin.",
+  "settings.appearance.languageHint": "Elliptic arayüzü için dili seçin.",
   "home.getStarted": "Başlayın",
 };
 
@@ -77,7 +77,7 @@ const de: Catalog = {
   "nav.settings": "Einstellungen",
   "settings.appearance.theme": "Design",
   "settings.appearance.language": "Sprache",
-  "settings.appearance.languageHint": "Wählen Sie die Sprache der CompanyOS-Oberfläche.",
+  "settings.appearance.languageHint": "Wählen Sie die Sprache der Elliptic-Oberfläche.",
   "home.getStarted": "Loslegen",
 };
 
@@ -94,7 +94,7 @@ const fr: Catalog = {
   "nav.settings": "Paramètres",
   "settings.appearance.theme": "Thème",
   "settings.appearance.language": "Langue",
-  "settings.appearance.languageHint": "Choisissez la langue de l'interface CompanyOS.",
+  "settings.appearance.languageHint": "Choisissez la langue de l'interface Elliptic.",
   "home.getStarted": "Commencer",
 };
 

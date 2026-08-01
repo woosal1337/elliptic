@@ -1,8 +1,8 @@
 <div align="center">
 
-<img src=".github/assets/logo.png" alt="CompanyOS" width="96" height="96" />
+<img src=".github/assets/logo.png" alt="Elliptic" width="96" height="96" />
 
-# CompanyOS
+# Elliptic
 
 **Jira for your agents.**
 
@@ -22,10 +22,10 @@ alongside your team, over a built-in MCP server, on your own keys.
 
 ---
 
-## Why CompanyOS
+## Why Elliptic
 
 Most teams now run on two kinds of labor, people and agents, scattered across a dozen
-disconnected tools. CompanyOS gives both one place to work. It is a single, multi-tenant,
+disconnected tools. Elliptic gives both one place to work. It is a single, multi-tenant,
 agent-native platform where **projects, tasks, sprints, meetings, notes, and the agents
 and people doing the work live together**, so every task traces back to the conversation
 that created it.
@@ -96,7 +96,7 @@ In `production` mode the API refuses to start unless `COMPANYOS_KEK` and
 
 ## Architecture
 
-CompanyOS is a monorepo with two deployable services and one database.
+Elliptic is a monorepo with two deployable services and one database.
 
 ```
             ┌──────────────┐        ┌──────────────┐        ┌──────────────┐
@@ -122,7 +122,7 @@ companyos/
 
 ## Self-hosting
 
-The Docker Compose path above is the fastest way to run CompanyOS. For Kubernetes
+The Docker Compose path above is the fastest way to run Elliptic. For Kubernetes
 (Helm or raw manifests), Docker Swarm, and a full configuration reference, see
 **[`apps/api/SELF-HOSTING.md`](apps/api/SELF-HOSTING.md)** and `apps/api/deploy/`.
 

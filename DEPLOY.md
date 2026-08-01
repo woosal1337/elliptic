@@ -1,4 +1,4 @@
-# Deploying CompanyOS (igris / Coolify)
+# Deploying Elliptic (igris / Coolify)
 
 Production runs on the self-hosted **igris** box (reachable only over
 Tailscale), managed by **Coolify**. The dashboard URL, host address and other

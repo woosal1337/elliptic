@@ -215,9 +215,9 @@ export function WebhookDialog({
                 </IconButton>
               </div>
               <p className="text-caption text-muted-foreground">
-                Verify deliveries with the <code className="font-mono">X-CompanyOS-Signature</code>{" "}
+                Verify deliveries with the <code className="font-mono">X-Elliptic-Signature</code>{" "}
                 header (<code className="font-mono">sha256=HMAC(secret, timestamp.body)</code>), where
-                the timestamp is sent as <code className="font-mono">X-CompanyOS-Timestamp</code>.
+                the timestamp is sent as <code className="font-mono">X-Elliptic-Timestamp</code>.
               </p>
             </div>
             <DialogFooter>

@@ -11,7 +11,7 @@ export default function NotFound() {
       <header className="relative flex items-center justify-center px-6 py-8">
         <Link
           href="/"
-          aria-label="CompanyOS home"
+          aria-label="Elliptic home"
           className="inline-flex items-center transition-opacity duration-150 hover:opacity-90"
         >
           <Logo size="md" />

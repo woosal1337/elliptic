@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: BlogPostProps): Promise<Metad
       title: post.title,
       description: post.description,
       url: `/blog/${post.slug}`,
-      siteName: "CompanyOS",
+      siteName: "Elliptic",
       publishedTime: post.date,
       authors: post.authorUrl ? [post.authorUrl] : [post.author],
     },
@@ -52,7 +52,7 @@ export default async function BlogPostPage({ params }: BlogPostProps) {
       name: post.author,
       ...(post.authorUrl ? { url: post.authorUrl } : {}),
     },
-    publisher: { "@type": "Organization", name: "CompanyOS" },
+    publisher: { "@type": "Organization", name: "Elliptic" },
     mainEntityOfPage: `${SITE_URL}/blog/${post.slug}`,
   };
 
@@ -101,7 +101,7 @@ export default async function BlogPostPage({ params }: BlogPostProps) {
 
           <div className="mt-16 flex flex-col gap-4 rounded-2xl border border-border bg-surface p-8">
             <p className="font-display text-h3 font-semibold text-foreground">
-              Run CompanyOS yourself
+              Run Elliptic yourself
             </p>
             <p className="text-body leading-relaxed text-muted-foreground">
               It is open source and self-hostable. Bring your own model keys, and your data never

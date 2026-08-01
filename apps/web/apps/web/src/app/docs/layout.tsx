@@ -12,7 +12,7 @@ export default async function DocsLayout({ children }: { children: ReactNode }) 
     <div className="flex min-h-dvh flex-col bg-background">
       <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center justify-between border-b border-border bg-canvas px-4 supports-[backdrop-filter]:bg-canvas/70 supports-[backdrop-filter]:backdrop-blur-xl sm:px-6">
         <div className="flex items-center gap-3">
-          <a href={home} aria-label="CompanyOS docs home" className="flex items-center">
+          <a href={home} aria-label="Elliptic docs home" className="flex items-center">
             <Logo />
           </a>
           <span className="text-mono-label font-mono uppercase tracking-wide text-muted-foreground">

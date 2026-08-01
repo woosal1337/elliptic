@@ -265,7 +265,7 @@ function Sidebar() {
         <span aria-hidden="true" className="grid size-6 place-items-center rounded-md bg-foreground text-background">
           <Hash className="size-3.5" />
         </span>
-        <span className="text-small font-semibold tracking-tight text-foreground">CompanyOS</span>
+        <span className="text-small font-semibold tracking-tight text-foreground">Elliptic</span>
         <ChevronDown aria-hidden="true" className="ml-auto size-3.5 text-muted-foreground" />
       </div>
 

@@ -6,7 +6,7 @@ export interface LogoMarkProps extends React.ImgHTMLAttributes<HTMLImageElement>
 }
 
 export const LogoMark = React.forwardRef<HTMLImageElement, LogoMarkProps>(
-  ({ className, accent: _accent, alt = "CompanyOS", ...props }, ref) => (
+  ({ className, accent: _accent, alt = "Elliptic", ...props }, ref) => (
     <img
       ref={ref}
       src="/logo.png"

@@ -136,7 +136,7 @@ export default function PublicPagePage({ params }: { params: Promise<{ token: st
           </section>
 
           <footer className="mt-auto pt-6 text-center text-caption text-muted-foreground">
-            Powered by CompanyOS
+            Powered by Elliptic
           </footer>
         </>
       )}

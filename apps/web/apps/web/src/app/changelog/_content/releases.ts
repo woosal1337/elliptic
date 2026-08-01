@@ -66,7 +66,7 @@ export const RELEASES: Release[] = [
       {
         type: "ul",
         items: [
-          "A CompanyOS-hosted blog with posts and an RSS feed.",
+          "A Elliptic-hosted blog with posts and an RSS feed.",
           "This changelog, hosted on the site.",
         ],
       },
@@ -86,7 +86,7 @@ export const RELEASES: Release[] = [
     blocks: [
       {
         type: "p",
-        text: "The first public release of CompanyOS. The full agent-native work platform, open source under Apache-2.0 and self-hostable with one docker compose.",
+        text: "The first public release of Elliptic. The full agent-native work platform, open source under Apache-2.0 and self-hostable with one docker compose.",
       },
       { type: "h3", text: "Work tracking" },
       {

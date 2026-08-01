@@ -141,7 +141,7 @@ export function MeetingTemplatesSettings({ orgId }: { orgId: string }) {
         <CardTitle>Meeting templates</CardTitle>
         <CardDescription>
           Structure templates shape the sections of AI meeting summaries. Built-ins ship with
-          CompanyOS; add your own and they appear in the summarize picker. Editing a template only
+          Elliptic; add your own and they appear in the summarize picker. Editing a template only
           affects future summaries.
         </CardDescription>
       </CardHeader>

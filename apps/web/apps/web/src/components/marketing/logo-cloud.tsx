@@ -19,7 +19,7 @@ export function LogoCloud() {
       <Container>
         <SectionNumber index="0.1" label="Works with your stack" />
         <p className="mt-4 max-w-xl text-small text-muted-foreground">
-          CompanyOS plugs into the tools your team already runs on. Bring your own model key and
+          Elliptic plugs into the tools your team already runs on. Bring your own model key and
           connect the surfaces where work happens.
         </p>
         <div className="mt-12 mask-fade-edges">

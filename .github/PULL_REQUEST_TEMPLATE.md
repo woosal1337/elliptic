@@ -1,5 +1,5 @@
 <!--
-Thanks for contributing to CompanyOS! Please fill this in so reviewers have
+Thanks for contributing to Elliptic! Please fill this in so reviewers have
 the context they need. See CONTRIBUTING.md for the full workflow.
 -->
 

@@ -7,7 +7,7 @@ import { FinalCTA } from "@/components/marketing/final-cta";
 export const metadata = pageMetadata({
   title: "Contact",
   description:
-    "Get in touch with CompanyOS. Questions and ideas, bug reports, and security disclosures, all in the open on GitHub.",
+    "Get in touch with Elliptic. Questions and ideas, bug reports, and security disclosures, all in the open on GitHub.",
   path: "/contact",
 });
 
@@ -86,7 +86,7 @@ export default function ContactPage() {
             href="https://x.com/woosal1337"
             icon={<AtSign aria-hidden="true" />}
             title="Updates"
-            description="Follow along on X, and read the story behind CompanyOS on the blog."
+            description="Follow along on X, and read the story behind Elliptic on the blog."
           />
         </div>
       </FeatureSection>

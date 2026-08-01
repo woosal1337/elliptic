@@ -33,9 +33,9 @@ export function GET() {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
   <channel>
-    <title>CompanyOS Blog</title>
+    <title>Elliptic Blog</title>
     <link>${SITE}/blog</link>
-    <description>Product updates and notes on building an agent-native company, from the team behind CompanyOS.</description>
+    <description>Product updates and notes on building an agent-native company, from the team behind Elliptic.</description>
 ${items}
   </channel>
 </rss>`;

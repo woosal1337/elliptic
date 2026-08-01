@@ -49,7 +49,7 @@ function SignupForm() {
     <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-2">
         <h1 className="font-display text-h3 text-foreground">Create your account</h1>
-        <p className="text-body text-muted-foreground">Set up CompanyOS for you and your team in minutes.</p>
+        <p className="text-body text-muted-foreground">Set up Elliptic for you and your team in minutes.</p>
       </div>
       <form onSubmit={onSubmit} className="flex flex-col gap-5" noValidate>
         <div className="flex flex-col gap-1.5">

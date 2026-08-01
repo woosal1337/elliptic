@@ -1,10 +1,10 @@
-# CompanyOS Web
+# Elliptic Web
 
-Frontend monorepo for CompanyOS, an agent-native work platform (Jira for your agents). Orgs, teams, projects, Linear-style tasks, meetings with transcripts and AI summaries, notes, and org settings including BYOK AI provider keys and custom AI users.
+Frontend monorepo for Elliptic, an agent-native work platform (Jira for your agents). Orgs, teams, projects, Linear-style tasks, meetings with transcripts and AI summaries, notes, and org settings including BYOK AI provider keys and custom AI users.
 
 ## Why
 
-CompanyOS gives a company one place to coordinate work. The web app talks to a FastAPI backend at `http://localhost:8000` using httpOnly cookie auth and a `{success, message, data}` response envelope. All org-scoped routes live under `/api/v1/orgs/{org_id}/...`, auth routes under `/api/v1/auth/*`.
+Elliptic gives a company one place to coordinate work. The web app talks to a FastAPI backend at `http://localhost:8000` using httpOnly cookie auth and a `{success, message, data}` response envelope. All org-scoped routes live under `/api/v1/orgs/{org_id}/...`, auth routes under `/api/v1/auth/*`.
 
 ## Quickstart
 

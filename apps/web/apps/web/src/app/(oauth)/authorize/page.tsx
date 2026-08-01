@@ -118,7 +118,7 @@ function ResultView({ outcome }: { outcome: Outcome }) {
         </Button>
       }
     >
-      {outcome.clientName} was not granted access to your CompanyOS data. You can safely close this
+      {outcome.clientName} was not granted access to your Elliptic data. You can safely close this
       window.
     </StatusCard>
   );
@@ -204,13 +204,13 @@ function ConsentView({
     <Card>
       <CardHeader className="gap-3">
         <CardTitle className="font-display text-h3">
-          {context.client_name} wants to connect to your CompanyOS brain
+          {context.client_name} wants to connect to your Elliptic brain
         </CardTitle>
         {context.client_unverified ? (
           <div className="flex items-start gap-2 rounded-md border border-warning/30 bg-warning-muted px-3 py-2 text-caption text-muted-foreground">
             <ShieldAlert className="mt-0.5 size-4 shrink-0 text-warning" aria-hidden="true" />
             <span>
-              This app self-registered and has not been verified by CompanyOS. Only continue if you
+              This app self-registered and has not been verified by Elliptic. Only continue if you
               started this connection.
             </span>
           </div>
@@ -328,7 +328,7 @@ function ConsentView({
           </p>
         ) : null}
         <p className="flex items-center justify-center gap-1.5 text-caption text-muted-foreground">
-          <Lock className="size-3" aria-hidden="true" /> CompanyOS will never share your password
+          <Lock className="size-3" aria-hidden="true" /> Elliptic will never share your password
           with {context.client_name}.
         </p>
       </CardContent>
@@ -352,11 +352,11 @@ function AuthorizeInner() {
         title="Nothing to authorize"
         action={
           <Button variant="outline" size="sm" asChild>
-            <Link href="/app">Go to CompanyOS</Link>
+            <Link href="/app">Go to Elliptic</Link>
           </Button>
         }
       >
-        This page opens automatically when an app asks to connect to your CompanyOS brain. There is
+        This page opens automatically when an app asks to connect to your Elliptic brain. There is
         no pending request to review.
       </StatusCard>
     );
@@ -376,7 +376,7 @@ function AuthorizeInner() {
         title="Request expired"
         action={
           <Button variant="outline" size="sm" asChild>
-            <Link href="/app">Go to CompanyOS</Link>
+            <Link href="/app">Go to Elliptic</Link>
           </Button>
         }
       >

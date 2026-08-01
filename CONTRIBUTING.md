@@ -1,6 +1,6 @@
-# Contributing to CompanyOS
+# Contributing to Elliptic
 
-First off — thank you. CompanyOS is an open, agent-native work platform, and it
+First off — thank you. Elliptic is an open, agent-native work platform, and it
 gets better every time someone reports a bug, sharpens the docs, or ships a fix.
 This guide takes you from a fresh clone to a merged pull request. It should be the
 only document you need; if something here is wrong or unclear, that itself is a
@@ -98,7 +98,7 @@ bun run dev
 
 ## Repository layout
 
-CompanyOS is a Bun + Turborepo monorepo with three apps:
+Elliptic is a Bun + Turborepo monorepo with three apps:
 
 ```
 companyos/

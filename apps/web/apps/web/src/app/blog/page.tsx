@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   ...pageMetadata({
     title: "Blog",
     description:
-      "Product updates and notes on building an agent-native company, from the team behind CompanyOS.",
+      "Product updates and notes on building an agent-native company, from the team behind Elliptic.",
     path: "/blog",
   }),
   alternates: {
@@ -26,7 +26,7 @@ export default function BlogIndexPage() {
         <div className="mx-auto flex w-full max-w-3xl flex-col px-6 py-16 lg:py-24">
           <p className="font-mono text-mono-label uppercase text-muted-foreground">Blog</p>
           <h1 className="mt-3 font-display text-h1 font-semibold tracking-[-0.02em] text-foreground">
-            The CompanyOS blog
+            The Elliptic blog
           </h1>
           <p className="mt-3 text-lead text-muted-foreground">
             Product updates, and notes on building an agent-native company.

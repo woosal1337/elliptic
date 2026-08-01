@@ -120,7 +120,7 @@ export default function PublicBoardPage({ params }: { params: Promise<{ token: s
               ))}
           </div>
           <footer className="mt-auto pt-6 text-center text-caption text-muted-foreground">
-            Powered by CompanyOS
+            Powered by Elliptic
           </footer>
         </>
       )}

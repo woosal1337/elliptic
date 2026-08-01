@@ -51,7 +51,7 @@ export function WebhooksSettings({ orgId }: { orgId: string }) {
           </h2>
           <p className="text-caption text-muted-foreground">
             Subscribe an HTTPS endpoint to workspace events. Each delivery is signed with an
-            HMAC-SHA256 <code>X-CompanyOS-Signature</code> header. Leave event types blank to
+            HMAC-SHA256 <code>X-Elliptic-Signature</code> header. Leave event types blank to
             receive everything.
           </p>
         </div>

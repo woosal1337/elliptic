@@ -26,7 +26,7 @@ export function pageMetadata({ title, description, path, type = "website" }: Pag
       description,
       url: path,
       type,
-      siteName: "CompanyOS",
+      siteName: "Elliptic",
     },
   };
 }

@@ -14,7 +14,7 @@ export function SiteNav() {
   return (
     <MarketingNav
       brand={
-        <Link href="/" aria-label="CompanyOS home" className="flex items-center">
+        <Link href="/" aria-label="Elliptic home" className="flex items-center">
           <Logo />
         </Link>
       }

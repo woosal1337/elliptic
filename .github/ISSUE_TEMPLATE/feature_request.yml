@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for helping shape CompanyOS. For large or architectural changes,
+        Thanks for helping shape Elliptic. For large or architectural changes,
         please open the request first so we can align before code is written.
   - type: textarea
     id: problem

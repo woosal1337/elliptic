@@ -137,7 +137,7 @@ export function SiteFooter() {
               </FooterLinkItem>
             ))}
           </div>
-          <p className="text-caption text-muted-foreground">© 2026 CompanyOS</p>
+          <p className="text-caption text-muted-foreground">© 2026 Elliptic</p>
         </div>
       </Container>
     </footer>

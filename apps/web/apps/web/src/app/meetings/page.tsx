@@ -27,7 +27,7 @@ const ROWS: FeatureRowData[] = [
     titleLead: "Speaker-attributed, to the second.",
     titleRest: "Every line knows who said it and when.",
     description:
-      "Import from the Folio recorder and the full transcript lands in CompanyOS, diarized and timestamped. Scrub to any moment, quote a line straight into a task, and keep the record next to the work it produced.",
+      "Import from the Folio recorder and the full transcript lands in Elliptic, diarized and timestamped. Scrub to any moment, quote a line straight into a task, and keep the record next to the work it produced.",
     points: [
       "Speaker attribution and timestamps on every line",
       "Quote a segment straight into a task or a note",
@@ -135,7 +135,7 @@ export default function MeetingsPage() {
         eyebrow="Meetings"
         titleLead="Every meeting becomes"
         titleRest="a transcript, a summary, and an answer."
-        lede="Bring a recording in from Folio. CompanyOS keeps the speaker-attributed transcript, writes the summary on your own key, and lets anyone, or any agent, ask the meeting a question in plain language."
+        lede="Bring a recording in from Folio. Elliptic keeps the speaker-attributed transcript, writes the summary on your own key, and lets anyone, or any agent, ask the meeting a question in plain language."
         primary={{ label: "Start free", href: "/signup" }}
         secondary={{ label: "Read the docs", href: "https://docs.company.chele.bi/meetings" }}
         visual={

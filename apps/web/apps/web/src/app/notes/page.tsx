@@ -78,7 +78,7 @@ backlinks
     titleLead: "The same sync that powers the page",
     titleRest: "powers the board and the inbox too.",
     description:
-      "The realtime relay runs in-process next to the API and fans changes out over server-sent events. The mechanism that keeps two cursors in step is the mechanism that keeps every surface in CompanyOS live.",
+      "The realtime relay runs in-process next to the API and fans changes out over server-sent events. The mechanism that keeps two cursors in step is the mechanism that keeps every surface in Elliptic live.",
     points: [
       "One relay behind notes, boards, and inboxes",
       "Updates pushed over SSE, never polled",

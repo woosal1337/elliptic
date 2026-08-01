@@ -7,7 +7,7 @@ import type { DocBlock } from "@/app/docs/_content/types";
 export const metadata = pageMetadata({
   title: "Terms",
   description:
-    "Terms of service for the hosted CompanyOS at company.chele.bi. The CompanyOS software itself is open source under Apache-2.0.",
+    "Terms of service for the hosted Elliptic at company.chele.bi. The Elliptic software itself is open source under Apache-2.0.",
   path: "/terms",
 });
 
@@ -15,12 +15,12 @@ const BLOCKS: DocBlock[] = [
   { type: "p", text: "Last updated 28 June 2026." },
   {
     type: "p",
-    text: "These terms cover use of the hosted CompanyOS service at [company.chele.bi](https://company.chele.bi). The CompanyOS software itself is open source, and self-hosting it is governed by its license rather than by these terms.",
+    text: "These terms cover use of the hosted Elliptic service at [company.chele.bi](https://company.chele.bi). The Elliptic software itself is open source, and self-hosting it is governed by its license rather than by these terms.",
   },
   { type: "h2", text: "The software license" },
   {
     type: "p",
-    text: "CompanyOS is licensed under the [Apache License 2.0](https://github.com/woosal1337/companyos/blob/main/LICENSE). You are free to self-host, modify, and redistribute it under that license. When you run your own instance, these hosted terms do not apply to you.",
+    text: "Elliptic is licensed under the [Apache License 2.0](https://github.com/woosal1337/companyos/blob/main/LICENSE). You are free to self-host, modify, and redistribute it under that license. When you run your own instance, these hosted terms do not apply to you.",
   },
   { type: "h2", text: "Acceptable use" },
   { type: "p", text: "When using the hosted service, you agree not to do the following." },

@@ -7,7 +7,7 @@ import { sortedReleases } from "./_content/releases";
 
 export const metadata = pageMetadata({
   title: "Changelog",
-  description: "Notable changes to CompanyOS, newest first.",
+  description: "Notable changes to Elliptic, newest first.",
   path: "/changelog",
 });
 
@@ -22,7 +22,7 @@ export default function ChangelogPage() {
             Changelog
           </h1>
           <p className="mt-3 text-lead text-muted-foreground">
-            Notable changes to CompanyOS, newest first.
+            Notable changes to Elliptic, newest first.
           </p>
 
           <div className="mt-12 flex flex-col gap-16">

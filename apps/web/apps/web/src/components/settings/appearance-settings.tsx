@@ -52,7 +52,7 @@ export function AppearanceSettings() {
             {t("settings.appearance.theme")}
           </h2>
           <p className="text-caption text-muted-foreground">
-            Choose how CompanyOS looks. System follows your device setting.
+            Choose how Elliptic looks. System follows your device setting.
           </p>
         </div>
         <div className="inline-flex w-fit items-center gap-0.5 rounded-md border border-border bg-muted/30 p-0.5">

@@ -58,7 +58,7 @@ export default function QueryPage() {
           Query
         </h1>
         <p className="text-small text-muted-foreground">
-          Filter work items with the CompanyOS Query Language — fields, comparisons,{" "}
+          Filter work items with the Elliptic Query Language — fields, comparisons,{" "}
           <code className="rounded bg-muted px-1 font-mono text-caption">and/or/not</code>, lists,
           and functions like{" "}
           <code className="rounded bg-muted px-1 font-mono text-caption">is_overdue()</code>.

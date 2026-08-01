@@ -67,7 +67,7 @@ function LoginForm() {
     <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-2">
         <h1 className="font-display text-h3 text-foreground">Welcome back</h1>
-        <p className="text-body text-muted-foreground">Sign in to your CompanyOS account to continue.</p>
+        <p className="text-body text-muted-foreground">Sign in to your Elliptic account to continue.</p>
       </div>
       <form onSubmit={onSubmit} className="flex flex-col gap-5" noValidate>
         <div className="flex flex-col gap-1.5">

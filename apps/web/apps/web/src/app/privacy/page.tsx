@@ -7,7 +7,7 @@ import type { DocBlock } from "@/app/docs/_content/types";
 export const metadata = pageMetadata({
   title: "Privacy",
   description:
-    "How CompanyOS handles your data. Open source and self-hostable by default, bring-your-own-key, and nothing leaves your own infrastructure.",
+    "How Elliptic handles your data. Open source and self-hostable by default, bring-your-own-key, and nothing leaves your own infrastructure.",
   path: "/privacy",
 });
 
@@ -15,12 +15,12 @@ const BLOCKS: DocBlock[] = [
   { type: "p", text: "Last updated 28 June 2026." },
   {
     type: "p",
-    text: "CompanyOS is open source and self-hostable. This policy explains how data is handled when you run your own instance, and what the hosted instance at [company.chele.bi](https://company.chele.bi) collects. The CompanyOS software is licensed under [Apache-2.0](https://github.com/woosal1337/companyos/blob/main/LICENSE).",
+    text: "Elliptic is open source and self-hostable. This policy explains how data is handled when you run your own instance, and what the hosted instance at [company.chele.bi](https://company.chele.bi) collects. The Elliptic software is licensed under [Apache-2.0](https://github.com/woosal1337/companyos/blob/main/LICENSE).",
   },
   { type: "h2", text: "Self-hosted deployments" },
   {
     type: "p",
-    text: "When you run CompanyOS on your own infrastructure, everything you create stays in your own Postgres database on your own servers. Projects, tasks, meetings, notes, files, and model keys never reach us. You are the data controller, and this page is a reference for your own users rather than a contract with us.",
+    text: "When you run Elliptic on your own infrastructure, everything you create stays in your own Postgres database on your own servers. Projects, tasks, meetings, notes, files, and model keys never reach us. You are the data controller, and this page is a reference for your own users rather than a contract with us.",
   },
   { type: "h2", text: "What the hosted instance collects" },
   {
@@ -84,7 +84,7 @@ export default function PrivacyPage() {
             Privacy Policy
           </h1>
           <p className="mt-3 text-lead text-muted-foreground">
-            CompanyOS is open source and self-hostable. Your data stays on your own
+            Elliptic is open source and self-hostable. Your data stays on your own
             infrastructure.
           </p>
           <article className="mt-8">

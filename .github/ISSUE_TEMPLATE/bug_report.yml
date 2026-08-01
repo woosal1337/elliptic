@@ -32,7 +32,7 @@ body:
     id: area
     attributes:
       label: Area
-      description: Which part of CompanyOS is affected?
+      description: Which part of Elliptic is affected?
       options:
         - Web dashboard
         - API / backend

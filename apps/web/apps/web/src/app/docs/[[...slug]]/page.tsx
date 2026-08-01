@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: DocsPageProps): Promise<Metad
   const page = getPage(resolveSlug(slug));
   if (!page) return { title: "Docs" };
   return {
-    title: `${page.title} · CompanyOS Docs`,
+    title: `${page.title} · Elliptic Docs`,
     description: page.description,
   };
 }
@@ -88,7 +88,7 @@ export default async function DocsPage({ params }: DocsPageProps) {
       </nav>
 
       <footer className="mt-10 border-t border-border pt-6 text-caption text-muted-foreground">
-        © 2026 CompanyOS ·{" "}
+        © 2026 Elliptic ·{" "}
         <a
           href="https://company.chele.bi"
           className="text-accent underline-offset-4 hover:underline"

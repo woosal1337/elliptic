@@ -22,12 +22,12 @@ to ship a fix before any public disclosure.
 
 ## Supported versions
 
-CompanyOS ships from `main`. Security fixes land on `main` and in the latest
+Elliptic ships from `main`. Security fixes land on `main` and in the latest
 tagged release, so self-hosters should track the latest release.
 
 ## A note on secrets
 
-CompanyOS is bring-your-own-key: API keys and provider credentials are supplied
+Elliptic is bring-your-own-key: API keys and provider credentials are supplied
 per deployment and are never committed to this repository. The `.env.example`
 files contain placeholders only. If you ever find a real credential, key, or
 token committed anywhere in the tree, please report it through the private

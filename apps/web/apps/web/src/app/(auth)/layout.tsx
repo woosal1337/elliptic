@@ -35,7 +35,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
                 ))}
               </ul>
             </div>
-            <p className="text-caption text-muted-foreground">© 2026 CompanyOS</p>
+            <p className="text-caption text-muted-foreground">© 2026 Elliptic</p>
           </div>
         </div>
       </aside>

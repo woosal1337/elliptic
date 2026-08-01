@@ -12,7 +12,7 @@ export function AIAccessSettings() {
       <div className="flex flex-col gap-1">
         <h2 className="text-body font-medium text-foreground">AI Access</h2>
         <p className="text-small text-muted-foreground">
-          Apps and devices that can read and update your CompanyOS brain on your behalf.
+          Apps and devices that can read and update your Elliptic brain on your behalf.
         </p>
       </div>
 

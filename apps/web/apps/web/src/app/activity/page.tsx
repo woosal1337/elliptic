@@ -75,7 +75,7 @@ const ROWS: FeatureRowData[] = [
     titleLead: "The right change reaches the right person.",
     titleRest: "An inbox, notifications, and an outbox for webhooks.",
     description:
-      "Mentions and assignments raise notifications and fill an inbox. An outbox backbone delivers the same changes to your webhooks, reliably and in order, so the systems outside CompanyOS stay in step too.",
+      "Mentions and assignments raise notifications and fill an inbox. An outbox backbone delivers the same changes to your webhooks, reliably and in order, so the systems outside Elliptic stay in step too.",
     points: [
       "Notifications and an inbox that track what is yours",
       "An outbox backbone for reliable webhook delivery",

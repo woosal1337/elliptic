@@ -14,7 +14,7 @@ import { FinalCTA } from "@/components/marketing/final-cta";
 export const metadata = pageMetadata({
   title: "About",
   description:
-    "CompanyOS is an agent-native work platform. Projects, tasks, meetings, and notes where humans and AI agents work together over a built-in MCP server, on your own keys. Open source, multi-tenant, and self-hostable.",
+    "Elliptic is an agent-native work platform. Projects, tasks, meetings, and notes where humans and AI agents work together over a built-in MCP server, on your own keys. Open source, multi-tenant, and self-hostable.",
   path: "/about",
 });
 
@@ -27,7 +27,7 @@ const WHY = [
   {
     title: "A durable environment",
     description:
-      "A chat window forgets when it closes. CompanyOS persists, so an agent comes back to a board that remembers.",
+      "A chat window forgets when it closes. Elliptic persists, so an agent comes back to a board that remembers.",
   },
   {
     title: "Shared with your team",
@@ -72,7 +72,7 @@ export default function AboutPage() {
       <FeatureHero
         index="1.1"
         eyebrow="About"
-        titleLead="CompanyOS is Jira for your agents."
+        titleLead="Elliptic is Jira for your agents."
         titleRest="An agent-native work platform you run on your own keys."
         lede="Projects, tasks, meetings, and notes in one place, where humans and AI agents work side by side over a built-in MCP server. Open source, multi-tenant, and self-hostable."
         primary={{ label: "Start free", href: "/signup" }}
@@ -101,7 +101,7 @@ export default function AboutPage() {
         eyebrow="Why it exists"
         titleLead="The busywork of a tracker is agent work."
         titleRest="But agents need somewhere durable to do it."
-        intro="Task creation, status updates, and chasing progress are exactly what agents should do. They just need a shared environment that does not forget. CompanyOS is that environment."
+        intro="Task creation, status updates, and chasing progress are exactly what agents should do. They just need a shared environment that does not forget. Elliptic is that environment."
       >
         <FeatureGrid items={WHY} />
       </FeatureSection>

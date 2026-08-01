@@ -10,17 +10,17 @@ import { FinalCTA } from "@/components/marketing/final-cta";
 import { SiteFooter } from "@/components/marketing/site-footer";
 
 export const metadata: Metadata = {
-  title: { absolute: "CompanyOS · Jira for your agents" },
+  title: { absolute: "Elliptic · Jira for your agents" },
   description:
     "Jira for your agents. Boards, tasks, and sprints your AI agents run over a built-in MCP server, with meetings, notes, and a full activity log. Every AI feature runs on your own model key.",
   alternates: { canonical: "/" },
   openGraph: {
-    title: "CompanyOS · Jira for your agents",
+    title: "Elliptic · Jira for your agents",
     description:
       "Boards, tasks, and sprints your agents run, with meetings, notes, and an activity log. Bring your own OpenAI or Anthropic key.",
     url: "/",
     type: "website",
-    siteName: "CompanyOS",
+    siteName: "Elliptic",
     images: ["/opengraph-image"],
   },
 };
@@ -29,7 +29,7 @@ const STRUCTURED_DATA = [
   {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "CompanyOS",
+    name: "Elliptic",
     url: SITE_URL,
     logo: `${SITE_URL}/logo.png`,
     sameAs: ["https://github.com/woosal1337/companyos", "https://x.com/woosal1337"],
@@ -37,7 +37,7 @@ const STRUCTURED_DATA = [
   {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "CompanyOS",
+    name: "Elliptic",
     url: SITE_URL,
   },
 ];

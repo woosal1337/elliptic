@@ -55,7 +55,7 @@ const ROWS: DeepDiveRow[] = [
     lead: "Every meeting becomes an answer.",
     rest: "A transcript, a summary, and a chat that knows what was said.",
     description:
-      "Import a recording from the Folio recorder and CompanyOS keeps the transcript, generates a summary, and lets anyone ask the meeting a question in plain language.",
+      "Import a recording from the Folio recorder and Elliptic keeps the transcript, generates a summary, and lets anyone ask the meeting a question in plain language.",
     points: [
       "Speaker-attributed, timestamped transcripts",
       "AI summaries that capture the decisions, not the noise",

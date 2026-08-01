@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# CompanyOS — per-project agent setup.
+# Elliptic — per-project agent setup.
 #
 # Wires the CURRENT project so your AI coding agent (Claude Code, etc.) reliably
-# uses the CompanyOS company brain whenever it searches for or saves anything
+# uses the Elliptic company brain whenever it searches for or saves anything
 # about the company. Project-scoped and opt-in: it only touches the directory
 # you run it in, so your other projects are unaffected. Safe to re-run.
 #
@@ -12,7 +12,7 @@
 #
 # It writes (or idempotently updates):
 #   .mcp.json                          project-scoped MCP connection (OAuth)
-#   CLAUDE.md                          a marked CompanyOS routing block
+#   CLAUDE.md                          a marked Elliptic routing block
 #   .claude/skills/companyos/SKILL.md  an on-demand skill for the agent
 set -euo pipefail
 
@@ -33,7 +33,7 @@ while [ $# -gt 0 ]; do
 done
 
 ROOT="$(pwd)"
-echo "CompanyOS agent setup"
+echo "Elliptic agent setup"
 echo "  project:  $ROOT"
 echo "  endpoint: $ENDPOINT"
 echo "  server:   $NAME"
@@ -73,17 +73,17 @@ if [ -f "$CLAUDE_MD" ] && grep -qF "$START" "$CLAUDE_MD"; then HAD_BLOCK=1; fi
 BLOCK_FILE="$(mktemp)"
 cat > "$BLOCK_FILE" <<EOF
 $START
-## CompanyOS (company brain)
+## Elliptic (company brain)
 
-This project uses the **CompanyOS** MCP as the source of truth for the
+This project uses the **Elliptic** MCP as the source of truth for the
 organization's projects, tasks, meetings, notes, calendar, and activity.
 
 - **Search first.** Before answering anything about the company, a project, a
-  task, a person, a meeting, or a deadline, query CompanyOS (\`mcp__${NAME}__*\`)
+  task, a person, a meeting, or a deadline, query Elliptic (\`mcp__${NAME}__*\`)
   instead of guessing or relying only on local files.
 - **Save there.** When asked to create or track work — a task, note, decision,
-  or follow-up — write it to CompanyOS, not just to local memory.
-- **It is authoritative.** Treat CompanyOS as the source of truth; local memory
+  or follow-up — write it to Elliptic, not just to local memory.
+- **It is authoritative.** Treat Elliptic as the source of truth; local memory
   and notes should point to it, not duplicate it.
 
 Authorize once with \`/mcp\`.
@@ -105,9 +105,9 @@ cat "$BLOCK_FILE" >> "$TMP"
 mv "$TMP" "$CLAUDE_MD"
 rm -f "$BLOCK_FILE"
 if [ "${HAD_BLOCK:-0}" != "0" ]; then
-  echo "✓ refreshed CompanyOS block in CLAUDE.md"
+  echo "✓ refreshed Elliptic block in CLAUDE.md"
 else
-  echo "✓ added CompanyOS block to CLAUDE.md"
+  echo "✓ added Elliptic block to CLAUDE.md"
 fi
 
 # 3) On-demand skill -----------------------------------------------------------
@@ -116,20 +116,20 @@ mkdir -p "$SKILL_DIR"
 cat > "$SKILL_DIR/SKILL.md" <<EOF
 ---
 name: $NAME
-description: Use whenever the user asks to find, search, look up, check the status of, create, update, or save anything about the company, a project, a task, a meeting, a note, a person, or a deadline. Route those requests to the CompanyOS company-brain MCP instead of guessing or relying only on local files.
+description: Use whenever the user asks to find, search, look up, check the status of, create, update, or save anything about the company, a project, a task, a meeting, a note, a person, or a deadline. Route those requests to the Elliptic company-brain MCP instead of guessing or relying only on local files.
 ---
 
-# CompanyOS company brain
+# Elliptic company brain
 
-CompanyOS is this organization's source of truth for projects, tasks, meetings,
+Elliptic is this organization's source of truth for projects, tasks, meetings,
 notes, calendar events, and activity, reachable through the \`mcp__${NAME}__*\`
 tools (authorize once with \`/mcp\`).
 
 ## When to use
 - "find / search / look up / what's the status of …" a project, task, note,
-  meeting, or person → search CompanyOS first.
+  meeting, or person → search Elliptic first.
 - "create / add / track / save / log …" a task, note, decision, or follow-up →
-  write it to CompanyOS.
+  write it to Elliptic.
 - Any question whose answer lives in the company's projects, tasks, or meetings.
 
 ## How to use
@@ -143,7 +143,7 @@ tools (authorize once with \`/mcp\`).
   - \`mcp__${NAME}__brain_changes_since\`, \`mcp__${NAME}__brain_open_threads\`,
     \`mcp__${NAME}__brain_resume\` for "catch me up / where did I leave off".
 - Creates accept an \`idempotency_key\` — reuse it so retries never duplicate.
-- Treat CompanyOS as authoritative: don't answer company questions from memory
+- Treat Elliptic as authoritative: don't answer company questions from memory
   when a tool can fetch the real value.
 EOF
 echo "✓ wrote .claude/skills/$NAME/SKILL.md"
@@ -152,4 +152,4 @@ echo
 echo "Done. Next:"
 echo "  1. Open this project in Claude Code (or your MCP client)."
 echo "  2. Run /mcp and approve \"$NAME\" to authorize (OAuth, opens browser)."
-echo "  3. Your agent will now reach for CompanyOS on project search/save."
+echo "  3. Your agent will now reach for Elliptic on project search/save."
