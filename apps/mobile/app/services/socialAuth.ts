@@ -32,7 +32,12 @@ async function challengeFor(verifier: string): Promise<string> {
   return digest.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "")
 }
 
-function parseQuery(url: string): Record<string, string> {
+/** A handoff code is a JWT: three dot-separated segments. */
+export function looksLikeHandoffCode(code: string): boolean {
+  return code.split(".").length === 3
+}
+
+export function parseQuery(url: string): Record<string, string> {
   const query = url.split("?")[1]
   if (!query) return {}
   return Object.fromEntries(
@@ -68,6 +73,17 @@ export async function signInWithProvider(provider: SocialProvider): Promise<Soci
   const params = parseQuery(result.url)
   if (params.error) return { error: "That sign-in didn't go through." }
   if (!params.code) return { error: "That sign-in didn't go through." }
+
+  // The redirect should carry *our* handoff code. Anything else means the
+  // browser handed back the provider's callback instead of the app's, which is
+  // worth naming rather than letting the API reject an opaque string.
+  if (!looksLikeHandoffCode(params.code)) {
+    // eslint-disable-next-line no-console
+    console.warn(
+      `[oauth] unexpected callback: scheme=${result.url.split(":")[0]} params=${Object.keys(params).join(",")} codeSegments=${params.code.split(".").length}`,
+    )
+    return { error: "That sign-in didn't go through." }
+  }
 
   return api.exchangeOAuthCode(params.code, verifier)
 }

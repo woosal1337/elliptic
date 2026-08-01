@@ -9,6 +9,7 @@ from urllib.parse import urlencode
 
 import httpx
 import jwt
+from loguru import logger
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -21,7 +22,7 @@ from companyos.modules.users.models import User
 
 _STATE_TTL = 600
 # The handoff code only has to survive the redirect back into the app.
-_NATIVE_CODE_TTL = 120
+_NATIVE_CODE_TTL = 600
 _HTTP_ERROR_STATUS = 400
 
 _ENDPOINTS = {
@@ -186,10 +187,20 @@ def verify_native_code(code: str, verifier: str) -> uuid.UUID:
     try:
         payload = jwt.decode(code, get_settings().jwt_secret_key, algorithms=["HS256"])
     except jwt.InvalidTokenError as exc:
+        # Log the shape, never the value: this is the one failure a client can
+        # hit with no server-side trace of why.
+        logger.warning(
+            "native oauth exchange rejected: {} (segments={}, length={})",
+            exc.__class__.__name__,
+            code.count(".") + 1,
+            len(code),
+        )
         raise UnauthorizedError("Invalid or expired sign-in code") from exc
     if payload.get("typ") != "native_oauth":
+        logger.warning("native oauth exchange rejected: wrong token type {}", payload.get("typ"))
         raise UnauthorizedError("Invalid sign-in code")
     if not secrets.compare_digest(_challenge_for(verifier), str(payload.get("c", ""))):
+        logger.warning("native oauth exchange rejected: challenge/verifier mismatch")
         raise UnauthorizedError("Sign-in code does not match this device")
     return uuid.UUID(str(payload["sub"]))
 
