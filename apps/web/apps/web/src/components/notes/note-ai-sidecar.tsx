@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { CornerDownLeft, Sparkles } from "lucide-react";
-import { Button, Skeleton, Textarea } from "@companyos/ui";
+import { Button, Skeleton, Textarea } from "@elliptic/ui";
 import { useDocAssist } from "@/hooks/use-ai-queries";
 
 const PRESETS = [

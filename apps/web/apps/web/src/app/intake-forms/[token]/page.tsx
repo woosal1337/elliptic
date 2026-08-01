@@ -14,7 +14,7 @@ import {
   SelectValue,
   Skeleton,
   Textarea,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { usePublicIntakeForm, useSubmitIntakeForm } from "@/hooks/use-intake-form-queries";
 
 export default function PublicIntakeFormPage() {

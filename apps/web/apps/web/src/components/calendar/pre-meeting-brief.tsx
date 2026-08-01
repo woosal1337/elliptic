@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Info, Pin, PinOff, Sparkles, X } from "lucide-react";
-import { Skeleton, cn } from "@companyos/ui";
+import { Skeleton, cn } from "@elliptic/ui";
 import { useMeetingBrief } from "@/hooks/use-event-queries";
 import { briefSourceHref } from "@/lib/brief";
 

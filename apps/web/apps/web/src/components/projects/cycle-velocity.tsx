@@ -1,7 +1,7 @@
 "use client";
 
 import { TrendingUp } from "lucide-react";
-import { Card } from "@companyos/ui";
+import { Card } from "@elliptic/ui";
 import { useCycleVelocity } from "@/hooks/use-cycle-queries";
 
 export function CycleVelocity({ orgId, projectId }: { orgId: string; projectId: string }) {

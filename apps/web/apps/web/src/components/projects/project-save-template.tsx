@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { LayoutTemplate, Trash2 } from "lucide-react";
-import { Button, IconButton, Input, Skeleton } from "@companyos/ui";
+import { Button, IconButton, Input, Skeleton } from "@elliptic/ui";
 import {
   useDeleteProjectTemplate,
   useProjectTemplates,

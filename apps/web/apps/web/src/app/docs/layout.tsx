@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Logo } from "@companyos/ui";
+import { Logo } from "@elliptic/ui";
 import { getDocsBasePath } from "./_lib/base-path";
 import { DocsSidebar } from "./_components/docs-sidebar";
 import { DocsMobileNav } from "./_components/docs-mobile-nav";

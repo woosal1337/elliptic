@@ -1,4 +1,4 @@
-import { Avatar, Badge, cn } from "@companyos/ui";
+import { Avatar, Badge, cn } from "@elliptic/ui";
 import { FileText, Users } from "lucide-react";
 
 const PAGES = ["Launch runbook", "Architecture", "BYOK & keys", "On-call"];

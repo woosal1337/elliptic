@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Copy, Inbox } from "lucide-react";
-import { Button, IconButton, Input, Switch, toast } from "@companyos/ui";
+import { Button, IconButton, Input, Switch, toast } from "@elliptic/ui";
 import type { Project } from "@/lib/types";
 import { useSetInappIntakeEnabled, useSetIntakeEnabled } from "@/hooks/use-intake-queries";
 

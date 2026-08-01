@@ -20,7 +20,7 @@ import {
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { useProject } from "@/hooks/use-project-queries";
 import { useProjectPageCommands } from "@/components/command/use-host-commands";
 import { useShortcut } from "@/lib/keyboard";

@@ -1,7 +1,7 @@
 "use client";
 
 import { Clock, Video } from "lucide-react";
-import { EmptyState, Skeleton } from "@companyos/ui";
+import { EmptyState, Skeleton } from "@elliptic/ui";
 import { formatTimestamp, relativeTime } from "@/lib/format";
 import { useMeetings } from "@/hooks/use-meeting-queries";
 import { ErrorState } from "@/components/error-state";

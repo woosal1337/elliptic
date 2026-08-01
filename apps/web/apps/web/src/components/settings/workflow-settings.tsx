@@ -26,7 +26,7 @@ import {
   SelectValue,
   Switch,
   cn,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { ArrowRight } from "lucide-react";
 import { useOrg, useTeams, useUpdateOrg } from "@/hooks/use-org-queries";
 import {

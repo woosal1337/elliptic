@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Check, RotateCcw, Send, Trash2, Webhook } from "lucide-react";
-import { Badge, Button, IconButton, Input, Skeleton } from "@companyos/ui";
+import { Badge, Button, IconButton, Input, Skeleton } from "@elliptic/ui";
 import {
   useCreateOrgWebhook,
   useDeleteOrgWebhook,

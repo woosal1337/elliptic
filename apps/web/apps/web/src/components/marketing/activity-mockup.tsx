@@ -1,4 +1,4 @@
-import { Avatar, Badge, cn } from "@companyos/ui";
+import { Avatar, Badge, cn } from "@elliptic/ui";
 import { Sparkles } from "lucide-react";
 
 interface Event {

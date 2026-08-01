@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
   Skeleton,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import type { TaskStatus } from "@/lib/types";
 import { STATUS_LABELS, STATUS_ORDER } from "@/lib/task-meta";
 import { formatRelative } from "@/lib/format";

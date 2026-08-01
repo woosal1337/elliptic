@@ -1,7 +1,7 @@
 "use client";
 
 import { Check, X } from "lucide-react";
-import { Badge, IconButton, Skeleton, Switch } from "@companyos/ui";
+import { Badge, IconButton, Skeleton, Switch } from "@elliptic/ui";
 import type { Project } from "@/lib/types";
 import { useUpdateProject } from "@/hooks/use-project-queries";
 import { useDecideWorklog, useProjectPendingWorklogs } from "@/hooks/use-worklog-queries";

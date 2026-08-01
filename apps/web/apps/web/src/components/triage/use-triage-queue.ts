@@ -2,7 +2,7 @@
 
 import { useCallback, useMemo } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { toast } from "@companyos/ui";
+import { toast } from "@elliptic/ui";
 import { api, errorMessage, orgPath } from "@/lib/api";
 import type { Project, Task } from "@/lib/types";
 import { useProjects } from "@/hooks/use-project-queries";

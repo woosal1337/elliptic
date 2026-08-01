@@ -1,4 +1,4 @@
-import { Container, Section, SectionNumber, cn } from "@companyos/ui";
+import { Container, Section, SectionNumber, cn } from "@elliptic/ui";
 
 interface Integration {
   name: string;

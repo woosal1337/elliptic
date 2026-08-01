@@ -9,7 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
   Kbd,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import {
   formatKeysForDisplay,
   useKeyboard,

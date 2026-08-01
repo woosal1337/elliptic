@@ -10,7 +10,7 @@ import {
   TabsList,
   TabsTrigger,
   TooltipProvider,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { useInstanceSettings } from "@/hooks/use-instance-admin";
 import { InstanceGeneralSettings } from "@/components/admin/instance-general-settings";
 import { InstanceUsers } from "@/components/admin/instance-users";

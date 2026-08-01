@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ChevronDown, Plus, StickyNote } from "lucide-react";
-import { Button, IconButton, Textarea } from "@companyos/ui";
+import { Button, IconButton, Textarea } from "@elliptic/ui";
 import { useCreateSticky, useStickies } from "@/hooks/use-sticky-queries";
 import { StickyConvertMenu } from "@/components/stickies/sticky-convert-menu";
 

@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
   Textarea,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { useProjects } from "@/hooks/use-project-queries";
 import { useCreateNote } from "@/hooks/use-note-queries";
 import { useSendOrgMeetingChat, type OrgChatScope } from "@/hooks/use-meeting-queries";

@@ -15,7 +15,7 @@ import {
   Switch,
   Skeleton,
   toast,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import {
   useCreateMeetingShare,
   useMeetingShare,

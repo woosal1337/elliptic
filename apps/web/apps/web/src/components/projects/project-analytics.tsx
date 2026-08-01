@@ -1,7 +1,7 @@
 "use client";
 
 import { Clock, Download } from "lucide-react";
-import { Badge, Button, Card, Skeleton } from "@companyos/ui";
+import { Badge, Button, Card, Skeleton } from "@elliptic/ui";
 import {
   downloadAnalyticsCsv,
   useAnalyticsOverview,

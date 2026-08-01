@@ -21,7 +21,7 @@ import {
   TooltipContent,
   TooltipTrigger,
   cn,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import type { BugSeverity, OrgMember, TaskPriority, TaskStatus } from "@/lib/types";
 import {
   CATEGORY_DOT_CLASSES,

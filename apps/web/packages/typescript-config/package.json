@@ -1,5 +1,5 @@
 {
-  "name": "@companyos/typescript-config",
+  "name": "@elliptic/typescript-config",
   "version": "1.0.0",
   "private": true,
   "license": "Apache-2.0"

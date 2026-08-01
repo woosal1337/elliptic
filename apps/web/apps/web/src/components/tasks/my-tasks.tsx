@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { useQueries } from "@tanstack/react-query";
 import { CircleUser } from "lucide-react";
-import { Badge, Button, EmptyState, Skeleton, cn } from "@companyos/ui";
+import { Badge, Button, EmptyState, Skeleton, cn } from "@elliptic/ui";
 import type { Page, Project, Task } from "@/lib/types";
 import { PRIORITY_LABELS, STATUS_LABELS, statusCategory } from "@/lib/task-meta";
 import { api, errorMessage, orgPath } from "@/lib/api";

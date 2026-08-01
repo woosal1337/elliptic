@@ -1,1 +1,1 @@
-export { PageHeader, type PageHeaderProps } from "@companyos/ui";
+export { PageHeader, type PageHeaderProps } from "@elliptic/ui";

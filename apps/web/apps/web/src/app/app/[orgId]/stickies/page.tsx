@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { Plus, StickyNote, Trash2 } from "lucide-react";
-import { Button, EmptyState, IconButton, Skeleton, Textarea, cn } from "@companyos/ui";
+import { Button, EmptyState, IconButton, Skeleton, Textarea, cn } from "@elliptic/ui";
 import type { Sticky } from "@/lib/types";
 import { StickyConvertMenu } from "@/components/stickies/sticky-convert-menu";
 import { PageHeader } from "@/components/page-header";

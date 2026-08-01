@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Check, Sparkles, Wand2 } from "lucide-react";
-import { Badge, Button, IconButton, Skeleton } from "@companyos/ui";
+import { Badge, Button, IconButton, Skeleton } from "@elliptic/ui";
 import {
   useCatchUp,
   useCatchUpMarkSeen,

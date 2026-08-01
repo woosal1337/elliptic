@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { cn } from "@companyos/ui";
+import { cn } from "@elliptic/ui";
 import type { Module } from "@/lib/types";
 import { formatDate } from "@/lib/format";
 

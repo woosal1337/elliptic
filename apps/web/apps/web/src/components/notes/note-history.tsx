@@ -12,7 +12,7 @@ import {
   DialogTrigger,
   IconButton,
   Skeleton,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { formatRelative } from "@/lib/format";
 import { useNoteVersions, useRestoreNoteVersion } from "@/hooks/use-note-queries";
 

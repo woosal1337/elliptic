@@ -11,7 +11,7 @@ import {
   CardTitle,
   EmptyState,
   Skeleton,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { relativeTime } from "@/lib/format";
 import { useDeletedProjects, useRestoreProject } from "@/hooks/use-project-queries";
 import { ErrorState } from "@/components/error-state";

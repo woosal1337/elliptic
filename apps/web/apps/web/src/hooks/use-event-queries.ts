@@ -6,7 +6,7 @@ import {
   useQueryClient,
   type QueryClient,
 } from "@tanstack/react-query";
-import { toast } from "@companyos/ui";
+import { toast } from "@elliptic/ui";
 import { api, errorMessage, orgPath } from "@/lib/api";
 import { markOptimistic, tempId } from "@/lib/optimistic";
 import type { Event, EventScope, MeetingBrief } from "@/lib/types";

@@ -9,7 +9,7 @@ import {
   Kbd,
   Skeleton,
   cn,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { useShortcut } from "@/lib/keyboard";
 import { ErrorState } from "@/components/error-state";
 import {

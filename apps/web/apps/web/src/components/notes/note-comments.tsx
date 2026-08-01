@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Check, MessageSquare, Quote, Trash2 } from "lucide-react";
-import { Button, IconButton, Skeleton, Textarea } from "@companyos/ui";
+import { Button, IconButton, Skeleton, Textarea } from "@elliptic/ui";
 import { FileUpload } from "@/components/storage/file-upload";
 import { AttachmentList, PendingAttachmentChips } from "@/components/storage/attachment-list";
 import type { UploadResult } from "@/hooks/use-storage-queries";

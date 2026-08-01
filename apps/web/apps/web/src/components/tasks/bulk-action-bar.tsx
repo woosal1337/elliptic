@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Ban, Check, Flag, Trash2, UserRound, X } from "lucide-react";
-import { Button, IconButton, cn } from "@companyos/ui";
+import { Button, IconButton, cn } from "@elliptic/ui";
 import type { OrgMember, TaskPriority, TaskStatus } from "@/lib/types";
 import { useDeleteTask, useUpdateTask } from "@/hooks/use-task-queries";
 import { AssigneePicker, PriorityPicker, StatusPicker } from "./task-property-picker";

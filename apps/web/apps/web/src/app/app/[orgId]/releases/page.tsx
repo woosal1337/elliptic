@@ -17,7 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
   Skeleton,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import type { Release, ReleaseStatus } from "@/lib/types";
 import { formatDate } from "@/lib/format";
 import {

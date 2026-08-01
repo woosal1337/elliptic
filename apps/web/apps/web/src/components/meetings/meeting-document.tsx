@@ -42,7 +42,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { formatRelative } from "@/lib/format";
 import {
   useMeeting,

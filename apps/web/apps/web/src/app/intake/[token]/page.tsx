@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useParams } from "next/navigation";
 import { CheckCircle2, Send, ShieldOff } from "lucide-react";
-import { Button, Input, Logo, Skeleton, Textarea } from "@companyos/ui";
+import { Button, Input, Logo, Skeleton, Textarea } from "@elliptic/ui";
 import { usePublicIntakeForm, useSubmitIntake } from "@/hooks/use-intake-queries";
 
 export default function PublicIntakePage() {

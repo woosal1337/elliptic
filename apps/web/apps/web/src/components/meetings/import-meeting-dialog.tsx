@@ -18,8 +18,8 @@ import {
   TabsList,
   TabsTrigger,
   Textarea,
-} from "@companyos/ui";
-import { cn } from "@companyos/ui";
+} from "@elliptic/ui";
+import { cn } from "@elliptic/ui";
 import { useImportMeeting } from "@/hooks/use-meeting-queries";
 import { parseTranscript } from "./parse-transcript";
 

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Logo } from "@companyos/ui";
+import { Logo } from "@elliptic/ui";
 
 export default function OAuthLayout({ children }: { children: React.ReactNode }) {
   return (

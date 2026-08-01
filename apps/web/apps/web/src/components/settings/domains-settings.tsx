@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { BadgeCheck, Copy, Globe, RefreshCw, Trash2 } from "lucide-react";
-import { Badge, Button, IconButton, Input, Skeleton, toast } from "@companyos/ui";
+import { Badge, Button, IconButton, Input, Skeleton, toast } from "@elliptic/ui";
 import {
   type OrgDomain,
   useAddDomain,

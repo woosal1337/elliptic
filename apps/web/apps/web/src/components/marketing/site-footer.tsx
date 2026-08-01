@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { cn, Container, Logo } from "@companyos/ui";
+import { cn, Container, Logo } from "@elliptic/ui";
 
 interface FooterLink {
   label: string;

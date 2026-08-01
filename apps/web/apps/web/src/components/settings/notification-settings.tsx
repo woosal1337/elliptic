@@ -1,7 +1,7 @@
 "use client";
 
 import { Bell } from "lucide-react";
-import { Skeleton, Switch } from "@companyos/ui";
+import { Skeleton, Switch } from "@elliptic/ui";
 import {
   useNotificationPrefs,
   useSetNotificationPrefs,

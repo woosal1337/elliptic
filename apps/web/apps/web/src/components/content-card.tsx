@@ -10,7 +10,7 @@ import {
   TooltipTrigger,
   cn,
   type BadgeProps,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { hierarchy } from "@/lib/hierarchy";
 
 export interface ContentCardTag {

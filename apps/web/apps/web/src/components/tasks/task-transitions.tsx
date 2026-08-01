@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowRight } from "lucide-react";
-import { Badge, Skeleton } from "@companyos/ui";
+import { Badge, Skeleton } from "@elliptic/ui";
 import { useTaskTransitions } from "@/hooks/use-task-queries";
 import { STATUS_LABELS } from "@/lib/task-meta";
 import { ErrorState } from "@/components/error-state";

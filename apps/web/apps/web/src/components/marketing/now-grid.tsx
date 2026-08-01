@@ -8,7 +8,7 @@ import {
   SectionNumber,
   WireMesh,
   cn,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 
 type NowFigure = "stack" | "mesh" | "cubes" | "fan";
 

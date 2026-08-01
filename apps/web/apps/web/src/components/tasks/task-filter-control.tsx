@@ -10,7 +10,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import type { Label } from "@/lib/types";
 import { PRIORITY_LABELS, PRIORITY_SORT } from "@/lib/task-meta";
 import type { UseTaskFilters } from "./task-filters";

@@ -26,7 +26,7 @@ import {
   SelectValue,
   Skeleton,
   cn,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import type { Initiative, InitiativeStatus } from "@/lib/types";
 import { formatDate } from "@/lib/format";
 import { PageHeader } from "@/components/page-header";

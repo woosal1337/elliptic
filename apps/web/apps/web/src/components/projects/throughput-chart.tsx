@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import { Activity } from "lucide-react";
-import { EmptyState, Skeleton } from "@companyos/ui";
+import { EmptyState, Skeleton } from "@elliptic/ui";
 import type { ThroughputPoint } from "@/lib/types";
 import { useThroughput } from "@/hooks/use-analytics-queries";
 import { ErrorState } from "@/components/error-state";

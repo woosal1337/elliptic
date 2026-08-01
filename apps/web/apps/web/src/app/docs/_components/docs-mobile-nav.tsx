@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { cn } from "@companyos/ui";
+import { cn } from "@elliptic/ui";
 import { DOCS_NAV, FIRST_SLUG } from "../_content/nav";
 
 function hrefFor(basePath: string, slug: string): string {

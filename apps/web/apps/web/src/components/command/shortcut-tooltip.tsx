@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactElement } from "react";
-import { Kbd, Tooltip, TooltipContent, TooltipTrigger } from "@companyos/ui";
+import { Kbd, Tooltip, TooltipContent, TooltipTrigger } from "@elliptic/ui";
 import { formatKeysForDisplay } from "@/lib/keyboard";
 
 export function ShortcutTooltip({

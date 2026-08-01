@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Button, Container, Section } from "@companyos/ui";
+import { Button, Container, Section } from "@elliptic/ui";
 import { ArrowRight } from "lucide-react";
 
 export function FinalCTA() {

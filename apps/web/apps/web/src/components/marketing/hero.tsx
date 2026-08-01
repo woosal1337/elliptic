@@ -6,7 +6,7 @@ import {
   IsoStack,
   Section,
   SectionNumber,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { ArrowRight } from "lucide-react";
 import { ProductMockup } from "./product-mockup";
 

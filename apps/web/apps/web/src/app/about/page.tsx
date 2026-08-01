@@ -1,4 +1,4 @@
-import { BrowserFrame } from "@companyos/ui";
+import { BrowserFrame } from "@elliptic/ui";
 import { pageMetadata } from "@/lib/seo";
 import {
   FeaturePageShell,

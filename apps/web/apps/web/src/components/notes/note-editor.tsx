@@ -25,7 +25,7 @@ import {
   Textarea,
   cn,
   toast,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { api, errorMessage, orgPath } from "@/lib/api";
 import {
   SlashCommand,

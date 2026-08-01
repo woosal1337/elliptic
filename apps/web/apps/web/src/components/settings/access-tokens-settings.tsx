@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Copy, KeyRound, RefreshCw, Trash2 } from "lucide-react";
-import { Button, EmptyState, IconButton, Input, Skeleton, toast } from "@companyos/ui";
+import { Button, EmptyState, IconButton, Input, Skeleton, toast } from "@elliptic/ui";
 import { relativeTime } from "@/lib/format";
 import {
   useCreatePersonalToken,

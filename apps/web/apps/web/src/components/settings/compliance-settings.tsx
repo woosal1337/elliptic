@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
   Skeleton,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import {
   useDataSubjectExport,
   useOrg,

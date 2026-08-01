@@ -38,7 +38,7 @@ import {
   SelectValue,
   Skeleton,
   cn,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { formatRelative } from "@/lib/format";
 import {
   useDeleteNote,

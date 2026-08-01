@@ -1,7 +1,7 @@
 "use client";
 
 import { Download, FileText, ImageIcon } from "lucide-react";
-import { Skeleton } from "@companyos/ui";
+import { Skeleton } from "@elliptic/ui";
 import type { Attachment } from "@/lib/types";
 import { openStoredObject, useObjectUrl } from "@/hooks/use-storage-queries";
 

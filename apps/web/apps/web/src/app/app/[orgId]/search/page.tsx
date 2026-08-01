@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useQueries } from "@tanstack/react-query";
 import { CheckSquare, FolderKanban, Search } from "lucide-react";
-import { Badge, EmptyState, Input, Skeleton } from "@companyos/ui";
+import { Badge, EmptyState, Input, Skeleton } from "@elliptic/ui";
 import type { Page, Project, Task } from "@/lib/types";
 import { api, orgPath } from "@/lib/api";
 import { PageHeader } from "@/components/page-header";

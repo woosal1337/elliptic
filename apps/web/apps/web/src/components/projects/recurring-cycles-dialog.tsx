@@ -10,7 +10,7 @@ import {
   DialogTitle,
   Input,
   Label,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { useGenerateRecurringCycles } from "@/hooks/use-cycle-queries";
 
 export function RecurringCyclesDialog({

@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { LayoutDashboard, Plus, Trash2 } from "lucide-react";
-import { Button, IconButton, Input, Skeleton } from "@companyos/ui";
+import { Button, IconButton, Input, Skeleton } from "@elliptic/ui";
 import {
   useCreateDashboard,
   useDashboards,

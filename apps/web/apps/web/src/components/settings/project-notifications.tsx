@@ -11,7 +11,7 @@ import {
   EmptyState,
   Skeleton,
   Switch,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import type { Project } from "@/lib/types";
 import {
   useProjects,

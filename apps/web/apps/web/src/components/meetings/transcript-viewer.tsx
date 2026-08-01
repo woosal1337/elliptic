@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { FileAudio } from "lucide-react";
-import { Button, EmptyState, Skeleton, cn } from "@companyos/ui";
+import { Button, EmptyState, Skeleton, cn } from "@elliptic/ui";
 import { formatTimestamp } from "@/lib/format";
 import { useMeetingChapters, useTranscript } from "@/hooks/use-meeting-queries";
 import { activeChapterIndex, shouldShowChapters } from "@/lib/chapters";

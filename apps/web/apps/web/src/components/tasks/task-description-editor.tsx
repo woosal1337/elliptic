@@ -7,7 +7,7 @@ import type { AnyExtension } from "@tiptap/core";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import { Markdown } from "tiptap-markdown";
-import { cn } from "@companyos/ui";
+import { cn } from "@elliptic/ui";
 import { SlashCommand, createMention, type MentionConfig } from "@/components/notes/editor-extensions";
 import { PROSE_CLASS } from "@/components/notes/note-editor";
 

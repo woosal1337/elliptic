@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useIsFetching, useIsMutating } from "@tanstack/react-query";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@companyos/ui";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@elliptic/ui";
 
 const SHOW_DELAY_MS = 400;
 const MIN_VISIBLE_MS = 600;

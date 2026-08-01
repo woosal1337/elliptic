@@ -7,7 +7,7 @@ import {
   UserPlus,
   type LucideIcon,
 } from "lucide-react";
-import type { BadgeProps } from "@companyos/ui";
+import type { BadgeProps } from "@elliptic/ui";
 import type { Notification } from "@/hooks/use-notification-queries";
 
 export interface NotificationKindMeta {

@@ -6,7 +6,7 @@ import {
   PopoverContent,
   PopoverTrigger,
   cn,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import type { Event } from "@/lib/types";
 import { formatDayHeading, formatEventTime } from "./calendar-utils";
 

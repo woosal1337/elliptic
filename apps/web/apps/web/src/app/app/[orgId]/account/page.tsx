@@ -1,6 +1,6 @@
 "use client";
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@companyos/ui";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@elliptic/ui";
 import { PageHeader } from "@/components/page-header";
 import { ProfileSettings } from "@/components/settings/profile-settings";
 import { AppearanceSettings } from "@/components/settings/appearance-settings";

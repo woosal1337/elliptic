@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Badge, cn } from "@companyos/ui";
+import { Badge, cn } from "@elliptic/ui";
 import { Bot, KeyRound, ShieldCheck, Sparkles } from "lucide-react";
 
 interface ProviderKey {

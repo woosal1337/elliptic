@@ -43,7 +43,7 @@ Run the `companyos-api` stack first (`docker compose up -d --build` there), then
 apps/
   web/                  Next.js 16 App Router app (React 19, TanStack Query v5, Tailwind v4)
 packages/
-  ui/                   @companyos/ui, the component library and design tokens (raw TS source, no build step)
+  ui/                   @elliptic/ui, the component library and design tokens (raw TS source, no build step)
   typescript-config/    Shared tsconfig presets (base, nextjs, react-library)
   eslint-config/        Shared ESLint flat configs (base, next-js, react-internal)
 ```

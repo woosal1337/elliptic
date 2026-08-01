@@ -3,7 +3,7 @@
 import { use } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Kanban } from "lucide-react";
-import { Badge, Skeleton } from "@companyos/ui";
+import { Badge, Skeleton } from "@elliptic/ui";
 import { api } from "@/lib/api";
 
 interface PublicTask {

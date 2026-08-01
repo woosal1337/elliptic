@@ -1,4 +1,4 @@
-import { BrowserFrame, IsoStack, IsoFan, WireMesh } from "@companyos/ui";
+import { BrowserFrame, IsoStack, IsoFan, WireMesh } from "@elliptic/ui";
 import { pageMetadata } from "@/lib/seo";
 import {
   FeaturePageShell,

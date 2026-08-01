@@ -8,7 +8,7 @@ import {
   PopoverContent,
   PopoverTrigger,
   cn,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { useShortcut } from "@/lib/keyboard";
 import { useUnreadCount } from "@/hooks/use-notification-queries";
 import { InboxContent } from "./inbox-content";

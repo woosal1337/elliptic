@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Button, Logo } from "@companyos/ui";
+import { Button, Logo } from "@elliptic/ui";
 
 export default function NotFound() {
   return (

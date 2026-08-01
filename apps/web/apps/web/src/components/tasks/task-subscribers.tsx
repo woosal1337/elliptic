@@ -1,6 +1,6 @@
 "use client";
 
-import { Avatar } from "@companyos/ui";
+import { Avatar } from "@elliptic/ui";
 import { useOrgMembers } from "@/hooks/use-org-queries";
 import { useTaskSubscribers } from "@/hooks/use-task-queries";
 

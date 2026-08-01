@@ -9,7 +9,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import type { TableDensity } from "./task-view-prefs";
 import {
   DISPLAY_PROPERTY_LABELS,

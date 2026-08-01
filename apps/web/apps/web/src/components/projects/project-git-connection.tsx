@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Copy, GitBranch, Plus, Trash2 } from "lucide-react";
-import { Button, IconButton, Input, Skeleton, toast } from "@companyos/ui";
+import { Button, IconButton, Input, Skeleton, toast } from "@elliptic/ui";
 import {
   useCreateGitConnection,
   useDeleteGitConnection,

@@ -22,7 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
   Textarea,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { useCreateProject } from "@/hooks/use-project-queries";
 import {
   useInstantiateProjectTemplate,

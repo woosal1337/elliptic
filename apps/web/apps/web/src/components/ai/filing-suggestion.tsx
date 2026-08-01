@@ -10,7 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
   cn,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { resolveRouting } from "@/lib/routing";
 import { CONFIDENCE_LABELS } from "@/lib/confidence";
 import { ConfidenceBadge } from "./coverage-note";

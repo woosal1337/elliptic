@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { Paperclip } from "lucide-react";
-import { Button } from "@companyos/ui";
+import { Button } from "@elliptic/ui";
 import {
   type StorageEntity,
   type UploadResult,
@@ -33,7 +33,7 @@ export function FileUpload({
     if (!file) return;
     if (maxBytes && file.size > maxBytes) {
       const mb = Math.round(maxBytes / (1024 * 1024));
-      const { toast } = await import("@companyos/ui");
+      const { toast } = await import("@elliptic/ui");
       toast.error(`File exceeds the ${mb} MB limit`);
       return;
     }

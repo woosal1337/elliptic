@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { ClipboardList, Plus, Trash2 } from "lucide-react";
-import { Button, IconButton, Input, Skeleton, Textarea } from "@companyos/ui";
+import { Button, IconButton, Input, Skeleton, Textarea } from "@elliptic/ui";
 import { formatDate } from "@/lib/format";
 import {
   type Retrospective,

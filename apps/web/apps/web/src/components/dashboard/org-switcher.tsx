@@ -18,7 +18,7 @@ import {
   Label,
   Skeleton,
   cn,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { useCreateOrg, useDeleteOrg, useOrgs } from "@/hooks/use-org-queries";
 import { clearLastOrgId, setLastOrgId } from "@/lib/storage";
 

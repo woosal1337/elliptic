@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { EmptyState, Skeleton } from "@companyos/ui";
+import { EmptyState, Skeleton } from "@elliptic/ui";
 import { useMe } from "@/hooks/use-auth-queries";
 import { useProjects } from "@/hooks/use-project-queries";
 import { CreateTaskDialog } from "@/components/tasks/create-task-dialog";

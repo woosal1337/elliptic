@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { Menu, Search } from "lucide-react";
-import { Kbd } from "@companyos/ui";
+import { Kbd } from "@elliptic/ui";
 import { useCommandMenu } from "@/components/command/command-menu-provider";
 import { NotificationBell } from "@/components/notifications/notification-bell";
 import { HelpMenu } from "@/components/help/help-menu";

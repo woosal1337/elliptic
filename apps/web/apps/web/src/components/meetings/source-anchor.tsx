@@ -7,7 +7,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
   cn,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { formatTimestamp } from "@/lib/format";
 import type { SourceMatch } from "./provenance";
 import { useAnchor } from "./anchor-context";

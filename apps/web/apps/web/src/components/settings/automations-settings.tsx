@@ -19,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
   Switch,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import {
   useCreateTriageRule,
   useDeleteTriageRule,

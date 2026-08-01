@@ -1,7 +1,7 @@
 "use client";
 
 import { Ban, ShieldCheck, ShieldOff, Undo2 } from "lucide-react";
-import { Badge, Button, Skeleton } from "@companyos/ui";
+import { Badge, Button, Skeleton } from "@elliptic/ui";
 import {
   useGrantAdmin,
   useInstanceUsers,

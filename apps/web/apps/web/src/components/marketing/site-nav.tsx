@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Logo, MarketingNav, type NavLink as NavLinkType } from "@companyos/ui";
+import { Logo, MarketingNav, type NavLink as NavLinkType } from "@elliptic/ui";
 
 const NAV_LINKS: NavLinkType[] = [
   { label: "Product", href: "/#how-it-works" },

@@ -1,5 +1,5 @@
 {
-  "name": "@companyos/eslint-config",
+  "name": "@elliptic/eslint-config",
   "version": "1.0.0",
   "private": true,
   "license": "Apache-2.0",

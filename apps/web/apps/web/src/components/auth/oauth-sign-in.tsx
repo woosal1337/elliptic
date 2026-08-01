@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button, toast } from "@companyos/ui";
+import { Button, toast } from "@elliptic/ui";
 import { api } from "@/lib/api";
 import { usePublicProviders } from "@/hooks/use-auth-provider-queries";
 import { OAUTH_NEXT_KEY, type OAuthProvider } from "@/lib/oauth";

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Check, Copy } from "lucide-react";
-import { cn } from "@companyos/ui";
+import { cn } from "@elliptic/ui";
 
 export function CopyPageButton({ markdown }: { markdown: string }) {
   const [copied, setCopied] = useState(false);

@@ -2,7 +2,7 @@
 
 import { Fragment, type ReactNode, useMemo, useState } from "react";
 import { FileText, ScrollText, Sparkles } from "lucide-react";
-import { Badge, EmptyState, Skeleton, cn } from "@companyos/ui";
+import { Badge, EmptyState, Skeleton, cn } from "@elliptic/ui";
 import { formatRelative } from "@/lib/format";
 import { useSummaries, useTranscript } from "@/hooks/use-meeting-queries";
 import { ErrorState } from "@/components/error-state";

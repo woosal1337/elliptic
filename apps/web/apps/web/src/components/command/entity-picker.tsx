@@ -11,7 +11,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { useKeyboard } from "@/lib/keyboard";
 import { useProjects } from "@/hooks/use-project-queries";
 import { useTeams } from "@/hooks/use-org-queries";

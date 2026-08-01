@@ -34,7 +34,7 @@ import {
 import { ReactRenderer, ReactNodeViewRenderer, NodeViewWrapper } from "@tiptap/react";
 import { Plugin, PluginKey } from "@tiptap/pm/state";
 import { Decoration, DecorationSet } from "@tiptap/pm/view";
-import { cn } from "@companyos/ui";
+import { cn } from "@elliptic/ui";
 
 export type TaskDraft = { title: string };
 

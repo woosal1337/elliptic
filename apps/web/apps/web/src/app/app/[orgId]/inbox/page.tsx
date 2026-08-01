@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useParams } from "next/navigation";
-import { Tabs, TabsList, TabsTrigger } from "@companyos/ui";
+import { Tabs, TabsList, TabsTrigger } from "@elliptic/ui";
 import { PageHeader } from "@/components/page-header";
 import { InboxContent } from "@/components/notifications/inbox-content";
 import { HomePreferenceControl } from "@/components/notifications/home-preference-control";

@@ -6,7 +6,7 @@ import {
   useQueryClient,
   type QueryClient,
 } from "@tanstack/react-query";
-import { toast } from "@companyos/ui";
+import { toast } from "@elliptic/ui";
 import { ApiError, api, errorMessage, orgPath } from "@/lib/api";
 
 export type NotificationStatus = "unread" | "all" | "archived";

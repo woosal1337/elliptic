@@ -8,7 +8,7 @@ import {
   PopoverAnchor,
   PopoverContent,
   cn,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import type { Event } from "@/lib/types";
 import { formatEventTime, formatEventTimeRange } from "./calendar-utils";
 

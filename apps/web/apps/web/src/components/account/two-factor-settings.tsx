@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { ShieldCheck } from "lucide-react";
-import { Button, Input } from "@companyos/ui";
+import { Button, Input } from "@elliptic/ui";
 import {
   useDisable2fa,
   useEnable2fa,

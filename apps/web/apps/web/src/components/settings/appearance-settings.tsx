@@ -8,7 +8,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { getStoredTheme, setTheme, type Theme } from "@/lib/theme";
 import { useTranslation } from "@/lib/i18n/i18n-provider";
 import { LOCALES, type LocaleCode } from "@/lib/i18n/messages";

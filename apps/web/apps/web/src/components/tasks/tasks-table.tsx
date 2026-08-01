@@ -16,7 +16,7 @@ import {
   SelectValue,
   Skeleton,
   cn,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import type { Label, Task, TaskStatus } from "@/lib/types";
 import { STATUS_LABELS, STATUS_ORDER } from "@/lib/task-meta";
 import { formatDate, formatRelative } from "@/lib/format";

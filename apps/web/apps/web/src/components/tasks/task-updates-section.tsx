@@ -10,7 +10,7 @@ import {
   SelectValue,
   Skeleton,
   Textarea,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import type { ProjectHealth } from "@/lib/types";
 import { relativeTime } from "@/lib/format";
 import {

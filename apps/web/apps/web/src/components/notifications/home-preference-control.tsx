@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
   toast,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import {
   DEFAULT_HOME_OPTIONS,
   FALLBACK_DEFAULT_HOME,

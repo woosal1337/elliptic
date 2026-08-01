@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FileText, Plus } from "lucide-react";
-import { Button, Card, Input, Skeleton } from "@companyos/ui";
+import { Button, Card, Input, Skeleton } from "@elliptic/ui";
 import { useCreateNote, useTeamNotes } from "@/hooks/use-note-queries";
 
 export function TeamPages({

@@ -10,7 +10,7 @@ import {
   Skeleton,
   Switch,
   toast,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import {
   type CatalogEntry,
   type RemoteTool,

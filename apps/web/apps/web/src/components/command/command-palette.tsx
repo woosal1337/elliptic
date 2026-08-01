@@ -29,7 +29,7 @@ import {
   CommandList,
   CommandSeparator,
   Kbd,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import type { LucideIcon } from "lucide-react";
 import { formatKeysForDisplay, useKeyboard, useShortcut } from "@/lib/keyboard";
 import { getRecentCommandIds, pushRecentCommandId } from "@/lib/storage";

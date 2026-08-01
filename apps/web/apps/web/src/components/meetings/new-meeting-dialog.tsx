@@ -14,7 +14,7 @@ import {
   DialogTrigger,
   Input,
   Label,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { useCreateMeeting } from "@/hooks/use-meeting-queries";
 
 export function NewMeetingDialog({ orgId }: { orgId: string }) {

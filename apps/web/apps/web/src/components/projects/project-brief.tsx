@@ -10,7 +10,7 @@ import {
 } from "react";
 import { useRouter } from "next/navigation";
 import { LinkIcon, Plus, X } from "lucide-react";
-import { Badge, Button, IconButton, Input, Separator, Skeleton } from "@companyos/ui";
+import { Badge, Button, IconButton, Input, Separator, Skeleton } from "@elliptic/ui";
 import { formatDate } from "@/lib/format";
 import { useProject, useProjectMembers, useUpdateProject } from "@/hooks/use-project-queries";
 import { useOrgMembers } from "@/hooks/use-org-queries";

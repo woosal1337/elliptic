@@ -1,7 +1,7 @@
 "use client";
 
 import { FileText } from "lucide-react";
-import { EmptyState, Skeleton } from "@companyos/ui";
+import { EmptyState, Skeleton } from "@elliptic/ui";
 import { relativeTime } from "@/lib/format";
 import { useNotes } from "@/hooks/use-note-queries";
 import { ErrorState } from "@/components/error-state";

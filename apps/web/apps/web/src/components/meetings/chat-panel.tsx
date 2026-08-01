@@ -36,7 +36,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
   cn,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import type { MeetingChatMessage, TranscriptSegment } from "@/lib/types";
 import { useMeeting, useSendMeetingChat, useTranscript } from "@/hooks/use-meeting-queries";
 import { useMeetingRecipes, useSaveRecipe } from "@/hooks/use-meeting-template-queries";

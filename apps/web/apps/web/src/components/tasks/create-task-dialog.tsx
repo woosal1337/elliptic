@@ -19,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
   Textarea,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import type { BugSeverity, TaskKind, TaskPriority, TaskStatus } from "@/lib/types";
 import { useCreateTask } from "@/hooks/use-task-queries";
 import { useDuplicateCheck } from "@/hooks/use-duplicate-check";

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { Avatar, Badge, Skeleton, cn } from "@companyos/ui";
+import { Avatar, Badge, Skeleton, cn } from "@elliptic/ui";
 import { PRIORITY_LABELS, STATUS_LABELS } from "@/lib/task-meta";
 import { formatRelative } from "@/lib/format";
 import { useTask, useTaskComments } from "@/hooks/use-task-queries";

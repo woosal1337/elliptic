@@ -21,7 +21,7 @@ import {
   IconButton,
   Input,
   Skeleton,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import type { Team } from "@/lib/types";
 import {
   useCreateTeam,

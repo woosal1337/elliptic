@@ -18,7 +18,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { useCreateNote } from "@/hooks/use-note-queries";
 import { useNoteTemplates } from "@/hooks/use-note-template-queries";
 

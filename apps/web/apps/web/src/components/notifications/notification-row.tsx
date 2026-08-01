@@ -9,7 +9,7 @@ import {
   TooltipContent,
   TooltipTrigger,
   cn,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { relativeTime } from "@/lib/format";
 import type { Notification } from "@/hooks/use-notification-queries";
 import { isMeetingActionDone, notificationMeta } from "./notification-meta";

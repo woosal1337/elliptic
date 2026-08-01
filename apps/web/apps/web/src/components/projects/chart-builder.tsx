@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
   Skeleton,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { useCustomChart } from "@/hooks/use-analytics-queries";
 
 const METRICS = [

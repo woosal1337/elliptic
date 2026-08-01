@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Play, Repeat, Trash2 } from "lucide-react";
-import { Badge, Button, IconButton, Input, Skeleton, Switch } from "@companyos/ui";
+import { Badge, Button, IconButton, Input, Skeleton, Switch } from "@elliptic/ui";
 import { formatRelative } from "@/lib/format";
 import {
   useCreateRecurringTask,

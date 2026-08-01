@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Clock, Play, Terminal, Trash2 } from "lucide-react";
-import { Badge, Button, IconButton, Input, Skeleton, Textarea } from "@companyos/ui";
+import { Badge, Button, IconButton, Input, Skeleton, Textarea } from "@elliptic/ui";
 import {
   type RunnerScript,
   useCreateScript,

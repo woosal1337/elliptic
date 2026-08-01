@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Plus, Shield, Trash2 } from "lucide-react";
-import { Badge, Button, IconButton, Input, Skeleton } from "@companyos/ui";
+import { Badge, Button, IconButton, Input, Skeleton } from "@elliptic/ui";
 import {
   useCreateRole,
   useCustomRoles,

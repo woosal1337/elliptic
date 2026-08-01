@@ -27,7 +27,7 @@ import {
   Label,
   Logo,
   Skeleton,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { useCreateOrg, useOrgs } from "@/hooks/use-org-queries";
 import { clearLastOrgId, getLastOrgId, setLastOrgId } from "@/lib/storage";
 import { ErrorState } from "@/components/error-state";

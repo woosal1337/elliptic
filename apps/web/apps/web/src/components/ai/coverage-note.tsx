@@ -1,7 +1,7 @@
 "use client";
 
 import { ShieldCheck, Sparkles, TriangleAlert } from "lucide-react";
-import { cn } from "@companyos/ui";
+import { cn } from "@elliptic/ui";
 import {
   CONFIDENCE_LABELS,
   coverageLabel,

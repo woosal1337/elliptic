@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Layers } from "lucide-react";
-import { Badge, EmptyState, Skeleton } from "@companyos/ui";
+import { Badge, EmptyState, Skeleton } from "@elliptic/ui";
 import { useTasks } from "@/hooks/use-task-queries";
 import { ErrorState } from "@/components/error-state";
 import { StatusDot } from "./task-bits";

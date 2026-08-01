@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { Search } from "lucide-react";
-import { EmptyState, Skeleton } from "@companyos/ui";
+import { EmptyState, Skeleton } from "@elliptic/ui";
 import { api, orgPath } from "@/lib/api";
 
 interface ResolveResult {

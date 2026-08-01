@@ -16,7 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
   toast,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { noteKeys } from "@/hooks/use-note-queries";
 import { useProjects } from "@/hooks/use-project-queries";
 import { useCreateTask } from "@/hooks/use-task-queries";

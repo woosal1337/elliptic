@@ -21,7 +21,7 @@ import {
   TabsList,
   TabsTrigger,
   Textarea,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import type { Event, EventScope } from "@/lib/types";
 import {
   useCreateEvent,

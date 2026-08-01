@@ -24,7 +24,7 @@ import {
   IconButton,
   Skeleton,
   cn,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { Wand2 } from "lucide-react";
 import { formatRelative } from "@/lib/format";
 import { useShortcut } from "@/lib/keyboard";

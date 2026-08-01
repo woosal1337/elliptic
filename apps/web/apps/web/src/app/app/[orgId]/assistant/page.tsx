@@ -28,7 +28,7 @@ import {
   PopoverTrigger,
   Skeleton,
   Textarea,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import {
   type ActionProposal,
   useExecuteAction,

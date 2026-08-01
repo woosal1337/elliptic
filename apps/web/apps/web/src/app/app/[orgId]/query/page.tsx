@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { Database, Play, Sparkles, TriangleAlert } from "lucide-react";
-import { Badge, Button, Input, Skeleton, Textarea } from "@companyos/ui";
+import { Badge, Button, Input, Skeleton, Textarea } from "@elliptic/ui";
 import { useExecutePql, useTextToPql } from "@/hooks/use-pql-queries";
 
 const EXAMPLES = [

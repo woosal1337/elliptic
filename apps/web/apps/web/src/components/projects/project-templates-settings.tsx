@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Plus, Trash2 } from "lucide-react";
-import { Badge, Button, IconButton, Input, Skeleton, Textarea } from "@companyos/ui";
+import { Badge, Button, IconButton, Input, Skeleton, Textarea } from "@elliptic/ui";
 import type { TaskKind, TaskPriority } from "@/lib/types";
 import {
   useCreateTemplate,

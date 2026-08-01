@@ -2,7 +2,7 @@
 
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { Plus, SlidersHorizontal } from "lucide-react";
-import { IconButton, Spinner, Tooltip, TooltipContent, TooltipTrigger, cn } from "@companyos/ui";
+import { IconButton, Spinner, Tooltip, TooltipContent, TooltipTrigger, cn } from "@elliptic/ui";
 import type { TaskKind, TaskStatus } from "@/lib/types";
 import { STATUS_LABELS } from "@/lib/task-meta";
 import { useCreateTask } from "@/hooks/use-task-queries";

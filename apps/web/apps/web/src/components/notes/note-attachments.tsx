@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { ExternalLink, Link2, Paperclip, Trash2 } from "lucide-react";
-import { Button, IconButton, Input, Skeleton } from "@companyos/ui";
+import { Button, IconButton, Input, Skeleton } from "@elliptic/ui";
 import { FileUpload } from "@/components/storage/file-upload";
 import { AttachmentList } from "@/components/storage/attachment-list";
 import {

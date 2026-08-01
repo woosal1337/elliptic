@@ -10,7 +10,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import type { CustomProperty, Task } from "@/lib/types";
 import { useCustomProperties } from "@/hooks/use-property-queries";
 import { useUpdateTask } from "@/hooks/use-task-queries";

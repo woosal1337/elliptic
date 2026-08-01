@@ -1,5 +1,5 @@
 {
-  "name": "@companyos/ui",
+  "name": "@elliptic/ui",
   "version": "1.0.0",
   "private": true,
   "license": "Apache-2.0",
@@ -24,8 +24,8 @@
     "tailwindcss": "^4.3.0"
   },
   "devDependencies": {
-    "@companyos/eslint-config": "workspace:*",
-    "@companyos/typescript-config": "workspace:*",
+    "@elliptic/eslint-config": "workspace:*",
+    "@elliptic/typescript-config": "workspace:*",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "eslint": "^9.39.1",

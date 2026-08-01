@@ -1,5 +1,5 @@
 {
-  "extends": "@companyos/typescript-config/react-library.json",
+  "extends": "@elliptic/typescript-config/react-library.json",
   "compilerOptions": {
     "types": ["react", "react-dom"]
   },

@@ -14,7 +14,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import type { RelatedTask, TaskRelationKind } from "@/lib/types";
 import {
   useCreateRelation,

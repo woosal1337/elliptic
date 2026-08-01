@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { FileText } from "lucide-react";
-import { cn } from "@companyos/ui";
+import { cn } from "@elliptic/ui";
 import { DOCS_NAV, FIRST_SLUG } from "../_content/nav";
 
 function hrefFor(basePath: string, slug: string): string {

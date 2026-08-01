@@ -3,7 +3,7 @@
 import { useEffect, useId, useState } from "react";
 import Link from "next/link";
 import { ChevronRight, FolderKanban } from "lucide-react";
-import { cn } from "@companyos/ui";
+import { cn } from "@elliptic/ui";
 import { useProjects } from "@/hooks/use-project-queries";
 
 /**

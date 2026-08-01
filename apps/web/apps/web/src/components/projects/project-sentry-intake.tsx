@@ -1,7 +1,7 @@
 "use client";
 
 import { Copy, Plus, Trash2, TriangleAlert } from "lucide-react";
-import { Button, IconButton, Skeleton, toast } from "@companyos/ui";
+import { Button, IconButton, Skeleton, toast } from "@elliptic/ui";
 import {
   useCreateSentryIntake,
   useDeleteSentryIntake,

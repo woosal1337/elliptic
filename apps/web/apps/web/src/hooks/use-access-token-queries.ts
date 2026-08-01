@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { toast } from "@companyos/ui";
+import { toast } from "@elliptic/ui";
 import type { PersonalAccessToken, PersonalAccessTokenCreated } from "@/lib/types";
 import { api, errorMessage } from "@/lib/api";
 

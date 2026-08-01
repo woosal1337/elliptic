@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo } from "react";
 import { useParams } from "next/navigation";
-import { Skeleton } from "@companyos/ui";
+import { Skeleton } from "@elliptic/ui";
 import { useActivity } from "@/hooks/use-activity-queries";
 import { useOrgMembers } from "@/hooks/use-org-queries";
 import { PageHeader } from "@/components/page-header";

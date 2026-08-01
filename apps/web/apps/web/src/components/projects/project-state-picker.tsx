@@ -6,7 +6,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import type { Project } from "@/lib/types";
 import { useUpdateProject } from "@/hooks/use-project-queries";
 import { useProjectStates } from "@/hooks/use-project-state-queries";

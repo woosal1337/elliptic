@@ -9,7 +9,7 @@ import {
   Section,
   SectionNumber,
   cn,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { Check } from "lucide-react";
 import { ProductMockup } from "./product-mockup";
 import { MeetingMockup } from "./meeting-mockup";

@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
   Skeleton,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { useNotes } from "@/hooks/use-note-queries";
 import { useLinkNote, useTaskNoteLinks, useUnlinkNote } from "@/hooks/use-task-queries";
 

@@ -13,7 +13,7 @@ import {
   TabsList,
   TabsTrigger,
   Textarea,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { formatDate } from "@/lib/format";
 import { useRelease, useReleaseTasks, useUpdateRelease } from "@/hooks/use-release-queries";
 import { StatusDot } from "@/components/tasks/task-bits";

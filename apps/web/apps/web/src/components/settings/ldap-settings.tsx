@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { CheckCircle2, Network, XCircle } from "lucide-react";
-import { Button, Input, Skeleton } from "@companyos/ui";
+import { Button, Input, Skeleton } from "@elliptic/ui";
 import {
   useDeleteLDAP,
   useLDAPConnection,

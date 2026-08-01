@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { KeyRound } from "lucide-react";
-import { Badge, Button, Skeleton, Textarea } from "@companyos/ui";
+import { Badge, Button, Skeleton, Textarea } from "@elliptic/ui";
 import {
   useActivateLicense,
   useDelinkLicense,

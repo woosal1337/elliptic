@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Layers } from "lucide-react";
-import { Button, Input, Skeleton } from "@companyos/ui";
+import { Button, Input, Skeleton } from "@elliptic/ui";
 import { useSetTypeLevels, useTypeLevels, type TypeLevel } from "@/hooks/use-type-level-queries";
 import { ErrorState } from "@/components/error-state";
 

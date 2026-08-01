@@ -16,7 +16,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { useProjects } from "@/hooks/use-project-queries";
 import { useCreateTask } from "@/hooks/use-task-queries";
 

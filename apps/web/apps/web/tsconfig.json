@@ -1,5 +1,5 @@
 {
-  "extends": "@companyos/typescript-config/nextjs.json",
+  "extends": "@elliptic/typescript-config/nextjs.json",
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {

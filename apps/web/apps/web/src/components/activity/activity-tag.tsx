@@ -1,4 +1,4 @@
-import { cn } from "@companyos/ui";
+import { cn } from "@elliptic/ui";
 import {
   ACTIVITY_TAXONOMY,
   TONE_CHIP_CLASSES,

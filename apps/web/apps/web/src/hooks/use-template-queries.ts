@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { toast } from "@companyos/ui";
+import { toast } from "@elliptic/ui";
 import type { TaskKind, TaskPriority, WorkItemTemplate } from "@/lib/types";
 import { api, errorMessage, orgPath } from "@/lib/api";
 

@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
   toast,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import type { Task } from "@/lib/types";
 import { useProject } from "@/hooks/use-project-queries";
 import { useUpdateTask } from "@/hooks/use-task-queries";

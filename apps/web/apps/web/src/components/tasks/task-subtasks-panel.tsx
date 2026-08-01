@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Plus } from "lucide-react";
-import { Checkbox, Skeleton, Spinner, cn } from "@companyos/ui";
+import { Checkbox, Skeleton, Spinner, cn } from "@elliptic/ui";
 import type { Task, TaskStatus } from "@/lib/types";
 import { useCreateTask, useSubtasks, useUpdateTask } from "@/hooks/use-task-queries";
 import { ErrorState } from "@/components/error-state";

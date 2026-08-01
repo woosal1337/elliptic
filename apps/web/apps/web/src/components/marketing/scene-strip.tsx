@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Container, Section, SectionNumber, cn } from "@companyos/ui";
+import { Container, Section, SectionNumber, cn } from "@elliptic/ui";
 
 interface Scene {
   src: string;

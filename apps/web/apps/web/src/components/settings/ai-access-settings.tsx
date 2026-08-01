@@ -1,6 +1,6 @@
 "use client";
 
-import { Badge, Button, Card, CardContent, Spinner } from "@companyos/ui";
+import { Badge, Button, Card, CardContent, Spinner } from "@elliptic/ui";
 import { useGrants, useRevokeGrant } from "@/hooks/use-oauth-queries";
 
 export function AIAccessSettings() {

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { KeyRound } from "lucide-react";
-import { Button, Input, Skeleton } from "@companyos/ui";
+import { Button, Input, Skeleton } from "@elliptic/ui";
 import { useDeleteSSO, useSSOConnection, useUpsertSSO } from "@/hooks/use-sso-queries";
 import { GroupMappings } from "@/components/settings/group-mappings";
 

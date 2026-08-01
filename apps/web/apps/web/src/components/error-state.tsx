@@ -1,7 +1,7 @@
 "use client";
 
 import { AlertTriangle } from "lucide-react";
-import { Button, EmptyState } from "@companyos/ui";
+import { Button, EmptyState } from "@elliptic/ui";
 import { errorMessage } from "@/lib/api";
 
 export function ErrorState({ error, onRetry }: { error: unknown; onRetry?: () => void }) {

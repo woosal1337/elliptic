@@ -16,7 +16,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { useCommandMenu } from "@/components/command/command-menu-provider";
 
 const DOCS_URL = "https://docs.companyos.dev";

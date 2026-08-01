@@ -10,7 +10,7 @@ import {
   Skeleton,
   Textarea,
   cn,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { usePublicMeetingChat, usePublicMeetingShare } from "@/hooks/use-public-share-queries";
 import { formatTimestamp } from "@/lib/format";
 

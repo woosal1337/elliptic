@@ -1,7 +1,7 @@
 "use client";
 
 import { Globe } from "lucide-react";
-import { Button, toast } from "@companyos/ui";
+import { Button, toast } from "@elliptic/ui";
 import { usePublishPage } from "@/hooks/use-page-publish";
 
 export function NotePublishButton({ orgId, noteId }: { orgId: string; noteId: string }) {

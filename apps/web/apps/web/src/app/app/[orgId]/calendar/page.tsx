@@ -13,7 +13,7 @@ import {
   Tabs,
   TabsList,
   TabsTrigger,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import type { Event, EventScope } from "@/lib/types";
 import { useEvents } from "@/hooks/use-event-queries";
 import { PageHeader } from "@/components/page-header";

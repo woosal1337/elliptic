@@ -9,7 +9,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import type { Project, TaskStatus } from "@/lib/types";
 import { useUpdateProject } from "@/hooks/use-project-queries";
 

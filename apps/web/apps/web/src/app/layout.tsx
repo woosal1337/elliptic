@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { Inter, Inter_Tight, JetBrains_Mono } from "next/font/google";
-import { Toaster } from "@companyos/ui";
+import { Toaster } from "@elliptic/ui";
 import { QueryProvider } from "@/lib/query";
 import { I18nProvider } from "@/lib/i18n/i18n-provider";
 import { THEME_INIT_SCRIPT } from "@/lib/theme";
 import { SITE_URL } from "@/lib/seo";
-import "@companyos/ui/styles.css";
+import "@elliptic/ui/styles.css";
 
 const inter = Inter({
   subsets: ["latin"],

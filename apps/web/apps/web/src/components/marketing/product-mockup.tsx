@@ -23,7 +23,7 @@ import {
   Square,
   Triangle,
 } from "lucide-react";
-import { Avatar, Badge, cn, type BadgeProps } from "@companyos/ui";
+import { Avatar, Badge, cn, type BadgeProps } from "@elliptic/ui";
 
 type Priority = "urgent" | "high" | "medium" | "low" | "none";
 

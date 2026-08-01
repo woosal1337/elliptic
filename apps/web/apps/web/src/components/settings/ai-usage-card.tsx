@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
   Skeleton,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { useAIUsage } from "@/hooks/use-ai-usage";
 
 export function AIUsageCard({ orgId }: { orgId: string }) {

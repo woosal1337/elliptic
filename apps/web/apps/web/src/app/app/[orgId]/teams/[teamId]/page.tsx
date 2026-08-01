@@ -31,7 +31,7 @@ import {
   TabsTrigger,
   Textarea,
   toast,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import {
   useAddTeamMember,
   useLinkTeamProjects,

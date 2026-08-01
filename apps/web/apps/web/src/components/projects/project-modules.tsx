@@ -25,7 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
   Skeleton,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import type { Module, ModuleStatus } from "@/lib/types";
 import { formatDate } from "@/lib/format";
 import {

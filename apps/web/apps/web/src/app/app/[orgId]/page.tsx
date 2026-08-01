@@ -10,7 +10,7 @@ import {
   Star,
   StickyNote,
 } from "lucide-react";
-import { Badge, Skeleton } from "@companyos/ui";
+import { Badge, Skeleton } from "@elliptic/ui";
 import { useMe } from "@/hooks/use-auth-queries";
 import { useProjects } from "@/hooks/use-project-queries";
 import { useFavorites } from "@/hooks/use-favorite-queries";

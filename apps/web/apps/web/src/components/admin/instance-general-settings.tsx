@@ -1,6 +1,6 @@
 "use client";
 
-import { Input, Switch } from "@companyos/ui";
+import { Input, Switch } from "@elliptic/ui";
 import {
   type InstanceSettings,
   useUpdateInstanceSettings,

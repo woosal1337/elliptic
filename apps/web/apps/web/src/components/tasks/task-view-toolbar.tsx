@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { cn } from "@companyos/ui";
+import { cn } from "@elliptic/ui";
 
 interface SegmentOption<T extends string> {
   value: T;

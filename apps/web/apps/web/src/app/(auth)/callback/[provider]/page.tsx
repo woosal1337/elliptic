@@ -3,7 +3,7 @@
 import { Suspense, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useParams, useSearchParams } from "next/navigation";
-import { Button, Spinner } from "@companyos/ui";
+import { Button, Spinner } from "@elliptic/ui";
 import { ShieldX } from "lucide-react";
 import { api, errorMessage } from "@/lib/api";
 import { OAUTH_NEXT_KEY, OAUTH_PROVIDER_LABELS, isOAuthProvider, safeOAuthNext } from "@/lib/oauth";

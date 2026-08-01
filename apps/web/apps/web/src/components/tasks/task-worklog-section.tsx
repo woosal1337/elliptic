@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Clock, Plus, Trash2 } from "lucide-react";
-import { Badge, Button, IconButton, Input, Skeleton } from "@companyos/ui";
+import { Badge, Button, IconButton, Input, Skeleton } from "@elliptic/ui";
 import { formatDate } from "@/lib/format";
 import {
   formatMinutes,

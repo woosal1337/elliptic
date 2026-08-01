@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { ArrowUpRight, CalendarClock } from "lucide-react";
-import { cn } from "@companyos/ui";
+import { cn } from "@elliptic/ui";
 import type { Event } from "@/lib/types";
 import { formatDuration } from "@/lib/format";
 import { formatDayHeading, formatEventTimeRange } from "./calendar-utils";

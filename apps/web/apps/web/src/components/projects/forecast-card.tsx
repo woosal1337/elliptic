@@ -1,7 +1,7 @@
 "use client";
 
 import { TrendingUp } from "lucide-react";
-import { Skeleton } from "@companyos/ui";
+import { Skeleton } from "@elliptic/ui";
 import { useThroughputForecast } from "@/hooks/use-analytics-queries";
 
 export function ForecastCard({ orgId, projectId }: { orgId: string; projectId: string }) {

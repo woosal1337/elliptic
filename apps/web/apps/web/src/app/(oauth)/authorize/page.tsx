@@ -17,7 +17,7 @@ import {
   SelectValue,
   Separator,
   Spinner,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import {
   AlertCircle,
   CheckCircle2,

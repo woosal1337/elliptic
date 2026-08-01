@@ -37,7 +37,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
   cn,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { OrgSwitcher } from "./org-switcher";
 import { SidebarFavorites } from "./sidebar-favorites";
 import { SidebarProjects } from "./sidebar-projects";

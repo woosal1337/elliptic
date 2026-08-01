@@ -9,7 +9,7 @@ import {
   SectionNumber,
   StatBlock,
   cn,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { ArrowRight, Check } from "lucide-react";
 import { SiteNav } from "./site-nav";
 import { SiteFooter } from "./site-footer";

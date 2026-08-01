@@ -1,6 +1,6 @@
 import { Fragment, type ReactNode } from "react";
 import { Info, Lightbulb, AlertTriangle } from "lucide-react";
-import { cn } from "@companyos/ui";
+import { cn } from "@elliptic/ui";
 import type { DocBlock } from "../_content/types";
 
 const INLINE = /(`[^`]+`)|(\*\*[^*]+\*\*)|(\[[^\]]+\]\([^)]+\))/g;

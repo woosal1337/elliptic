@@ -26,7 +26,7 @@ import {
   SelectValue,
   Skeleton,
   toast,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import type { OrgRole } from "@/lib/types";
 import {
   useCreateInvite,

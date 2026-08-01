@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { ExternalLink, Link2, Plus, X } from "lucide-react";
-import { Button, IconButton, Input, Skeleton } from "@companyos/ui";
+import { Button, IconButton, Input, Skeleton } from "@elliptic/ui";
 import { useAddTaskLink, useDeleteTaskLink, useTaskLinks } from "@/hooks/use-task-queries";
 
 function normalizeUrl(raw: string): string {

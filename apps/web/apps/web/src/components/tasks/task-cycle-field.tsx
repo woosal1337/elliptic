@@ -1,6 +1,6 @@
 "use client";
 
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@companyos/ui";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@elliptic/ui";
 import type { Task } from "@/lib/types";
 import {
   useAssignTaskToCycle,

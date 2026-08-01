@@ -11,7 +11,7 @@ import {
   TooltipContent,
   TooltipTrigger,
   cn,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import type { ActivityEvent } from "@/lib/types";
 import {
   ENTITY_DND_MIME,

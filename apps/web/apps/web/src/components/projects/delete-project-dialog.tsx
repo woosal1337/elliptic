@@ -14,7 +14,7 @@ import {
   DialogTrigger,
   Input,
   Label,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { useDeleteProject } from "@/hooks/use-project-queries";
 
 export function DeleteProjectDialog({

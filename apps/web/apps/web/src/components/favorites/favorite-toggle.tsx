@@ -1,7 +1,7 @@
 "use client";
 
 import { Star } from "lucide-react";
-import { IconButton } from "@companyos/ui";
+import { IconButton } from "@elliptic/ui";
 import { useAddFavorite, useFavorites, useRemoveFavorite } from "@/hooks/use-favorite-queries";
 
 export function FavoriteToggle({

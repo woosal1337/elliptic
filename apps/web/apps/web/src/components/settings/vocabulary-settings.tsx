@@ -17,7 +17,7 @@ import {
   Input,
   Skeleton,
   Textarea,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import type { VocabularyTerm } from "@/lib/types";
 import { ErrorState } from "@/components/error-state";
 import {

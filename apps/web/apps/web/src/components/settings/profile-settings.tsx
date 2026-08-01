@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Button, Input, Label, Skeleton } from "@companyos/ui";
+import { Button, Input, Label, Skeleton } from "@elliptic/ui";
 import { useMe, useUpdateProfile } from "@/hooks/use-auth-queries";
 
 export function ProfileSettings() {

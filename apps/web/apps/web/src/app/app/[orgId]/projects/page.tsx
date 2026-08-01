@@ -16,7 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
   Skeleton,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { useProjects } from "@/hooks/use-project-queries";
 import { useProjectStates, type ProjectState } from "@/hooks/use-project-state-queries";
 import { useNewParam } from "@/lib/use-new-param";

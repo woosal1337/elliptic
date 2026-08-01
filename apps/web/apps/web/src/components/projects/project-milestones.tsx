@@ -10,7 +10,7 @@ import {
   IconButton,
   Input,
   Skeleton,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import type { Milestone } from "@/lib/types";
 import { formatDate } from "@/lib/format";
 import {

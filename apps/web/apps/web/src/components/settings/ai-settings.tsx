@@ -33,7 +33,7 @@ import {
   Skeleton,
   Switch,
   Textarea,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import type { AIProvider, AIUser } from "@/lib/types";
 import {
   useAddAIProviderKey,

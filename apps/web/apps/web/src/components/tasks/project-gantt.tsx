@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import Link from "next/link";
-import { Badge, Skeleton } from "@companyos/ui";
+import { Badge, Skeleton } from "@elliptic/ui";
 import { TriangleAlert } from "lucide-react";
 import { type TimelineTask, useProjectTimeline } from "@/hooks/use-timeline-queries";
 

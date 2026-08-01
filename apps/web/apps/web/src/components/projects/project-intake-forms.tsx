@@ -14,7 +14,7 @@ import {
   SelectValue,
   Skeleton,
   toast,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import {
   type IntakeFormField,
   useCreateIntakeForm,

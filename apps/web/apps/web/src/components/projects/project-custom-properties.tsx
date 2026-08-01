@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
   Skeleton,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import type { PropertyType } from "@/lib/types";
 import {
   useCreateProperty,

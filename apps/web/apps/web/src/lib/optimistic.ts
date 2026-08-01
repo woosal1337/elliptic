@@ -1,5 +1,5 @@
 import type { QueryClient, QueryKey } from "@tanstack/react-query";
-import { toast } from "@companyos/ui";
+import { toast } from "@elliptic/ui";
 import { errorMessage } from "@/lib/api";
 
 export const OPTIMISTIC_FLAG = "__optimistic" as const;

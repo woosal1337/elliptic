@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Globe } from "lucide-react";
-import { Button, toast } from "@companyos/ui";
+import { Button, toast } from "@elliptic/ui";
 import { usePublishBoard, useUnpublishBoard } from "@/hooks/use-board-publish";
 
 const ATTRIBUTES: { value: string; label: string }[] = [

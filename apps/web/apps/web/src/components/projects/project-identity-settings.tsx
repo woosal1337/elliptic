@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Button, Input } from "@companyos/ui";
+import { Button, Input } from "@elliptic/ui";
 import type { Project } from "@/lib/types";
 import { useUpdateProject } from "@/hooks/use-project-queries";
 

@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { Button, Skeleton } from "@companyos/ui";
+import { Button, Skeleton } from "@elliptic/ui";
 import { AlertTriangle, ArrowRight, Mail } from "lucide-react";
 import { useAcceptInvite, useInvitePreview, useMe } from "@/hooks/use-auth-queries";
 import { setLastOrgId } from "@/lib/storage";

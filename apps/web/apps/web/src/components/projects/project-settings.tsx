@@ -1,6 +1,6 @@
 "use client";
 
-import { Skeleton, Switch } from "@companyos/ui";
+import { Skeleton, Switch } from "@elliptic/ui";
 import { useMe } from "@/hooks/use-auth-queries";
 import { useOrgMembers } from "@/hooks/use-org-queries";
 import { useProject, useUpdateProject } from "@/hooks/use-project-queries";

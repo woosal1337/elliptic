@@ -28,7 +28,7 @@ import {
   SelectValue,
   Skeleton,
   cn,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import {
   DndContext,
   DragOverlay,

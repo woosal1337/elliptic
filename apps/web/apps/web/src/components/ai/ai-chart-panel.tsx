@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Sparkles } from "lucide-react";
-import { Button, Card, Input } from "@companyos/ui";
+import { Button, Card, Input } from "@elliptic/ui";
 import { useAIChart } from "@/hooks/use-ai-chart";
 
 export function AIChartPanel({ orgId }: { orgId: string }) {

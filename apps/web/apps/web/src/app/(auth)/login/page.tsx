@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Button, Input, Label, toast } from "@companyos/ui";
+import { Button, Input, Label, toast } from "@elliptic/ui";
 import { Lock, Mail } from "lucide-react";
 import { useLogin, useResendVerification } from "@/hooks/use-auth-queries";
 import { ApiError, api } from "@/lib/api";

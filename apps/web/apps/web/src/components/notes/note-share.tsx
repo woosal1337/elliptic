@@ -18,7 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
   Skeleton,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import type { NoteShareAccess } from "@/lib/types";
 import { useOrgMembers } from "@/hooks/use-org-queries";
 import { useNoteShares, useShareNote, useUnshareNote } from "@/hooks/use-note-queries";

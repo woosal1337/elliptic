@@ -1,7 +1,7 @@
 "use client";
 
 import { CreditCard } from "lucide-react";
-import { Badge, Card, CardContent, CardDescription, CardHeader, CardTitle, Skeleton } from "@companyos/ui";
+import { Badge, Card, CardContent, CardDescription, CardHeader, CardTitle, Skeleton } from "@elliptic/ui";
 import { useSeatUsage } from "@/hooks/use-org-queries";
 
 const ROLE_ORDER = ["owner", "admin", "member", "guest"];

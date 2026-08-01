@@ -13,7 +13,7 @@ import {
   IconButton,
   Input,
   cn,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import type { SavedView, UseTaskViews, ViewConfig } from "./task-views";
 
 function configsEqual(a: ViewConfig, b: ViewConfig): boolean {

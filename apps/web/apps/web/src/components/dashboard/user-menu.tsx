@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
   Skeleton,
   cn,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { useLogout, useMe } from "@/hooks/use-auth-queries";
 
 export function UserMenu({ orgId, collapsed = false }: { orgId: string; collapsed?: boolean }) {

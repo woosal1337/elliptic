@@ -1,7 +1,7 @@
 "use client";
 
 import { Globe, Lock } from "lucide-react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@companyos/ui";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@elliptic/ui";
 import type { Project } from "@/lib/types";
 import { useUpdateProject } from "@/hooks/use-project-queries";
 

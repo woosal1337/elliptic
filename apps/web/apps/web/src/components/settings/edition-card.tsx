@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
   Skeleton,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { useEdition, useSetPlan } from "@/hooks/use-edition-queries";
 
 export function EditionCard({ orgId }: { orgId: string }) {

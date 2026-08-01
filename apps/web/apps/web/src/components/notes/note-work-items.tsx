@@ -1,7 +1,7 @@
 "use client";
 
 import { ListChecks, Plus } from "lucide-react";
-import { Button, Skeleton } from "@companyos/ui";
+import { Button, Skeleton } from "@elliptic/ui";
 import { StatusDot } from "@/components/tasks/task-bits";
 import { useNoteTasks } from "@/hooks/use-note-task-queries";
 import { useCreateTask } from "@/hooks/use-task-queries";

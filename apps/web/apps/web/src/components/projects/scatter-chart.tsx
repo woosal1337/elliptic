@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
   Skeleton,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { useProgressScatter } from "@/hooks/use-analytics-queries";
 
 const W = 520;

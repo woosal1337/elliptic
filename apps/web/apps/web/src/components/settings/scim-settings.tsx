@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Copy, RefreshCw, ShieldCheck, Trash2 } from "lucide-react";
-import { Badge, Button, IconButton, Input, Skeleton, toast } from "@companyos/ui";
+import { Badge, Button, IconButton, Input, Skeleton, toast } from "@elliptic/ui";
 import {
   useMintScimToken,
   useRevokeScimToken,

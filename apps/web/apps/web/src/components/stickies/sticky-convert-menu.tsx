@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
   toast,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { useConvertSticky } from "@/hooks/use-sticky-queries";
 import { useProjects } from "@/hooks/use-project-queries";
 

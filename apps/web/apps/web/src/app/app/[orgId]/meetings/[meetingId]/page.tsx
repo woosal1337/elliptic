@@ -3,7 +3,7 @@
 import { useCallback, useState } from "react";
 import { useParams } from "next/navigation";
 import { Clock, Columns2, FileText, ScrollText } from "lucide-react";
-import { Badge, Button, Skeleton, Tabs, TabsContent, TabsList, TabsTrigger, cn } from "@companyos/ui";
+import { Badge, Button, Skeleton, Tabs, TabsContent, TabsList, TabsTrigger, cn } from "@elliptic/ui";
 import { formatDateTime, formatTimestamp } from "@/lib/format";
 import { useMeeting } from "@/hooks/use-meeting-queries";
 import { ErrorState } from "@/components/error-state";

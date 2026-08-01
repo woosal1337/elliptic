@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, usePathname, useRouter } from "next/navigation";
-import { Logo, Sheet, SheetContent, SheetTitle, Skeleton, TooltipProvider } from "@companyos/ui";
+import { Logo, Sheet, SheetContent, SheetTitle, Skeleton, TooltipProvider } from "@elliptic/ui";
 import { Sidebar } from "@/components/dashboard/sidebar";
 import { Topbar } from "@/components/dashboard/topbar";
 import { CommandMenuProvider } from "@/components/command/command-menu-provider";

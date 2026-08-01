@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { Skeleton } from "@companyos/ui";
+import { Skeleton } from "@elliptic/ui";
 import { statusCategory, type StatusCategory } from "@/lib/task-meta";
 import { useTasks } from "@/hooks/use-task-queries";
 

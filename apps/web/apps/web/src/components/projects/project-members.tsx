@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
   Skeleton,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { useState } from "react";
 import { useMe } from "@/hooks/use-auth-queries";
 import { useOrgMembers } from "@/hooks/use-org-queries";

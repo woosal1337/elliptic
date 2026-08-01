@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Check, Circle, Rocket, X } from "lucide-react";
-import { IconButton } from "@companyos/ui";
+import { IconButton } from "@elliptic/ui";
 import { useOnboarding } from "@/hooks/use-onboarding-queries";
 import { useTranslation } from "@/lib/i18n/i18n-provider";
 

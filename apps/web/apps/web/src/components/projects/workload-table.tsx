@@ -1,7 +1,7 @@
 "use client";
 
 import { Users } from "lucide-react";
-import { Avatar, Skeleton } from "@companyos/ui";
+import { Avatar, Skeleton } from "@elliptic/ui";
 import { useMemberWorkload } from "@/hooks/use-analytics-queries";
 import { useOrgMembers } from "@/hooks/use-org-queries";
 

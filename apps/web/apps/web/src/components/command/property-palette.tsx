@@ -13,7 +13,7 @@ import {
   PopoverContent,
   PopoverTrigger,
   cn,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import type { OrgMember, TaskPriority, TaskStatus } from "@/lib/types";
 import {
   PRIORITY_LABELS,

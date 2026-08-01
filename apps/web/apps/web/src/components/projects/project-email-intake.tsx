@@ -1,7 +1,7 @@
 "use client";
 
 import { Copy, Mail, Plus, Trash2 } from "lucide-react";
-import { Button, IconButton, Skeleton, toast } from "@companyos/ui";
+import { Button, IconButton, Skeleton, toast } from "@elliptic/ui";
 import {
   useCreateEmailIntake,
   useDeleteEmailIntake,

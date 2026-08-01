@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
   Skeleton,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { usePivotTable } from "@/hooks/use-analytics-queries";
 
 const DIMENSIONS = [

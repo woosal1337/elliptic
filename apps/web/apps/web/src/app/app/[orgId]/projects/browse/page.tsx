@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { Check, Compass, Globe, Users } from "lucide-react";
-import { Badge, Button, Card, EmptyState, Skeleton } from "@companyos/ui";
+import { Badge, Button, Card, EmptyState, Skeleton } from "@elliptic/ui";
 import { useBrowseProjects, useJoinProject } from "@/hooks/use-project-queries";
 import { PageHeader } from "@/components/page-header";
 import { ErrorState } from "@/components/error-state";

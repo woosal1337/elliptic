@@ -1,4 +1,4 @@
-import { Button } from "@companyos/ui";
+import { Button } from "@elliptic/ui";
 import { FileQuestion } from "lucide-react";
 import { getDocsBasePath } from "./_lib/base-path";
 

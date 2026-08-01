@@ -13,7 +13,7 @@ import {
   DialogTrigger,
   IconButton,
   Input,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { useSaveNoteAsTemplate } from "@/hooks/use-note-template-queries";
 
 export function SaveNoteTemplateButton({ orgId, noteId }: { orgId: string; noteId: string }) {

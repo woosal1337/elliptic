@@ -11,7 +11,7 @@ import {
   Input,
   Label,
   Skeleton,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { useOrg, useUpdateOrg } from "@/hooks/use-org-queries";
 import { ErrorState } from "@/components/error-state";
 import { DeletedProjects } from "@/components/settings/deleted-projects";

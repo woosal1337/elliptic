@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Plus, Trash2 } from "lucide-react";
-import { Checkbox, IconButton, Input, Textarea } from "@companyos/ui";
+import { Checkbox, IconButton, Input, Textarea } from "@elliptic/ui";
 import type { DodItem, Task } from "@/lib/types";
 import { useUpdateTask } from "@/hooks/use-task-queries";
 

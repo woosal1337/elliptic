@@ -43,7 +43,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import type { ActivityEvent, Comment, Task, TaskKind } from "@/lib/types";
 import { formatRelative } from "@/lib/format";
 import { FileUpload } from "@/components/storage/file-upload";

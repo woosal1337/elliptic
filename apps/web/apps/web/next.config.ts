@@ -16,7 +16,7 @@ const nextConfig: NextConfig = {
   // Fall back to Next's defaults there.
   output: isVercel ? undefined : "standalone",
   outputFileTracingRoot: isVercel ? undefined : path.join(dirname, "../.."),
-  transpilePackages: ["@companyos/ui"],
+  transpilePackages: ["@elliptic/ui"],
   env: {
     NEXT_PUBLIC_REALTIME_URL: realtimeUrl,
   },

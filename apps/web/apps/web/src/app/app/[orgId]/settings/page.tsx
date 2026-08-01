@@ -15,7 +15,7 @@ import {
   SelectValue,
   Tabs,
   TabsContent,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import { PageHeader } from "@/components/page-header";
 import { GeneralSettings } from "@/components/settings/general-settings";
 import { MembersSettings } from "@/components/settings/members-settings";

@@ -20,7 +20,7 @@ import {
   IconButton,
   Skeleton,
   Switch,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import type { Webhook as WebhookEntity } from "@/lib/types";
 import {
   useDeleteWebhook,

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Upload } from "lucide-react";
-import { Button, Textarea } from "@companyos/ui";
+import { Button, Textarea } from "@elliptic/ui";
 import { type ImportReport, useImportTasks } from "@/hooks/use-import-queries";
 
 const SAMPLE = "Summary,Description,Status,Priority,Type\nFix login bug,NPE on submit,Todo,High,Bug";

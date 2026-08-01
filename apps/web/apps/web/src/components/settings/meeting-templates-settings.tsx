@@ -14,7 +14,7 @@ import {
   Input,
   Label,
   Textarea,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 import {
   useCreateMeetingTemplate,
   useDeleteMeetingTemplate,

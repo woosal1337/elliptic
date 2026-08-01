@@ -3,7 +3,7 @@
 import { use, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Flag, MessageSquare } from "lucide-react";
-import { Button, Input, Skeleton, Textarea, toast } from "@companyos/ui";
+import { Button, Input, Skeleton, Textarea, toast } from "@elliptic/ui";
 import { api } from "@/lib/api";
 import { Markdown } from "@/components/notes/markdown";
 

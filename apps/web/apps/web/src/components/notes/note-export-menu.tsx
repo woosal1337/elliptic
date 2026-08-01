@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
   IconButton,
   toast,
-} from "@companyos/ui";
+} from "@elliptic/ui";
 
 export function NoteExportMenu({ orgId, noteId }: { orgId: string; noteId: string }) {
   const base = `/api/v1/orgs/${orgId}/notes/${noteId}`;

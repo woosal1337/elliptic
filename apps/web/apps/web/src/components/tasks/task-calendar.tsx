@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Button, Skeleton, cn } from "@companyos/ui";
+import { Button, Skeleton, cn } from "@elliptic/ui";
 import type { Task } from "@/lib/types";
 import { useTasks } from "@/hooks/use-task-queries";
 import { ErrorState } from "@/components/error-state";
