@@ -19,20 +19,20 @@ appId: sh.elliptic
     from:
       text: ".*Day-group the inbox feed.*"
     direction: RIGHT
-- takeScreenshot: .maestro/output/companyos/05-swipe-reveal
+- takeScreenshot: .maestro/output/elliptic/05-swipe-reveal
 - tapOn:
     id: "swipe-action-done"
 - waitForAnimationToEnd
 - assertVisible:
     id: "toast"
-- takeScreenshot: .maestro/output/companyos/07-toast-undo
+- takeScreenshot: .maestro/output/elliptic/07-toast-undo
 - tapOn:
     id: "toast-action"
 - extendedWaitUntil:
     notVisible:
       id: "toast"
     timeout: 8000
-- takeScreenshot: .maestro/output/companyos/08-after-undo
+- takeScreenshot: .maestro/output/elliptic/08-after-undo
 
 # --- two writes in a row: the second toast waits its turn -------------------
 - swipe:
@@ -48,7 +48,7 @@ appId: sh.elliptic
 - tapOn:
     id: "swipe-action-done"
 - assertVisible: "MOB-7 .* Done"
-- takeScreenshot: .maestro/output/companyos/09-toast-queue
+- takeScreenshot: .maestro/output/elliptic/09-toast-queue
 - tapOn:
     id: "toast-action"
 - assertVisible: "MOB-6 .* Done"

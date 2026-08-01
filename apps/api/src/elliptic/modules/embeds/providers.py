@@ -26,7 +26,7 @@ def _figma(url: str, m: re.Match[str]) -> ProviderMatch:  # noqa: ARG001
     return ProviderMatch(
         "figma",
         "iframe",
-        f"https://www.figma.com/embed?embed_host=companyos&url={quote(url, safe='')}",
+        f"https://www.figma.com/embed?embed_host=elliptic&url={quote(url, safe='')}",
     )
 
 

@@ -41,7 +41,7 @@ appId: sh.elliptic
 - tapOn: "Add a comment…"
 - inputText: "Pinned composer smoke test"
 - waitForAnimationToEnd
-- takeScreenshot: .maestro/output/companyos/16-composer-keyboard
+- takeScreenshot: .maestro/output/elliptic/16-composer-keyboard
 # Tapping Send only works if the composer cleared the keyboard.
 - tapOn: "Send comment"
 - extendedWaitUntil:

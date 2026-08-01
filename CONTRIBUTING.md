@@ -101,7 +101,7 @@ bun run dev
 Elliptic is a Bun + Turborepo monorepo with three apps:
 
 ```
-companyos/
+elliptic/
 ├── apps/
 │   ├── api/                  # Python / FastAPI backend
 │   │   ├── src/elliptic/

@@ -19,16 +19,16 @@ appId: sh.elliptic
     commands:
       - tapOn: "Not Now"
 - waitForAnimationToEnd
-- takeScreenshot: .maestro/output/companyos/00-home
+- takeScreenshot: .maestro/output/elliptic/00-home
 - tapOn: "Tasks"
 - waitForAnimationToEnd
-- takeScreenshot: .maestro/output/companyos/01-tasks
+- takeScreenshot: .maestro/output/elliptic/01-tasks
 - tapOn: "Notes"
 - waitForAnimationToEnd
-- takeScreenshot: .maestro/output/companyos/02-notes
+- takeScreenshot: .maestro/output/elliptic/02-notes
 - tapOn: "Inbox"
 - waitForAnimationToEnd
-- takeScreenshot: .maestro/output/companyos/03-inbox
+- takeScreenshot: .maestro/output/elliptic/03-inbox
 - tapOn: "Profile"
 - waitForAnimationToEnd
-- takeScreenshot: .maestro/output/companyos/04-profile
+- takeScreenshot: .maestro/output/elliptic/04-profile

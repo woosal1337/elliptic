@@ -1,4 +1,4 @@
-"""Inbound Slack slash command: /companyos creates a work item (COS-266)."""
+"""Inbound Slack slash command: /elliptic creates a work item (COS-266)."""
 
 import hashlib
 import hmac
@@ -38,12 +38,12 @@ def verify_slack_signature(
 
 
 async def handle_command(session: AsyncSession, *, team_id: str, user_text: str) -> dict[str, str]:
-    """Create a work item from a /companyos slash command in the team's default project."""
+    """Create a work item from a /elliptic slash command in the team's default project."""
     text = user_text.strip()
     if not text:
         return {
             "response_type": "ephemeral",
-            "text": "Usage: `/companyos <work item title>`",
+            "text": "Usage: `/elliptic <work item title>`",
         }
     connection = await session.scalar(
         select(SlackConnection).where(SlackConnection.team_id == team_id)
@@ -91,7 +91,7 @@ async def handle_command(session: AsyncSession, *, team_id: str, user_text: str)
 async def set_default_project(
     session: AsyncSession, ctx: OrgContext, project_id: uuid.UUID | None
 ) -> SlackConnection:
-    """Admin sets the project that /companyos files work items into."""
+    """Admin sets the project that /elliptic files work items into."""
     from elliptic.core.exceptions import BadRequestError, NotFoundError  # noqa: PLC0415
 
     membership = await session.scalar(

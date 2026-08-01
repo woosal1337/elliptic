@@ -54,7 +54,7 @@ async def test_web_search_synthesizes_with_sources(
     )
 
     res = await client.post(
-        f"{API}/orgs/{org['id']}/ai/web-search", json={"query": "what is companyos"}, headers=h
+        f"{API}/orgs/{org['id']}/ai/web-search", json={"query": "what is elliptic"}, headers=h
     )
     assert res.status_code == 200, res.text
     data = res.json()["data"]

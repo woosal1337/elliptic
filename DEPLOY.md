@@ -25,8 +25,8 @@ are gone — there is nothing deploy-related left in `.github/workflows/`.
 
 ## The Coolify application
 
-Coolify project **companyos** → environment **production** → application
-**companyos-api**:
+Coolify project **elliptic** → environment **production** → application
+**elliptic-api**:
 
 - **Source:** `woosal1337/elliptic.git`, branch `main`, base directory
   `/apps/api`, Dockerfile build pack.
@@ -73,7 +73,7 @@ drop/rename columns in a later deploy once no old code references them.
 
 ## Rollback
 
-In the Coolify UI: **companyos-api → Deployments**, pick an earlier successful
+In the Coolify UI: **elliptic-api → Deployments**, pick an earlier successful
 deployment and redeploy it. Images are tagged with the commit SHA and kept on
 igris, so rolling back does not rebuild.
 

@@ -21,7 +21,7 @@ AdminCtx = Annotated[OrgContext, Depends(require_role(OrgRole.ADMIN))]
 
 @public_router.post("/commands")
 async def slash_command(request: Request, session: SessionDep) -> dict[str, str]:
-    """Handle a Slack /companyos slash command (form-encoded, signed).
+    """Handle a Slack /elliptic slash command (form-encoded, signed).
 
     The raw body is read once and parsed manually so its exact bytes are available
     for HMAC signature verification (FastAPI Form parsing would consume the stream).
@@ -42,7 +42,7 @@ async def slash_command(request: Request, session: SessionDep) -> dict[str, str]
 async def set_default_project(
     payload: dict[str, str | None], ctx: AdminCtx, session: SessionDep
 ) -> SuccessResponse[None]:
-    """Set the project that /companyos files work items into."""
+    """Set the project that /elliptic files work items into."""
     raw = payload.get("project_id")
     project_id = uuid.UUID(raw) if raw else None
     await slack_commands.set_default_project(session, ctx, project_id)
