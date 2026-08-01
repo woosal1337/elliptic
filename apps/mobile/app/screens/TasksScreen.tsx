@@ -6,7 +6,6 @@ import { EmptyState } from "@/components/EmptyState"
 import { Screen } from "@/components/Screen"
 import { ScreenHeader } from "@/components/ScreenHeader"
 import { SectionHeader } from "@/components/SectionHeader"
-import { SegmentedControl } from "@/components/SegmentedControl"
 import { TaskListSkeleton } from "@/components/Skeleton"
 import { SwipeableRow } from "@/components/SwipeableRow"
 import { TaskRow } from "@/components/TaskRow"
@@ -22,12 +21,6 @@ import { hapticSuccess } from "@/utils/haptics"
 import { prettyLabel, STATUS_OPTIONS } from "@/utils/taskOptions"
 import { useListQuery } from "@/utils/useListQuery"
 
-type Scope = "assigned" | "created"
-const SCOPES: { key: Scope; label: string }[] = [
-  { key: "assigned", label: "Assigned" },
-  { key: "created", label: "Created" },
-]
-
 // Active work first, closed work last.
 const STATUS_ORDER = ["in_progress", "in_review", "todo", "backlog", "done", "cancelled"]
 
@@ -36,12 +29,18 @@ export const TasksScreen: FC<TasksStackScreenProps<"TasksList">> = ({ navigation
   const {
     theme: { colors },
   } = useAppTheme()
-  const [scope, setScope] = useState<Scope>("assigned")
   const [showCreate, setShowCreate] = useState(false)
-  const cacheKey = activeOrg ? queryKeys.tasks(activeOrg.id, scope) : null
+  const [collapsed, setCollapsed] = useState<ReadonlySet<string>>(new Set())
+  const toggle = (status: string) =>
+    setCollapsed((prev) => {
+      const next = new Set(prev)
+      if (!next.delete(status)) next.add(status)
+      return next
+    })
+  const cacheKey = activeOrg ? queryKeys.tasks(activeOrg.id, "all") : null
   const fetcher = useCallback(
-    () => (activeOrg ? api.listTasks(activeOrg.id, scope) : Promise.resolve<Task[]>([])),
-    [activeOrg, scope],
+    () => (activeOrg ? api.listTasks(activeOrg.id, "all") : Promise.resolve<Task[]>([])),
+    [activeOrg],
   )
   const { data: tasks, loading, refreshing, refresh } = useListQuery<Task>(cacheKey, fetcher)
   const toast = useToast()
@@ -78,12 +77,16 @@ export const TasksScreen: FC<TasksStackScreenProps<"TasksList">> = ({ navigation
       arr.push(t)
       groups.set(t.status, arr)
     }
-    return STATUS_ORDER.filter((s) => groups.has(s)).map((status) => ({
-      status,
-      title: prettyLabel(status, STATUS_OPTIONS),
-      data: groups.get(status)!,
-    }))
-  }, [tasks])
+    return STATUS_ORDER.filter((s) => groups.has(s)).map((status) => {
+      const rows = groups.get(status)!
+      return {
+        status,
+        title: prettyLabel(status, STATUS_OPTIONS),
+        count: rows.length,
+        data: collapsed.has(status) ? [] : rows,
+      }
+    })
+  }, [tasks, collapsed])
 
   return (
     <Screen preset="fixed" contentContainerStyle={$flex} safeAreaEdges={["top"]}>
@@ -102,9 +105,7 @@ export const TasksScreen: FC<TasksStackScreenProps<"TasksList">> = ({ navigation
               ]
             : []
         }
-      >
-        <SegmentedControl segments={SCOPES} value={scope} onChange={setScope} />
-      </ScreenHeader>
+      />
 
       {loading ? (
         <TaskListSkeleton />
@@ -128,7 +129,9 @@ export const TasksScreen: FC<TasksStackScreenProps<"TasksList">> = ({ navigation
             <SectionHeader
               status={section.status}
               title={section.title}
-              count={section.data.length}
+              count={section.count}
+              collapsed={collapsed.has(section.status)}
+              onToggle={() => toggle(section.status)}
             />
           )}
           renderItem={({ item }) => (

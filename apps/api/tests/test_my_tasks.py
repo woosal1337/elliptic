@@ -40,6 +40,27 @@ async def test_assigned_spans_projects_and_excludes_others(client: AsyncClient) 
     assert ids == {mine_a["id"], mine_b["id"]}
 
 
+async def test_all_lists_every_task_in_the_org(client: AsyncClient) -> None:
+    """The shared list shows a member work they neither own nor created."""
+    owner = await register_and_login(client)
+    org = await create_org(client, owner["headers"])
+    member = await register_and_login(client)
+    await add_org_member(client, owner["headers"], org["id"], member, role="member")
+    project = await create_project(client, owner["headers"], org["id"], key="ALL")
+    someone_elses = await create_task(
+        client, owner["headers"], org["id"], project["id"], title="Owner's task"
+    )
+
+    assigned = await client.get(
+        f"{API}/orgs/{org['id']}/tasks/assigned", headers=member["headers"]
+    )
+    assert someone_elses["id"] not in {i["id"] for i in assigned.json()["data"]["items"]}
+
+    response = await client.get(f"{API}/orgs/{org['id']}/tasks/all", headers=member["headers"])
+    assert response.status_code == 200, response.text
+    assert someone_elses["id"] in {i["id"] for i in response.json()["data"]["items"]}
+
+
 async def test_created_lists_tasks_the_user_authored(client: AsyncClient) -> None:
     auth = await register_and_login(client)
     org = await create_org(client, auth["headers"])

@@ -1,4 +1,4 @@
-import { FC, useCallback } from "react"
+import { FC, useCallback, useState } from "react"
 import { SectionList, ViewStyle } from "react-native"
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs"
 
@@ -9,6 +9,7 @@ import { TaskListSkeleton } from "@/components/Skeleton"
 import { TaskRow } from "@/components/TaskRow"
 import { useOrg } from "@/context/OrgContext"
 import type { HomeStackScreenProps, MainTabParamList } from "@/navigators/navigationTypes"
+import { TAB_BAR_CLEARANCE } from "@/navigators/tabBarClearance"
 import { api } from "@/services/api"
 import type { Task } from "@/services/api/types"
 import { queryKeys } from "@/services/query"
@@ -33,11 +34,25 @@ export const ProjectDetailScreen: FC<HomeStackScreenProps<"ProjectDetail">> = ({
     fetcher,
   )
 
-  const sections = ORDER.map((status) => ({
-    status,
-    title: prettyLabel(status, STATUS_OPTIONS),
-    data: data.filter((t) => t.status === status),
-  })).filter((s) => s.data.length > 0)
+  const [collapsed, setCollapsed] = useState<ReadonlySet<string>>(new Set())
+  const toggle = (status: string) =>
+    setCollapsed((prev) => {
+      const next = new Set(prev)
+      if (!next.delete(status)) next.add(status)
+      return next
+    })
+
+  // `count` is the real size; `data` empties when collapsed so the section keeps
+  // its header while its rows disappear.
+  const sections = ORDER.map((status) => {
+    const rows = data.filter((t) => t.status === status)
+    return {
+      status,
+      title: prettyLabel(status, STATUS_OPTIONS),
+      count: rows.length,
+      data: collapsed.has(status) ? [] : rows,
+    }
+  }).filter((s) => s.count > 0)
 
   const open = (t: Task) => {
     const parent = navigation.getParent<BottomTabNavigationProp<MainTabParamList>>()
@@ -58,12 +73,14 @@ export const ProjectDetailScreen: FC<HomeStackScreenProps<"ProjectDetail">> = ({
         sections={sections}
         keyExtractor={(t) => t.id}
         stickySectionHeadersEnabled={false}
-        contentContainerStyle={sections.length === 0 ? $flex : undefined}
+        contentContainerStyle={sections.length === 0 ? $flex : $listContent}
         renderSectionHeader={({ section }) => (
           <SectionHeader
             status={section.status}
             title={section.title}
-            count={section.data.length}
+            count={section.count}
+            collapsed={collapsed.has(section.status)}
+            onToggle={() => toggle(section.status)}
           />
         )}
         ListEmptyComponent={
@@ -80,3 +97,5 @@ export const ProjectDetailScreen: FC<HomeStackScreenProps<"ProjectDetail">> = ({
 }
 
 const $flex: ViewStyle = { flexGrow: 1 }
+// Without this the last row scrolls under the floating tab bar.
+const $listContent: ViewStyle = { paddingBottom: TAB_BAR_CLEARANCE }

@@ -784,7 +784,7 @@ async def board(
     return columns, project
 
 
-UserTaskScope = Literal["assigned", "created", "subscribed", "recent"]
+UserTaskScope = Literal["assigned", "created", "subscribed", "recent", "all"]
 
 _PRIORITY_ORDER = case(
     (Task.priority == TaskPriority.URGENT, 0),
@@ -809,8 +809,9 @@ async def list_user_tasks(
     """List the current user's tasks for a My-Work tab, across all their projects.
 
     assigned/created/subscribed filter by the user's relationship to the task;
-    recent unions all three. Non-recent tabs use a focus-style ordering — open
-    work first, then by priority — while recent orders by latest activity.
+    recent unions all three; all applies no relationship filter, so a member
+    sees every task in the org. Non-recent tabs use a focus-style ordering —
+    open work first, then by priority — while recent orders by latest activity.
     """
     base = (
         select(Task, Project.key)
@@ -824,7 +825,9 @@ async def list_user_tasks(
     subscribed_ids = select(TaskSubscription.task_id).where(
         TaskSubscription.org_id == ctx.org.id, TaskSubscription.user_id == ctx.user.id
     )
-    if scope == "assigned":
+    if scope == "all":
+        pass  # org-wide: the base query is already scoped to this organization
+    elif scope == "assigned":
         base = base.where(Task.assignee_id == ctx.user.id)
     elif scope == "created":
         base = base.where(Task.created_by == ctx.user.id)

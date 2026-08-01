@@ -198,7 +198,7 @@ export class Api {
 
   async listTasks(
     orgId: string,
-    scope: "assigned" | "created" | "subscribed" | "recent" = "assigned",
+    scope: "all" | "assigned" | "created" | "subscribed" | "recent" = "assigned",
   ): Promise<Task[]> {
     const res = await this.apisauce.get<Envelope<{ items: Task[]; total: number }>>(
       `/orgs/${orgId}/tasks/${scope}`,

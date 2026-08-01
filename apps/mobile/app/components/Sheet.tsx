@@ -1,6 +1,7 @@
 import { FC, ReactNode, useEffect, useState } from "react"
-import { Dimensions, Modal, Pressable, StyleSheet, View, ViewStyle } from "react-native"
+import { Dimensions, Modal, Pressable, ScrollView, StyleSheet, View, ViewStyle } from "react-native"
 import { Gesture, GestureDetector, GestureHandlerRootView } from "react-native-gesture-handler"
+import { useReanimatedKeyboardAnimation } from "react-native-keyboard-controller"
 import Animated, {
   runOnJS,
   useAnimatedStyle,
@@ -37,6 +38,9 @@ export const Sheet: FC<{
   } = useAppTheme()
   const insets = useSafeAreaInsets()
   const [mounted, setMounted] = useState(visible)
+  // The sheet is pinned to the bottom, so a raised keyboard would otherwise sit
+  // on top of its lower half — fields there could be neither seen nor tapped.
+  const { height: keyboardHeight } = useReanimatedKeyboardAnimation()
 
   const translateY = useSharedValue(CLOSED)
   const backdrop = useSharedValue(0)
@@ -69,6 +73,8 @@ export const Sheet: FC<{
     })
 
   const $sheetAnim = useAnimatedStyle(() => ({ transform: [{ translateY: translateY.value }] }))
+  // Grows the sheet by the keyboard's height, lifting its content clear of it.
+  const $keyboardSpacer = useAnimatedStyle(() => ({ height: Math.max(0, -keyboardHeight.value) }))
   const $backdropAnim = useAnimatedStyle(() => ({ opacity: backdrop.value }))
 
   if (!mounted) return null
@@ -115,7 +121,18 @@ export const Sheet: FC<{
                 ) : null}
               </View>
             </GestureDetector>
-            {children}
+            <ScrollView
+              style={$scroll}
+              contentContainerStyle={$scrollContent}
+              // Rows stay tappable while a field is focused, and dragging the
+              // content puts the keyboard away.
+              keyboardShouldPersistTaps="handled"
+              keyboardDismissMode="interactive"
+              showsVerticalScrollIndicator={false}
+            >
+              {children}
+            </ScrollView>
+            <Animated.View style={$keyboardSpacer} />
           </GlassSurface>
         </Animated.View>
       </GestureHandlerRootView>
@@ -134,6 +151,8 @@ const $sheet: ViewStyle = {
   paddingTop: 8,
   maxHeight: "88%",
 }
+const $scroll: ViewStyle = { flexShrink: 1 }
+const $scrollContent: ViewStyle = { flexGrow: 1 }
 const $grabArea: ViewStyle = { paddingTop: 4 }
 const $handle: ViewStyle = {
   alignSelf: "center",

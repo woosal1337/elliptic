@@ -256,6 +256,14 @@ async def list_subscribed_tasks(
     return await _my_tasks_page("subscribed", ctx, session, page)
 
 
+@router.get("/tasks/all")
+async def list_all_tasks(
+    ctx: OrgCtx, session: SessionDep, page: PageParamsDep
+) -> SuccessResponse[Page[TaskOut]]:
+    """Every task in the org, for a shared task list rather than a personal one."""
+    return await _my_tasks_page("all", ctx, session, page)
+
+
 @router.get("/tasks/recent")
 async def list_recent_tasks(
     ctx: OrgCtx, session: SessionDep, page: PageParamsDep
