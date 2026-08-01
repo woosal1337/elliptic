@@ -1,4 +1,4 @@
-"""Curated marketplace registry aggregating CompanyOS extension points (COS-273)."""
+"""Curated marketplace registry aggregating Elliptic extension points (COS-273)."""
 
 from elliptic.modules.mcp_connectors.catalog import CATALOG as CONNECTOR_CATALOG
 

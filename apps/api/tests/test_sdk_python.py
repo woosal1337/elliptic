@@ -1,4 +1,4 @@
-"""CompanyOS Python SDK smoke test (COS-219)."""
+"""Elliptic Python SDK smoke test (COS-219)."""
 
 import sys
 from pathlib import Path

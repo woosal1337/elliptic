@@ -75,7 +75,7 @@ class Settings(BaseSettings):
     instance_admin_emails: str = ""
 
     resend_api_key: str = ""
-    email_from: str = "CompanyOS <noreply@example.com>"
+    email_from: str = "Elliptic <noreply@example.com>"
     verification_code_ttl_minutes: int = 15
 
     r2_account_id: str = ""

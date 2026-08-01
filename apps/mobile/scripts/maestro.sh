@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Cross-platform Maestro runner for CompanyOS mobile.
+# Cross-platform Maestro runner for Elliptic mobile.
 #
 # Drives flows on either the iOS simulator (where the app is developed) or the
 # Android emulator (Android_1, where the Linear app lives as a UX reference).

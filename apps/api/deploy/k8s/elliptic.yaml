@@ -1,4 +1,4 @@
-# CompanyOS — flat Kubernetes manifests (COS-205).
+# Elliptic — flat Kubernetes manifests (COS-205).
 # Helm-less install: edit the Secret values + image refs, then `kubectl apply -f elliptic.yaml`.
 apiVersion: v1
 kind: Secret

@@ -1,4 +1,4 @@
-"""OAuth 2.1 authorization-server HTTP endpoints for the CompanyOS MCP."""
+"""OAuth 2.1 authorization-server HTTP endpoints for the Elliptic MCP."""
 
 import uuid
 from typing import Annotated
@@ -73,7 +73,7 @@ async def authorize(
 ) -> RedirectResponse:
     """Validate the request and redirect to the frontend consent page with a signed
     request id. This endpoint is public: it carries no user identity (the browser's
-    CompanyOS session lives on the web app's domain, not the API's). The consent page
+    Elliptic session lives on the web app's domain, not the API's). The consent page
     enforces login, and the user is established at the /consent and /decision steps,
     which the frontend calls through its own origin with the session cookie.
 

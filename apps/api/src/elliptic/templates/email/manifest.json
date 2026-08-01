@@ -10,6 +10,6 @@
       "expiresIn",
       "appUrl"
     ],
-    "subject": "{inviterName} invited you to {orgName} on CompanyOS"
+    "subject": "{inviterName} invited you to {orgName} on Elliptic"
   }
 }

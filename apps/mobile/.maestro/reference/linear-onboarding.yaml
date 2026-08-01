@@ -1,6 +1,6 @@
 # Reference capture: Linear (Android) onboarding + sign-in.
 # Linear is our UX north star. This flow walks its cold-start onboarding so we
-# can redesign CompanyOS's Login/Register + first-run to the same bar.
+# can redesign Elliptic's Login/Register + first-run to the same bar.
 #
 # Run:  scripts/maestro.sh android .maestro/reference/linear-onboarding.yaml
 appId: app.linear

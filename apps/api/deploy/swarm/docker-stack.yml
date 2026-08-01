@@ -1,4 +1,4 @@
-# CompanyOS — Docker Swarm stack (COS-205). `docker stack deploy -c docker-stack.yml elliptic`
+# Elliptic — Docker Swarm stack (COS-205). `docker stack deploy -c docker-stack.yml elliptic`
 version: "3.8"
 services:
   postgres:

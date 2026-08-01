@@ -1,4 +1,4 @@
-# CompanyOS Helm values (COS-205).
+# Elliptic Helm values (COS-205).
 nameOverride: ""
 
 api:

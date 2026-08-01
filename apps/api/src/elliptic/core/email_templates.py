@@ -52,7 +52,7 @@ def render_invitation_email(
     )
     html = _TOKEN_RE.sub("", html)
 
-    subject = f"{inviter_name} invited you to {org_name} on CompanyOS"
+    subject = f"{inviter_name} invited you to {org_name} on Elliptic"
     return subject, html
 
 
@@ -63,7 +63,7 @@ def render_verification_email(*, code: str, expires_in: str) -> tuple[str, str]:
     always a digit string and ``expires_in`` is a fixed phrase we build, so no
     dynamic value needs HTML-escaping here.
     """
-    subject = "Your CompanyOS verification code"
+    subject = "Your Elliptic verification code"
     html = f"""\
 <!DOCTYPE html>
 <html lang="en">
@@ -80,7 +80,7 @@ Roboto,Helvetica,Arial,sans-serif;">
                 <h1 style="margin:0 0 16px;font-size:22px;line-height:1.3;color:#F7F7F7;">\
 Confirm your email</h1>
                 <p style="margin:0 0 24px;font-size:15px;line-height:1.6;color:#909091;">\
-Enter this code to verify your email address and finish setting up your CompanyOS account.</p>
+Enter this code to verify your email address and finish setting up your Elliptic account.</p>
                 <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                   <tr>
                     <td align="center" \

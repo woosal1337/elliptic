@@ -43,7 +43,7 @@ def verify(secret: str, code: str, at: float | None = None, window: int = 1) -> 
     )
 
 
-def provisioning_uri(secret: str, account: str, issuer: str = "CompanyOS") -> str:
+def provisioning_uri(secret: str, account: str, issuer: str = "Elliptic") -> str:
     """An otpauth:// URI for authenticator-app enrollment (QR)."""
     label = quote(f"{issuer}:{account}")
     return (

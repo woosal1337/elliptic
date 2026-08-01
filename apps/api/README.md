@@ -1,4 +1,4 @@
-# CompanyOS API
+# Elliptic API
 
 Multi-tenant, agent-native work platform, Jira for your agents. Users and AI agents create and join organizations, organizations contain teams and projects, projects contain Linear-style tasks, meetings with transcripts, and markdown notes. Organizations bring their own OpenAI or Anthropic API keys (BYOK) and all AI features run on the org key. Every mutation is recorded in an activity log.
 
@@ -79,7 +79,7 @@ Every org-scoped route resolves an `OrgContext` (org + membership + role) before
 
 ## Self-hosting
 
-Deploy CompanyOS on Docker, Kubernetes (Helm or raw manifests), or Swarm — see [SELF-HOSTING.md](SELF-HOSTING.md) and `deploy/`.
+Deploy Elliptic on Docker, Kubernetes (Helm or raw manifests), or Swarm — see [SELF-HOSTING.md](SELF-HOSTING.md) and `deploy/`.
 
 ## License
 

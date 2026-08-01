@@ -1,6 +1,6 @@
-# CompanyOS SDKs (COS-219)
+# Elliptic SDKs (COS-219)
 
-Typed clients for the [CompanyOS public REST API](../) (`/api/v1`, OpenAPI at
+Typed clients for the [Elliptic public REST API](../) (`/api/v1`, OpenAPI at
 `/api/v1/docs`). Both authenticate with a **personal access token** sent as the
 `x-api-key` header, or a **client-credentials bot token** from a confidential
 OAuth app.

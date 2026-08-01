@@ -1,4 +1,4 @@
-"""The OAuth scope catalog for the CompanyOS MCP company brain."""
+"""The OAuth scope catalog for the Elliptic MCP company brain."""
 
 from dataclasses import dataclass
 

@@ -19,7 +19,7 @@ class SynthProvider:
     ) -> CompletionResult:
         self.calls.append(messages)
         return CompletionResult(
-            content="CompanyOS is an AI-native work OS [1].",
+            content="Elliptic is an AI-native work OS [1].",
             model=model,
             input_tokens=5,
             output_tokens=8,
@@ -49,7 +49,7 @@ async def test_web_search_synthesizes_with_sources(
         ai_service,
         "fetch_web_results",
         lambda query: _async(
-            [{"title": "CompanyOS", "snippet": "An AI-native OS", "url": "https://x"}]
+            [{"title": "Elliptic", "snippet": "An AI-native OS", "url": "https://x"}]
         ),
     )
 

@@ -1,4 +1,4 @@
-"""CompanyOS config-as-code CLI (COS-243).
+"""Elliptic config-as-code CLI (COS-243).
 
 Pull, validate, diff, and (dry-run) push an org's declarative configuration.
 
@@ -20,7 +20,7 @@ from pathlib import Path
 import typer
 import yaml
 
-app = typer.Typer(help="CompanyOS config-as-code CLI (COS-243).")
+app = typer.Typer(help="Elliptic config-as-code CLI (COS-243).")
 _STATE = "elliptic.yaml"
 
 

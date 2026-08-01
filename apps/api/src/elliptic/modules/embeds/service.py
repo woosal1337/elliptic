@@ -45,7 +45,7 @@ async def unfurl(session: AsyncSession, url: str) -> EmbedMeta:
 
     try:
         async with httpx.AsyncClient(timeout=6.0, follow_redirects=True) as http:
-            resp = await http.get(url, headers={"User-Agent": "CompanyOS-Unfurl/1.0"})
+            resp = await http.get(url, headers={"User-Agent": "Elliptic-Unfurl/1.0"})
             html = resp.text[:200_000]
     except Exception:
         return meta

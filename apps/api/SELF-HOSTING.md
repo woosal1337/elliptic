@@ -1,6 +1,6 @@
-# Self-hosting CompanyOS
+# Self-hosting Elliptic
 
-CompanyOS is a lean two-service application backed by PostgreSQL.
+Elliptic is a lean two-service application backed by PostgreSQL.
 
 ```
             ┌──────────┐      ┌──────────┐      ┌────────────┐

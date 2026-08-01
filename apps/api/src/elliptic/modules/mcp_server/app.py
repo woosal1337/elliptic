@@ -1,4 +1,4 @@
-"""The embedded CompanyOS MCP server: a stateless FastMCP app over the services."""
+"""The embedded Elliptic MCP server: a stateless FastMCP app over the services."""
 
 from typing import Any
 

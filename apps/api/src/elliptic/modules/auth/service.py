@@ -57,7 +57,7 @@ async def _issue_verification_code(user: User) -> None:
             deliver_email,
             user.email,
             subject,
-            f"Your CompanyOS verification code is {code}",
+            f"Your Elliptic verification code is {code}",
             html=html,
         )
     except Exception:

@@ -40,7 +40,7 @@ TASKS: list[tuple[str, TaskStatus, TaskPriority]] = [
 ]
 
 SEGMENTS: list[tuple[str, float, float, str]] = [
-    ("Ege", 0.0, 14.5, "Welcome everyone, today we are reviewing the CompanyOS launch plan."),
+    ("Ege", 0.0, 14.5, "Welcome everyone, today we are reviewing the Elliptic launch plan."),
     ("Mira", 14.5, 31.0, "The API scaffold is done, tenancy isolation tests are green."),
     ("Ege", 31.0, 52.0, "Great. Next milestone is the BYOK flow and the meeting summaries."),
     ("Mira", 52.0, 70.0, "I will own the provider integration, target is end of the sprint."),

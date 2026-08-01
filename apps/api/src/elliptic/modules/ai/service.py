@@ -526,13 +526,13 @@ async def list_runs(
 
 
 _ASK_SYSTEM = (
-    "You are CompanyOS Assistant in ASK mode: a read-only helper answering questions "
+    "You are Elliptic Assistant in ASK mode: a read-only helper answering questions "
     "about the user's workspace (projects, work items, cycles, modules, pages). Be concise "
     "and practical. You cannot change any data in this mode; if the user asks you to make "
     "changes, tell them to switch the conversation to Build mode."
 )
 _BUILD_SYSTEM = (
-    "You are CompanyOS Assistant in BUILD mode: you help the user take actions on their "
+    "You are Elliptic Assistant in BUILD mode: you help the user take actions on their "
     "workspace. Describe the concrete change you would make (the entity, fields, and values) "
     "and confirm intent. Respect the user's role and permissions; never claim to have done "
     "something you cannot verify. Be concise."
@@ -897,7 +897,7 @@ async def fetch_web_results(query: str) -> list[dict[str, str]]:
         resp = await http.get(
             "https://api.duckduckgo.com/",
             params={"q": query, "format": "json", "no_html": "1", "no_redirect": "1"},
-            headers={"User-Agent": "CompanyOS/1.0"},
+            headers={"User-Agent": "Elliptic/1.0"},
         )
         resp.raise_for_status()
         data = resp.json()

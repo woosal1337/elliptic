@@ -1,7 +1,7 @@
 /**
- * CompanyOS Node/TypeScript SDK (COS-219).
+ * Elliptic Node/TypeScript SDK (COS-219).
  *
- * A small, typed client over the CompanyOS public REST API. Authenticate with a
+ * A small, typed client over the Elliptic public REST API. Authenticate with a
  * personal access token (Profile -> Tokens) sent as `x-api-key`, or a
  * client-credentials bot token (Settings -> OAuth apps).
  *

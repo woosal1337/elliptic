@@ -197,7 +197,7 @@ def create_app() -> FastAPI:  # noqa: PLR0915 — flat router registration list
     """Build the FastAPI application."""
     settings = get_settings()
     app = FastAPI(
-        title="CompanyOS API",
+        title="Elliptic API",
         version="0.1.0",
         lifespan=lifespan,
         docs_url="/api/v1/docs",

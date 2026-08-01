@@ -66,6 +66,8 @@ async def post_to_endpoint(url: str, body: str, signature: str) -> int:
             content=body,
             headers={
                 "Content-Type": "application/json",
+                # Both names through the rename — see webhooks/sender.py.
+                "X-Elliptic-Signature": signature,
                 "X-CompanyOS-Signature": signature,
             },
         )

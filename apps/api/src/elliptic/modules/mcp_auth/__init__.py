@@ -1,1 +1,1 @@
-"""OAuth 2.1 authorization server for the CompanyOS MCP."""
+"""OAuth 2.1 authorization server for the Elliptic MCP."""

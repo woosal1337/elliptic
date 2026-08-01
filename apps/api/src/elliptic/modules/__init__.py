@@ -1,1 +1,1 @@
-"""Feature modules of the CompanyOS API."""
+"""Feature modules of the Elliptic API."""

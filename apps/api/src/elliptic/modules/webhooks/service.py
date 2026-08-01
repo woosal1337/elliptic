@@ -164,7 +164,7 @@ async def test_send(
     url = _decrypt_url(wh)
     rm = RenderModel(
         title="Test webhook",
-        subtitle="Sample message from CompanyOS",
+        subtitle="Sample message from Elliptic",
         category="created",
         event_label="Test webhook",
         url=get_settings().app_base_url,

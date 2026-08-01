@@ -1,4 +1,4 @@
-"""CompanyOS operations CLI (COS-259).
+"""Elliptic operations CLI (COS-259).
 
 A thin operator helper over a running instance + the local database.
 
@@ -15,7 +15,7 @@ import urllib.request
 
 import typer
 
-app = typer.Typer(help="CompanyOS operations CLI (COS-259).")
+app = typer.Typer(help="Elliptic operations CLI (COS-259).")
 
 
 def _pg_url() -> str:

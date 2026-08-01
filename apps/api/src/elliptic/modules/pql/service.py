@@ -68,7 +68,7 @@ async def execute_query(
 
 
 _GRAMMAR_PROMPT = (
-    "You translate a natural-language request into a CompanyOS Query Language (PQL) "
+    "You translate a natural-language request into a Elliptic Query Language (PQL) "
     "filter over work items. Output ONLY the query, no explanation, no code fences.\n"
     "Fields: status (backlog|todo|in_progress|in_review|done|cancelled), "
     "priority (none|low|medium|high|urgent), kind (task|bug|...), severity, component, "

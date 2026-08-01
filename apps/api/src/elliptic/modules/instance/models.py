@@ -13,7 +13,7 @@ class InstanceSettings(BaseModel):
 
     __tablename__ = "instance_settings"
 
-    instance_name: Mapped[str] = mapped_column(String(200), default="CompanyOS")
+    instance_name: Mapped[str] = mapped_column(String(200), default="Elliptic")
     telemetry_enabled: Mapped[bool] = mapped_column(Boolean, default=False, server_default=false())
     allow_workspace_creation: Mapped[bool] = mapped_column(
         Boolean, default=True, server_default=true()

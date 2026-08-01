@@ -1,1 +1,1 @@
-"""Test suite for the CompanyOS API."""
+"""Test suite for the Elliptic API."""

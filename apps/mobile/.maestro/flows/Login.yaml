@@ -1,5 +1,5 @@
 #flow: Login
-#intent: sign into CompanyOS with credentials injected via env (never hardcoded).
+#intent: sign into Elliptic with credentials injected via env (never hardcoded).
 # Run: MAESTRO_EMAIL=... MAESTRO_PASSWORD=... scripts/maestro.sh ios .maestro/flows/Login.yaml
 appId: sh.elliptic
 ---

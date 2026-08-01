@@ -95,7 +95,7 @@ def build_slack_payload(rm: RenderModel) -> dict[str, Any]:
     blocks.append(
         {
             "type": "context",
-            "elements": [{"type": "mrkdwn", "text": f"CompanyOS • {rm.actor_name or 'system'}"}],
+            "elements": [{"type": "mrkdwn", "text": f"Elliptic • {rm.actor_name or 'system'}"}],
         }
     )
     return {"text": _truncate(f"{rm.event_label}: {title}", 300), "blocks": blocks}
@@ -108,7 +108,7 @@ def build_discord_payload(rm: RenderModel) -> dict[str, Any]:
         "author": {"name": _truncate(f"{rm.actor_name or 'system'} • {rm.event_label}", 256)},
         "title": _truncate(rm.title, _TITLE_MAX),
         "color": style["color"],
-        "footer": {"text": "CompanyOS"},
+        "footer": {"text": "Elliptic"},
     }
     if rm.url:
         embed["url"] = rm.url
@@ -123,4 +123,4 @@ def build_discord_payload(rm: RenderModel) -> dict[str, Any]:
             }
             for name, value in rm.fields[:_DISCORD_MAX_FIELDS]
         ]
-    return {"username": "CompanyOS", "embeds": [embed]}
+    return {"username": "Elliptic", "embeds": [embed]}

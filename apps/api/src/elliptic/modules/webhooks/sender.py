@@ -58,10 +58,14 @@ async def send(
     headers = {"Content-Type": "application/json"}
     if secret:
         timestamp = str(int(time.time()))
-        headers["X-CompanyOS-Timestamp"] = timestamp
-        headers["X-CompanyOS-Signature"] = compute_signature(secret, timestamp, body)
+        signature = compute_signature(secret, timestamp, body)
+        # Send both names through the rename: consumers verify a signature against
+        # a header they hard-coded, so dropping X-CompanyOS-* would break every
+        # existing integration silently. Retire the old pair once consumers move.
+        headers["X-Elliptic-Timestamp"] = headers["X-CompanyOS-Timestamp"] = timestamp
+        headers["X-Elliptic-Signature"] = headers["X-CompanyOS-Signature"] = signature
         if event_type:
-            headers["X-CompanyOS-Event"] = event_type
+            headers["X-Elliptic-Event"] = headers["X-CompanyOS-Event"] = event_type
 
     last_detail = "no attempt made"
     async with httpx.AsyncClient(timeout=get_settings().notify_timeout_seconds) as client:

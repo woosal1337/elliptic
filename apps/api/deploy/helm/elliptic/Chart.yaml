@@ -1,6 +1,6 @@
 apiVersion: v2
 name: elliptic
-description: CompanyOS — AI-native work OS (api + web + optional bundled Postgres)
+description: Elliptic — AI-native work OS (api + web + optional bundled Postgres)
 type: application
 version: 1.0.0
 appVersion: "1.0.0"

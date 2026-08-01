@@ -51,7 +51,7 @@ async def handle_command(session: AsyncSession, *, team_id: str, user_text: str)
     if connection is None:
         return {
             "response_type": "ephemeral",
-            "text": "This Slack workspace isn't connected to a CompanyOS organization.",
+            "text": "This Slack workspace isn't connected to a Elliptic organization.",
         }
     if connection.default_project_id is None:
         return {

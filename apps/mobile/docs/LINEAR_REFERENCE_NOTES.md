@@ -2,7 +2,7 @@
 
 Observed live from the Linear Android app (`app.linear`) on the `Android_1`
 emulator, 2026-07-04. Screenshots are kept out of git (private workspace data);
-this file captures the reusable patterns for the CompanyOS redesign.
+this file captures the reusable patterns for the Elliptic redesign.
 
 ## Global language
 - **Type**: large, tight sans (Inter-family). Screen titles are big and bold;
@@ -47,7 +47,7 @@ this file captures the reusable patterns for the CompanyOS redesign.
 - **Pinned bottom composer**: `+ Comment` field pinned above the home indicator,
   with a leading action and a trailing pip icon (keyboard-attached).
 
-## Direct implications for the CompanyOS backlog
+## Direct implications for the Elliptic backlog
 - **C2 Task detail**: adopt the chip property row + rendered markdown + pinned
   composer + activity timeline. (COS-372)
 - **C3 Inbox**: actor avatar + status badge + unread dot + reason line + dimmed

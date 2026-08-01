@@ -132,7 +132,7 @@ async def test_register_requires_verification_when_enabled(
     )
     assert response.status_code == 201
     assert response.json()["data"]["email_verified"] is False
-    assert verification_on == [("verify@test.dev", "Your CompanyOS verification code")]
+    assert verification_on == [("verify@test.dev", "Your Elliptic verification code")]
 
     async with session_factory() as session:
         user = await session.scalar(select(User).where(User.email == "verify@test.dev"))
@@ -209,7 +209,7 @@ async def test_resend_verification_always_succeeds(
         f"{API}/auth/resend-verification", json={"email": "resend@test.dev"}
     )
     assert response.status_code == 200
-    assert verification_on == [("resend@test.dev", "Your CompanyOS verification code")]
+    assert verification_on == [("resend@test.dev", "Your Elliptic verification code")]
 
     verification_on.clear()
     missing = await client.post(

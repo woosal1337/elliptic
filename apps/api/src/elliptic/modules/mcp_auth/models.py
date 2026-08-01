@@ -1,4 +1,4 @@
-"""OAuth 2.1 authorization-server models for the CompanyOS MCP."""
+"""OAuth 2.1 authorization-server models for the Elliptic MCP."""
 
 import enum
 import uuid

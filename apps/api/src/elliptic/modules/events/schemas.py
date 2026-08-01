@@ -72,7 +72,7 @@ class MeetingBriefBulletOut(BaseModel):
 
 
 class MeetingBriefOut(BaseModel):
-    """A 2-3 bullet pre-meeting brief pulled from existing CompanyOS data."""
+    """A 2-3 bullet pre-meeting brief pulled from existing Elliptic data."""
 
     bullets: list[MeetingBriefBulletOut]
     confidence: float

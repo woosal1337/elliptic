@@ -1,1 +1,1 @@
-"""The embedded first-party CompanyOS MCP server."""
+"""The embedded first-party Elliptic MCP server."""

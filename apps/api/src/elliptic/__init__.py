@@ -1,1 +1,1 @@
-"""CompanyOS API application package."""
+"""Elliptic API application package."""

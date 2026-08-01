@@ -1,4 +1,4 @@
-# CompanyOS Mobile — Linear-grade UI/UX Rebuild Backlog
+# Elliptic Mobile — Linear-grade UI/UX Rebuild Backlog
 
 Derived from: Linear mobile UX reference, mobile codebase audit, web→mobile brand token extraction, API consumption map, and a live 18-screen simulator audit (iPhone 17 Pro, iOS 26.5).
 
