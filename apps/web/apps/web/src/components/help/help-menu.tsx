@@ -22,7 +22,7 @@ import { useCommandMenu } from "@/components/command/command-menu-provider";
 const DOCS_URL = "https://docs.companyos.dev";
 const API_DOCS_PATH = "/api/v1/docs";
 const SUPPORT_EMAIL = "support@companyos.dev";
-const ISSUES_URL = "https://github.com/woosal1337/companyos-api/issues/new";
+const ISSUES_URL = "https://github.com/woosal1337/elliptic-api/issues/new";
 
 export function HelpMenu() {
   const command = useCommandMenu();

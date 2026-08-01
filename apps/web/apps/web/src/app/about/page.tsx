@@ -76,7 +76,7 @@ export default function AboutPage() {
         titleRest="An agent-native work platform you run on your own keys."
         lede="Projects, tasks, meetings, and notes in one place, where humans and AI agents work side by side over a built-in MCP server. Open source, multi-tenant, and self-hostable."
         primary={{ label: "Start free", href: "/signup" }}
-        secondary={{ label: "View on GitHub", href: "https://github.com/woosal1337/companyos" }}
+        secondary={{ label: "View on GitHub", href: "https://github.com/woosal1337/elliptic" }}
         visual={
           <BrowserFrame
             url="app.companyos.com/q3-platform"
@@ -126,7 +126,7 @@ export default function AboutPage() {
       >
         <CodeShowcase
           caption="quickstart"
-          code={`git clone https://github.com/woosal1337/companyos.git
+          code={`git clone https://github.com/woosal1337/elliptic.git
 cd companyos
 cp .env.example .env
 docker compose up --build

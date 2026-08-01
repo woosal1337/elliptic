@@ -21,13 +21,13 @@ By participating you agree to our [Code of Conduct](CODE_OF_CONDUCT.md).
 
 You don't have to write code to help.
 
-- **Report a bug** — open a [Bug report](https://github.com/woosal1337/companyos/issues/new?template=bug_report.yml).
+- **Report a bug** — open a [Bug report](https://github.com/woosal1337/elliptic/issues/new?template=bug_report.yml).
   A good report is often more valuable than a rushed fix.
 - **Request a feature or flag a gap** — open a
-  [Feature request](https://github.com/woosal1337/companyos/issues/new?template=feature_request.yml).
+  [Feature request](https://github.com/woosal1337/elliptic/issues/new?template=feature_request.yml).
 - **Improve the docs** — typos, missing steps, and confusing wording are all fair game.
 - **Pick up an issue** — anything labeled
-  [`good first issue`](https://github.com/woosal1337/companyos/labels/good%20first%20issue)
+  [`good first issue`](https://github.com/woosal1337/elliptic/labels/good%20first%20issue)
   is a friendly entry point. Comment to claim it so we don't double up.
 - **Review a pull request** — thoughtful review from anyone is welcome.
 
@@ -38,7 +38,7 @@ discuss it **before** writing the code. It saves everyone a redo.
 
 ## Getting help
 
-- **Questions & ideas:** [GitHub Discussions](https://github.com/woosal1337/companyos/discussions).
+- **Questions & ideas:** [GitHub Discussions](https://github.com/woosal1337/elliptic/discussions).
 - **Docs:** [docs.company.chele.bi](https://docs.company.chele.bi).
 - **Bugs:** a GitHub issue, using the templates above.
 
@@ -61,7 +61,7 @@ discuss it **before** writing the code. It saves everyone a redo.
 The fastest path — Postgres, API, and web, with migrations applied automatically:
 
 ```bash
-git clone https://github.com/woosal1337/companyos.git
+git clone https://github.com/woosal1337/elliptic.git
 cd companyos
 cp .env.example .env
 docker compose up --build
@@ -220,7 +220,7 @@ conversation, not a gate.
 ## Reporting bugs
 
 Great bug reports are specific and reproducible. Use the
-[Bug report template](https://github.com/woosal1337/companyos/issues/new?template=bug_report.yml)
+[Bug report template](https://github.com/woosal1337/elliptic/issues/new?template=bug_report.yml)
 and include:
 
 - **What happened** vs. **what you expected**.

@@ -52,8 +52,8 @@ export default function ContactPage() {
         titleLead="Built in the open,"
         titleRest="so the best ways to reach us are public."
         lede="Questions, bugs, and security disclosures, all on GitHub. Pick whichever fits, and you will not be talking to a contact form."
-        primary={{ label: "Open a discussion", href: "https://github.com/woosal1337/companyos/discussions" }}
-        secondary={{ label: "Report a bug", href: "https://github.com/woosal1337/companyos/issues" }}
+        primary={{ label: "Open a discussion", href: "https://github.com/woosal1337/elliptic/discussions" }}
+        secondary={{ label: "Report a bug", href: "https://github.com/woosal1337/elliptic/issues" }}
       />
 
       <FeatureSection
@@ -65,19 +65,19 @@ export default function ContactPage() {
       >
         <div className="grid gap-5 sm:grid-cols-2">
           <ContactLink
-            href="https://github.com/woosal1337/companyos/discussions"
+            href="https://github.com/woosal1337/elliptic/discussions"
             icon={<MessagesSquare aria-hidden="true" />}
             title="Questions and ideas"
             description="Open a thread in GitHub Discussions for product questions, ideas, and general conversation."
           />
           <ContactLink
-            href="https://github.com/woosal1337/companyos/issues"
+            href="https://github.com/woosal1337/elliptic/issues"
             icon={<Bug aria-hidden="true" />}
             title="Bugs and features"
             description="File an issue with steps to reproduce and the version or commit you are on. Feature requests welcome too."
           />
           <ContactLink
-            href="https://github.com/woosal1337/companyos/blob/main/SECURITY.md"
+            href="https://github.com/woosal1337/elliptic/blob/main/SECURITY.md"
             icon={<ShieldCheck aria-hidden="true" />}
             title="Security"
             description="Report vulnerabilities privately through the repository's Security tab, as described in the security policy."

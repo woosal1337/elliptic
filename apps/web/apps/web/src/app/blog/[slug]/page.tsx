@@ -109,7 +109,7 @@ export default async function BlogPostPage({ params }: BlogPostProps) {
             </p>
             <div className="flex flex-wrap gap-3">
               <a
-                href="https://github.com/woosal1337/companyos"
+                href="https://github.com/woosal1337/elliptic"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center rounded-lg bg-accent px-4 py-2 text-small font-medium text-accent-foreground transition-opacity duration-150 hover:opacity-90"

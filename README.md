@@ -10,9 +10,9 @@ An agent-native work platform. Your agents run boards, tasks, sprints, meetings,
 alongside your team, over a built-in MCP server, on your own keys.
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-5B5BD6.svg)](LICENSE)
-[![Release](https://img.shields.io/github/v/release/woosal1337/companyos?color=5B5BD6)](https://github.com/woosal1337/companyos/releases)
-[![CI](https://github.com/woosal1337/companyos/actions/workflows/ci.yml/badge.svg)](https://github.com/woosal1337/companyos/actions/workflows/ci.yml)
-[![Stars](https://img.shields.io/github/stars/woosal1337/companyos?style=flat&color=5B5BD6)](https://github.com/woosal1337/companyos/stargazers)
+[![Release](https://img.shields.io/github/v/release/woosal1337/elliptic?color=5B5BD6)](https://github.com/woosal1337/elliptic/releases)
+[![CI](https://github.com/woosal1337/elliptic/actions/workflows/ci.yml/badge.svg)](https://github.com/woosal1337/elliptic/actions/workflows/ci.yml)
+[![Stars](https://img.shields.io/github/stars/woosal1337/elliptic?style=flat&color=5B5BD6)](https://github.com/woosal1337/elliptic/stargazers)
 [![Containers](https://img.shields.io/badge/ghcr.io-companyos-5B5BD6?logo=docker&logoColor=white)](https://github.com/woosal1337?tab=packages)
 [![Docs](https://img.shields.io/badge/docs-company.chele.bi-5B5BD6.svg)](https://docs.company.chele.bi)
 
@@ -69,7 +69,7 @@ Run the whole stack — Postgres, the API, and the web app — with one command.
 Requires [Docker](https://docs.docker.com/get-docker/) with the Compose plugin.
 
 ```bash
-git clone https://github.com/woosal1337/companyos.git
+git clone https://github.com/woosal1337/elliptic.git
 cd companyos
 cp .env.example .env
 docker compose up --build
@@ -86,12 +86,12 @@ deployment, generate fresh secrets and switch to production mode:
 
 ```bash
 # in .env
-COMPANYOS_KEK=$(python3 -c "import base64,os;print(base64.urlsafe_b64encode(os.urandom(32)).decode())")
+ELLIPTIC_KEK=$(python3 -c "import base64,os;print(base64.urlsafe_b64encode(os.urandom(32)).decode())")
 JWT_SECRET_KEY=$(openssl rand -hex 32)
 ENV=production            # secure cookies — serve the web app over HTTPS
 ```
 
-In `production` mode the API refuses to start unless `COMPANYOS_KEK` and
+In `production` mode the API refuses to start unless `ELLIPTIC_KEK` and
 `JWT_SECRET_KEY` are set to strong, non-default values.
 
 ## Architecture
@@ -127,7 +127,7 @@ The Docker Compose path above is the fastest way to run Elliptic. For Kubernetes
 **[`apps/api/SELF-HOSTING.md`](apps/api/SELF-HOSTING.md)** and `apps/api/deploy/`.
 
 Tagged releases publish container images to GHCR:
-`ghcr.io/woosal1337/companyos-api` and `ghcr.io/woosal1337/companyos-web`.
+`ghcr.io/woosal1337/elliptic-api` and `ghcr.io/woosal1337/elliptic-web`.
 
 ## Development
 

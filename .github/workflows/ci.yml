@@ -27,7 +27,7 @@ jobs:
           --health-retries 10
     env:
       DATABASE_URL: postgresql+asyncpg://companyos:companyos@localhost:5434/companyos
-      COMPANYOS_KEK: MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA=
+      ELLIPTIC_KEK: MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA=
       JWT_SECRET_KEY: ci-secret-key-with-enough-length-for-hs256
       ENV: test
     steps:

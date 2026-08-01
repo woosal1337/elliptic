@@ -20,7 +20,7 @@ const BLOCKS: DocBlock[] = [
   { type: "h2", text: "The software license" },
   {
     type: "p",
-    text: "Elliptic is licensed under the [Apache License 2.0](https://github.com/woosal1337/companyos/blob/main/LICENSE). You are free to self-host, modify, and redistribute it under that license. When you run your own instance, these hosted terms do not apply to you.",
+    text: "Elliptic is licensed under the [Apache License 2.0](https://github.com/woosal1337/elliptic/blob/main/LICENSE). You are free to self-host, modify, and redistribute it under that license. When you run your own instance, these hosted terms do not apply to you.",
   },
   { type: "h2", text: "Acceptable use" },
   { type: "p", text: "When using the hosted service, you agree not to do the following." },

@@ -32,7 +32,7 @@ const STRUCTURED_DATA = [
     name: "Elliptic",
     url: SITE_URL,
     logo: `${SITE_URL}/logo.png`,
-    sameAs: ["https://github.com/woosal1337/companyos", "https://x.com/woosal1337"],
+    sameAs: ["https://github.com/woosal1337/elliptic", "https://x.com/woosal1337"],
   },
   {
     "@context": "https://schema.org",

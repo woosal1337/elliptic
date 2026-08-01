@@ -15,7 +15,7 @@ const BLOCKS: DocBlock[] = [
   { type: "p", text: "Last updated 28 June 2026." },
   {
     type: "p",
-    text: "Elliptic is open source and self-hostable. This policy explains how data is handled when you run your own instance, and what the hosted instance at [company.chele.bi](https://company.chele.bi) collects. The Elliptic software is licensed under [Apache-2.0](https://github.com/woosal1337/companyos/blob/main/LICENSE).",
+    text: "Elliptic is open source and self-hostable. This policy explains how data is handled when you run your own instance, and what the hosted instance at [company.chele.bi](https://company.chele.bi) collects. The Elliptic software is licensed under [Apache-2.0](https://github.com/woosal1337/elliptic/blob/main/LICENSE).",
   },
   { type: "h2", text: "Self-hosted deployments" },
   {
@@ -69,7 +69,7 @@ const BLOCKS: DocBlock[] = [
   { type: "h2", text: "Contact" },
   {
     type: "p",
-    text: "Questions about privacy or your data go to the [contact page](/contact). To report a security issue, follow the [security policy](https://github.com/woosal1337/companyos/blob/main/SECURITY.md).",
+    text: "Questions about privacy or your data go to the [contact page](/contact). To report a security issue, follow the [security policy](https://github.com/woosal1337/elliptic/blob/main/SECURITY.md).",
   },
 ];
 

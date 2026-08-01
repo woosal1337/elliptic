@@ -11050,7 +11050,7 @@ export const DOC_PAGES: DocPage[] = [
         "steps": [
           {
             "title": "Clone and enter the repo",
-            "text": "Run `git clone https://github.com/woosal1337/companyos.git` and then `cd companyos`."
+            "text": "Run `git clone https://github.com/woosal1337/elliptic.git` and then `cd companyos`."
           },
           {
             "title": "Create your env file",
@@ -11069,7 +11069,7 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "code",
         "lang": "bash",
-        "code": "git clone https://github.com/woosal1337/companyos.git\ncd companyos\ncp .env.example .env\ndocker compose up --build\n\n# then open http://localhost:3000"
+        "code": "git clone https://github.com/woosal1337/elliptic.git\ncd companyos\ncp .env.example .env\ndocker compose up --build\n\n# then open http://localhost:3000"
       },
       {
         "type": "callout",
@@ -11132,7 +11132,7 @@ export const DOC_PAGES: DocPage[] = [
             "The async Postgres connection string. In compose it points at the `postgres` service: `postgresql+asyncpg://companyos:companyos@postgres:5432/companyos`."
           ],
           [
-            "COMPANYOS_KEK",
+            "ELLIPTIC_KEK",
             "api",
             "The key-encryption key. A 32-byte urlsafe-base64 key that encrypts every stored secret (integration, SSO, connector, and MCP signing keys, among others). See Secrets and encryption below."
           ],
@@ -11183,26 +11183,26 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "The `.env.example` defaults are deliberately public and for **local evaluation only**. Before you run Elliptic for real, you generate two fresh secrets: a key-encryption key (`COMPANYOS_KEK`) and a JWT signing secret (`JWT_SECRET_KEY`). Both are critical, and production mode refuses to start without strong, non-default values for them."
+        "text": "The `.env.example` defaults are deliberately public and for **local evaluation only**. Before you run Elliptic for real, you generate two fresh secrets: a key-encryption key (`ELLIPTIC_KEK`) and a JWT signing secret (`JWT_SECRET_KEY`). Both are critical, and production mode refuses to start without strong, non-default values for them."
       },
       {
         "type": "h3",
-        "text": "COMPANYOS_KEK, the key-encryption key"
+        "text": "ELLIPTIC_KEK, the key-encryption key"
       },
       {
         "type": "p",
-        "text": "`COMPANYOS_KEK` is the master key from which Elliptic encrypts every secret it stores at rest: your BYOK provider keys, your integration credentials, your SSO and LDAP configuration, your connector secrets, and the private signing key behind MCP tokens. Nothing sensitive is written to the database in the clear; it is all sealed with this key. It must be a **32-byte key, urlsafe-base64 encoded**. Elliptic validates this on startup: if the value does not decode to exactly 32 bytes, the API refuses to boot. Generate one like this:"
+        "text": "`ELLIPTIC_KEK` is the master key from which Elliptic encrypts every secret it stores at rest: your BYOK provider keys, your integration credentials, your SSO and LDAP configuration, your connector secrets, and the private signing key behind MCP tokens. Nothing sensitive is written to the database in the clear; it is all sealed with this key. It must be a **32-byte key, urlsafe-base64 encoded**. Elliptic validates this on startup: if the value does not decode to exactly 32 bytes, the API refuses to boot. Generate one like this:"
       },
       {
         "type": "code",
         "lang": "bash",
-        "code": "# 32-byte urlsafe-base64 key-encryption key\nCOMPANYOS_KEK=$(python3 -c \"import base64,os;print(base64.urlsafe_b64encode(os.urandom(32)).decode())\")"
+        "code": "# 32-byte urlsafe-base64 key-encryption key\nELLIPTIC_KEK=$(python3 -c \"import base64,os;print(base64.urlsafe_b64encode(os.urandom(32)).decode())\")"
       },
       {
         "type": "callout",
         "variant": "warning",
         "title": "Treat the KEK as irreplaceable",
-        "text": "If you lose or change `COMPANYOS_KEK`, every secret encrypted under it, BYOK keys, integration tokens, SSO secrets, connector credentials, and the MCP signing key, becomes undecryptable. Store it somewhere durable and secret (a secrets manager, not the repo), back it up, and do not rotate it casually. Leaving it empty falls back to a public development key, which is fine for local evaluation and unacceptable for anything real."
+        "text": "If you lose or change `ELLIPTIC_KEK`, every secret encrypted under it, BYOK keys, integration tokens, SSO secrets, connector credentials, and the MCP signing key, becomes undecryptable. Store it somewhere durable and secret (a secrets manager, not the repo), back it up, and do not rotate it casually. Leaving it empty falls back to a public development key, which is fine for local evaluation and unacceptable for anything real."
       },
       {
         "type": "h3",
@@ -11229,7 +11229,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "ul",
         "items": [
           "**`JWT_SECRET_KEY` is set and strong.** It cannot be empty and cannot be one of the known weak development defaults (`insecure-dev-secret`, or the `local-dev-jwt-secret-change-in-production` placeholder shipped in the compose file). A weak or default value aborts startup.",
-          "**`COMPANYOS_KEK` is set.** A missing key-encryption key in production aborts startup; the value must also decode to exactly 32 bytes, which is checked in every mode.",
+          "**`ELLIPTIC_KEK` is set.** A missing key-encryption key in production aborts startup; the value must also decode to exactly 32 bytes, which is checked in every mode.",
           "**`CORS_ORIGINS` is not a wildcard.** Because the API allows credentialed requests, a `*` origin is rejected in production. You list your real web origins explicitly, comma-separated."
         ]
       },
@@ -11242,7 +11242,7 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "code",
         "lang": "bash",
-        "code": "# in .env\nCOMPANYOS_KEK=$(python3 -c \"import base64,os;print(base64.urlsafe_b64encode(os.urandom(32)).decode())\")\nJWT_SECRET_KEY=$(openssl rand -hex 32)\nENV=production            # secure cookies, serve the web app over HTTPS\nCORS_ORIGINS=https://app.example.com\nAPP_BASE_URL=https://app.example.com"
+        "code": "# in .env\nELLIPTIC_KEK=$(python3 -c \"import base64,os;print(base64.urlsafe_b64encode(os.urandom(32)).decode())\")\nJWT_SECRET_KEY=$(openssl rand -hex 32)\nENV=production            # secure cookies, serve the web app over HTTPS\nCORS_ORIGINS=https://app.example.com\nAPP_BASE_URL=https://app.example.com"
       },
       {
         "type": "h3",
@@ -11250,7 +11250,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "The built-in MCP server, the surface your agents authenticate against, mints short-lived access tokens signed with **RS256** (asymmetric signing) rather than the symmetric secret used for user sessions. On first use the instance generates an RSA signing key pair, encrypts the private key with your `COMPANYOS_KEK`, and stores it. The matching public key is published as a **JWKS** document, so any client (and the API itself) can verify a token's signature without ever seeing the private key. Each MCP access token is bound to a specific audience (a single org, or an org-agnostic audience for multi-org tokens), is short-lived, and org membership is re-verified live on every call. This is all automatic; the only thing you provide is the KEK that protects the signing key at rest."
+        "text": "The built-in MCP server, the surface your agents authenticate against, mints short-lived access tokens signed with **RS256** (asymmetric signing) rather than the symmetric secret used for user sessions. On first use the instance generates an RSA signing key pair, encrypts the private key with your `ELLIPTIC_KEK`, and stores it. The matching public key is published as a **JWKS** document, so any client (and the API itself) can verify a token's signature without ever seeing the private key. Each MCP access token is bound to a specific audience (a single org, or an org-agnostic audience for multi-org tokens), is short-lived, and org membership is re-verified live on every call. This is all automatic; the only thing you provide is the KEK that protects the signing key at rest."
       },
       {
         "type": "h2",
@@ -11258,7 +11258,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Self-hosting changes nothing about how AI is powered: it is always **bring-your-own-key (BYOK)**, per organization. There is no shared, pooled model account anywhere in Elliptic, not on the hosted instance and not in your own deployment. Every AI feature, meeting summaries, asking the meeting, the company brain, and AI agents acting as first-class members over the MCP server, runs on a provider key (OpenAI or Anthropic, with OpenAI-compatible endpoints also supported) that an owner or admin stores at the organization level. That key is encrypted at rest under your `COMPANYOS_KEK` and decrypted only at call time."
+        "text": "Self-hosting changes nothing about how AI is powered: it is always **bring-your-own-key (BYOK)**, per organization. There is no shared, pooled model account anywhere in Elliptic, not on the hosted instance and not in your own deployment. Every AI feature, meeting summaries, asking the meeting, the company brain, and AI agents acting as first-class members over the MCP server, runs on a provider key (OpenAI or Anthropic, with OpenAI-compatible endpoints also supported) that an owner or admin stores at the organization level. That key is encrypted at rest under your `ELLIPTIC_KEK` and decrypted only at call time."
       },
       {
         "type": "p",
@@ -11268,7 +11268,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "info",
         "title": "Set the org key in Settings, not in env",
-        "text": "BYOK keys are not environment variables. They are added per organization, in the workspace under Settings, and managed there (you can hold several, mark a default, and rotate with no downtime). The `COMPANYOS_KEK` you set in `.env` is what encrypts those keys, it is not itself a model key."
+        "text": "BYOK keys are not environment variables. They are added per organization, in the workspace under Settings, and managed there (you can hold several, mark a default, and rotate with no downtime). The `ELLIPTIC_KEK` you set in `.env` is what encrypts those keys, it is not itself a model key."
       },
       {
         "type": "h2",
@@ -11281,8 +11281,8 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "ul",
         "items": [
-          "`ghcr.io/woosal1337/companyos-api`, the backend, MCP server, and realtime relay.",
-          "`ghcr.io/woosal1337/companyos-web`, the Next.js web app."
+          "`ghcr.io/woosal1337/elliptic-api`, the backend, MCP server, and realtime relay.",
+          "`ghcr.io/woosal1337/elliptic-web`, the Next.js web app."
         ]
       },
       {
@@ -11310,7 +11310,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "tip",
         "title": "Flip to production when you go live",
-        "text": "The single most important switch when moving from evaluation to a real deployment is `ENV=production` together with fresh `COMPANYOS_KEK` and `JWT_SECRET_KEY` and a non-wildcard `CORS_ORIGINS`. Production mode is what enforces secure cookies and rejects weak or default secrets, so making the switch is what turns an evaluation stack into a hardened one."
+        "text": "The single most important switch when moving from evaluation to a real deployment is `ENV=production` together with fresh `ELLIPTIC_KEK` and `JWT_SECRET_KEY` and a non-wildcard `CORS_ORIGINS`. Production mode is what enforces secure cookies and rejects weak or default secrets, so making the switch is what turns an evaluation stack into a hardened one."
       },
       {
         "type": "h2",

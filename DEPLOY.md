@@ -28,7 +28,7 @@ are gone — there is nothing deploy-related left in `.github/workflows/`.
 Coolify project **companyos** → environment **production** → application
 **companyos-api**:
 
-- **Source:** `woosal1337/companyos.git`, branch `main`, base directory
+- **Source:** `woosal1337/elliptic.git`, branch `main`, base directory
   `/apps/api`, Dockerfile build pack.
 - **Domain:** `api-company.chele.bi` → Traefik → container port 8000.
 - **Database:** the Coolify-managed **companyos-postgres** resource
@@ -39,7 +39,7 @@ Coolify project **companyos** → environment **production** → application
   There is no host `.env` or `docker-compose.override.yml` in this setup.
 
 Deploys stay logged-in-safe for the same reason as before:
-`JWT_SECRET_KEY` / `COMPANYOS_KEK` are pinned in Coolify's env (stable across
+`JWT_SECRET_KEY` / `ELLIPTIC_KEK` are pinned in Coolify's env (stable across
 deploys) and Postgres is a separate resource that deploys never recreate.
 
 ## Config note (the MCP OAuth fix)

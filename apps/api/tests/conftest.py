@@ -6,7 +6,7 @@ os.environ["DATABASE_URL"] = os.environ.get(
     "TEST_DATABASE_URL", "postgresql+asyncpg://companyos:companyos@localhost:5434/companyos_test"
 )
 os.environ["ENV"] = "test"
-os.environ["COMPANYOS_KEK"] = "MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA="
+os.environ["ELLIPTIC_KEK"] = "MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA="
 os.environ["JWT_SECRET_KEY"] = "test-secret-key-with-enough-length-for-hs256"
 
 from collections.abc import AsyncIterator

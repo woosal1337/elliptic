@@ -56,7 +56,7 @@ const COLUMNS: FooterColumn[] = [
     heading: "Connect",
     links: [
       { label: "X (Twitter)", href: "https://x.com/woosal1337" },
-      { label: "GitHub", href: "https://github.com/woosal1337/companyos" },
+      { label: "GitHub", href: "https://github.com/woosal1337/elliptic" },
     ],
   },
 ];
