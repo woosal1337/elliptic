@@ -4,7 +4,7 @@ contact_links:
     url: https://github.com/woosal1337/elliptic/discussions
     about: Ask questions, share ideas, and discuss with the community.
   - name: Documentation
-    url: https://docs.company.chele.bi
+    url: https://docs.elliptic.sh
     about: Read the Elliptic docs before filing an issue.
   - name: Report a security vulnerability
     url: https://github.com/woosal1337/elliptic/security/advisories/new

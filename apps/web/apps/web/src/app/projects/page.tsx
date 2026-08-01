@@ -142,7 +142,7 @@ export default function ProjectsPage() {
         titleRest="and your team run on one board, in real time."
         lede="Projects, tasks, sub-tasks, and the planning layers above them. Every task carries a stable identifier, so a meeting, a comment, or an agent can point straight at it."
         primary={{ label: "Start free", href: "/signup" }}
-        secondary={{ label: "Read the docs", href: "https://docs.company.chele.bi/projects-and-tasks" }}
+        secondary={{ label: "Read the docs", href: "https://docs.elliptic.sh/projects-and-tasks" }}
         visual={
           <BrowserFrame
             url="app.companyos.com/q3-platform"

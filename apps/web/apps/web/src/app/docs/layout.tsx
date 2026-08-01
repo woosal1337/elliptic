@@ -20,7 +20,7 @@ export default async function DocsLayout({ children }: { children: ReactNode }) 
           </span>
         </div>
         <a
-          href="https://company.chele.bi/app"
+          href="https://elliptic.sh/app"
           className="text-small text-muted-foreground transition-colors duration-150 hover:text-foreground"
         >
           Open app →

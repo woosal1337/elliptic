@@ -28,10 +28,10 @@ const COLUMNS: FooterColumn[] = [
     index: "02",
     heading: "Features",
     links: [
-      { label: "BYOK", href: "https://docs.company.chele.bi/ai-byok-assistant" },
-      { label: "Board", href: "https://docs.company.chele.bi/workflows-statuses-transitions" },
-      { label: "Transcripts", href: "https://docs.company.chele.bi/meetings" },
-      { label: "Activity log", href: "https://docs.company.chele.bi/activity-calendar-inbox" },
+      { label: "BYOK", href: "https://docs.elliptic.sh/ai-byok-assistant" },
+      { label: "Board", href: "https://docs.elliptic.sh/workflows-statuses-transitions" },
+      { label: "Transcripts", href: "https://docs.elliptic.sh/meetings" },
+      { label: "Activity log", href: "https://docs.elliptic.sh/activity-calendar-inbox" },
     ],
   },
   {
@@ -47,7 +47,7 @@ const COLUMNS: FooterColumn[] = [
     index: "04",
     heading: "Resources",
     links: [
-      { label: "Docs", href: "https://docs.company.chele.bi" },
+      { label: "Docs", href: "https://docs.elliptic.sh" },
       { label: "Changelog", href: "/changelog" },
     ],
   },

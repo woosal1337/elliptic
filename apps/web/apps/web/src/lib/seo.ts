@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 /** Absolute origin of the marketing site, used for canonical URLs, OG, sitemap, and robots. */
-export const SITE_URL = process.env.NEXT_PUBLIC_APP_ORIGIN ?? "https://company.chele.bi";
+export const SITE_URL = process.env.NEXT_PUBLIC_APP_ORIGIN ?? "https://elliptic.sh";
 
 interface PageMetaInput {
   title: string;

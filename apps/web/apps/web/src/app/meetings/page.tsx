@@ -137,7 +137,7 @@ export default function MeetingsPage() {
         titleRest="a transcript, a summary, and an answer."
         lede="Bring a recording in from Folio. Elliptic keeps the speaker-attributed transcript, writes the summary on your own key, and lets anyone, or any agent, ask the meeting a question in plain language."
         primary={{ label: "Start free", href: "/signup" }}
-        secondary={{ label: "Read the docs", href: "https://docs.company.chele.bi/meetings" }}
+        secondary={{ label: "Read the docs", href: "https://docs.elliptic.sh/meetings" }}
         visual={
           <BrowserFrame
             url="app.companyos.com/meetings/weekly-sync"

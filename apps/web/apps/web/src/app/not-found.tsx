@@ -33,7 +33,7 @@ export default function NotFound() {
             <Link href="/">Back to home</Link>
           </Button>
           <Button variant="outline" asChild>
-            <a href="https://docs.company.chele.bi">Read the docs</a>
+            <a href="https://docs.elliptic.sh">Read the docs</a>
           </Button>
         </div>
       </main>

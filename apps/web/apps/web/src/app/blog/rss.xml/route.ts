@@ -1,6 +1,6 @@
 import { POSTS } from "../_content/posts";
 
-const SITE = process.env.NEXT_PUBLIC_APP_ORIGIN ?? "https://company.chele.bi";
+const SITE = process.env.NEXT_PUBLIC_APP_ORIGIN ?? "https://elliptic.sh";
 
 function escapeXml(s: string): string {
   return s.replace(/[<>&'"]/g, (c) =>

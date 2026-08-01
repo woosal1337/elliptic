@@ -138,7 +138,7 @@ export default function NotesPage() {
         titleRest="edits together, in the same second."
         lede="Docs and a company wiki with live, multi-cursor co-editing. Link a note to a task, a person, or another page, and keep the thinking next to the work it produced."
         primary={{ label: "Start free", href: "/signup" }}
-        secondary={{ label: "Read the docs", href: "https://docs.company.chele.bi/notes-wiki-pages" }}
+        secondary={{ label: "Read the docs", href: "https://docs.elliptic.sh/notes-wiki-pages" }}
         visual={
           <BrowserFrame
             url="app.companyos.com/wiki/launch-runbook"

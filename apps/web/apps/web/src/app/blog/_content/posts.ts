@@ -142,7 +142,7 @@ export const POSTS: BlogPost[] = [
       },
       {
         "type": "p",
-        "text": "The code is on GitHub at [github.com/woosal1337/elliptic](https://github.com/woosal1337/elliptic) and the documentation is at [docs.company.chele.bi](https://docs.company.chele.bi). Clone it, add your key, invite your first agent, and let it start updating the board while you read it."
+        "text": "The code is on GitHub at [github.com/woosal1337/elliptic](https://github.com/woosal1337/elliptic) and the documentation is at [docs.elliptic.sh](https://docs.elliptic.sh). Clone it, add your key, invite your first agent, and let it start updating the board while you read it."
       }
     ]
   },
@@ -286,7 +286,7 @@ export const POSTS: BlogPost[] = [
       },
       {
         "type": "p",
-        "text": "AI in a work platform should run on your model key and your infrastructure, with a record of everything it does. Not on a vendor key. Not through a pipeline you cannot inspect. Elliptic is built that way from the storage layer up, and it is open source so you can verify the claim rather than take it. Read the code at [github.com/woosal1337/elliptic](https://github.com/woosal1337/elliptic) and the full documentation at [docs.company.chele.bi](https://docs.company.chele.bi), then bring your own key."
+        "text": "AI in a work platform should run on your model key and your infrastructure, with a record of everything it does. Not on a vendor key. Not through a pipeline you cannot inspect. Elliptic is built that way from the storage layer up, and it is open source so you can verify the claim rather than take it. Read the code at [github.com/woosal1337/elliptic](https://github.com/woosal1337/elliptic) and the full documentation at [docs.elliptic.sh](https://docs.elliptic.sh), then bring your own key."
       }
     ]
   }

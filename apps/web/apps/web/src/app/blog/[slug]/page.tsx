@@ -117,7 +117,7 @@ export default async function BlogPostPage({ params }: BlogPostProps) {
                 GitHub
               </a>
               <a
-                href="https://docs.company.chele.bi"
+                href="https://docs.elliptic.sh"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center rounded-lg border border-border px-4 py-2 text-small font-medium text-foreground transition-colors duration-150 hover:border-input"

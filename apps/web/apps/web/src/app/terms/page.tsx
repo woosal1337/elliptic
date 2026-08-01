@@ -7,7 +7,7 @@ import type { DocBlock } from "@/app/docs/_content/types";
 export const metadata = pageMetadata({
   title: "Terms",
   description:
-    "Terms of service for the hosted Elliptic at company.chele.bi. The Elliptic software itself is open source under Apache-2.0.",
+    "Terms of service for the hosted Elliptic at elliptic.sh. The Elliptic software itself is open source under Apache-2.0.",
   path: "/terms",
 });
 
@@ -15,7 +15,7 @@ const BLOCKS: DocBlock[] = [
   { type: "p", text: "Last updated 28 June 2026." },
   {
     type: "p",
-    text: "These terms cover use of the hosted Elliptic service at [company.chele.bi](https://company.chele.bi). The Elliptic software itself is open source, and self-hosting it is governed by its license rather than by these terms.",
+    text: "These terms cover use of the hosted Elliptic service at [elliptic.sh](https://elliptic.sh). The Elliptic software itself is open source, and self-hosting it is governed by its license rather than by these terms.",
   },
   { type: "h2", text: "The software license" },
   {

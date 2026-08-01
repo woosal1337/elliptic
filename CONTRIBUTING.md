@@ -39,7 +39,7 @@ discuss it **before** writing the code. It saves everyone a redo.
 ## Getting help
 
 - **Questions & ideas:** [GitHub Discussions](https://github.com/woosal1337/elliptic/discussions).
-- **Docs:** [docs.company.chele.bi](https://docs.company.chele.bi).
+- **Docs:** [docs.elliptic.sh](https://docs.elliptic.sh).
 - **Bugs:** a GitHub issue, using the templates above.
 
 ---

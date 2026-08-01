@@ -15,6 +15,6 @@ export default async function Image({ params }: { params: Promise<{ slug: string
   return ogImage({
     eyebrow: "Elliptic Blog",
     title: post?.title ?? "Elliptic Blog",
-    subtitle: "company.chele.bi",
+    subtitle: "elliptic.sh",
   });
 }

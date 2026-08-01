@@ -138,7 +138,7 @@ export const RELEASES: Release[] = [
         type: "callout",
         variant: "tip",
         title: "Get started",
-        text: "Run the whole stack with one `docker compose up`. See the [docs](https://docs.company.chele.bi) and the [repository](https://github.com/woosal1337/elliptic).",
+        text: "Run the whole stack with one `docker compose up`. See the [docs](https://docs.elliptic.sh) and the [repository](https://github.com/woosal1337/elliptic).",
       },
     ],
   },

@@ -5,9 +5,9 @@ Tailscale), managed by **Coolify**. The dashboard URL, host address and other
 host specifics are deliberately kept out of this public doc. Cloudflare
 terminates public TLS at its edge and a cloudflared tunnel hands requests
 to Coolify's Traefik proxy
-(`coolify-proxy`), which routes `api-company.chele.bi` to the api container.
+(`coolify-proxy`), which routes `api.elliptic.sh` to the api container.
 igris serves the **API + Postgres**; the **web app is deployed via Vercel**
-(`company.chele.bi`), so only the api is built here.
+(`elliptic.sh`), so only the api is built here.
 
 ## CI/CD
 
@@ -30,7 +30,7 @@ Coolify project **companyos** → environment **production** → application
 
 - **Source:** `woosal1337/elliptic.git`, branch `main`, base directory
   `/apps/api`, Dockerfile build pack.
-- **Domain:** `api-company.chele.bi` → Traefik → container port 8000.
+- **Domain:** `api.elliptic.sh` → Traefik → container port 8000.
 - **Database:** the Coolify-managed **companyos-postgres** resource
   (`postgres:17-alpine`), internal to the `coolify` Docker network — never
   published on a host port. The app reaches it via the `DATABASE_URL` env var.
@@ -47,15 +47,15 @@ deploys) and Postgres is a separate resource that deploys never recreate.
 `MCP_RESOURCE_BASE` **must** be the full URL including the path:
 
 ```
-MCP_RESOURCE_BASE=https://api-company.chele.bi/api/v1/mcp
+MCP_RESOURCE_BASE=https://api.elliptic.sh/api/v1/mcp
 ```
 
-A bare origin (`https://api-company.chele.bi`) makes the OAuth flow fail with
+A bare origin (`https://api.elliptic.sh`) makes the OAuth flow fail with
 `resource must equal the canonical MCP URI`. Verify:
 
 ```bash
-curl -s https://api-company.chele.bi/.well-known/oauth-protected-resource/api/v1/mcp
-# "resource" must read https://api-company.chele.bi/api/v1/mcp
+curl -s https://api.elliptic.sh/.well-known/oauth-protected-resource/api/v1/mcp
+# "resource" must read https://api.elliptic.sh/api/v1/mcp
 ```
 
 ## Zero-downtime deploys and migrations

@@ -90,10 +90,10 @@ export default async function DocsPage({ params }: DocsPageProps) {
       <footer className="mt-10 border-t border-border pt-6 text-caption text-muted-foreground">
         © 2026 Elliptic ·{" "}
         <a
-          href="https://company.chele.bi"
+          href="https://elliptic.sh"
           className="text-accent underline-offset-4 hover:underline"
         >
-          company.chele.bi
+          elliptic.sh
         </a>
       </footer>
     </div>

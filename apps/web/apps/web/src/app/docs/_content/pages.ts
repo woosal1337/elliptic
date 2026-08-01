@@ -56,7 +56,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "On the hosted instance, head to [company.chele.bi](https://company.chele.bi) and choose **Start free**, which opens the sign-up page. If you are self-hosting, open your own instance's URL instead."
+        "text": "On the hosted instance, head to [elliptic.sh](https://elliptic.sh) and choose **Start free**, which opens the sign-up page. If you are self-hosting, open your own instance's URL instead."
       },
       {
         "type": "steps",
@@ -865,7 +865,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "info",
         "title": "Where this lives",
-        "text": "Projects live at **company.chele.bi → Projects**. Each project opens to its own workspace with tabs for Overview, Updates, Board, Tasks, Epics, Calendar, Register, Insights, Members, and Settings, plus (when their feature toggle is on) Timeline, Cycles, Milestones, Modules, Meetings, and Notes. **Your Work** in the sidebar collects the tasks assigned to and created by you across every project."
+        "text": "Projects live at **elliptic.sh → Projects**. Each project opens to its own workspace with tabs for Overview, Updates, Board, Tasks, Epics, Calendar, Register, Insights, Members, and Settings, plus (when their feature toggle is on) Timeline, Cycles, Milestones, Modules, Meetings, and Notes. **Your Work** in the sidebar collects the tasks assigned to and created by you across every project."
       },
       {
         "type": "callout",
@@ -3336,7 +3336,7 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "code",
         "lang": "bash",
-        "code": "# Export one user's logged time for a date range\ncurl -L -b cookies.txt \\\n  'https://company.chele.bi/api/orgs/{org_id}/projects/{project_id}/worklogs/export.csv?start_date=2026-06-01&end_date=2026-06-30&user_id={user_id}' \\\n  -o worklogs.csv"
+        "code": "# Export one user's logged time for a date range\ncurl -L -b cookies.txt \\\n  'https://elliptic.sh/api/orgs/{org_id}/projects/{project_id}/worklogs/export.csv?start_date=2026-06-01&end_date=2026-06-30&user_id={user_id}' \\\n  -o worklogs.csv"
       },
       {
         "type": "h2",
@@ -4906,7 +4906,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "info",
         "title": "Self-hosting note",
-        "text": "The 25 MB ceiling and the allowed content type list are server settings (`file_size_limit_bytes` and `allowed_upload_content_types`). On the hosted instance at company.chele.bi they are the defaults above. If you self-host, you can adjust both in your API configuration. File storage must also be configured: if your instance has no object storage set up, uploads fail with \"Object storage is not configured\" and attachment features stay off."
+        "text": "The 25 MB ceiling and the allowed content type list are server settings (`file_size_limit_bytes` and `allowed_upload_content_types`). On the hosted instance at elliptic.sh they are the defaults above. If you self-host, you can adjust both in your API configuration. File storage must also be configured: if your instance has no object storage set up, uploads fail with \"Object storage is not configured\" and attachment features stay off."
       },
       {
         "type": "h2",
@@ -5064,7 +5064,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Self-hosted instances can run in a zero-egress **air-gapped mode**. When air-gapped mode is enabled, Elliptic does not make outbound requests to fetch external pages, so Open Graph unfurling is turned off. In that mode, link cards resolve from the URL alone: you still get the provider and a link out, but there is no fetched title, description, or thumbnail. Iframes are unaffected, because they are built from the URL and never required a fetch in the first place. The hosted instance at company.chele.bi is not air-gapped, so it fetches Open Graph metadata normally."
+        "text": "Self-hosted instances can run in a zero-egress **air-gapped mode**. When air-gapped mode is enabled, Elliptic does not make outbound requests to fetch external pages, so Open Graph unfurling is turned off. In that mode, link cards resolve from the URL alone: you still get the provider and a link out, but there is no fetched title, description, or thumbnail. Iframes are unaffected, because they are built from the URL and never required a fetch in the first place. The hosted instance at elliptic.sh is not air-gapped, so it fetches Open Graph metadata normally."
       },
       {
         "type": "callout",
@@ -5248,7 +5248,7 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "code",
         "lang": "bash",
-        "code": "# Download the analytics rollups for one org as CSV\ncurl -L -H \"Authorization: Bearer $TOKEN\" \\\n  \"https://api-company.chele.bi/api/v1/orgs/$ORG_ID/analytics/export.csv\" \\\n  -o analytics.csv"
+        "code": "# Download the analytics rollups for one org as CSV\ncurl -L -H \"Authorization: Bearer $TOKEN\" \\\n  \"https://api.elliptic.sh/api/v1/orgs/$ORG_ID/analytics/export.csv\" \\\n  -o analytics.csv"
       },
       {
         "type": "h2",
@@ -5365,7 +5365,7 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "code",
         "lang": "bash",
-        "code": "# Fetch the printable HTML for a dashboard, then print to PDF in the browser\ncurl -L -H \"Authorization: Bearer $TOKEN\" \\\n  \"https://api-company.chele.bi/api/v1/orgs/$ORG_ID/dashboards/$DASHBOARD_ID/export.html\" \\\n  -o dashboard.html"
+        "code": "# Fetch the printable HTML for a dashboard, then print to PDF in the browser\ncurl -L -H \"Authorization: Bearer $TOKEN\" \\\n  \"https://api.elliptic.sh/api/v1/orgs/$ORG_ID/dashboards/$DASHBOARD_ID/export.html\" \\\n  -o dashboard.html"
       },
       {
         "type": "h2",
@@ -6647,7 +6647,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "info",
         "title": "Endpoint",
-        "text": "On the hosted instance the server lives at `https://api-company.chele.bi/api/v1/mcp`, a single streamable-HTTP MCP endpoint. Self-hosting follows the same path under your own API origin (for local development, `http://localhost:8000/api/v1/mcp`). Authentication is OAuth 2.1, so there is nothing to copy and paste. The client walks you through a browser consent the first time."
+        "text": "On the hosted instance the server lives at `https://api.elliptic.sh/api/v1/mcp`, a single streamable-HTTP MCP endpoint. Self-hosting follows the same path under your own API origin (for local development, `http://localhost:8000/api/v1/mcp`). Authentication is OAuth 2.1, so there is nothing to copy and paste. The client walks you through a browser consent the first time."
       },
       {
         "type": "h2",
@@ -6729,7 +6729,7 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "code",
         "lang": "bash",
-        "code": "WWW-Authenticate: Bearer resource_metadata=\"https://api-company.chele.bi/.well-known/oauth-protected-resource/api/v1/mcp\""
+        "code": "WWW-Authenticate: Bearer resource_metadata=\"https://api.elliptic.sh/.well-known/oauth-protected-resource/api/v1/mcp\""
       },
       {
         "type": "p",
@@ -6775,7 +6775,7 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "code",
         "lang": "bash",
-        "code": "claude mcp add --transport http companyos https://api-company.chele.bi/api/v1/mcp\n\n# then, inside Claude Code:\n/mcp        # opens the Elliptic consent screen in your browser"
+        "code": "claude mcp add --transport http companyos https://api.elliptic.sh/api/v1/mcp\n\n# then, inside Claude Code:\n/mcp        # opens the Elliptic consent screen in your browser"
       },
       {
         "type": "h3",
@@ -6788,7 +6788,7 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "code",
         "lang": "json",
-        "code": "{\n  \"mcpServers\": {\n    \"companyos\": {\n      \"url\": \"https://api-company.chele.bi/api/v1/mcp\"\n    }\n  }\n}"
+        "code": "{\n  \"mcpServers\": {\n    \"companyos\": {\n      \"url\": \"https://api.elliptic.sh/api/v1/mcp\"\n    }\n  }\n}"
       },
       {
         "type": "p",
@@ -6805,7 +6805,7 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "code",
         "lang": "json",
-        "code": "{\n  \"mcpServers\": {\n    \"companyos\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"mcp-remote\", \"https://api-company.chele.bi/api/v1/mcp\"]\n    }\n  }\n}"
+        "code": "{\n  \"mcpServers\": {\n    \"companyos\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"mcp-remote\", \"https://api.elliptic.sh/api/v1/mcp\"]\n    }\n  }\n}"
       },
       {
         "type": "callout",
@@ -7375,7 +7375,7 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "code",
         "lang": "bash",
-        "code": "# from the root of a project you want connected\ncd your-project\ncurl -fsSL https://company.chele.bi/companyos-agent-init.sh -o companyos-agent-init.sh\nbash companyos-agent-init.sh"
+        "code": "# from the root of a project you want connected\ncd your-project\ncurl -fsSL https://elliptic.sh/companyos-agent-init.sh -o companyos-agent-init.sh\nbash companyos-agent-init.sh"
       },
       {
         "type": "p",
@@ -7400,7 +7400,7 @@ export const DOC_PAGES: DocPage[] = [
           [
             "`--endpoint URL`",
             "the `COMPANYOS_MCP_URL` env var, else `http://localhost:8000/api/v1/mcp`",
-            "The MCP endpoint written into `.mcp.json`. Point it at your Elliptic API's `/api/v1/mcp` path. On the hosted instance that is `https://api-company.chele.bi/api/v1/mcp`."
+            "The MCP endpoint written into `.mcp.json`. Point it at your Elliptic API's `/api/v1/mcp` path. On the hosted instance that is `https://api.elliptic.sh/api/v1/mcp`."
           ],
           [
             "`--name companyos`",
@@ -7412,7 +7412,7 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "code",
         "lang": "bash",
-        "code": "# point at the hosted instance explicitly\nbash companyos-agent-init.sh --endpoint https://api-company.chele.bi/api/v1/mcp\n\n# or set it once in the environment\nexport COMPANYOS_MCP_URL=https://api-company.chele.bi/api/v1/mcp\nbash companyos-agent-init.sh"
+        "code": "# point at the hosted instance explicitly\nbash companyos-agent-init.sh --endpoint https://api.elliptic.sh/api/v1/mcp\n\n# or set it once in the environment\nexport COMPANYOS_MCP_URL=https://api.elliptic.sh/api/v1/mcp\nbash companyos-agent-init.sh"
       },
       {
         "type": "callout",
@@ -7439,7 +7439,7 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "code",
         "lang": "json",
-        "code": "{\n  \"mcpServers\": {\n    \"companyos\": {\n      \"type\": \"http\",\n      \"url\": \"https://api-company.chele.bi/api/v1/mcp\"\n    }\n  }\n}"
+        "code": "{\n  \"mcpServers\": {\n    \"companyos\": {\n      \"type\": \"http\",\n      \"url\": \"https://api.elliptic.sh/api/v1/mcp\"\n    }\n  }\n}"
       },
       {
         "type": "p",
@@ -7543,7 +7543,7 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "code",
         "lang": "json",
-        "code": "{\n  \"mcpServers\": {\n    \"companyos\": {\n      \"url\": \"https://api-company.chele.bi/api/v1/mcp\"\n    }\n  }\n}"
+        "code": "{\n  \"mcpServers\": {\n    \"companyos\": {\n      \"url\": \"https://api.elliptic.sh/api/v1/mcp\"\n    }\n  }\n}"
       },
       {
         "type": "p",
@@ -7710,7 +7710,7 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "code",
         "lang": "text",
-        "code": "https://company.chele.bi/api/v1/integrations/git/<token>"
+        "code": "https://elliptic.sh/api/v1/integrations/git/<token>"
       },
       {
         "type": "p",
@@ -7797,7 +7797,7 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "code",
         "lang": "text",
-        "code": "https://company.chele.bi/api/v1/integrations/sentry/<token>"
+        "code": "https://elliptic.sh/api/v1/integrations/sentry/<token>"
       },
       {
         "type": "p",
@@ -7843,7 +7843,7 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "code",
         "lang": "text",
-        "code": "https://company.chele.bi/api/v1/integrations/email/<token>"
+        "code": "https://elliptic.sh/api/v1/integrations/email/<token>"
       },
       {
         "type": "p",
@@ -8043,7 +8043,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "tip",
         "title": "Air-gapped instances",
-        "text": "If your Elliptic is self-hosted on a private network, public links resolve only to people who can reach that network. A public board on `localhost` or an internal host is public only to those already inside the perimeter. On the hosted instance at company.chele.bi, a published link is reachable from the open internet. Know which one you are on before you share."
+        "text": "If your Elliptic is self-hosted on a private network, public links resolve only to people who can reach that network. A public board on `localhost` or an internal host is public only to those already inside the perimeter. On the hosted instance at elliptic.sh, a published link is reachable from the open internet. Know which one you are on before you share."
       },
       {
         "type": "p",
@@ -9747,7 +9747,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "On the hosted instance you sign in at [company.chele.bi](https://company.chele.bi). When you submit your email and password, Elliptic verifies the credentials and starts a session for you."
+        "text": "On the hosted instance you sign in at [elliptic.sh](https://elliptic.sh). When you submit your email and password, Elliptic verifies the credentials and starts a session for you."
       },
       {
         "type": "h3",
@@ -9941,7 +9941,7 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "code",
         "lang": "bash",
-        "code": "curl -X POST https://company.chele.bi/api/v1/oauth/token \\\n  -d grant_type=client_credentials \\\n  -d client_id=app-xxxxxxxx \\\n  -d client_secret=cos_secret_xxxxxxxx"
+        "code": "curl -X POST https://elliptic.sh/api/v1/oauth/token \\\n  -d grant_type=client_credentials \\\n  -d client_id=app-xxxxxxxx \\\n  -d client_secret=cos_secret_xxxxxxxx"
       },
       {
         "type": "p",
@@ -10277,7 +10277,7 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "code",
         "lang": "bash",
-        "code": "# SCIM base URL your IdP points at\nhttps://company.chele.bi/scim/v2/orgs/{org_id}\n\n# every request carries the per-org bearer token\nAuthorization: Bearer scim_xxxxxxxxxxxxxxxxxxxxxxxx"
+        "code": "# SCIM base URL your IdP points at\nhttps://elliptic.sh/scim/v2/orgs/{org_id}\n\n# every request carries the per-org bearer token\nAuthorization: Bearer scim_xxxxxxxxxxxxxxxxxxxxxxxx"
       },
       {
         "type": "p",
@@ -11029,7 +11029,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Elliptic is open source and self-hostable, so the whole platform, your projects, tasks, meetings, notes, the activity log, the company brain, and the built-in MCP server your agents connect to, can run entirely on your own infrastructure. The fastest path is **Docker Compose**: one command brings up the database, the API, and the web app together. This page walks through that quick start, the compose stack and how its services are wired, the secrets and encryption you set before any real deployment, how AI runs on your own keys, and how to upgrade. The canonical hosted instance lives at company.chele.bi; everything here is about running the same software yourself."
+        "text": "Elliptic is open source and self-hostable, so the whole platform, your projects, tasks, meetings, notes, the activity log, the company brain, and the built-in MCP server your agents connect to, can run entirely on your own infrastructure. The fastest path is **Docker Compose**: one command brings up the database, the API, and the web app together. This page walks through that quick start, the compose stack and how its services are wired, the secrets and encryption you set before any real deployment, how AI runs on your own keys, and how to upgrade. The canonical hosted instance lives at elliptic.sh; everything here is about running the same software yourself."
       },
       {
         "type": "callout",
@@ -11349,7 +11349,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "This page is for whoever runs the instance. On the hosted instance at company.chele.bi that is the Elliptic team. On a self-hosted deployment it is you. Either way the surfaces and rules are identical, and they all live behind a single role."
+        "text": "This page is for whoever runs the instance. On the hosted instance at elliptic.sh that is the Elliptic team. On a self-hosted deployment it is you. Either way the surfaces and rules are identical, and they all live behind a single role."
       },
       {
         "type": "h2",
@@ -11788,7 +11788,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "info",
         "title": "Why a relative sentinel path",
-        "text": "`/__mention/...` is a relative path, not an absolute URL, so it stays stable across environments and across the hosted instance at company.chele.bi and any self-hosted deployment. The editor and renderer intercept it before it would ever be followed as a normal link, so the id is the source of truth and the label is display only. Editing the label does not change the target."
+        "text": "`/__mention/...` is a relative path, not an absolute URL, so it stays stable across environments and across the hosted instance at elliptic.sh and any self-hosted deployment. The editor and renderer intercept it before it would ever be followed as a normal link, so the id is the source of truth and the label is display only. Editing the label does not change the target."
       },
       {
         "type": "p",

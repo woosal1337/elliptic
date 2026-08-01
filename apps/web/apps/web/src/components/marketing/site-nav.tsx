@@ -5,7 +5,7 @@ import { Logo, MarketingNav, type NavLink as NavLinkType } from "@elliptic/ui";
 
 const NAV_LINKS: NavLinkType[] = [
   { label: "Product", href: "/#how-it-works" },
-  { label: "Docs", href: "https://docs.company.chele.bi" },
+  { label: "Docs", href: "https://docs.elliptic.sh" },
   { label: "Now", href: "/#now" },
   { label: "Contact", href: "/contact" },
 ];

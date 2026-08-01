@@ -6,7 +6,7 @@ The Elliptic iOS/Android app — React Native + Expo, scaffolded from
 ## Stack
 - Expo (CNG) + React Native, TypeScript (strict)
 - React Navigation (native stack + bottom tabs)
-- apisauce API client against `api-company.chele.bi` (native **token** auth — Bearer access/refresh)
+- apisauce API client against `api.elliptic.sh` (native **token** auth — Bearer access/refresh)
 - Auth tokens in the Keychain (expo-secure-store); MMKV for cached lists and preferences
 - TanStack Query (MMKV-persisted) for list data, themed component library (`app/components`, `app/theme`)
 
