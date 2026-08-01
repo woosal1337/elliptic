@@ -1,4 +1,4 @@
-// CompanyOS mobile — DARK theme (brand default).
+// Elliptic mobile — DARK theme (brand default).
 // Ported from the web design system (apps/web/packages/ui/src/styles.css),
 // oklch source values resolved to sRGB hex. This is a designed dark palette,
 // not a mechanical inversion of the light ramp.

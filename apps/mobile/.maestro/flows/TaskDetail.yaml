@@ -2,7 +2,7 @@
 #intent: task detail behaviours — the label picker round-trips, and the pinned
 #        composer stays reachable with the keyboard up (it used to sit behind it).
 #        Labels are toggled on and back off, so only the posted comment persists.
-appId: bi.chele.companyos
+appId: sh.elliptic
 ---
 - launchApp
 - waitForAnimationToEnd

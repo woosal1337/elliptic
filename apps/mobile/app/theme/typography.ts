@@ -1,4 +1,4 @@
-// CompanyOS mobile typography.
+// Elliptic mobile typography.
 // Matches the web brand: Inter (UI/body), Inter Tight (display/titles),
 // JetBrains Mono (task identifiers, code).
 

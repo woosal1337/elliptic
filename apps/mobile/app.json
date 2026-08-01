@@ -1,7 +1,10 @@
 {
-  "name": "CompanyOS",
-  "slug": "companyos",
-  "scheme": "companyos",
+  "name": "Elliptic",
+  "slug": "elliptic",
+  "scheme": [
+    "elliptic",
+    "companyos"
+  ],
   "version": "1.0.0",
   "orientation": "portrait",
   "userInterfaceStyle": "automatic",
@@ -16,7 +19,7 @@
   ],
   "android": {
     "icon": "./assets/images/app-icon.png",
-    "package": "bi.chele.companyos",
+    "package": "sh.elliptic",
     "adaptiveIcon": {
       "foregroundImage": "./assets/images/app-icon.png",
       "backgroundColor": "#0E0E11"
@@ -27,7 +30,7 @@
   "ios": {
     "icon": "./assets/images/app-icon.png",
     "supportsTablet": true,
-    "bundleIdentifier": "bi.chele.companyos",
+    "bundleIdentifier": "sh.elliptic",
     "config": {
       "usesNonExemptEncryption": false
     },
@@ -73,7 +76,7 @@
     [
       "expo-image-picker",
       {
-        "photosPermission": "CompanyOS uses your photo library so you can attach images to tasks and comments.",
+        "photosPermission": "Elliptic uses your photo library so you can attach images to tasks and comments.",
         "cameraPermission": false,
         "microphonePermission": false
       }
@@ -87,7 +90,7 @@
       "version": "11.5.0"
     },
     "eas": {
-      "projectId": "6b825850-62cc-42e2-8166-da8fca8ba8ea"
+      "projectId": "ab29717b-7aed-4cba-95d8-30227f3d5f85"
     }
   },
   "owner": "woosal"

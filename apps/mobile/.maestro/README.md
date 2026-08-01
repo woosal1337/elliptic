@@ -1,17 +1,17 @@
-# CompanyOS mobile — Maestro test & reference harness
+# Elliptic mobile — Maestro test & reference harness
 
 Cross-platform [Maestro](https://maestro.dev) flows that drive **two** devices:
 
 | Target | Device | Purpose |
 |---|---|---|
-| **iOS** | booted iPhone 17 Pro simulator | where CompanyOS mobile is developed & tested |
+| **iOS** | booted iPhone 17 Pro simulator | where Elliptic mobile is developed & tested |
 | **Android** | `Android_1` emulator (`emulator-5554`) | runs **Linear** (`app.linear`) — our UX north star — for reference capture |
 
 ## Runner
 
 ```bash
 scripts/maestro.sh devices                                   # list connected iOS + Android devices
-scripts/maestro.sh ios     .maestro/capture/companyos-tour.yaml
+scripts/maestro.sh ios     .maestro/capture/elliptic-tour.yaml
 scripts/maestro.sh android .maestro/reference/linear-onboarding.yaml
 ```
 
@@ -36,8 +36,8 @@ dev-client onboarding sheet and the iOS save-password dialog.
 .maestro/
   reference/     # flows that drive Linear on Android → the design reference library
     linear-onboarding.yaml
-  capture/       # flows that tour CompanyOS itself (before/after redesign diffs)
-    companyos-tour.yaml
+  capture/       # flows that tour Elliptic itself (before/after redesign diffs)
+    elliptic-tour.yaml
   flows/         # functional test flows
     Login.yaml       # sign in with MAESTRO_EMAIL / MAESTRO_PASSWORD
     TaskUndo.yaml    # swipe → Done, toast undo, toast queueing (undoes its writes)
@@ -59,12 +59,12 @@ claude mcp add maestro --scope user \
   -- ~/.maestro/bin/maestro mcp
 ```
 
-## Reference workflow (Linear → CompanyOS redesign)
+## Reference workflow (Linear → Elliptic redesign)
 
 1. Sign into Linear on `Android_1` (one-time; see note below).
 2. Capture Linear's screens with `reference/` flows → `.maestro/output/linear/`.
-3. Capture CompanyOS's matching screens with `capture/companyos-tour.yaml`.
-4. Redesign each CompanyOS screen against its Linear counterpart (tracked as
+3. Capture Elliptic's matching screens with `capture/elliptic-tour.yaml`.
+4. Redesign each Elliptic screen against its Linear counterpart (tracked as
    the C-epic tasks, COS-371..380).
 
 > **Linear login note:** Linear signs in via a web OAuth flow (Chrome custom
@@ -79,6 +79,6 @@ where `ScreenHeader`'s action pill lives — and it swallows taps there, so
 screenshot runs and flows see it, not the app. Turn it off per install:
 
 ```bash
-xcrun simctl spawn booted defaults write bi.chele.companyos EXDevMenuShowFloatingActionButton -bool false
+xcrun simctl spawn booted defaults write sh.elliptic EXDevMenuShowFloatingActionButton -bool false
 # then relaunch the app (dev menu → Tools button toggle does the same thing)
 ```

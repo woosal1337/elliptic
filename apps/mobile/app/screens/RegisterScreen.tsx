@@ -28,7 +28,7 @@ export const RegisterScreen: FC<AppStackScreenProps<"Register">> = ({ navigation
   return (
     <Screen preset="auto" contentContainerStyle={{ padding: spacing.lg }} safeAreaEdges={["top"]}>
       <Text preset="heading" text="Create your account" style={$gap} />
-      <Text preset="subheading" text="Join your team on CompanyOS" style={$gap} />
+      <Text preset="subheading" text="Join your team on Elliptic" style={$gap} />
 
       <TextField
         value={fullName}

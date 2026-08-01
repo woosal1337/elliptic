@@ -16,7 +16,7 @@ Notifications.setNotificationHandler({
 
 /**
  * Request notification permission, obtain the Expo push token, and register it with
- * the CompanyOS backend (COS-290). No-ops gracefully until an EAS projectId exists.
+ * the Elliptic backend (COS-290). No-ops gracefully until an EAS projectId exists.
  */
 export async function registerForPush(orgId: string): Promise<void> {
   if (!Device.isDevice) return

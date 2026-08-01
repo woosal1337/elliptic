@@ -22,7 +22,7 @@ export const PrivacyOverlay: FC = () => {
   if (!hidden) return null
   return (
     <View style={[$overlay, { backgroundColor: colors.background }]} pointerEvents="none">
-      <Text preset="heading" text="CompanyOS" style={{ color: colors.tint }} />
+      <Text preset="heading" text="Elliptic" style={{ color: colors.tint }} />
     </View>
   )
 }

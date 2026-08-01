@@ -16,7 +16,12 @@ import type { AuthTokens, User } from "@/services/api/types"
 
 export type SocialProvider = "google" | "github"
 
-/** Where the API sends the browser when the round-trip is done. */
+/**
+ * Where the API sends the browser when the round-trip is done. This must match
+ * the API's `native_app_scheme`, which production still serves as `companyos`.
+ * The app registers both schemes; flip this to `elliptic://` in the same change
+ * that deploys NATIVE_APP_SCHEME=elliptic, or sign-in breaks for everyone.
+ */
 const REDIRECT_URL = "companyos://auth/callback"
 
 function randomVerifier(): string {

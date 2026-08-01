@@ -39,7 +39,7 @@ export const LoginScreen: FC<LoginScreenProps> = ({ navigation }) => {
 
   return (
     <Screen preset="auto" contentContainerStyle={{ padding: spacing.lg }} safeAreaEdges={["top"]}>
-      <Text preset="heading" text="CompanyOS" style={{ marginTop: spacing.xl }} />
+      <Text preset="heading" text="Elliptic" style={{ marginTop: spacing.xl }} />
       <Text
         preset="subheading"
         text="Sign in to your workspace"

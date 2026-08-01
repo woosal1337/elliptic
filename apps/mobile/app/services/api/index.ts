@@ -1,5 +1,5 @@
 /**
- * Typed client for the CompanyOS API. Unwraps the standard {success,message,data}
+ * Typed client for the Elliptic API. Unwraps the standard {success,message,data}
  * envelope and carries a Bearer token for authenticated requests.
  */
 import { ApisauceInstance, create } from "apisauce"

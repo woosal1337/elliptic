@@ -1,6 +1,6 @@
-# CompanyOS Mobile
+# Elliptic Mobile
 
-The CompanyOS iOS/Android app — React Native + Expo, scaffolded from
+The Elliptic iOS/Android app — React Native + Expo, scaffolded from
 [Ignite](https://github.com/infinitered/ignite) and stripped to our own foundation.
 
 ## Stack
@@ -17,7 +17,7 @@ app/
   context/      AuthContext (token login/logout)
   navigators/   AppNavigator (auth gate) + MainNavigator (bottom tabs)
   screens/      Login, Home, Tasks, Profile
-  services/api/ CompanyOS API client (login, me, orgs, …)
+  services/api/ Elliptic API client (login, me, orgs, …)
   theme/        colors, spacing, typography tokens
   config/       API_URL per environment
 ```

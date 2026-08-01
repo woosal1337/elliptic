@@ -17,7 +17,7 @@ export const ProfileScreen: FC<ProfileStackScreenProps<"ProfileMain">> = ({ navi
   const { themeContext } = useAppTheme()
 
   const confirmSignOut = () => {
-    Alert.alert("Sign out", "You'll need to sign in again to use CompanyOS.", [
+    Alert.alert("Sign out", "You'll need to sign in again to use Elliptic.", [
       { text: "Cancel", style: "cancel" },
       { text: "Sign out", style: "destructive", onPress: logout },
     ])

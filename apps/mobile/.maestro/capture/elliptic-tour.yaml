@@ -1,9 +1,9 @@
-# Capture tour of the CompanyOS app itself, for before/after redesign diffing.
+# Capture tour of the Elliptic app itself, for before/after redesign diffing.
 # Platform-agnostic — runs on whichever device the runner targets. The app is
 # currently built for iOS; add Android once `expo run:android` is wired.
 #
-# Run:  scripts/maestro.sh ios .maestro/capture/companyos-tour.yaml
-appId: bi.chele.companyos
+# Run:  scripts/maestro.sh ios .maestro/capture/elliptic-tour.yaml
+appId: sh.elliptic
 ---
 - launchApp
 - waitForAnimationToEnd

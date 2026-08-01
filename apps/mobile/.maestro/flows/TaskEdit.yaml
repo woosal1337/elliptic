@@ -5,7 +5,7 @@
 #note:   the description body cannot be tapped by label. It is taller than the
 #        viewport, so the driver filters it out of the hierarchy; the flow taps
 #        its coordinates instead.
-appId: bi.chele.companyos
+appId: sh.elliptic
 ---
 - launchApp
 - waitForAnimationToEnd

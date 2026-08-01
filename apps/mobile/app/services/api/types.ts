@@ -1,4 +1,4 @@
-/** Shapes returned by the CompanyOS API. */
+/** Shapes returned by the Elliptic API. */
 export interface ApiConfig {
   url: string
   timeout: number
