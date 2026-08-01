@@ -2,8 +2,8 @@
 
 import pytest
 
-from companyos.core.crypto import decrypt_secret, encrypt_secret, last4
-from companyos.core.exceptions import BadRequestError
+from elliptic.core.crypto import decrypt_secret, encrypt_secret, last4
+from elliptic.core.exceptions import BadRequestError
 
 KEK = b"0" * 32
 

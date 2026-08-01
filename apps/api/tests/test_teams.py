@@ -5,8 +5,8 @@ import uuid
 from httpx import AsyncClient
 from sqlalchemy import update
 
-from companyos.core.database import session_factory
-from companyos.modules.projects.models import Project
+from elliptic.core.database import session_factory
+from elliptic.modules.projects.models import Project
 from tests.helpers import (
     API,
     create_org,

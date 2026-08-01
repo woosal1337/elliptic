@@ -5,12 +5,12 @@ Typed clients for the [CompanyOS public REST API](../) (`/api/v1`, OpenAPI at
 `x-api-key` header, or a **client-credentials bot token** from a confidential
 OAuth app.
 
-## Python (`sdk/python/companyos.py`)
+## Python (`sdk/python/elliptic_sdk.py`)
 
 ```python
-from companyos_sdk import CompanyOSClient
+from elliptic_sdk import EllipticClient
 
-with CompanyOSClient("https://api.companyos.dev", token="cos_pat_...") as cos:
+with EllipticClient("https://api.elliptic.sh", token="cos_pat_...") as cos:
     me = cos.me()
     for project in cos.projects(org_id):
         print(project["name"])
@@ -20,18 +20,18 @@ with CompanyOSClient("https://api.companyos.dev", token="cos_pat_...") as cos:
 Bot token (OAuth client_credentials):
 
 ```python
-token = CompanyOSClient.bot_token(base_url, client_id="app-...", client_secret="cos_secret_...")
-cos = CompanyOSClient(base_url, token=token)
+token = EllipticClient.bot_token(base_url, client_id="app-...", client_secret="cos_secret_...")
+cos = EllipticClient(base_url, token=token)
 ```
 
 Requires `httpx`.
 
-## Node / TypeScript (`sdk/node/companyos.ts`)
+## Node / TypeScript (`sdk/node/elliptic.ts`)
 
 ```ts
-import { CompanyOSClient } from "./companyos";
+import { EllipticClient } from "./elliptic";
 
-const cos = new CompanyOSClient("https://api.companyos.dev", "cos_pat_...");
+const cos = new EllipticClient("https://api.elliptic.sh", "cos_pat_...");
 const me = await cos.me();
 const projects = await cos.projects(orgId);
 await cos.createTask(orgId, projectId, "Investigate latency", { priority: "high" });

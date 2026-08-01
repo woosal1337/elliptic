@@ -8,12 +8,12 @@ import pytest
 from httpx import AsyncClient
 from sqlalchemy import select
 
-from companyos.core.database import session_factory
-from companyos.core.exceptions import BadGatewayError
-from companyos.modules.ai import service as ai_service
-from companyos.modules.ai.models import AIProviderKey, AIProviderType, AIRun, AIRunStatus
-from companyos.modules.ai.providers import ChatMessage, CompletionResult, OpenAIProvider
-from companyos.modules.meetings.models import MeetingSummary
+from elliptic.core.database import session_factory
+from elliptic.core.exceptions import BadGatewayError
+from elliptic.modules.ai import service as ai_service
+from elliptic.modules.ai.models import AIProviderKey, AIProviderType, AIRun, AIRunStatus
+from elliptic.modules.ai.providers import ChatMessage, CompletionResult, OpenAIProvider
+from elliptic.modules.meetings.models import MeetingSummary
 from tests.helpers import API, create_org, import_meeting, register_and_login
 
 PLAINTEXT_KEY = "sk-test-aaaabbbbccccdddd"

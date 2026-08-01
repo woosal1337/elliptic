@@ -1,7 +1,7 @@
 .PHONY: dev lint format typecheck test migrate revision seed all
 
 dev:
-	uv run uvicorn companyos.main:app --reload --port 8000
+	uv run uvicorn elliptic.main:app --reload --port 8000
 
 lint:
 	uv run ruff check .

@@ -7,7 +7,7 @@ from urllib.parse import parse_qs, urlparse
 
 from httpx import AsyncClient
 
-from companyos.core.config import get_settings
+from elliptic.core.config import get_settings
 from tests.helpers import create_org, register_and_login
 
 _REDIRECT = "http://127.0.0.1:53999/callback"

@@ -3,7 +3,7 @@
 import pytest
 from httpx import AsyncClient
 
-from companyos.modules.mcp_connectors import service as conn_service
+from elliptic.modules.mcp_connectors import service as conn_service
 from tests.helpers import API, create_org, register_and_login
 
 

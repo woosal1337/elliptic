@@ -17,9 +17,9 @@ from fastapi import FastAPI
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy import text
 
-from companyos.core.database import engine
-from companyos.core.models_registry import Base
-from companyos.main import app as fastapi_app
+from elliptic.core.database import engine
+from elliptic.core.models_registry import Base
+from elliptic.main import app as fastapi_app
 
 
 @pytest.fixture(scope="session", autouse=True)

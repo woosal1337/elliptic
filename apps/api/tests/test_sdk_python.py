@@ -8,11 +8,11 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "sdk" / "python"))
 
-import companyos_sdk as companyos
+import elliptic_sdk as companyos
 
 
-def _client(handler) -> companyos.CompanyOSClient:
-    client = companyos.CompanyOSClient("https://api.example.com", token="cos_pat_x")
+def _client(handler) -> companyos.EllipticClient:
+    client = companyos.EllipticClient("https://api.example.com", token="cos_pat_x")
     client._http = httpx.Client(  # type: ignore[attr-defined]
         base_url="https://api.example.com/api/v1",
         headers={"x-api-key": "cos_pat_x"},
@@ -40,6 +40,6 @@ def test_sdk_raises_on_error() -> None:
     def handler(request: httpx.Request) -> httpx.Response:
         return httpx.Response(404, json={"success": False, "message": "Not found"})
 
-    with _client(handler) as cos, pytest.raises(companyos.CompanyOSError) as exc:
+    with _client(handler) as cos, pytest.raises(companyos.EllipticError) as exc:
         cos.projects("org-1")
     assert exc.value.status_code == 404

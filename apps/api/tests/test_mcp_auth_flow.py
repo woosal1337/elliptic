@@ -7,11 +7,11 @@ import uuid
 import pytest
 from httpx import AsyncClient
 
-from companyos.core.config import get_settings
-from companyos.core.database import session_factory
-from companyos.core.exceptions import BadRequestError, ForbiddenError, UnauthorizedError
-from companyos.modules.mcp_auth import service
-from companyos.modules.mcp_auth.resolver import resolve_token
+from elliptic.core.config import get_settings
+from elliptic.core.database import session_factory
+from elliptic.core.exceptions import BadRequestError, ForbiddenError, UnauthorizedError
+from elliptic.modules.mcp_auth import service
+from elliptic.modules.mcp_auth.resolver import resolve_token
 from tests.helpers import create_org, register_and_login
 
 _REDIRECT = "http://127.0.0.1:53111/callback"

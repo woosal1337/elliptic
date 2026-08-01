@@ -6,17 +6,17 @@ from datetime import timedelta
 from httpx import AsyncClient
 from sqlalchemy import func, select, update
 
-from companyos.core.database import session_factory
-from companyos.core.jobs import (
+from elliptic.core.database import session_factory
+from elliptic.core.jobs import (
     archive_stale_tasks,
     dispatch_pending_emails,
     prune_notifications,
     purge_deleted_projects,
 )
-from companyos.core.models_base import utcnow
-from companyos.modules.notifications.models import Notification, NotificationType
-from companyos.modules.projects.models import Project
-from companyos.modules.tasks.models import Task
+from elliptic.core.models_base import utcnow
+from elliptic.modules.notifications.models import Notification, NotificationType
+from elliptic.modules.projects.models import Project
+from elliptic.modules.tasks.models import Task
 from tests.helpers import API, create_org, create_project, create_task, register_and_login
 
 

@@ -18,7 +18,7 @@ These rules are binding for every change in this repository.
 
 ## Secrets
 
-- BYOK provider keys are encrypted with AES-256-GCM under the KEK from `COMPANYOS_KEK` (32-byte urlsafe base64). Ciphertext and nonce are stored; plaintext only exists in memory inside the request that uses it.
+- BYOK provider keys are encrypted with AES-256-GCM under the KEK from `ELLIPTIC_KEK` (32-byte urlsafe base64). Ciphertext and nonce are stored; plaintext only exists in memory inside the request that uses it.
 - API responses expose only `provider`, `name`, `last4`, `is_default`, `created_at`. Never ciphertext, never plaintext.
 - Never log key material, Authorization headers, or provider error bodies verbatim.
 

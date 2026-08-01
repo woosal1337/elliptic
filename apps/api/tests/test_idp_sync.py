@@ -5,9 +5,9 @@ import uuid as _uuid
 from httpx import AsyncClient
 from sqlalchemy import select
 
-from companyos.core.database import session_factory
-from companyos.modules.idp_sync.service import reconcile
-from companyos.modules.projects.models import ProjectMember
+from elliptic.core.database import session_factory
+from elliptic.modules.idp_sync.service import reconcile
+from elliptic.modules.projects.models import ProjectMember
 from tests.helpers import API, add_org_member, create_org, create_project, register_and_login
 
 

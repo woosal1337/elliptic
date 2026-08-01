@@ -5,8 +5,8 @@ import uuid
 from httpx import AsyncClient
 from sqlalchemy import select
 
-from companyos.core.database import session_factory
-from companyos.modules.notifications.models import Notification, NotificationType
+from elliptic.core.database import session_factory
+from elliptic.modules.notifications.models import Notification, NotificationType
 from tests.helpers import (
     API,
     add_org_member,

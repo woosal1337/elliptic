@@ -5,8 +5,8 @@ import uuid as _uuid
 from httpx import AsyncClient
 from sqlalchemy import update
 
-from companyos.core.database import session_factory
-from companyos.modules.users.models import User
+from elliptic.core.database import session_factory
+from elliptic.modules.users.models import User
 from tests.helpers import API, register_and_login
 
 

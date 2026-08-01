@@ -5,9 +5,9 @@ import hmac
 
 from httpx import AsyncClient
 
-from companyos.core.database import session_factory
-from companyos.modules.integrations.models import SlackConnection
-from companyos.modules.integrations.slack_commands import verify_slack_signature
+from elliptic.core.database import session_factory
+from elliptic.modules.integrations.models import SlackConnection
+from elliptic.modules.integrations.slack_commands import verify_slack_signature
 from tests.helpers import API, create_org, create_project, register_and_login
 
 SIGNING_SECRET = "test-signing-secret"
@@ -30,7 +30,7 @@ def test_signature_verification_roundtrip() -> None:
 
 
 async def test_slash_command_creates_triage_task(client: AsyncClient, monkeypatch) -> None:
-    from companyos.core.config import get_settings  # noqa: PLC0415
+    from elliptic.core.config import get_settings  # noqa: PLC0415
 
     get_settings.cache_clear()  # type: ignore[attr-defined]
     monkeypatch.setenv("SLACK_SIGNING_SECRET", SIGNING_SECRET)

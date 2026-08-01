@@ -3,7 +3,7 @@
 import pytest
 from httpx import AsyncClient
 
-from companyos.modules.sso import service as sso_service
+from elliptic.modules.sso import service as sso_service
 from tests.helpers import API, create_org, register_and_login
 
 
@@ -25,7 +25,7 @@ async def test_sso_config_and_login_flow(
             "issuer": "https://idp.example.com",
             "client_id": "cid",
             "client_secret": "shh",
-            "redirect_uri": "https://app.companyos.dev/auth/sso/callback",
+            "redirect_uri": "https://app.elliptic.sh/auth/sso/callback",
         },
         headers=h,
     )

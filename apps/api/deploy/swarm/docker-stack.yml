@@ -1,4 +1,4 @@
-# CompanyOS — Docker Swarm stack (COS-205). `docker stack deploy -c docker-stack.yml companyos`
+# CompanyOS — Docker Swarm stack (COS-205). `docker stack deploy -c docker-stack.yml elliptic`
 version: "3.8"
 services:
   postgres:
@@ -10,10 +10,10 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
   api:
-    image: ghcr.io/woosal1337/companyos-api:latest
+    image: ghcr.io/woosal1337/elliptic-api:latest
     environment:
       DATABASE_URL: postgresql+asyncpg://companyos:companyos@postgres:5432/companyos
-      COMPANYOS_KEK: ${COMPANYOS_KEK:?set a base64 32-byte key}
+      ELLIPTIC_KEK: ${ELLIPTIC_KEK:?set a base64 32-byte key}
       JWT_SECRET_KEY: ${JWT_SECRET_KEY:?set a secret}
       CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000}
     depends_on: [postgres]
@@ -22,7 +22,7 @@ services:
     ports:
       - "8000:8000"
   web:
-    image: ghcr.io/woosal1337/companyos-web:latest
+    image: ghcr.io/woosal1337/elliptic-web:latest
     environment:
       BACKEND_ORIGIN: http://api:8000
     depends_on: [api]

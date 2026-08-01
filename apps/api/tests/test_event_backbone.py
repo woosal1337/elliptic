@@ -3,7 +3,7 @@
 import pytest
 from httpx import AsyncClient
 
-from companyos.modules.outbox import service as outbox_service
+from elliptic.modules.outbox import service as outbox_service
 from tests.helpers import API, create_org, create_project, create_task, register_and_login
 
 

@@ -3,7 +3,7 @@
 import pytest
 from httpx import AsyncClient
 
-from companyos.modules.outbox import service as outbox_service
+from elliptic.modules.outbox import service as outbox_service
 from tests.helpers import API, create_org, create_project, create_task, register_and_login
 
 
@@ -36,8 +36,8 @@ async def test_dead_letter_and_retry(client: AsyncClient, monkeypatch: pytest.Mo
 
     from sqlalchemy import update  # noqa: PLC0415
 
-    from companyos.core.database import session_factory  # noqa: PLC0415
-    from companyos.modules.outbox.models import EventOutbox  # noqa: PLC0415
+    from elliptic.core.database import session_factory  # noqa: PLC0415
+    from elliptic.modules.outbox.models import EventOutbox  # noqa: PLC0415
 
     for _ in range(5):
         async with session_factory() as s:
@@ -69,8 +69,8 @@ async def test_scheduler_drains_all_orgs(
     project = await create_project(client, h, org["id"], key="DRN")
     await create_task(client, h, org["id"], project["id"], title="drain me")
 
-    from companyos.core import jobs  # noqa: PLC0415
-    from companyos.core.database import session_factory  # noqa: PLC0415
+    from elliptic.core import jobs  # noqa: PLC0415
+    from elliptic.core.database import session_factory  # noqa: PLC0415
 
     async with session_factory() as s:
         drained = await jobs.drain_outbox(s)

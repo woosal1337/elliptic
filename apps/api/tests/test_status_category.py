@@ -2,7 +2,7 @@
 
 from httpx import AsyncClient
 
-from companyos.modules.tasks.models import (
+from elliptic.modules.tasks.models import (
     PROGRESS_EXCLUDED_STATUSES,
     STATUS_TO_CATEGORY,
     StatusCategory,

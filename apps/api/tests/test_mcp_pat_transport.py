@@ -3,10 +3,10 @@
 import pytest
 from httpx import AsyncClient
 
-from companyos.core.database import session_factory
-from companyos.core.exceptions import UnauthorizedError
-from companyos.modules.mcp_auth import scopes as scope_catalog
-from companyos.modules.mcp_auth.resolver import resolve_token
+from elliptic.core.database import session_factory
+from elliptic.core.exceptions import UnauthorizedError
+from elliptic.modules.mcp_auth import scopes as scope_catalog
+from elliptic.modules.mcp_auth.resolver import resolve_token
 from tests.helpers import API, create_org, register_and_login
 
 

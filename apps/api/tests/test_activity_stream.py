@@ -5,7 +5,7 @@ import uuid
 
 from httpx import AsyncClient
 
-from companyos.core.realtime import ActivityBroker, broker
+from elliptic.core.realtime import ActivityBroker, broker
 from tests.helpers import create_org, create_project, register_and_login
 
 

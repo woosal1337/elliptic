@@ -6,9 +6,9 @@ from datetime import UTC, datetime, timedelta
 from httpx import AsyncClient
 from sqlalchemy import select, update
 
-from companyos.core import jobs
-from companyos.core.database import session_factory
-from companyos.modules.tasks.models import Task, TaskStatus
+from elliptic.core import jobs
+from elliptic.core.database import session_factory
+from elliptic.modules.tasks.models import Task, TaskStatus
 from tests.helpers import API, create_org, create_project, create_task, register_and_login
 
 

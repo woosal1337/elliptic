@@ -6,11 +6,11 @@ import pytest
 from httpx import AsyncClient
 from sqlalchemy import select
 
-from companyos.core.database import session_factory
-from companyos.core.security import create_access_token
-from companyos.modules.auth import service as auth_service
-from companyos.modules.orgs import service as orgs_service
-from companyos.modules.users.models import User
+from elliptic.core.database import session_factory
+from elliptic.core.security import create_access_token
+from elliptic.modules.auth import service as auth_service
+from elliptic.modules.orgs import service as orgs_service
+from elliptic.modules.users.models import User
 from tests.helpers import API, create_org, register_and_login
 
 FIXED_CODE = "123456"

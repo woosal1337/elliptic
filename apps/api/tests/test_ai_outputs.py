@@ -5,7 +5,7 @@ from typing import get_args
 import pytest
 from pydantic import TypeAdapter, ValidationError
 
-from companyos.modules.ai.outputs import (
+from elliptic.modules.ai.outputs import (
     CHART_DIMENSIONS,
     CHART_METRICS,
     ActionProposalOutput,

@@ -15,10 +15,10 @@ jobs:
       matrix:
         include:
           - app: api
-            image: companyos-api
+            image: elliptic-api
             build_args: ""
           - app: web
-            image: companyos-web
+            image: elliptic-web
             build_args: |
               BACKEND_ORIGIN=http://api:8000
     steps:

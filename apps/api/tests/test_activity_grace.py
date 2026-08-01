@@ -6,10 +6,10 @@ from datetime import timedelta
 from httpx import AsyncClient
 from sqlalchemy import update
 
-from companyos.core.database import session_factory
-from companyos.core.models_base import utcnow
-from companyos.modules.tasks.models import Task
-from companyos.modules.tasks.service import CREATION_GRACE_SECONDS
+from elliptic.core.database import session_factory
+from elliptic.core.models_base import utcnow
+from elliptic.modules.tasks.models import Task
+from elliptic.modules.tasks.service import CREATION_GRACE_SECONDS
 from tests.helpers import API, create_org, create_project, create_task, register_and_login
 
 

@@ -3,8 +3,8 @@
 import pytest
 from httpx import AsyncClient
 
-from companyos.modules.pql.parser import PqlError, parse
-from companyos.modules.pql.service import validate_query
+from elliptic.modules.pql.parser import PqlError, parse
+from elliptic.modules.pql.service import validate_query
 from tests.helpers import API, create_org, create_project, create_task, register_and_login
 
 

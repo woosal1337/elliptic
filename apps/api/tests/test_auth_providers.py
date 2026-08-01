@@ -3,7 +3,7 @@
 import pytest
 from httpx import AsyncClient
 
-from companyos.modules.auth_providers import service as ap_service
+from elliptic.modules.auth_providers import service as ap_service
 from tests.helpers import API, create_org, register_and_login
 
 

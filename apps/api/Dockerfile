@@ -37,4 +37,4 @@ HEALTHCHECK --interval=10s --timeout=5s --start-period=40s --retries=5 \
 # Apply pending migrations, then serve. Runs on every container start so the
 # schema is in sync on the first deploy too (Coolify skips its pre-deploy hook
 # when no prior container exists). Alembic is idempotent, so re-runs are safe.
-CMD ["sh", "-c", "alembic upgrade head && exec uvicorn companyos.main:app --host 0.0.0.0 --port 8000"]
+CMD ["sh", "-c", "alembic upgrade head && exec uvicorn elliptic.main:app --host 0.0.0.0 --port 8000"]

@@ -4,9 +4,9 @@ import uuid
 
 import pytest
 
-from companyos.core.database import session_factory
-from companyos.core.exceptions import UnauthorizedError
-from companyos.modules.mcp_auth.tokens import (
+from elliptic.core.database import session_factory
+from elliptic.core.exceptions import UnauthorizedError
+from elliptic.modules.mcp_auth.tokens import (
     build_jwks,
     ensure_signing_key,
     mcp_resource_uri,

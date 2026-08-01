@@ -6,7 +6,7 @@ clients sync through /api/v1/ws/notes/{id}); here we cover the REST token surfac
 
 from httpx import AsyncClient
 
-from companyos.core.security import decode_token
+from elliptic.core.security import decode_token
 from tests.helpers import API, register_and_login
 
 

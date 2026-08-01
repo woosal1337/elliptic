@@ -1,6 +1,6 @@
 """AI confidence/coverage trust primitive (MA-13)."""
 
-from companyos.modules.ai.trust import (
+from elliptic.modules.ai.trust import (
     ConfidenceLevel,
     Coverage,
     TrustSignal,

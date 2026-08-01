@@ -2,7 +2,7 @@
 
 from httpx import AsyncClient
 
-from companyos.core import totp
+from elliptic.core import totp
 from tests.helpers import API, register_and_login
 
 

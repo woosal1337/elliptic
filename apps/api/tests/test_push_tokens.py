@@ -5,9 +5,9 @@ import uuid
 import pytest
 from httpx import AsyncClient
 
-from companyos.core.config import get_settings
-from companyos.core.database import session_factory
-from companyos.modules.notifications import service as notif_service
+from elliptic.core.config import get_settings
+from elliptic.core.database import session_factory
+from elliptic.modules.notifications import service as notif_service
 from tests.helpers import API, create_org, register_and_login
 
 EXPO_TOKEN = "ExponentPushToken[abcDEF123]"

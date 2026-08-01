@@ -1,0 +1,38 @@
+{{- if .Values.postgres.enabled }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "elliptic.name" . }}-postgres
+spec:
+  serviceName: {{ include "elliptic.name" . }}-postgres
+  replicas: 1
+  selector:
+    matchLabels: { app: {{ include "elliptic.name" . }}-postgres }
+  template:
+    metadata:
+      labels: { app: {{ include "elliptic.name" . }}-postgres }
+    spec:
+      containers:
+        - name: postgres
+          image: {{ .Values.postgres.image | quote }}
+          ports: [{ containerPort: 5432 }]
+          env:
+            - { name: POSTGRES_USER, value: companyos }
+            - { name: POSTGRES_PASSWORD, value: companyos }
+            - { name: POSTGRES_DB, value: companyos }
+          volumeMounts:
+            - { name: data, mountPath: /var/lib/postgresql/data }
+  volumeClaimTemplates:
+    - metadata: { name: data }
+      spec:
+        accessModes: [ReadWriteOnce]
+        resources: { requests: { storage: {{ .Values.postgres.storage }} } }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "elliptic.name" . }}-postgres
+spec:
+  selector: { app: {{ include "elliptic.name" . }}-postgres }
+  ports: [{ port: 5432, targetPort: 5432 }]
+{{- end }}

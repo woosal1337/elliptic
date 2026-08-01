@@ -5,9 +5,9 @@ from datetime import UTC, datetime, timedelta
 
 from httpx import AsyncClient
 
-from companyos.core.database import session_factory
-from companyos.modules.notifications.models import NotificationType
-from companyos.modules.notifications.service import notify
+from elliptic.core.database import session_factory
+from elliptic.modules.notifications.models import NotificationType
+from elliptic.modules.notifications.service import notify
 from tests.helpers import (
     API,
     add_org_member,

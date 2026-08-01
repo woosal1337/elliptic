@@ -6,8 +6,8 @@ from datetime import UTC, datetime, timedelta
 from loguru import logger
 from sqlalchemy import select
 
-from companyos.core.database import engine, session_factory
-from companyos.core.models_registry import (
+from elliptic.core.database import engine, session_factory
+from elliptic.core.models_registry import (
     Meeting,
     Note,
     Organization,
@@ -20,12 +20,12 @@ from companyos.core.models_registry import (
     TranscriptSegment,
     User,
 )
-from companyos.core.security import hash_password
-from companyos.modules.meetings.models import MeetingSource
-from companyos.modules.orgs.models import OrgRole
-from companyos.modules.tasks.models import TaskPriority, TaskStatus
+from elliptic.core.security import hash_password
+from elliptic.modules.meetings.models import MeetingSource
+from elliptic.modules.orgs.models import OrgRole
+from elliptic.modules.tasks.models import TaskPriority, TaskStatus
 
-DEMO_EMAIL = "ege@companyos.dev"
+DEMO_EMAIL = "ege@elliptic.sh"
 DEMO_PASSWORD = "password"
 
 TASKS: list[tuple[str, TaskStatus, TaskPriority]] = [

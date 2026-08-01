@@ -3,7 +3,7 @@
 import pytest
 from httpx import AsyncClient
 
-from companyos.modules.ldap import service as ldap_service
+from elliptic.modules.ldap import service as ldap_service
 from tests.helpers import API, create_org, register_and_login
 
 

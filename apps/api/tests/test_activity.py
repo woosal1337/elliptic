@@ -5,9 +5,9 @@ import uuid
 from httpx import AsyncClient
 from sqlalchemy import select
 
-from companyos.core.database import session_factory
-from companyos.modules.activity.models import ActivityEvent
-from companyos.modules.activity.service import record_activity
+from elliptic.core.database import session_factory
+from elliptic.modules.activity.models import ActivityEvent
+from elliptic.modules.activity.service import record_activity
 from tests.helpers import API, create_org, create_project, create_task, register_and_login
 
 

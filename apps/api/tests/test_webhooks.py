@@ -8,11 +8,11 @@ from typing import Any
 import pytest
 from httpx import AsyncClient
 
-from companyos.core.config import get_settings
-from companyos.core.crypto import decrypt_secret, encrypt_secret
-from companyos.core.database import session_factory
-from companyos.modules.webhooks import sender, service
-from companyos.modules.webhooks.models import ProjectWebhook
+from elliptic.core.config import get_settings
+from elliptic.core.crypto import decrypt_secret, encrypt_secret
+from elliptic.core.database import session_factory
+from elliptic.modules.webhooks import sender, service
+from elliptic.modules.webhooks.models import ProjectWebhook
 from tests.helpers import (
     API,
     add_org_member,

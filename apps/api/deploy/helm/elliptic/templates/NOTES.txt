@@ -1,0 +1,6 @@
+CompanyOS is installing.
+
+1. Watch rollout:   kubectl get pods -l app={{ include "elliptic.name" . }}-api -w
+2. App URL:         https://{{ .Values.ingress.host }}
+3. BEFORE PRODUCTION: override secrets.ELLIPTIC_KEK + secrets.JWT_SECRET_KEY,
+   and set postgres.enabled=false with externalDatabaseUrl pointing at managed PG.

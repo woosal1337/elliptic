@@ -3,8 +3,8 @@
 import pytest
 from httpx import AsyncClient
 
-from companyos.core.config import get_settings
-from companyos.modules.storage import client as storage_client
+from elliptic.core.config import get_settings
+from elliptic.modules.storage import client as storage_client
 from tests.helpers import API, create_org, create_project, create_task, register_and_login
 
 

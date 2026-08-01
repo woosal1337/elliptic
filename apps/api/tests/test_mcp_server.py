@@ -13,11 +13,11 @@ from fastmcp.client.transports import StreamableHttpTransport
 from fastmcp.exceptions import ToolError
 from httpx import AsyncClient
 
-from companyos.core.config import get_settings
-from companyos.core.database import session_factory
-from companyos.modules.ai import service as ai_service
-from companyos.modules.ai.providers import CompletionResult
-from companyos.modules.mcp_auth import service
+from elliptic.core.config import get_settings
+from elliptic.core.database import session_factory
+from elliptic.modules.ai import service as ai_service
+from elliptic.modules.ai.providers import CompletionResult
+from elliptic.modules.mcp_auth import service
 from tests.helpers import create_org, create_project, import_meeting, register_and_login
 
 _REDIRECT = "http://127.0.0.1:7777/cb"
@@ -344,7 +344,7 @@ async def test_comment_attachments_visible_and_viewable_via_mcp(
     app: FastAPI, client: AsyncClient, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     """Agents see comment attachments (with a URL) and can view images inline (COS-106 MCP)."""
-    from companyos.modules.storage import client as storage_client  # noqa: PLC0415
+    from elliptic.modules.storage import client as storage_client  # noqa: PLC0415
     from tests.helpers import API, create_task  # noqa: PLC0415
 
     settings = get_settings()

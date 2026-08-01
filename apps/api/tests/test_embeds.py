@@ -3,7 +3,7 @@
 import pytest
 from httpx import AsyncClient
 
-from companyos.modules.embeds import service as embed_service
+from elliptic.modules.embeds import service as embed_service
 from tests.helpers import API, create_org, register_and_login
 
 
@@ -40,7 +40,7 @@ async def test_generic_link_unfurl_mocked(
     org = await create_org(client, h)
 
     async def fake_unfurl(session, url):
-        from companyos.modules.embeds.schemas import EmbedMeta  # noqa: PLC0415
+        from elliptic.modules.embeds.schemas import EmbedMeta  # noqa: PLC0415
 
         return EmbedMeta(url=url, provider="link", kind="link", title="Example", description="d")
 

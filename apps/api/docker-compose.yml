@@ -21,18 +21,18 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: companyos-api:local
-    container_name: companyos-api
+    image: elliptic-api:local
+    container_name: elliptic-api
     depends_on:
       postgres:
         condition: service_healthy
     environment:
       DATABASE_URL: postgresql+asyncpg://companyos:companyos@postgres:5432/companyos
-      COMPANYOS_KEK: ${COMPANYOS_KEK:-6TTRiEDAMzSkS6g3YKCQCjbqx9mUnCO3Rsop01k0FSY=}
+      ELLIPTIC_KEK: ${ELLIPTIC_KEK:-6TTRiEDAMzSkS6g3YKCQCjbqx9mUnCO3Rsop01k0FSY=}
       JWT_SECRET_KEY: ${JWT_SECRET_KEY:-local-dev-jwt-secret-change-in-production}
       ENV: development
       CORS_ORIGINS: http://localhost:3000
-    command: ["sh", "-c", "alembic upgrade head && uvicorn companyos.main:app --host 0.0.0.0 --port 8000"]
+    command: ["sh", "-c", "alembic upgrade head && uvicorn elliptic.main:app --host 0.0.0.0 --port 8000"]
     ports:
       - "8001:8000"
     healthcheck:

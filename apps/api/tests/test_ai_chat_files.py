@@ -3,10 +3,10 @@
 import pytest
 from httpx import AsyncClient
 
-from companyos.core.config import get_settings
-from companyos.modules.ai import service as ai_service
-from companyos.modules.ai.providers import ChatMessage, CompletionResult
-from companyos.modules.storage import client as storage_client
+from elliptic.core.config import get_settings
+from elliptic.modules.ai import service as ai_service
+from elliptic.modules.ai.providers import ChatMessage, CompletionResult
+from elliptic.modules.storage import client as storage_client
 from tests.helpers import API, create_org, register_and_login
 
 KEY = "sk-test-aaaabbbbccccdddd"

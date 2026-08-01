@@ -16,16 +16,16 @@ Multi-tenant, agent-native work platform, Jira for your agents. Users and AI age
 ```bash
 docker compose up -d --build      # postgres + api (migrations run on start)
 curl localhost:8001/api/v1/health # {"success":true,...}
-docker exec companyos-api python scripts/seed.py   # demo data
+docker exec elliptic-api python scripts/seed.py   # demo data
 ```
 
-The API container publishes on host port **8001** (`8001 -> 8000`), runs `alembic upgrade head` on boot, then serves uvicorn. A dev `COMPANYOS_KEK` and `JWT_SECRET_KEY` are baked into `docker-compose.yml` for local convenience and are overridable via the environment. Demo login: `ege@companyos.dev` / `password`.
+The API container publishes on host port **8001** (`8001 -> 8000`), runs `alembic upgrade head` on boot, then serves uvicorn. A dev `ELLIPTIC_KEK` and `JWT_SECRET_KEY` are baked into `docker-compose.yml` for local convenience and are overridable via the environment. Demo login: `ege@elliptic.sh` / `password`.
 
 ## Local development (API on host)
 
 ```bash
 docker compose up -d postgres   # just the database
-cp .env.example .env            # then fill COMPANYOS_KEK and JWT_SECRET_KEY
+cp .env.example .env            # then fill ELLIPTIC_KEK and JWT_SECRET_KEY
 uv sync --all-groups
 uv run alembic upgrade head
 uv run python scripts/seed.py
@@ -55,7 +55,7 @@ python -c "import base64,os;print(base64.urlsafe_b64encode(os.urandom(32)).decod
 ## Architecture map
 
 ```
-src/companyos/
+src/elliptic/
   main.py            app factory, lifespan, router registration
   core/              settings, db engine/session, security, crypto,
                      deps (auth + OrgContext), exceptions, handlers,

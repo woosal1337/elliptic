@@ -3,9 +3,9 @@
 import pytest
 from httpx import AsyncClient
 
-from companyos.core.config import get_settings
-from companyos.modules.storage import client as storage_client
-from companyos.modules.storage import service as storage_service
+from elliptic.core.config import get_settings
+from elliptic.modules.storage import client as storage_client
+from elliptic.modules.storage import service as storage_service
 from tests.helpers import API, create_org, register_and_login
 
 

@@ -4,7 +4,7 @@ from datetime import UTC, datetime, timedelta
 
 from httpx import AsyncClient
 
-from companyos.modules.meetings.service import compute_chapters
+from elliptic.modules.meetings.service import compute_chapters
 from tests.helpers import API, create_org, create_project, create_task, register_and_login
 
 

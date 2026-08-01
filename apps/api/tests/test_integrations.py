@@ -5,8 +5,8 @@ import uuid
 import pytest
 from httpx import AsyncClient
 
-from companyos.modules.integrations import slack_client
-from companyos.modules.integrations.service import build_slack_message
+from elliptic.modules.integrations import slack_client
+from elliptic.modules.integrations.service import build_slack_message
 from tests.helpers import API, create_org, import_meeting, register_and_login
 
 

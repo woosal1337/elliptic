@@ -1,0 +1,178 @@
+# CompanyOS — flat Kubernetes manifests (COS-205).
+# Helm-less install: edit the Secret values + image refs, then `kubectl apply -f elliptic.yaml`.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: elliptic-secrets
+type: Opaque
+stringData:
+  DATABASE_URL: "postgresql+asyncpg://companyos:companyos@companyos-postgres:5432/companyos"
+  ELLIPTIC_KEK: "CHANGE-ME-base64-32-bytes"
+  JWT_SECRET_KEY: "CHANGE-ME-in-production"
+  CORS_ORIGINS: "https://elliptic.example.com"
+  RESEND_API_KEY: ""
+  APP_BASE_URL: "https://elliptic.example.com"
+  OAUTH_ISSUER: "https://elliptic.example.com"
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: companyos-postgres
+spec:
+  serviceName: companyos-postgres
+  replicas: 1
+  selector:
+    matchLabels:
+      app: companyos-postgres
+  template:
+    metadata:
+      labels:
+        app: companyos-postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:17-alpine
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              value: companyos
+            - name: POSTGRES_PASSWORD
+              value: companyos
+            - name: POSTGRES_DB
+              value: companyos
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: companyos-postgres
+spec:
+  selector:
+    app: companyos-postgres
+  ports:
+    - port: 5432
+      targetPort: 5432
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: elliptic-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: elliptic-api
+  template:
+    metadata:
+      labels:
+        app: elliptic-api
+    spec:
+      initContainers:
+        - name: migrate
+          image: ghcr.io/woosal1337/elliptic-api:latest
+          command: ["alembic", "upgrade", "head"]
+          envFrom:
+            - secretRef:
+                name: elliptic-secrets
+      containers:
+        - name: api
+          image: ghcr.io/woosal1337/elliptic-api:latest
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - secretRef:
+                name: elliptic-secrets
+          livenessProbe:
+            httpGet:
+              path: /api/v1/health
+              port: 8000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /api/v1/health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: elliptic-api
+spec:
+  selector:
+    app: elliptic-api
+  ports:
+    - port: 8000
+      targetPort: 8000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: elliptic-web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: elliptic-web
+  template:
+    metadata:
+      labels:
+        app: elliptic-web
+    spec:
+      containers:
+        - name: web
+          image: ghcr.io/woosal1337/elliptic-web:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: BACKEND_ORIGIN
+              value: "http://elliptic-api:8000"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: elliptic-web
+spec:
+  selector:
+    app: elliptic-web
+  ports:
+    - port: 3000
+      targetPort: 3000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: companyos
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: elliptic.example.com
+      http:
+        paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: elliptic-api
+                port:
+                  number: 8000
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: elliptic-web
+                port:
+                  number: 3000

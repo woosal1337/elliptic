@@ -6,9 +6,9 @@ from types import SimpleNamespace
 import pytest
 from httpx import AsyncClient
 
-from companyos.modules.ai import service as ai_service
-from companyos.modules.ai.providers import ChatMessage, CompletionResult
-from companyos.modules.meetings.service import extract_action_items_decisions
+from elliptic.modules.ai import service as ai_service
+from elliptic.modules.ai.providers import ChatMessage, CompletionResult
+from elliptic.modules.meetings.service import extract_action_items_decisions
 from tests.helpers import (
     API,
     add_org_member,

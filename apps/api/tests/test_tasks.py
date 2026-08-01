@@ -7,11 +7,11 @@ from datetime import timedelta
 from httpx import AsyncClient
 from sqlalchemy import select, update
 
-from companyos.core.database import session_factory
-from companyos.core.models_base import utcnow
-from companyos.modules.tasks.models import Task
-from companyos.modules.tasks.service import CREATION_GRACE_SECONDS
-from companyos.modules.users.models import User
+from elliptic.core.database import session_factory
+from elliptic.core.models_base import utcnow
+from elliptic.modules.tasks.models import Task
+from elliptic.modules.tasks.service import CREATION_GRACE_SECONDS
+from elliptic.modules.users.models import User
 from tests.helpers import (
     API,
     add_org_member,

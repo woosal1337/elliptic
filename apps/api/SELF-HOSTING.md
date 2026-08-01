@@ -9,8 +9,8 @@ CompanyOS is a lean two-service application backed by PostgreSQL.
             └──────────┘      └──────────┘      └────────────┘
 ```
 
-- **web** (`companyos-web`, Next.js) — serves the UI and proxies `/api/*` to the API via `BACKEND_ORIGIN`.
-- **api** (`companyos-api`, FastAPI) — the application + REST API; health at `GET /api/v1/health`. Runs DB migrations (`alembic upgrade head`) on deploy.
+- **web** (`elliptic-web`, Next.js) — serves the UI and proxies `/api/*` to the API via `BACKEND_ORIGIN`.
+- **api** (`elliptic-api`, FastAPI) — the application + REST API; health at `GET /api/v1/health`. Runs DB migrations (`alembic upgrade head`) on deploy.
 - **PostgreSQL 16** — the only stateful dependency. Use the bundled instance for trials; point `DATABASE_URL` at a managed database in production.
 
 ## Minimum hardware
@@ -19,12 +19,12 @@ A single small node (**1 vCPU / 2 GB RAM**) runs the whole stack for a small tea
 
 ## Environment reference
 
-All API config lives in `src/companyos/core/config.py`. The essentials:
+All API config lives in `src/elliptic/core/config.py`. The essentials:
 
 | Variable | Required | Notes |
 |----------|----------|-------|
 | `DATABASE_URL` | yes | `postgresql+asyncpg://…` |
-| `COMPANYOS_KEK` | yes | base64 32-byte key encrypting BYOK/SSO/SCIM/connector secrets — **rotate per install** |
+| `ELLIPTIC_KEK` | yes | base64 32-byte key encrypting BYOK/SSO/SCIM/connector secrets — **rotate per install** |
 | `JWT_SECRET_KEY` | yes | session signing secret |
 | `CORS_ORIGINS` | yes | comma-separated web origins |
 | `APP_BASE_URL` | recommended | public web URL (links in emails) |
@@ -36,9 +36,9 @@ All API config lives in `src/companyos/core/config.py`. The essentials:
 ## Quickstart — Helm
 
 ```bash
-helm install companyos ./deploy/helm/companyos \
-  --set ingress.host=companyos.yourco.com \
-  --set secrets.COMPANYOS_KEK="$(openssl rand -base64 32)" \
+helm install elliptic ./deploy/helm/elliptic \
+  --set ingress.host=elliptic.yourco.com \
+  --set secrets.ELLIPTIC_KEK="$(openssl rand -base64 32)" \
   --set secrets.JWT_SECRET_KEY="$(openssl rand -hex 32)"
 ```
 
@@ -47,13 +47,13 @@ Production: set `postgres.enabled=false` and `externalDatabaseUrl=postgresql+asy
 ## Quickstart — raw Kubernetes
 
 ```bash
-# edit deploy/k8s/companyos.yaml (secret values + image tags), then:
-kubectl apply -f deploy/k8s/companyos.yaml
+# edit deploy/k8s/elliptic.yaml (secret values + image tags), then:
+kubectl apply -f deploy/k8s/elliptic.yaml
 ```
 
 ## Other targets
 
 - **Docker Compose** — `docker compose up` (see `docker-compose.yml`).
-- **Docker Swarm** — `docker stack deploy -c deploy/swarm/docker-stack.yml companyos`.
+- **Docker Swarm** — `docker stack deploy -c deploy/swarm/docker-stack.yml elliptic`.
 
 One-click PaaS templates (Coolify / Render / Railway) and a single-container all-in-one image are tracked as follow-on packaging increments.
