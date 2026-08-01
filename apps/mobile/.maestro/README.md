@@ -22,7 +22,8 @@ JRE), so no export is needed. Screenshots land under `.maestro/output/<app>/…`
 
 ## E2E account
 
-Flows sign in as `mobile-e2e@chele.bi` (org **Maestro QA**, project **MOB** —
+Flows sign in as `mobile-e2e@chele.bi` (an account email in the database, not a
+host — unchanged by the elliptic.sh migration) (org **Maestro QA**, project **MOB** —
 seeded fixtures, isolated from real workspaces). The password is never stored
 anywhere: generate a fresh one and reset it via the API container on the prod
 host (hash with `elliptic.core.security.hash_password`, `UPDATE users SET

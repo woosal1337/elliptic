@@ -46,7 +46,10 @@
   "submit": {
     "production": {
       "ios": {
-        "ascAppId": "6796972261"
+        "ascAppId": "6796972261",
+        "ascApiKeyPath": "/Users/ege/.appstoreconnect/private_keys/AuthKey_4UHH46GLQ6.p8",
+        "ascApiKeyId": "4UHH46GLQ6",
+        "ascApiKeyIssuerId": "7ed7d957-9dbb-4a12-8828-0f11f72937d6"
       }
     }
   }
