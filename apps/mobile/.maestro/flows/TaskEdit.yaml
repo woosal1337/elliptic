@@ -1,0 +1,43 @@
+#flow: TaskEdit
+#intent: the title and description edit in place. Both editors are entered and
+#        left without typing, so the commit guards short-circuit and this flow
+#        writes nothing — it is safe to run against any account.
+#note:   the description body cannot be tapped by label. It is taller than the
+#        viewport, so the driver filters it out of the hierarchy; the flow taps
+#        its coordinates instead.
+appId: bi.chele.companyos
+---
+- launchApp
+- waitForAnimationToEnd
+- runFlow:
+    when:
+      visible: "Continue"
+    commands:
+      - tapOn: "Continue"
+- tapOn: "Tasks"
+- waitForAnimationToEnd
+- tapOn:
+    text: ".*Day-group the inbox feed.*"
+- waitForAnimationToEnd
+
+# --- title -----------------------------------------------------------------
+# Editing swaps the composer for a Done button: the composer covers a grown
+# field, and with the keyboard up there is nowhere left to tap to blur.
+- tapOn: "Edit title"
+- waitForAnimationToEnd
+- assertVisible: "Done editing"
+- assertNotVisible: "Add a comment…"
+- tapOn: "Done editing"
+- waitForAnimationToEnd
+- assertVisible: "Edit title"
+- assertVisible: "Add a comment…"
+
+# --- description -----------------------------------------------------------
+- tapOn:
+    point: "50%,55%"
+- waitForAnimationToEnd
+- assertVisible: "Done editing"
+- tapOn: "Done editing"
+- waitForAnimationToEnd
+- assertVisible: "Add a comment…"
+- assertNotVisible: "Done editing"

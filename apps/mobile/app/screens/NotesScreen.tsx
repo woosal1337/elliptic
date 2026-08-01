@@ -11,8 +11,8 @@ import { ListSkeleton } from "@/components/Skeleton"
 import { Text } from "@/components/Text"
 import { TextField } from "@/components/TextField"
 import { useOrg } from "@/context/OrgContext"
-import { TAB_BAR_CLEARANCE } from "@/navigators/FloatingTabBar"
 import type { NotesStackScreenProps } from "@/navigators/navigationTypes"
+import { TAB_BAR_CLEARANCE } from "@/navigators/tabBarClearance"
 import { api } from "@/services/api"
 import type { Note } from "@/services/api/types"
 import { invalidate, queryKeys } from "@/services/query"
@@ -100,7 +100,7 @@ export const NotesScreen: FC<NotesStackScreenProps<"NotesList">> = ({ navigation
               ) : (
                 <Ionicons name="document-text-outline" size={18} color={colors.textDim} />
               )}
-              <Text text={item.title} size="sm" weight="medium" numberOfLines={1} style={$grow} />
+              <Text text={item.title} size="sm" weight="medium" numberOfLines={1} style={$title} />
             </Pressable>
           )}
         />
@@ -126,6 +126,9 @@ export const NotesScreen: FC<NotesStackScreenProps<"NotesList">> = ({ navigation
 const $flex: ViewStyle = { flex: 1 }
 const $emoji: TextStyle = { fontSize: 18 }
 const $grow: ViewStyle = { flexGrow: 1 }
+// flexShrink is 0 by default in RN, so flexGrow alone lets a long title overrun
+// the row's padding and ellipsize at the screen edge instead of the margin.
+const $title: ViewStyle = { flex: 1 }
 // Let the last row scroll clear of the floating tab bar and any toast.
 const $bottomClearance: ViewStyle = { paddingBottom: TAB_BAR_CLEARANCE }
 const $row: ViewStyle = {

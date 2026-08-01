@@ -1,13 +1,28 @@
-import { FC, ReactNode, useCallback, useEffect, useState } from "react"
-import { Linking, Pressable, ScrollView, View, ViewStyle } from "react-native"
+import { FC, ReactNode, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react"
+import {
+  Keyboard,
+  Linking,
+  Pressable,
+  RefreshControl,
+  TextStyle,
+  View,
+  ViewStyle,
+} from "react-native"
 import * as ImagePicker from "expo-image-picker"
 import { Ionicons } from "@expo/vector-icons"
-import { KeyboardStickyView } from "react-native-keyboard-controller"
+import { useFocusEffect } from "@react-navigation/native"
+import {
+  KeyboardAwareScrollView,
+  type KeyboardAwareScrollViewRef,
+  KeyboardStickyView,
+} from "react-native-keyboard-controller"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { Avatar } from "@/components/Avatar"
 import { Badge } from "@/components/Badge"
 import { DatePickerSheet } from "@/components/DatePickerSheet"
+import { EmptyState } from "@/components/EmptyState"
+import { GlassContainer, GlassField, GlassIconButton, GlassSurface } from "@/components/Glass"
 import { LabelRow } from "@/components/LabelChip"
 import { LabelPickerSheet } from "@/components/LabelPickerSheet"
 import { Markdown } from "@/components/Markdown"
@@ -16,18 +31,18 @@ import { PriorityIcon } from "@/components/PriorityIcon"
 import { Screen } from "@/components/Screen"
 import { DetailSkeleton } from "@/components/Skeleton"
 import { StatusIcon } from "@/components/StatusIcon"
-import { Text } from "@/components/Text"
-import { TextField } from "@/components/TextField"
+import { displayFontStyles, Text, textSizeStyles } from "@/components/Text"
 import { useToast } from "@/components/Toast"
 import { useOrg } from "@/context/OrgContext"
 import type { TasksStackScreenProps } from "@/navigators/navigationTypes"
-import { useHideTabBar } from "@/navigators/useHideTabBar"
+import { useHideTabBar } from "@/navigators/tabBarVisibility"
 import { api } from "@/services/api"
 import type { Comment, Member, Project, Task } from "@/services/api/types"
 import { invalidate } from "@/services/query"
 import { uploadAsset } from "@/services/upload"
 import { useAppTheme } from "@/theme/context"
 import { hapticSelection, hapticSuccess } from "@/utils/haptics"
+import { relativeTime } from "@/utils/relativeTime"
 import {
   cap,
   CUSTOM_DUE,
@@ -42,7 +57,17 @@ type Picker = "status" | "priority" | "assignee" | "due" | "mention"
 
 const labelChipText = (n: number) => (n === 0 ? "Labels" : n === 1 ? "1 label" : `${n} labels`)
 
-export const TaskDetailScreen: FC<TasksStackScreenProps<"TaskDetail">> = ({ route }) => {
+/**
+ * Status changes are written as comments by the API (tasks/service.py), marked
+ * with a leading ↩︎. They belong in the thread but read as activity, not
+ * discussion — no author card, no resolve.
+ */
+const isActivity = (comment: Comment) => comment.content.trimStart().startsWith("↩︎")
+
+export const TaskDetailScreen: FC<TasksStackScreenProps<"TaskDetail">> = ({
+  route,
+  navigation,
+}) => {
   const { activeOrg } = useOrg()
   const {
     theme: { colors, spacing, radius },
@@ -58,6 +83,10 @@ export const TaskDetailScreen: FC<TasksStackScreenProps<"TaskDetail">> = ({ rout
   const [members, setMembers] = useState<Member[]>([])
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
+  const [refreshing, setRefreshing] = useState(false)
+  // Measured, not guessed: the composer grows with its content.
+  const [composerHeight, setComposerHeight] = useState(0)
+  const scrollRef = useRef<KeyboardAwareScrollViewRef>(null)
   const [picker, setPicker] = useState<Picker | null>(null)
   const [commentText, setCommentText] = useState("")
   const [mentionIds, setMentionIds] = useState<string[]>([])
@@ -69,6 +98,13 @@ export const TaskDetailScreen: FC<TasksStackScreenProps<"TaskDetail">> = ({ rout
   const [showDatePicker, setShowDatePicker] = useState(false)
   // Labels are edited as a draft and committed once, on sheet close.
   const [labelDraft, setLabelDraft] = useState<string[] | null>(null)
+  // Title and description edit in place and commit on blur; null means "reading".
+  const [titleDraft, setTitleDraft] = useState<string | null>(null)
+  const [descriptionDraft, setDescriptionDraft] = useState<string | null>(null)
+  // Pin the caret to the top for the first frame, then hand control back.
+  const [descriptionCaret, setDescriptionCaret] = useState<
+    { start: number; end: number } | undefined
+  >()
 
   const load = useCallback(async () => {
     if (!activeOrg) return
@@ -89,6 +125,20 @@ export const TaskDetailScreen: FC<TasksStackScreenProps<"TaskDetail">> = ({ rout
 
   useEffect(() => {
     void load()
+  }, [load])
+
+  // Someone may have commented or moved the task while this screen sat in the
+  // stack; pick that up when it comes back into view.
+  useFocusEffect(
+    useCallback(() => {
+      void load()
+    }, [load]),
+  )
+
+  const refresh = useCallback(async () => {
+    setRefreshing(true)
+    await load()
+    setRefreshing(false)
   }, [load])
 
   const memberName = (id: string | null) =>
@@ -147,6 +197,57 @@ export const TaskDetailScreen: FC<TasksStackScreenProps<"TaskDetail">> = ({ rout
     })
   }
 
+  const commitTitle = async () => {
+    const next = titleDraft?.trim()
+    setTitleDraft(null)
+    if (!activeOrg || !task || !next || next === task.title) return
+    setTask({ ...task, title: next })
+    const ok = await api.updateTask(activeOrg.id, task.id, { title: next })
+    invalidate(activeOrg.id, "tasks") // the lists show the title
+    if (!ok) {
+      toast("Couldn't rename that task", { variant: "error" })
+      void load()
+    }
+  }
+
+  const commitDescription = async () => {
+    if (descriptionDraft === null) return // a null draft is "not editing", not "empty"
+    const next = descriptionDraft
+    setDescriptionDraft(null)
+    if (!activeOrg || !task || next === (task.description ?? "")) return
+    setTask({ ...task, description: next })
+    const ok = await api.updateTask(activeOrg.id, task.id, { description: next || null })
+    invalidate(activeOrg.id, "tasks")
+    if (!ok) {
+      toast("Couldn't save the description", { variant: "error" })
+      void load()
+    }
+  }
+
+  const editing = titleDraft !== null || descriptionDraft !== null
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: editing
+        ? () => (
+            <Pressable
+              onPress={() => {
+                Keyboard.dismiss()
+                void commitTitle()
+                void commitDescription()
+              }}
+              accessibilityRole="button"
+              accessibilityLabel="Done editing"
+              hitSlop={12}
+            >
+              <Text text="Done" weight="medium" style={{ color: colors.tint }} />
+            </Pressable>
+          )
+        : undefined,
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editing, titleDraft, descriptionDraft, colors.tint])
+
   const addSubtask = async () => {
     const title = newSubtask.trim()
     if (!activeOrg || !task?.project_id || !title || creatingSubtask) return
@@ -178,7 +279,11 @@ export const TaskDetailScreen: FC<TasksStackScreenProps<"TaskDetail">> = ({ rout
     if (!activeOrg) return
     const resolved = !comment.resolved_at
     const ok = await api.resolveComment(activeOrg.id, comment.id, resolved)
-    if (ok) {
+    if (!ok) {
+      toast("Couldn't update that comment", { variant: "error" })
+      return
+    }
+    {
       setComments((prev) =>
         prev.map((c) =>
           c.id === comment.id
@@ -228,6 +333,7 @@ export const TaskDetailScreen: FC<TasksStackScreenProps<"TaskDetail">> = ({ rout
       setMentionIds([])
       setPendingAttach([])
       setComments(await api.listComments(activeOrg.id, "task", taskId))
+      requestAnimationFrame(() => scrollRef.current?.scrollToEnd({ animated: true }))
     } else {
       toast("Couldn't post comment", { variant: "error" })
     }
@@ -242,10 +348,27 @@ export const TaskDetailScreen: FC<TasksStackScreenProps<"TaskDetail">> = ({ rout
   const removeMention = (userId: string) =>
     setMentionIds((ids) => ids.filter((id) => id !== userId))
 
-  if (loading || !task) {
+  if (loading) {
     return (
       <Screen preset="scroll">
         <DetailSkeleton />
+      </Screen>
+    )
+  }
+
+  if (!task) {
+    return (
+      <Screen preset="fixed" contentContainerStyle={$fill}>
+        <EmptyState
+          icon="alert-circle-outline"
+          title="Couldn't open this task"
+          caption="It may have been deleted, or you no longer have access."
+          actionLabel="Try again"
+          onAction={() => {
+            setLoading(true)
+            void load()
+          }}
+        />
       </Screen>
     )
   }
@@ -263,11 +386,40 @@ export const TaskDetailScreen: FC<TasksStackScreenProps<"TaskDetail">> = ({ rout
       // KeyboardStickyView lifts the composer; a second avoider would double it.
       KeyboardAvoidingViewProps={{ enabled: false }}
     >
-      <ScrollView
-        contentContainerStyle={[$scrollContent, { padding: spacing.lg }]}
+      <KeyboardAwareScrollView
+        ref={scrollRef}
+        contentContainerStyle={[
+          $scrollContent,
+          { padding: spacing.lg, paddingBottom: (editing ? 0 : composerHeight) + spacing.lg },
+        ]}
         keyboardShouldPersistTaps="handled"
+        // Keep a focused field clear of both the keyboard and the composer.
+        bottomOffset={(editing ? 0 : composerHeight) + 16}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={colors.tint} />
+        }
       >
-        <Text preset="heading" text={task.title} />
+        {titleDraft === null ? (
+          <Pressable
+            onPress={() => setTitleDraft(task.title)}
+            accessible
+            accessibilityRole="button"
+            accessibilityLabel="Edit title"
+          >
+            <Text preset="heading" text={task.title} />
+          </Pressable>
+        ) : (
+          <GlassField
+            value={titleDraft}
+            onChangeText={setTitleDraft}
+            placeholder="Task title"
+            multiline
+            autoFocus
+            maxHeight={260}
+            style={$titleInput}
+            onBlur={() => void commitTitle()}
+          />
+        )}
 
         <View style={[$propWrap, { marginTop: spacing.md }]}>
           <PropChip onPress={() => setPicker("status")} testID="prop-status" label="Status">
@@ -345,14 +497,46 @@ export const TaskDetailScreen: FC<TasksStackScreenProps<"TaskDetail">> = ({ rout
           </View>
         ) : null}
 
-        {task.description ? (
-          <View style={{ marginTop: spacing.lg }}>
-            <Text preset="formLabel" text="Description" style={{ color: colors.textDim }} />
-            <View style={{ marginTop: spacing.xs }}>
-              <Markdown source={task.description} />
-            </View>
-          </View>
-        ) : null}
+        <View style={{ marginTop: spacing.lg }}>
+          <Text preset="formLabel" text="Description" style={{ color: colors.textDim }} />
+          {descriptionDraft === null ? (
+            <Pressable
+              onPress={() => {
+                setDescriptionCaret({ start: 0, end: 0 })
+                setDescriptionDraft(task.description ?? "")
+              }}
+              accessible
+              accessibilityRole="button"
+              accessibilityLabel="Edit description"
+              style={{ marginTop: spacing.xs }}
+            >
+              {task.description ? (
+                <Markdown source={task.description} />
+              ) : (
+                <Text
+                  text="Add a description…"
+                  size="sm"
+                  style={{ color: colors.textDim, paddingVertical: spacing.xs }}
+                />
+              )}
+            </Pressable>
+          ) : (
+            <GlassField
+              value={descriptionDraft}
+              onChangeText={setDescriptionDraft}
+              placeholder="Describe this task…"
+              multiline
+              autoFocus
+              minHeight={220}
+              maxHeight={520}
+              style={$descriptionInput}
+              selection={descriptionCaret}
+              onSelectionChange={() => setDescriptionCaret(undefined)}
+              containerStyle={{ marginTop: spacing.xs }}
+              onBlur={() => void commitDescription()}
+            />
+          )}
+        </View>
 
         {task.project_id ? (
           <View style={{ marginTop: spacing.lg }}>
@@ -360,31 +544,73 @@ export const TaskDetailScreen: FC<TasksStackScreenProps<"TaskDetail">> = ({ rout
               preset="subheading"
               text={`Subtasks${subtasks.length ? ` (${subtasks.length})` : ""}`}
             />
+            {subtasks.length === 0 ? (
+              <Text
+                text="No subtasks yet."
+                size="xs"
+                style={{ color: colors.textDim, paddingVertical: spacing.xs }}
+              />
+            ) : null}
             {subtasks.map((st) => (
-              <Pressable key={st.id} onPress={() => void toggleSubtask(st)} style={$subtaskRow}>
-                <Ionicons
-                  name={st.status === "done" ? "checkbox" : "square-outline"}
-                  size={20}
-                  color={st.status === "done" ? colors.tint : colors.textDim}
-                />
-                <View style={$grow}>
+              <View key={st.id} style={$subtaskRow}>
+                <Pressable
+                  onPress={() => void toggleSubtask(st)}
+                  hitSlop={6}
+                  // Without `accessible` the glyph and the title merge into one
+                  // node, so neither can be addressed on its own.
+                  accessible
+                  accessibilityRole="button"
+                  accessibilityLabel={st.status === "done" ? "Reopen subtask" : "Complete subtask"}
+                >
+                  <Ionicons
+                    name={st.status === "done" ? "checkbox" : "square-outline"}
+                    size={20}
+                    color={st.status === "done" ? colors.tint : colors.textDim}
+                  />
+                </Pressable>
+                <Pressable
+                  style={$grow}
+                  accessible
+                  accessibilityRole="button"
+                  accessibilityLabel={st.title}
+                  onPress={() =>
+                    navigation.push("TaskDetail", { taskId: st.id, title: st.identifier })
+                  }
+                >
                   <Text
                     text={st.title}
                     numberOfLines={1}
                     style={{ color: st.status === "done" ? colors.textDim : colors.text }}
                   />
-                </View>
-              </Pressable>
+                </Pressable>
+              </View>
             ))}
             <View style={$subtaskRow}>
-              <Ionicons name="add" size={20} color={colors.textDim} />
-              <TextField
+              <Pressable
+                onPress={() => void addSubtask()}
+                disabled={!newSubtask.trim() || creatingSubtask}
+                hitSlop={8}
+                testID="subtask-add"
+                // Merge the glyph into one node, else the icon is what surfaces.
+                accessible
+                accessibilityRole="button"
+                accessibilityLabel="Add subtask"
+                style={!newSubtask.trim() || creatingSubtask ? $dim : undefined}
+              >
+                <Ionicons
+                  name="add"
+                  size={20}
+                  color={newSubtask.trim() ? colors.tint : colors.textDim}
+                />
+              </Pressable>
+              <GlassField
                 value={newSubtask}
                 onChangeText={setNewSubtask}
-                placeholder="Add subtask…"
+                placeholder={creatingSubtask ? "Adding…" : "Add subtask…"}
                 containerStyle={$grow}
                 onSubmitEditing={() => void addSubtask()}
                 returnKeyType="done"
+                editable={!creatingSubtask}
               />
             </View>
           </View>
@@ -395,129 +621,94 @@ export const TaskDetailScreen: FC<TasksStackScreenProps<"TaskDetail">> = ({ rout
           text={`Comments (${comments.length})`}
           style={{ marginTop: spacing.lg, marginBottom: spacing.sm }}
         />
+        {comments.length === 0 ? (
+          <Text
+            text="No comments yet."
+            size="xs"
+            style={{ color: colors.textDim, marginBottom: spacing.sm }}
+          />
+        ) : null}
         {comments.map((c) => (
-          <View key={c.id} style={[$comment, { borderColor: colors.separator }]}>
-            <Markdown source={c.content} />
-            {c.attachments && c.attachments.length > 0 ? (
-              <View style={$attachWrap}>
-                {c.attachments.map((a) => (
+          <CommentRow
+            key={c.id}
+            comment={c}
+            author={memberName(c.author_id)}
+            onToggleResolve={() => void toggleResolve(c)}
+          />
+        ))}
+      </KeyboardAwareScrollView>
+
+      {editing ? null : (
+        <KeyboardStickyView offset={{ closed: 0, opened: insets.bottom }} style={$composerDock}>
+          <GlassSurface
+            onLayout={(e) => setComposerHeight(e.nativeEvent.layout.height)}
+            style={[$composerBar, { paddingBottom: insets.bottom || 8 }]}
+          >
+            {pendingAttach.length > 0 || attaching ? (
+              <Text
+                text={attaching ? "Uploading…" : `${pendingAttach.length} attachment(s)`}
+                size="xxs"
+                style={{ color: colors.textDim }}
+              />
+            ) : null}
+            {mentionIds.length > 0 ? (
+              <View style={$mentionRow}>
+                {mentionIds.map((id) => (
                   <Pressable
-                    key={a.id}
-                    onPress={() => void Linking.openURL(a.download_url)}
-                    style={[$attachChip, { borderColor: colors.border }]}
+                    key={id}
+                    onPress={() => removeMention(id)}
+                    accessible
+                    accessibilityRole="button"
+                    accessibilityLabel={`Remove mention of ${memberName(id)}`}
+                    style={[
+                      $mentionChip,
+                      { backgroundColor: colors.accentMuted, borderRadius: radius.full },
+                    ]}
                   >
-                    <Ionicons name="document-attach-outline" size={14} color={colors.tint} />
                     <Text
-                      text={a.filename}
+                      text={`@${memberName(id)}`}
                       size="xxs"
-                      numberOfLines={1}
+                      weight="medium"
                       style={{ color: colors.tint }}
                     />
+                    <Ionicons name="close" size={12} color={colors.tint} />
                   </Pressable>
                 ))}
               </View>
             ) : null}
-            <View style={$commentFooter}>
-              {c.resolved_at ? <Badge text="Resolved" variant="success" /> : null}
-              <Pressable
-                onPress={() => void toggleResolve(c)}
-                style={[$smallBtn, { borderColor: colors.border }]}
-              >
-                <Text
-                  text={c.resolved_at ? "Reopen" : "Resolve"}
-                  size="xs"
-                  weight="medium"
-                  style={{ color: colors.tint }}
-                />
-              </Pressable>
-            </View>
-          </View>
-        ))}
-      </ScrollView>
-
-      <KeyboardStickyView offset={{ closed: 0, opened: insets.bottom }}>
-        <View
-          style={[
-            $composerBar,
-            {
-              borderTopColor: colors.separator,
-              backgroundColor: colors.background,
-              paddingBottom: insets.bottom || 8,
-            },
-          ]}
-        >
-          {pendingAttach.length > 0 || attaching ? (
-            <Text
-              text={attaching ? "Uploading…" : `${pendingAttach.length} attachment(s)`}
-              size="xxs"
-              style={{ color: colors.textDim }}
-            />
-          ) : null}
-          {mentionIds.length > 0 ? (
-            <View style={$mentionRow}>
-              {mentionIds.map((id) => (
-                <Pressable
-                  key={id}
-                  onPress={() => removeMention(id)}
-                  accessibilityRole="button"
-                  accessibilityLabel={`Remove mention of ${memberName(id)}`}
-                  style={[
-                    $mentionChip,
-                    { backgroundColor: colors.accentMuted, borderRadius: radius.full },
-                  ]}
-                >
-                  <Text
-                    text={`@${memberName(id)}`}
-                    size="xxs"
-                    weight="medium"
-                    style={{ color: colors.tint }}
+            <View style={$composerRow}>
+              <GlassContainer spacing={8} style={$controls}>
+                <GlassIconButton onPress={() => setPicker("mention")} label="Mention someone">
+                  <Ionicons name="at" size={18} color={colors.textDim} />
+                </GlassIconButton>
+                <GlassIconButton onPress={() => void pickAttachment()} label="Attach an image">
+                  <Ionicons
+                    name="image-outline"
+                    size={18}
+                    color={attaching ? colors.tint : colors.textDim}
                   />
-                  <Ionicons name="close" size={12} color={colors.tint} />
-                </Pressable>
-              ))}
-            </View>
-          ) : null}
-          <View style={[$composer, { borderColor: colors.border }]}>
-            <Pressable
-              onPress={() => setPicker("mention")}
-              style={$at}
-              accessibilityRole="button"
-              accessibilityLabel="Mention someone"
-            >
-              <Ionicons name="at" size={20} color={colors.textDim} />
-            </Pressable>
-            <Pressable
-              onPress={() => void pickAttachment()}
-              style={$at}
-              accessibilityRole="button"
-              accessibilityLabel="Attach an image"
-            >
-              <Ionicons
-                name="image-outline"
-                size={20}
-                color={attaching ? colors.tint : colors.textDim}
-              />
-            </Pressable>
-            <View style={$grow}>
-              <TextField
+                </GlassIconButton>
+              </GlassContainer>
+              <GlassField
                 value={commentText}
                 onChangeText={setCommentText}
                 placeholder="Add a comment…"
                 multiline
+                containerStyle={$grow}
               />
+              <GlassIconButton
+                onPress={() => void postComment()}
+                disabled={(!commentText.trim() && pendingAttach.length === 0) || posting}
+                label="Send comment"
+                tint={colors.tint}
+                size={38}
+              >
+                <Ionicons name="arrow-up" size={18} color={colors.onTint} />
+              </GlassIconButton>
             </View>
-            <Pressable
-              onPress={() => void postComment()}
-              disabled={!commentText.trim() || posting}
-              accessibilityRole="button"
-              accessibilityLabel="Send comment"
-              style={[$send, { backgroundColor: colors.tint }, commentText.trim() ? null : $dim]}
-            >
-              <Ionicons name="arrow-up" size={18} color={colors.onTint} />
-            </Pressable>
-          </View>
-        </View>
-      </KeyboardStickyView>
+          </GlassSurface>
+        </KeyboardStickyView>
+      )}
 
       <OptionSheet
         visible={picker === "status"}
@@ -578,6 +769,85 @@ export const TaskDetailScreen: FC<TasksStackScreenProps<"TaskDetail">> = ({ rout
   )
 }
 
+/**
+ * One entry in the thread. Real comments carry their author and time; the API's
+ * status-change notes render as a quiet activity line instead of a card with a
+ * nonsensical "Resolve" button.
+ */
+const CommentRow: FC<{
+  comment: Comment
+  author: string
+  onToggleResolve: () => void
+}> = ({ comment, author, onToggleResolve }) => {
+  const {
+    theme: { colors, spacing, radius },
+  } = useAppTheme()
+
+  if (isActivity(comment)) {
+    return (
+      <View style={$activityRow}>
+        <Ionicons name="git-commit-outline" size={14} color={colors.textDim} />
+        <View style={$grow}>
+          <Text
+            text={comment.content.replace(/\*\*/g, "").replace(/^↩︎\s*/, "")}
+            size="xs"
+            style={{ color: colors.textDim }}
+          />
+        </View>
+        <Text
+          text={relativeTime(comment.created_at)}
+          size="xxs"
+          style={{ color: colors.textDim }}
+        />
+      </View>
+    )
+  }
+
+  return (
+    <View style={[$comment, { borderColor: colors.separator }]}>
+      <View style={$commentHead}>
+        <Avatar name={author} size={22} />
+        <Text text={author} size="xs" weight="medium" />
+        <Text
+          text={relativeTime(comment.created_at)}
+          size="xxs"
+          style={{ color: colors.textDim }}
+        />
+        <View style={$grow} />
+        {comment.resolved_at ? <Badge text="Resolved" variant="success" /> : null}
+      </View>
+      <Markdown source={comment.content} />
+      {comment.attachments && comment.attachments.length > 0 ? (
+        <View style={$attachWrap}>
+          {comment.attachments.map((a) => (
+            <Pressable
+              key={a.id}
+              onPress={() => void Linking.openURL(a.download_url)}
+              style={[$attachChip, { borderColor: colors.border, borderRadius: radius.sm }]}
+            >
+              <Ionicons name="document-attach-outline" size={14} color={colors.tint} />
+              <Text text={a.filename} size="xxs" numberOfLines={1} style={{ color: colors.tint }} />
+            </Pressable>
+          ))}
+        </View>
+      ) : null}
+      <Pressable
+        onPress={onToggleResolve}
+        hitSlop={8}
+        accessibilityRole="button"
+        style={{ marginTop: spacing.xxs }}
+      >
+        <Text
+          text={comment.resolved_at ? "Reopen" : "Resolve"}
+          size="xxs"
+          weight="medium"
+          style={{ color: colors.textDim }}
+        />
+      </Pressable>
+    </View>
+  )
+}
+
 /** A tappable property chip (status / priority / assignee / due) — Linear-style. */
 const PropChip: FC<{
   onPress?: () => void
@@ -602,9 +872,15 @@ const PropChip: FC<{
 }
 
 const $fill: ViewStyle = { flex: 1 }
+// Both editors mirror what they replace: the title is the `heading` preset,
+// the description is body text as the Markdown renderer sets it.
+const $titleInput: TextStyle = { ...textSizeStyles.xxl, ...displayFontStyles.bold }
+const $descriptionInput: TextStyle = { ...textSizeStyles.sm }
 const $scrollContent: ViewStyle = { paddingBottom: 24 }
 // The composer is pinned below the scrolling body (C2) — Screen's keyboard
 // avoidance lifts it, so it stays reachable with the keyboard up.
+const $composerDock: ViewStyle = { position: "absolute", left: 0, right: 0, bottom: 0 }
+const $controls: ViewStyle = { flexDirection: "row", alignItems: "center", gap: 6 }
 const $composerBar: ViewStyle = {
   borderTopWidth: 1,
   paddingHorizontal: 12,
@@ -643,7 +919,14 @@ const $comment: ViewStyle = {
   marginBottom: 8,
   gap: 8,
 }
-const $commentFooter: ViewStyle = { flexDirection: "row", alignItems: "center", gap: 8 }
+const $commentHead: ViewStyle = { flexDirection: "row", alignItems: "center", gap: 8 }
+const $activityRow: ViewStyle = {
+  flexDirection: "row",
+  alignItems: "center",
+  gap: 8,
+  paddingVertical: 6,
+  paddingHorizontal: 2,
+}
 const $attachWrap: ViewStyle = { flexDirection: "row", flexWrap: "wrap", gap: 6 }
 const $attachChip: ViewStyle = {
   flexDirection: "row",
@@ -655,26 +938,5 @@ const $attachChip: ViewStyle = {
   paddingVertical: 4,
   maxWidth: "100%",
 }
-const $smallBtn: ViewStyle = {
-  borderWidth: 1,
-  borderRadius: 8,
-  paddingVertical: 6,
-  paddingHorizontal: 12,
-}
-const $composer: ViewStyle = {
-  flexDirection: "row",
-  alignItems: "flex-end",
-  gap: 8,
-  borderWidth: 1,
-  borderRadius: 12,
-  padding: 8,
-}
+const $composerRow: ViewStyle = { flexDirection: "row", alignItems: "flex-end", gap: 8 }
 const $grow: ViewStyle = { flex: 1 }
-const $at: ViewStyle = { padding: 6 }
-const $send: ViewStyle = {
-  width: 36,
-  height: 36,
-  borderRadius: 18,
-  alignItems: "center",
-  justifyContent: "center",
-}

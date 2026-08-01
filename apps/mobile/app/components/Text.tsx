@@ -123,3 +123,11 @@ const $presets: Record<Presets, ThemedStyleArray<TextStyle>> = {
   formHelper: [$baseStyle, { ...$sizeStyles.xs, ...$fontWeightStyles.normal }],
 }
 const $rtlStyle: TextStyle = isRTL ? { writingDirection: "rtl" } : {}
+
+/**
+ * The type scale and display faces, for the few places that need to render text
+ * outside a `Text` — a `TextInput` editing a value has to match the `Text` that
+ * displays it, or the font visibly swaps on tap.
+ */
+export const textSizeStyles = $sizeStyles
+export const displayFontStyles = $displayStyles

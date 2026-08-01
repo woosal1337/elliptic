@@ -5,11 +5,12 @@ import { Ionicons } from "@expo/vector-icons"
 import { Markdown } from "@/components/Markdown"
 import { Screen } from "@/components/Screen"
 import { Skeleton } from "@/components/Skeleton"
-import { Text } from "@/components/Text"
+import { displayFontStyles, Text, textSizeStyles } from "@/components/Text"
 import { TextField } from "@/components/TextField"
 import { useToast } from "@/components/Toast"
 import { useOrg } from "@/context/OrgContext"
 import type { NotesStackScreenProps } from "@/navigators/navigationTypes"
+import { TAB_BAR_CLEARANCE } from "@/navigators/tabBarClearance"
 import { api } from "@/services/api"
 import { invalidate } from "@/services/query"
 import { useAppTheme } from "@/theme/context"
@@ -121,7 +122,14 @@ export const NoteDetailScreen: FC<NotesStackScreenProps<"NoteDetail">> = ({
   }, [dirty, saving, content, title, mode])
 
   return (
-    <Screen preset="scroll" contentContainerStyle={{ padding: spacing.lg, gap: spacing.sm }}>
+    <Screen
+      preset="scroll"
+      contentContainerStyle={{
+        padding: spacing.lg,
+        gap: spacing.sm,
+        paddingBottom: TAB_BAR_CLEARANCE,
+      }}
+    >
       {loading ? (
         <Skeleton height={200} />
       ) : mode === "preview" ? (
@@ -142,6 +150,7 @@ export const NoteDetailScreen: FC<NotesStackScreenProps<"NoteDetail">> = ({
               setDirty(true)
             }}
             placeholder="Title"
+            style={$titleInput}
           />
           <TextField
             value={content}
@@ -151,6 +160,7 @@ export const NoteDetailScreen: FC<NotesStackScreenProps<"NoteDetail">> = ({
             }}
             multiline
             placeholder="Write…"
+            style={$bodyInput}
             inputWrapperStyle={$editor}
           />
         </>
@@ -159,5 +169,9 @@ export const NoteDetailScreen: FC<NotesStackScreenProps<"NoteDetail">> = ({
   )
 }
 
+// Editing keeps the preview's type: the title is the `heading` preset and the
+// body is what Markdown renders, so tapping in does not reflow the note.
+const $titleInput: TextStyle = { ...textSizeStyles.xxl, ...displayFontStyles.bold }
+const $bodyInput: TextStyle = { ...textSizeStyles.sm }
 const $editor: TextStyle = { minHeight: 240, alignItems: "flex-start" }
 const $headerRow: ViewStyle = { flexDirection: "row", alignItems: "center", gap: 16 }

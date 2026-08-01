@@ -1,53 +1,26 @@
-import { FC, useCallback, useEffect, useState } from "react"
+import { FC, useCallback } from "react"
 import { Pressable, RefreshControl, View, ViewStyle } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs"
 
+import { GlassSurface, LIQUID_GLASS } from "@/components/Glass"
 import { OrgSwitcher } from "@/components/OrgSwitcher"
+import { ProjectRow } from "@/components/ProjectRow"
 import { Screen } from "@/components/Screen"
 import { TaskListSkeleton } from "@/components/Skeleton"
 import { TaskRow } from "@/components/TaskRow"
 import { Text } from "@/components/Text"
 import { useAuth } from "@/context/AuthContext"
 import { useOrg } from "@/context/OrgContext"
-import { TAB_BAR_CLEARANCE } from "@/navigators/FloatingTabBar"
 import type { HomeStackScreenProps, MainTabParamList } from "@/navigators/navigationTypes"
+import { TAB_BAR_CLEARANCE } from "@/navigators/tabBarClearance"
 import { api } from "@/services/api"
-import type { Task } from "@/services/api/types"
+import type { Project, Task } from "@/services/api/types"
 import { queryKeys } from "@/services/query"
 import { useAppTheme } from "@/theme/context"
 import { openEntity } from "@/utils/openEntity"
 import { useListQuery } from "@/utils/useListQuery"
 import { useOfflineQueue } from "@/utils/useOfflineQueue"
-import { useUnreadCount } from "@/utils/useUnreadCount"
-
-const QuickLink: FC<{
-  icon: keyof typeof Ionicons.glyphMap
-  label: string
-  badge?: number
-  onPress: () => void
-}> = ({ icon, label, badge, onPress }) => {
-  const {
-    theme: { colors, radius },
-  } = useAppTheme()
-  return (
-    <Pressable
-      onPress={onPress}
-      style={[
-        $quick,
-        { borderColor: colors.border, borderRadius: radius.lg, backgroundColor: colors.surface },
-      ]}
-    >
-      <Ionicons name={icon} size={22} color={colors.tint} />
-      <Text text={label} size="xs" weight="medium" />
-      {badge && badge > 0 ? (
-        <View style={[$badge, { backgroundColor: colors.tint }]}>
-          <Text text={String(badge)} size="xxs" style={{ color: colors.onTint }} />
-        </View>
-      ) : null}
-    </Pressable>
-  )
-}
 
 export const HomeScreen: FC<HomeStackScreenProps<"HomeMain">> = ({ navigation }) => {
   const { user } = useAuth()
@@ -67,13 +40,15 @@ export const HomeScreen: FC<HomeStackScreenProps<"HomeMain">> = ({ navigation })
   } = useListQuery<Task>(activeOrg ? queryKeys.tasks(activeOrg.id, "assigned") : null, fetcher)
   // Home surfaces actionable work only; closed tasks live in the Tasks tab.
   const activeTasks = tasks.filter((t) => t.status !== "done" && t.status !== "cancelled")
-  const unread = useUnreadCount(activeOrg?.id)
+  const projectFetcher = useCallback(
+    () => (activeOrg ? api.listProjects(activeOrg.id) : Promise.resolve<Project[]>([])),
+    [activeOrg],
+  )
+  const { data: projects } = useListQuery<Project>(
+    activeOrg ? queryKeys.projects(activeOrg.id) : null,
+    projectFetcher,
+  )
   const pending = useOfflineQueue()
-  const [triage, setTriage] = useState(0)
-  useEffect(() => {
-    if (activeOrg) void api.triageCount(activeOrg.id).then(setTriage)
-  }, [activeOrg, tasks])
-
   const parent = () => navigation.getParent<BottomTabNavigationProp<MainTabParamList>>()
   const openTask = (t: Task) => openEntity(parent(), "task", t.id, t.identifier)
 
@@ -108,44 +83,23 @@ export const HomeScreen: FC<HomeStackScreenProps<"HomeMain">> = ({ navigation })
 
       <Pressable
         onPress={() => navigation.navigate("Search")}
-        style={[
-          $search,
-          {
-            borderColor: colors.inputBorder,
-            backgroundColor: colors.surface,
-            borderRadius: radius.lg,
-            marginTop: spacing.md,
-          },
-        ]}
+        accessible
+        accessibilityRole="button"
+        accessibilityLabel="Search tasks, notes, projects"
+        style={{ marginTop: spacing.md }}
       >
-        <Ionicons name="search" size={18} color={colors.textDim} />
-        <Text text="Search tasks, notes, projects…" style={{ color: colors.textDim }} />
+        <GlassSurface
+          interactive
+          style={[
+            $search,
+            { borderRadius: radius.full },
+            !LIQUID_GLASS && [$bordered, { borderColor: colors.inputBorder }],
+          ]}
+        >
+          <Ionicons name="search" size={18} color={colors.textDim} />
+          <Text text="Search tasks, notes, projects…" style={{ color: colors.textDim }} />
+        </GlassSurface>
       </Pressable>
-
-      <View style={[$quickRow, { marginTop: spacing.md }]}>
-        <QuickLink
-          icon="folder-outline"
-          label="Projects"
-          onPress={() => navigation.navigate("Projects")}
-        />
-        <QuickLink
-          icon="sparkles-outline"
-          label="Assistant"
-          onPress={() => navigation.navigate("Chat")}
-        />
-        <QuickLink
-          icon="file-tray-outline"
-          label="Triage"
-          badge={triage}
-          onPress={() => parent()?.navigate("Inbox", { screen: "Triage" })}
-        />
-        <QuickLink
-          icon="notifications-outline"
-          label="Inbox"
-          badge={unread}
-          onPress={() => parent()?.navigate("Inbox", { screen: "Notifications" })}
-        />
-      </View>
 
       <Text
         preset="subheading"
@@ -167,10 +121,47 @@ export const HomeScreen: FC<HomeStackScreenProps<"HomeMain">> = ({ navigation })
           ))}
         </View>
       )}
+
+      {projects.length > 0 ? (
+        <>
+          <View style={[$sectionHead, { marginTop: spacing.xl, marginBottom: spacing.xs }]}>
+            <Text preset="subheading" text="Projects" />
+            {projects.length > PROJECT_PREVIEW ? (
+              <Pressable
+                onPress={() => navigation.navigate("Projects")}
+                accessibilityRole="button"
+                accessibilityLabel="See all projects"
+                hitSlop={8}
+              >
+                <Text text="See all" size="sm" weight="medium" style={{ color: colors.tint }} />
+              </Pressable>
+            ) : null}
+          </View>
+          <View style={{ marginHorizontal: -spacing.lg }}>
+            {projects.slice(0, PROJECT_PREVIEW).map((p, i, shown) => (
+              <ProjectRow
+                key={p.id}
+                project={p}
+                divider={i < shown.length - 1}
+                onPress={() =>
+                  navigation.navigate("ProjectDetail", { projectId: p.id, title: p.name })
+                }
+              />
+            ))}
+          </View>
+        </>
+      ) : null}
     </Screen>
   )
 }
 
+// Home previews a few projects; the rest live behind "See all".
+const PROJECT_PREVIEW = 5
+const $sectionHead: ViewStyle = {
+  flexDirection: "row",
+  alignItems: "center",
+  justifyContent: "space-between",
+}
 const $search: ViewStyle = {
   flexDirection: "row",
   alignItems: "center",
@@ -179,25 +170,7 @@ const $search: ViewStyle = {
   paddingHorizontal: 12,
   paddingVertical: 12,
 }
-const $quickRow: ViewStyle = { flexDirection: "row", gap: 8 }
-const $quick: ViewStyle = {
-  flex: 1,
-  alignItems: "center",
-  gap: 4,
-  borderWidth: 1,
-  paddingVertical: 12,
-}
-const $badge: ViewStyle = {
-  position: "absolute",
-  top: 6,
-  right: 10,
-  minWidth: 16,
-  height: 16,
-  borderRadius: 8,
-  alignItems: "center",
-  justifyContent: "center",
-  paddingHorizontal: 4,
-}
+const $bordered: ViewStyle = { borderWidth: 1 }
 const $pending: ViewStyle = {
   flexDirection: "row",
   alignItems: "center",
