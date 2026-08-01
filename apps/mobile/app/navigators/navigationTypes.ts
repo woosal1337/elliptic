@@ -48,6 +48,7 @@ export type AppStackParamList = {
   Login: undefined
   Register: undefined
   Main: NavigatorScreenParams<MainTabParamList>
+  SwitchWorkspace: undefined
 }
 
 export type AppStackScreenProps<T extends keyof AppStackParamList> = NativeStackScreenProps<

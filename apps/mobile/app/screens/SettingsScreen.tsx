@@ -1,21 +1,24 @@
 import { FC, useEffect, useState } from "react"
-import { Switch, View, ViewStyle } from "react-native"
+import { View, ViewStyle } from "react-native"
+import {
+  Button,
+  Form,
+  Host,
+  Picker,
+  Section,
+  Text as NativeText,
+  TextField,
+  Toggle,
+} from "@expo/ui/swift-ui"
+import { pickerStyle, tag } from "@expo/ui/swift-ui/modifiers"
 import { useMMKVBoolean } from "react-native-mmkv"
 
-import { Button } from "@/components/Button"
-import { FieldRow } from "@/components/FieldRow"
-import { OptionSheet } from "@/components/OptionSheet"
-import { Screen } from "@/components/Screen"
-import { Text } from "@/components/Text"
-import { TextField } from "@/components/TextField"
 import { useAuth } from "@/context/AuthContext"
 import { useOrg } from "@/context/OrgContext"
 import type { ProfileStackScreenProps } from "@/navigators/navigationTypes"
 import { api } from "@/services/api"
 import type { NotificationPrefs } from "@/services/api/types"
 import { useAppTheme } from "@/theme/context"
-
-const THEME_LABEL: Record<string, string> = { system: "System", light: "Light", dark: "Dark" }
 
 type EmailPrefs = Omit<NotificationPrefs, "project_id">
 
@@ -35,18 +38,24 @@ const ALL_ON: EmailPrefs = {
   email_mentions: true,
 }
 
+const THEMES = ["system", "light", "dark"] as const
+const THEME_LABEL: Record<(typeof THEMES)[number], string> = {
+  system: "System",
+  light: "Light",
+  dark: "Dark",
+}
+
+/**
+ * Settings is a SwiftUI `Form` — the same construct the system Settings app
+ * uses — so the grouped rows, the inset styling, the toggles and the pickers
+ * are UIKit's, including whatever iOS does to them on 26 and later.
+ */
 export const SettingsScreen: FC<ProfileStackScreenProps<"Settings">> = () => {
   const { user, logout } = useAuth()
-  const {
-    theme: { colors, spacing },
-    themeContext,
-    setThemeContextOverride,
-  } = useAppTheme()
+  const { themeOverride, setThemeContextOverride, themeContext } = useAppTheme()
   const { activeOrg } = useOrg()
   const [name, setName] = useState(user?.full_name ?? "")
-  const [savingName, setSavingName] = useState(false)
   const [pushEnabled, setPushEnabled] = useMMKVBoolean("push.enabled")
-  const [themePicker, setThemePicker] = useState(false)
   const [prefs, setPrefs] = useState<EmailPrefs | null>(null)
 
   useEffect(() => {
@@ -66,95 +75,72 @@ export const SettingsScreen: FC<ProfileStackScreenProps<"Settings">> = () => {
     )
   }, [activeOrg])
 
-  const saveName = async () => {
-    if (!name.trim() || savingName) return
-    setSavingName(true)
-    await api.updateProfile(name.trim())
-    setSavingName(false)
+  // The field commits on change with a trailing save, so there is no button.
+  const saveName = (value: string) => {
+    setName(value)
+    if (value.trim()) void api.updateProfile(value.trim())
   }
 
-  const togglePref = (key: keyof EmailPrefs) => {
+  const togglePref = (key: keyof EmailPrefs, value: boolean) => {
     if (!activeOrg || !prefs) return
-    const next = { ...prefs, [key]: !prefs[key] }
+    const next = { ...prefs, [key]: value }
     setPrefs(next)
     void api.updateNotificationPrefs(activeOrg.id, next)
   }
 
   return (
-    <Screen preset="scroll" contentContainerStyle={{ padding: spacing.lg }}>
-      <Text preset="formLabel" text="Your name" style={{ color: colors.textDim }} />
-      <TextField value={name} onChangeText={setName} placeholder="Full name" />
-      <Button
-        text={savingName ? "Saving…" : "Save name"}
-        preset="filled"
-        disabled={!name.trim() || savingName}
-        onPress={() => void saveName()}
-        style={$save}
-      />
+    <View style={$fill}>
+      <Host style={$fill} colorScheme={themeContext}>
+        <Form>
+          <Section title="Profile">
+            <TextField defaultValue={name} placeholder="Full name" onValueChange={saveName} />
+            <NativeText>{user?.email ?? ""}</NativeText>
+          </Section>
 
-      <View style={$section}>
-        <Text text={user?.email ?? ""} style={{ color: colors.textDim }} />
-      </View>
+          <Section title="Appearance">
+            <Picker
+              label="Theme"
+              selection={themeOverride ?? "system"}
+              onSelectionChange={(value) =>
+                setThemeContextOverride(
+                  value === "system" ? undefined : (value as "light" | "dark"),
+                )
+              }
+              modifiers={[pickerStyle("segmented")]}
+            >
+              {THEMES.map((t) => (
+                <NativeText key={t} modifiers={[tag(t)]}>
+                  {THEME_LABEL[t]}
+                </NativeText>
+              ))}
+            </Picker>
+            <Toggle
+              label="Push notifications"
+              isOn={pushEnabled ?? true}
+              onIsOnChange={setPushEnabled}
+            />
+          </Section>
 
-      <View style={$section}>
-        <FieldRow
-          label="Theme"
-          value={THEME_LABEL[themeContext] ?? "System"}
-          onPress={() => setThemePicker(true)}
-        />
-        <View style={[$toggleRow, { borderBottomColor: colors.separator }]}>
-          <Text text="Push notifications" />
-          <Switch
-            value={pushEnabled ?? true}
-            onValueChange={setPushEnabled}
-            trackColor={{ true: colors.tint, false: colors.palette.neutral300 }}
-          />
-        </View>
-      </View>
+          {prefs ? (
+            <Section title="Email notifications">
+              {PREF_ROWS.map((row) => (
+                <Toggle
+                  key={row.key}
+                  label={row.label}
+                  isOn={prefs[row.key]}
+                  onIsOnChange={(value) => togglePref(row.key, value)}
+                />
+              ))}
+            </Section>
+          ) : null}
 
-      {prefs ? (
-        <View style={$section}>
-          <Text preset="formLabel" text="Email notifications" style={{ color: colors.textDim }} />
-          {PREF_ROWS.map((row) => (
-            <View key={row.key} style={[$toggleRow, { borderBottomColor: colors.separator }]}>
-              <Text text={row.label} />
-              <Switch
-                value={prefs[row.key]}
-                onValueChange={() => togglePref(row.key)}
-                trackColor={{ true: colors.tint, false: colors.palette.neutral300 }}
-              />
-            </View>
-          ))}
-        </View>
-      ) : null}
-
-      <Button text="Sign out" onPress={logout} style={$signout} />
-
-      <OptionSheet
-        visible={themePicker}
-        onClose={() => setThemePicker(false)}
-        title="Theme"
-        options={[
-          { label: "System", value: "system" },
-          { label: "Light", value: "light" },
-          { label: "Dark", value: "dark" },
-        ]}
-        selected={themeContext}
-        onSelect={(v) =>
-          setThemeContextOverride(v === "system" ? undefined : (v as "light" | "dark"))
-        }
-      />
-    </Screen>
+          <Section>
+            <Button role="destructive" label="Sign out" onPress={logout} />
+          </Section>
+        </Form>
+      </Host>
+    </View>
   )
 }
 
-const $save: ViewStyle = { marginTop: 12 }
-const $section: ViewStyle = { marginTop: 28 }
-const $toggleRow: ViewStyle = {
-  flexDirection: "row",
-  alignItems: "center",
-  justifyContent: "space-between",
-  paddingVertical: 12,
-  borderBottomWidth: 1,
-}
-const $signout: ViewStyle = { marginTop: 32 }
+const $fill: ViewStyle = { flex: 1 }

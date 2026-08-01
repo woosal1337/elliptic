@@ -1,4 +1,4 @@
-import { ReactNode, useRef, useState } from "react"
+import { ReactNode, useContext, useRef, useState } from "react"
 import {
   KeyboardAvoidingView,
   KeyboardAvoidingViewProps,
@@ -9,6 +9,7 @@ import {
   View,
   ViewStyle,
 } from "react-native"
+import { HeaderHeightContext } from "@react-navigation/elements"
 import { useScrollToTop } from "@react-navigation/native"
 import { SystemBars, SystemBarsProps, SystemBarStyle } from "react-native-edge-to-edge"
 import {
@@ -255,12 +256,16 @@ export function Screen(props: ScreenProps) {
   } = props
 
   const $containerInsets = useSafeAreaInsetsStyle(safeAreaEdges)
+  // Stack headers are transparent so the system material can show through
+  // (see useStackScreenOptions), which means content must inset itself. Screens
+  // without a header read 0 here.
+  const headerHeight = useContext(HeaderHeightContext) ?? 0
 
   return (
     <View
       style={[
         $containerStyle,
-        { backgroundColor: backgroundColor || colors.background },
+        { backgroundColor: backgroundColor || colors.background, paddingTop: headerHeight },
         $containerInsets,
       ]}
     >

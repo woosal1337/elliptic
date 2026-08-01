@@ -7,7 +7,7 @@ import {
   useEffect,
   useMemo,
 } from "react"
-import { StyleProp, useColorScheme } from "react-native"
+import { Appearance, StyleProp, useColorScheme } from "react-native"
 import {
   DarkTheme as NavDarkTheme,
   DefaultTheme as NavDefaultTheme,
@@ -31,6 +31,8 @@ import type {
 export type ThemeContextType = {
   navigationTheme: NavTheme
   setThemeContextOverride: (newTheme: ThemeContextModeT) => void
+  /** The explicit choice, or undefined when following the system. */
+  themeOverride: ThemeContextModeT
   theme: Theme
   themeContext: ImmutableThemeContextModeT
   themed: ThemedFnT
@@ -82,6 +84,13 @@ export const ThemeProvider: FC<PropsWithChildren<ThemeProviderProps>> = ({
     const t = initialContext || themeScheme || (!!systemColorScheme ? systemColorScheme : "light")
     return t === "dark" ? "dark" : "light"
   }, [initialContext, themeScheme, systemColorScheme])
+
+  // UIKit components (tab bar, segmented control, sheets, Liquid Glass) follow
+  // the *system* appearance, so a dark app on a light system renders bright
+  // native chrome. Push our resolved theme down to the native layer.
+  useEffect(() => {
+    Appearance.setColorScheme(themeContext)
+  }, [themeContext])
 
   const theme: Theme = useMemo(() => {
     switch (themeContext) {
@@ -136,6 +145,7 @@ export const ThemeProvider: FC<PropsWithChildren<ThemeProviderProps>> = ({
     themeContext,
     setThemeContextOverride,
     themed,
+    themeOverride: themeScheme as ThemeContextModeT,
   }
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>

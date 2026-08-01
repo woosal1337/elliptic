@@ -10,6 +10,7 @@ import Animated, {
 } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
+import { GlassSurface, LIQUID_GLASS } from "@/components/Glass"
 import { Text } from "@/components/Text"
 import { useAppTheme } from "@/theme/context"
 import { hapticImpact } from "@/utils/haptics"
@@ -75,7 +76,9 @@ export const Sheet: FC<{
   return (
     <Modal visible transparent animationType="none" onRequestClose={onClose}>
       <GestureHandlerRootView style={$root}>
-        <Animated.View style={[$backdropFill, { backgroundColor: colors.palette.overlay50 }, $backdropAnim]}>
+        <Animated.View
+          style={[$backdropFill, { backgroundColor: colors.palette.overlay50 }, $backdropAnim]}
+        >
           <Pressable style={$backdropFill} onPress={onClose} />
         </Animated.View>
 
@@ -83,27 +86,37 @@ export const Sheet: FC<{
           style={[
             $sheet,
             {
-              backgroundColor: colors.elevated,
               borderTopLeftRadius: radius.xl,
               borderTopRightRadius: radius.xl,
-              paddingBottom: insets.bottom + spacing.lg,
             },
+            !LIQUID_GLASS && { backgroundColor: colors.elevated },
             $sheetAnim,
           ]}
         >
-          <GestureDetector gesture={pan}>
-            <View style={$grabArea}>
-              <View style={[$handle, { backgroundColor: colors.borderStrong }]} />
-              {title ? (
-                <Text
-                  preset="subheading"
-                  text={title}
-                  style={{ paddingHorizontal: spacing.lg, paddingBottom: spacing.sm }}
-                />
-              ) : null}
-            </View>
-          </GestureDetector>
-          {children}
+          <GlassSurface
+            style={[
+              $sheetFill,
+              {
+                borderTopLeftRadius: radius.xl,
+                borderTopRightRadius: radius.xl,
+                paddingBottom: insets.bottom + spacing.lg,
+              },
+            ]}
+          >
+            <GestureDetector gesture={pan}>
+              <View style={$grabArea}>
+                <View style={[$handle, { backgroundColor: colors.borderStrong }]} />
+                {title ? (
+                  <Text
+                    preset="subheading"
+                    text={title}
+                    style={{ paddingHorizontal: spacing.lg, paddingBottom: spacing.sm }}
+                  />
+                ) : null}
+              </View>
+            </GestureDetector>
+            {children}
+          </GlassSurface>
         </Animated.View>
       </GestureHandlerRootView>
     </Modal>
@@ -112,6 +125,7 @@ export const Sheet: FC<{
 
 const $root: ViewStyle = { flex: 1 }
 const $backdropFill: ViewStyle = StyleSheet.absoluteFillObject
+const $sheetFill: ViewStyle = { overflow: "hidden" }
 const $sheet: ViewStyle = {
   position: "absolute",
   bottom: 0,

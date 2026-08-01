@@ -3,6 +3,7 @@ import { FC } from "react"
 import { ActivityIndicator, Pressable, TextInput, View, ViewStyle } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 
+import { GlassSurface, LIQUID_GLASS } from "@/components/Glass"
 import { Text } from "@/components/Text"
 import { useAppTheme } from "@/theme/context"
 import { typography } from "@/theme/typography"
@@ -22,15 +23,15 @@ export const SearchBar: FC<{
     theme: { colors, radius, spacing },
   } = useAppTheme()
   const field = (
-    <View
+    <GlassSurface
+      clear
       style={[
         $bar,
-        {
-          backgroundColor: colors.surface,
-          borderColor: colors.inputBorder,
-          borderRadius: radius.lg,
-          paddingHorizontal: spacing.sm,
-        },
+        { borderRadius: radius.full, paddingHorizontal: spacing.sm },
+        !LIQUID_GLASS && [
+          $bordered,
+          { backgroundColor: colors.surface, borderColor: colors.inputBorder },
+        ],
       ]}
     >
       <Ionicons name="search" size={18} color={colors.textDim} />
@@ -57,7 +58,7 @@ export const SearchBar: FC<{
           <Ionicons name="close-circle" size={18} color={colors.textDim} />
         </Pressable>
       ) : null}
-    </View>
+    </GlassSurface>
   )
 
   if (!onCancel) return field
@@ -73,13 +74,13 @@ export const SearchBar: FC<{
 }
 
 const $row: ViewStyle = { flexDirection: "row", alignItems: "center" }
+const $bordered: ViewStyle = { borderWidth: 1 }
 
 const $bar: ViewStyle = {
   flex: 1,
   flexDirection: "row",
   alignItems: "center",
   gap: 8,
-  borderWidth: 1,
   height: 44,
 }
 const $input = { flex: 1, fontSize: 15, padding: 0 } as const

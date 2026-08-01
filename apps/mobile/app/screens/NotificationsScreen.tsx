@@ -13,14 +13,15 @@ import { SwipeableRow } from "@/components/SwipeableRow"
 import { Text } from "@/components/Text"
 import { useToast } from "@/components/Toast"
 import { useOrg } from "@/context/OrgContext"
-import { TAB_BAR_CLEARANCE } from "@/navigators/FloatingTabBar"
 import type { InboxStackScreenProps, MainTabParamList } from "@/navigators/navigationTypes"
+import { TAB_BAR_CLEARANCE } from "@/navigators/tabBarClearance"
 import { api } from "@/services/api"
 import type { NotificationItem } from "@/services/api/types"
 import { invalidate, queryKeys } from "@/services/query"
 import { useAppTheme } from "@/theme/context"
 import { hapticSuccess } from "@/utils/haptics"
 import { openEntity } from "@/utils/openEntity"
+import { relativeTime } from "@/utils/relativeTime"
 import { useListQuery } from "@/utils/useListQuery"
 
 type Filter = "all" | "unread"
@@ -57,18 +58,6 @@ function reasonFor(n: NotificationItem): string {
     default:
       return who
   }
-}
-
-/** Compact relative time (e.g. "2h", "3d", "Jun 11"). */
-function relTime(iso: string): string {
-  const then = new Date(iso).getTime()
-  if (Number.isNaN(then)) return ""
-  const s = Math.max(0, (Date.now() - then) / 1000)
-  if (s < 60) return "now"
-  if (s < 3600) return `${Math.floor(s / 60)}m`
-  if (s < 86400) return `${Math.floor(s / 3600)}h`
-  if (s < 604800) return `${Math.floor(s / 86400)}d`
-  return new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric" })
 }
 
 /** Bucket label for day grouping. */
@@ -266,7 +255,7 @@ export const NotificationsScreen: FC<InboxStackScreenProps<"Notifications">> = (
                       />
                     </View>
                     <Text
-                      text={`${reasonFor(item)} · ${relTime(item.created_at)}`}
+                      text={`${reasonFor(item)} · ${relativeTime(item.created_at)}`}
                       size="xs"
                       style={{ color: colors.textDim }}
                       numberOfLines={1}

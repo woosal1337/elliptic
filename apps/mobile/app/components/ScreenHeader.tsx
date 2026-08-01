@@ -1,7 +1,8 @@
 import { FC, ReactNode } from "react"
-import { Pressable, View, ViewStyle } from "react-native"
+import { View, ViewStyle } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 
+import { GlassContainer, GlassIconButton } from "@/components/Glass"
 import { Text } from "@/components/Text"
 import { useAppTheme } from "@/theme/context"
 import { hapticSelection } from "@/utils/haptics"
@@ -16,8 +17,6 @@ export interface HeaderAction {
   emphasis?: boolean
 }
 
-const SIZE = 34
-
 /**
  * The screen title *is* the header — no nav bar — with icon actions grouped in
  * a pill top-right (D2, the Linear pattern). `children` render directly beneath
@@ -30,7 +29,7 @@ export const ScreenHeader: FC<{
   children?: ReactNode
 }> = ({ title, subtitle, actions, children }) => {
   const {
-    theme: { colors, spacing, radius },
+    theme: { colors, spacing },
   } = useAppTheme()
   return (
     <View
@@ -50,27 +49,25 @@ export const ScreenHeader: FC<{
           ) : null}
         </View>
         {actions?.length ? (
-          <View style={[$pill, { backgroundColor: colors.subtle, borderRadius: radius.full }]}>
+          <GlassContainer spacing={8} style={$pill}>
             {actions.map((a) => (
-              <Pressable
+              <GlassIconButton
                 key={a.key}
                 testID={`header-action-${a.key}`}
-                accessibilityRole="button"
-                accessibilityLabel={a.label}
+                label={a.label}
                 onPress={() => {
                   hapticSelection()
                   a.onPress()
                 }}
-                style={$action}
               >
                 <Ionicons
                   name={a.icon}
                   size={19}
                   color={a.emphasis ? colors.tint : colors.textDim}
                 />
-              </Pressable>
+              </GlassIconButton>
             ))}
-          </View>
+          </GlassContainer>
         ) : null}
       </View>
       {children}
@@ -81,9 +78,3 @@ export const ScreenHeader: FC<{
 const $row: ViewStyle = { flexDirection: "row", alignItems: "center", gap: 12 }
 const $titleCol: ViewStyle = { flex: 1, gap: 2 }
 const $pill: ViewStyle = { flexDirection: "row", alignItems: "center" }
-const $action: ViewStyle = {
-  width: SIZE,
-  height: SIZE,
-  alignItems: "center",
-  justifyContent: "center",
-}

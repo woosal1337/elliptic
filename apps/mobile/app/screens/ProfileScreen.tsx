@@ -1,39 +1,53 @@
 import { FC } from "react"
-import { ViewStyle } from "react-native"
-import { Ionicons } from "@expo/vector-icons"
+import { Alert, View, ViewStyle } from "react-native"
+import { Button, Form, Host, Label, Section, Text as NativeText } from "@expo/ui/swift-ui"
 
-import { Button } from "@/components/Button"
-import { ListRow } from "@/components/ListRow"
-import { Screen } from "@/components/Screen"
-import { Text } from "@/components/Text"
 import { useAuth } from "@/context/AuthContext"
+import { useOrg } from "@/context/OrgContext"
 import type { ProfileStackScreenProps } from "@/navigators/navigationTypes"
 import { useAppTheme } from "@/theme/context"
 
+/**
+ * Profile is a SwiftUI `Form`, like Settings — grouped rows, system labels with
+ * SF Symbols, and a destructive button, all drawn by UIKit.
+ */
 export const ProfileScreen: FC<ProfileStackScreenProps<"ProfileMain">> = ({ navigation }) => {
   const { user, logout } = useAuth()
-  const {
-    theme: { colors, spacing },
-  } = useAppTheme()
+  const { activeOrg } = useOrg()
+  const { themeContext } = useAppTheme()
+
+  const confirmSignOut = () => {
+    Alert.alert("Sign out", "You'll need to sign in again to use CompanyOS.", [
+      { text: "Cancel", style: "cancel" },
+      { text: "Sign out", style: "destructive", onPress: logout },
+    ])
+  }
+
   return (
-    <Screen preset="auto" contentContainerStyle={{ padding: spacing.lg }} safeAreaEdges={["top"]}>
-      <Text preset="heading" text={user?.full_name ?? "Me"} />
-      <Text text={user?.email ?? ""} style={{ marginTop: spacing.xs, marginBottom: spacing.lg }} />
+    <View style={$fill}>
+      <Host style={$fill} colorScheme={themeContext}>
+        <Form>
+          <Section title={user?.full_name ?? "Me"}>
+            <NativeText>{user?.email ?? ""}</NativeText>
+            {activeOrg ? <NativeText>{activeOrg.name}</NativeText> : null}
+          </Section>
 
-      <ListRow
-        title="Stickies"
-        left={<Ionicons name="document-outline" size={20} color={colors.textDim} />}
-        onPress={() => navigation.navigate("Stickies")}
-      />
-      <ListRow
-        title="Settings"
-        left={<Ionicons name="settings-outline" size={20} color={colors.textDim} />}
-        onPress={() => navigation.navigate("Settings")}
-      />
+          <Section>
+            <Button onPress={() => navigation.navigate("Stickies")}>
+              <Label title="Stickies" systemImage="note.text" />
+            </Button>
+            <Button onPress={() => navigation.navigate("Settings")}>
+              <Label title="Settings" systemImage="gearshape" />
+            </Button>
+          </Section>
 
-      <Button text="Sign out" onPress={logout} style={$signout} />
-    </Screen>
+          <Section>
+            <Button role="destructive" label="Sign out" onPress={confirmSignOut} />
+          </Section>
+        </Form>
+      </Host>
+    </View>
   )
 }
 
-const $signout: ViewStyle = { marginTop: 24 }
+const $fill: ViewStyle = { flex: 1 }

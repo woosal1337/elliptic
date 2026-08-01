@@ -6,6 +6,7 @@ import { useAuth } from "@/context/AuthContext"
 import { ErrorBoundary } from "@/screens/ErrorScreen/ErrorBoundary"
 import { LoginScreen } from "@/screens/LoginScreen"
 import { RegisterScreen } from "@/screens/RegisterScreen"
+import { SwitchWorkspaceScreen } from "@/screens/SwitchWorkspaceScreen"
 import { useAppTheme } from "@/theme/context"
 
 import { MainNavigator } from "./MainNavigator"
@@ -32,7 +33,23 @@ const AppStack = () => {
       initialRouteName={isAuthenticated ? "Main" : "Login"}
     >
       {isAuthenticated ? (
-        <Stack.Screen name="Main" component={MainNavigator} />
+        <>
+          <Stack.Screen name="Main" component={MainNavigator} />
+          <Stack.Screen
+            name="SwitchWorkspace"
+            component={SwitchWorkspaceScreen}
+            options={{
+              // A real UIKit sheet: system slide-up, grabber, detents, and the
+              // rubber-band dismissal — no hand-rolled backdrop to animate.
+              presentation: "formSheet",
+              // Sizes to the picker's own height. (It measures RN content fine;
+              // a SwiftUI host inside a sheet measures as zero.)
+              sheetAllowedDetents: "fitToContents",
+              sheetGrabberVisible: true,
+              sheetCornerRadius: 24,
+            }}
+          />
+        </>
       ) : (
         <>
           <Stack.Screen name="Login" component={LoginScreen} />
