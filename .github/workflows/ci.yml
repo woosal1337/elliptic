@@ -65,7 +65,9 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
       - name: Lint
-        run: bunx turbo run lint
+        # Via the package script, not turbo directly: it chains the theme-token
+        # check, which turbo has no task for.
+        run: bun run lint
       - name: Typecheck
         run: bunx turbo run typecheck
       - name: Build

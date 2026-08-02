@@ -25,6 +25,12 @@ export const buttonVariants = cva(
           "bg-danger text-danger-foreground shadow-sm hover:bg-danger/90",
       },
       size: {
+        // The two tightest sizes are for buttons that live inside a row or a
+        // toolbar, where a 32px control would set the line height of everything
+        // around it. They are not "small primary buttons" — reach for `sm` for
+        // that.
+        xxs: "h-6 gap-1 rounded-md px-2 text-caption [&_svg]:size-3",
+        xs: "h-7 gap-1.5 rounded-md px-2.5 text-caption [&_svg]:size-3.5",
         sm: "h-8 gap-1.5 rounded-md px-3 text-[0.8125rem] [&_svg]:size-3.5",
         md: "h-9 px-4 text-small [&_svg]:size-4",
         lg: "h-10 px-5 text-small [&_svg]:size-4",

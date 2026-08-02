@@ -17,6 +17,8 @@ export const iconButtonVariants = cva(
         danger: "text-muted-foreground hover:bg-danger-muted hover:text-danger",
       },
       size: {
+        // Matches Button's `xxs`: for controls that sit inside a 44px row.
+        xxs: "size-6 [&_svg]:size-3",
         sm: "size-7 [&_svg]:size-3.5",
         md: "size-8 [&_svg]:size-4",
         lg: "size-9 [&_svg]:size-[18px]",
