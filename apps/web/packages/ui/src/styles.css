@@ -16,16 +16,21 @@
   --foreground: color-mix(in oklch, var(--theme-base), white 97%);
 
   --canvas: color-mix(in oklch, var(--theme-base), black 18.7%);
-  --surface: color-mix(in oklch, var(--theme-base), white 3.8%);
+  --surface: color-mix(in oklch, var(--theme-base), white 5.3%);
+  /* The app shell: a darker gutter around a lighter content pane, with the nav
+     rail lighter still. The ramp inverts in light mode. */
+  --shell: color-mix(in oklch, var(--theme-base), black 15.1%);
+  --container: color-mix(in oklch, var(--theme-base), white 1%);
+  --sidebar: var(--surface);
   --surface-foreground: var(--foreground);
   --elevated: color-mix(in oklch, var(--theme-base), white 7.9%);
 
   --muted: color-mix(in oklch, var(--theme-base), white 7%);
-  --muted-foreground: color-mix(in oklch, var(--theme-base), var(--foreground) calc(60.2% * var(--theme-contrast)));
+  --muted-foreground: color-mix(in oklch, var(--theme-base), var(--foreground) calc(66.6% * var(--theme-contrast)));
   --nav-foreground: color-mix(in oklch, var(--theme-base), var(--foreground) calc(52% * var(--theme-contrast)));
-  --subtle: color-mix(in oklch, var(--theme-base), white 11.5%);
+  --subtle: color-mix(in oklch, var(--theme-base), white 13.1%);
 
-  --border: color-mix(in oklch, var(--theme-base), var(--foreground) calc(10.3% * var(--theme-contrast)));
+  --border: color-mix(in oklch, var(--theme-base), var(--foreground) calc(13.4% * var(--theme-contrast)));
   --border-strong: color-mix(in oklch, var(--theme-base), var(--foreground) calc(18.7% * var(--theme-contrast)));
   --input: color-mix(in oklch, var(--theme-base), var(--foreground) calc(16.5% * var(--theme-contrast)));
 
@@ -86,15 +91,18 @@
 
   --canvas: color-mix(in oklch, var(--theme-base), black 0.7%);
   --surface: white;
+  --shell: white;
+  --container: white;
+  --sidebar: var(--canvas);
   --surface-foreground: var(--foreground);
   --elevated: white;
 
   --muted: color-mix(in oklch, var(--theme-base), black 2.4%);
-  --muted-foreground: color-mix(in oklch, var(--theme-base), var(--foreground) calc(60.2% * var(--theme-contrast)));
+  --muted-foreground: color-mix(in oklch, var(--theme-base), var(--foreground) calc(51.7% * var(--theme-contrast)));
   --nav-foreground: color-mix(in oklch, var(--theme-base), var(--foreground) calc(70.1% * var(--theme-contrast)));
   --subtle: color-mix(in oklch, var(--theme-base), black 4.7%);
 
-  --border: color-mix(in oklch, var(--theme-base), var(--foreground) calc(9.7% * var(--theme-contrast)));
+  --border: color-mix(in oklch, var(--theme-base), var(--foreground) calc(8.5% * var(--theme-contrast)));
   --border-strong: color-mix(in oklch, var(--theme-base), var(--foreground) calc(14% * var(--theme-contrast)));
   --input: color-mix(in oklch, var(--theme-base), var(--foreground) calc(12.7% * var(--theme-contrast)));
 
@@ -191,6 +199,9 @@
 
 @theme inline {
   --color-canvas: var(--canvas);
+  --color-shell: var(--shell);
+  --color-container: var(--container);
+  --color-sidebar: var(--sidebar);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-surface: var(--surface);
@@ -559,4 +570,9 @@
   to {
     transform: translateX(-100%);
   }
+}
+
+/* iOS zooms in when focusing an input below 16px. */
+input[type="search"] {
+  font-size: 16px;
 }
