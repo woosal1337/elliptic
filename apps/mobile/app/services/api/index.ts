@@ -196,14 +196,36 @@ export class Api {
     return res.ok
   }
 
+  /**
+   * Read every page of a paginated collection.
+   *
+   * The API defaults to 50 rows and caps a page at 200. Asking without params
+   * therefore returns the first 50 quietly — a list that looks complete and is
+   * not, which is worse than an error. Pages until `total` is satisfied.
+   */
+  private async fetchAllPages<T>(path: string, params: Record<string, string> = {}): Promise<T[]> {
+    const PAGE = 200
+    const items: T[] = []
+    for (let offset = 0; ; offset += PAGE) {
+      const res = await this.apisauce.get<Envelope<{ items: T[]; total: number }>>(path, {
+        ...params,
+        limit: String(PAGE),
+        offset: String(offset),
+      })
+      if (!res.ok || !res.data) break
+      const page = res.data.data
+      items.push(...page.items)
+      // A short page means the end, whatever `total` claims.
+      if (page.items.length < PAGE || items.length >= page.total) break
+    }
+    return items
+  }
+
   async listTasks(
     orgId: string,
     scope: "all" | "assigned" | "created" | "subscribed" | "recent" = "assigned",
   ): Promise<Task[]> {
-    const res = await this.apisauce.get<Envelope<{ items: Task[]; total: number }>>(
-      `/orgs/${orgId}/tasks/${scope}`,
-    )
-    return res.ok && res.data ? res.data.data.items : []
+    return this.fetchAllPages<Task>(`/orgs/${orgId}/tasks/${scope}`)
   }
 
   async getTask(orgId: string, taskId: string): Promise<Task | null> {
@@ -212,11 +234,10 @@ export class Api {
   }
 
   async listComments(orgId: string, entityType: string, entityId: string): Promise<Comment[]> {
-    const res = await this.apisauce.get<Envelope<{ items: Comment[]; total: number }>>(
-      `/orgs/${orgId}/comments`,
-      { entity_type: entityType, entity_id: entityId },
-    )
-    return res.ok && res.data ? res.data.data.items : []
+    return this.fetchAllPages<Comment>(`/orgs/${orgId}/comments`, {
+      entity_type: entityType,
+      entity_id: entityId,
+    })
   }
 
   async resolveComment(orgId: string, commentId: string, resolved: boolean): Promise<boolean> {
@@ -253,10 +274,7 @@ export class Api {
   }
 
   async listNotes(orgId: string): Promise<Note[]> {
-    const res = await this.apisauce.get<Envelope<{ items: Note[]; total: number }>>(
-      `/orgs/${orgId}/notes`,
-    )
-    return res.ok && res.data ? res.data.data.items : []
+    return this.fetchAllPages<Note>(`/orgs/${orgId}/notes`)
   }
 
   async updateNote(orgId: string, noteId: string, content: string): Promise<boolean> {
@@ -459,10 +477,7 @@ export class Api {
   }
 
   async listProjectTasks(orgId: string, projectId: string): Promise<Task[]> {
-    const res = await this.apisauce.get<Envelope<{ items: Task[]; total: number }>>(
-      `/orgs/${orgId}/projects/${projectId}/tasks`,
-    )
-    return res.ok && res.data ? res.data.data.items : []
+    return this.fetchAllPages<Task>(`/orgs/${orgId}/projects/${projectId}/tasks`)
   }
 
   async createComment(
