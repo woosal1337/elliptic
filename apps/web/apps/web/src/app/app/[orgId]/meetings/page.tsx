@@ -15,9 +15,7 @@ export default function MeetingsPage() {
   return (
     <div className="mx-auto flex max-w-4xl flex-col gap-8 px-6 py-8">
       <PageHeader
-        eyebrow="Workspace"
         title="Meetings"
-        description="Transcripts, AI summaries, and answers across the org."
         actions={
           <div className="flex items-center gap-2">
             <OrgMeetingChat orgId={orgId} />

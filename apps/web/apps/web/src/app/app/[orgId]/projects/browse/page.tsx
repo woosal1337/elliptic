@@ -16,9 +16,7 @@ export default function BrowseProjectsPage() {
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-8 px-6 py-8">
       <PageHeader
-        eyebrow="Discover"
         title="Browse projects"
-        description="Public projects anyone in the workspace can join."
         actions={
           <Button asChild variant="ghost" size="sm">
             <Link href={`/app/${orgId}/projects`}>All projects</Link>

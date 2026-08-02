@@ -13,9 +13,7 @@ export default function NotesPage() {
   return (
     <div className="mx-auto flex max-w-4xl flex-col gap-8 px-6 py-8">
       <PageHeader
-        eyebrow="Workspace"
         title="Notes"
-        description="Shared writing across the organization."
         actions={<CreateNoteDialog orgId={orgId} open={createOpen} onOpenChange={setCreateOpen} />}
       />
       <NoteList orgId={orgId} emptyAction={<CreateNoteDialog orgId={orgId} />} />

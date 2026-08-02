@@ -322,9 +322,7 @@ export default function InitiativesPage() {
   return (
     <div className="mx-auto flex max-w-4xl flex-col gap-6 px-6 py-8">
       <PageHeader
-        eyebrow="Strategy"
         title="Initiatives"
-        description="Cross-project strategic groups with rolled-up progress."
       />
 
       <div className="flex flex-wrap items-end gap-2 rounded-lg border border-border bg-muted/30 p-3">

@@ -13,9 +13,7 @@ export default function WikiPage() {
   return (
     <div className="mx-auto flex max-w-4xl flex-col gap-8 px-6 py-8">
       <PageHeader
-        eyebrow="Workspace"
         title="Wiki"
-        description="Org-wide knowledge base — pages and collections shared across every project."
         actions={<CreateNoteDialog orgId={orgId} open={createOpen} onOpenChange={setCreateOpen} />}
       />
       <NoteList

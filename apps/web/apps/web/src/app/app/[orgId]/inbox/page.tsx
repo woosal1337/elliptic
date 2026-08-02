@@ -22,9 +22,7 @@ export default function InboxPage() {
   return (
     <div className="mx-auto flex max-w-2xl flex-col gap-6 px-6 py-8">
       <PageHeader
-        eyebrow="Triage"
         title="Inbox"
-        description="Assignments, mentions, and closed loops that need you. Triage from the keyboard."
         actions={<HomePreferenceControl />}
       />
       <CatchUpPanel orgId={orgId} />

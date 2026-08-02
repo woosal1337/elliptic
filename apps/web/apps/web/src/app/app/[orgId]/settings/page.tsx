@@ -129,7 +129,7 @@ export default function SettingsPage() {
 
   return (
     <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-6 py-8">
-      <PageHeader eyebrow="Organization" title="Settings" description="Organization configuration." />
+      <PageHeader title="Settings" />
 
       <div className="lg:hidden">
         <Select value={active} onValueChange={setTab}>

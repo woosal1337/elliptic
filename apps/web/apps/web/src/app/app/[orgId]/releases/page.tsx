@@ -141,9 +141,7 @@ export default function ReleasesPage() {
   return (
     <div className="mx-auto flex max-w-4xl flex-col gap-6 px-6 py-8">
       <PageHeader
-        eyebrow="Ship it"
         title="Releases"
-        description="Versioned deliverables that bundle work items across projects."
         actions={
           !adding ? <Button onClick={() => setAdding(true)}>New release</Button> : undefined
         }

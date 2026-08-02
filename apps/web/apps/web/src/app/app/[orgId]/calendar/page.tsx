@@ -77,9 +77,7 @@ export default function CalendarPage() {
   return (
     <div className="mx-auto flex max-w-5xl flex-col gap-8 px-6 py-8">
       <PageHeader
-        eyebrow="Keep everyone in sync"
         title="Calendar"
-        description="See team and personal events in one place so nothing slips through the week."
         actions={
           <Button size="sm" onClick={() => openCreate(null)}>
             <Plus className="size-4" />

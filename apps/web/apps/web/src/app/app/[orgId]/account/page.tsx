@@ -12,9 +12,7 @@ export default function AccountPage() {
   return (
     <div className="mx-auto flex max-w-4xl flex-col gap-8 px-6 py-8">
       <PageHeader
-        eyebrow="Account"
         title="Your account"
-        description="Personal profile, preferences, and security — separate from organization settings."
       />
       <Tabs defaultValue="profile">
         <TabsList>

@@ -194,9 +194,7 @@ export default function ProjectsPage() {
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-8">
       <PageHeader
-        eyebrow="Ship work, together"
         title="Projects"
-        description="Group related work so your team always knows what ships next."
         actions={
           <div className="flex items-center gap-2">
             <Button asChild variant="outline" size="sm">

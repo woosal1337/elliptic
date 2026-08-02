@@ -10,9 +10,7 @@ export default function MyTasksPage() {
   return (
     <div className="mx-auto flex max-w-4xl flex-col gap-8 px-6 py-8">
       <PageHeader
-        eyebrow="Personal"
         title="Your Work"
-        description="Tasks assigned to and created by you across your projects, with a workload summary."
       />
       <MyTasks orgId={orgId} />
     </div>

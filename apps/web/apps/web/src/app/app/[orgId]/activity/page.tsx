@@ -66,7 +66,7 @@ export default function ActivityPage() {
 
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-8 px-6 py-8">
-      <PageHeader eyebrow="Organization" title="Activity" description={description} />
+      <PageHeader title="Activity" description={description} />
       {activity.isPending || !ready ? (
         <div className="flex flex-col gap-3">
           {Array.from({ length: 6 }, (_, i) => (

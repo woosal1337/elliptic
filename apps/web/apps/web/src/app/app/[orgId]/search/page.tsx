@@ -84,7 +84,7 @@ export default function SearchPage() {
 
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-6 px-6 py-8">
-      <PageHeader eyebrow="Workspace" title="Search" description="Find projects and work items across your org." />
+      <PageHeader title="Search" />
       <Input
         autoFocus
         value={query}
