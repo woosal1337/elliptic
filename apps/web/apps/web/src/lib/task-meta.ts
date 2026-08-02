@@ -96,6 +96,20 @@ export const STATUS_DOT_CLASSES: Record<TaskStatus, string> = {
   duplicate: "bg-muted-foreground/60",
 };
 
+// Group headers carry a wash of their status colour rather than one flat grey,
+// so a long list stays readable while scrolling: the band you are under tells
+// you which group you are in without reading it. Kept faint on purpose — this
+// is a tint behind text, not a badge.
+export const STATUS_TINT_CLASSES: Record<TaskStatus, string> = {
+  backlog: "bg-muted-foreground/8",
+  todo: "bg-muted-foreground/10",
+  in_progress: "bg-warning/8",
+  in_review: "bg-accent/8",
+  done: "bg-success/8",
+  cancelled: "bg-danger/8",
+  duplicate: "bg-muted-foreground/8",
+};
+
 export const PRIORITY_SORT: readonly TaskPriority[] = ["urgent", "high", "medium", "low", "none"];
 
 export const PRIORITY_LABELS: Record<TaskPriority, string> = {

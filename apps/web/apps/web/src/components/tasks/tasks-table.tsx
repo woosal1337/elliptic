@@ -18,7 +18,7 @@ import {
   cn,
 } from "@elliptic/ui";
 import type { Label, Task, TaskStatus } from "@/lib/types";
-import { STATUS_LABELS, STATUS_ORDER } from "@/lib/task-meta";
+import { STATUS_LABELS, STATUS_ORDER, STATUS_TINT_CLASSES } from "@/lib/task-meta";
 import { formatDate, formatRelative } from "@/lib/format";
 import { hierarchy } from "@/lib/hierarchy";
 import { downloadProjectTasksCsv, useCreateTask, useTasks } from "@/hooks/use-task-queries";
@@ -130,7 +130,7 @@ function GroupComposer({
   };
 
   return (
-    <div className={cn("flex items-center border-b border-border px-4 last:border-b-0", rowY)}>
+    <div className={cn("flex items-center px-6", rowY)}>
       <input
         ref={inputRef}
         autoFocus
@@ -216,7 +216,7 @@ export function TasksTable({
   }, [views.defaultView, applyView]);
 
   const compact = density === "compact";
-  const rowY = compact ? "h-8" : "h-10";
+  const rowY = compact ? "h-8" : "h-11";
 
   const normalizedQuery = query.trim().toLowerCase();
   const filtered = useMemo(() => {
@@ -426,7 +426,7 @@ export function TasksTable({
           }
         />
       ) : (
-        <div className="max-h-[calc(100dvh-16rem)] overflow-auto rounded-lg border border-border text-small shadow-xs">
+        <div className="-mx-4 max-h-[calc(100dvh-16rem)] overflow-auto text-small">
           {groups.map((group) => {
             const isCollapsed = collapsed.has(group.status);
             return (
@@ -435,12 +435,22 @@ export function TasksTable({
                 aria-label={STATUS_LABELS[group.status]}
                 className="group/group"
               >
-                <div className="sticky top-0 z-10 flex h-9 items-center gap-2 border-b border-border bg-muted px-4">
+                <div className="sticky top-0 z-10 flex h-10 items-center gap-2 bg-container px-6">
+                  {/* The tint is translucent and the header is sticky, so it
+                      needs the opaque bg-container above and its own layer
+                      here — otherwise rows scrolling underneath show through. */}
+                  <span
+                    aria-hidden="true"
+                    className={cn(
+                      "pointer-events-none absolute inset-0",
+                      STATUS_TINT_CLASSES[group.status]
+                    )}
+                  />
                   <button
                     type="button"
                     onClick={() => toggleGroup(group.status)}
                     aria-expanded={!isCollapsed}
-                    className="flex items-center gap-2 rounded text-small font-medium text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    className="relative flex items-center gap-2 rounded text-small font-medium text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   >
                     <ChevronRight
                       aria-hidden="true"
@@ -460,7 +470,7 @@ export function TasksTable({
                       setComposing(group.status);
                     }}
                     aria-label={`Add task to ${STATUS_LABELS[group.status]}`}
-                    className="ml-auto flex size-5 items-center justify-center rounded text-muted-foreground opacity-0 transition-opacity hover:text-foreground focus-visible:opacity-100 group-hover/group:opacity-100"
+                    className="relative ml-auto flex size-5 items-center justify-center rounded text-muted-foreground opacity-0 transition-opacity hover:text-foreground focus-visible:opacity-100 group-hover/group:opacity-100"
                   >
                     <Plus className="size-4" aria-hidden="true" />
                   </button>
@@ -489,8 +499,9 @@ export function TasksTable({
                           onClick={(event) => surface.onCardSelect(task.id, event)}
                           onDoubleClick={() => surface.setOpenTaskId(task.id)}
                           className={cn(
-                            "relative flex cursor-pointer items-center gap-2.5 border-b border-border bg-surface px-4 transition-colors duration-150 last:border-b-0 hover:bg-muted/50",
-                            "before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-accent before:opacity-0 before:transition-opacity hover:before:opacity-100",
+                            // No hairline between rows: at this density a border
+                            // per row reads as a grid. Hover does the separating.
+                            "relative flex cursor-pointer items-center gap-2.5 px-6 transition-colors duration-150 hover:bg-muted/50",
                             rowY,
                             selected && "bg-accent/10 hover:bg-accent/15",
                             focused && "outline-none ring-2 ring-inset ring-ring"

@@ -47,6 +47,7 @@ import {
   PRIORITY_SORT,
   STATUS_LABELS,
   STATUS_ORDER,
+  STATUS_TINT_CLASSES,
   computeProgress,
   statusCategory,
 } from "@/lib/task-meta";
@@ -313,8 +314,16 @@ function BoardColumn({
   });
 
   return (
-    <section aria-label={STATUS_LABELS[status]} className="flex w-72 shrink-0 flex-col">
-      <div className="mb-2 flex items-center justify-between gap-2 px-0.5">
+    <section
+      aria-label={STATUS_LABELS[status]}
+      className="flex w-[348px] shrink-0 flex-col overflow-hidden rounded-md"
+    >
+      <div
+        className={cn(
+          "flex h-[50px] items-center justify-between gap-2 px-3",
+          STATUS_TINT_CLASSES[status]
+        )}
+      >
         <div className="flex items-center gap-2">
           <StatusDot status={status} title={CATEGORY_LABELS[statusCategory(status)]} />
           <h3 className="text-small font-semibold text-foreground">{STATUS_LABELS[status]}</h3>
@@ -342,8 +351,10 @@ function BoardColumn({
         className={cn(
           // Fills the height the row allows and scrolls its own cards, so one
           // long column can't stretch the board past the fold.
-          "flex min-h-28 flex-1 flex-col gap-2 overflow-y-auto rounded-lg border bg-muted/40 p-2 transition-colors duration-150",
-          isOver ? "border-accent/60 bg-accent/5" : "border-border/60"
+          // Hangs directly off the tinted header — the column reads as one
+          // surface rather than a label floating above a box.
+          "flex min-h-28 flex-1 flex-col gap-2 overflow-y-auto bg-muted/40 p-2 transition-colors duration-150",
+          isOver && "bg-accent/5"
         )}
       >
         {tasks.map((task) => (
@@ -691,7 +702,7 @@ export function Board({
     return (
       <div className="flex gap-4 overflow-x-auto pb-4">
         {STATUS_ORDER.map((status) => (
-          <div key={status} className="w-72 shrink-0">
+          <div key={status} className="w-[348px] shrink-0">
             <Skeleton className="mb-3 h-6 w-28" />
             <Skeleton className="mb-2 h-24 w-full rounded-md" />
             <Skeleton className="h-24 w-full rounded-md" />
