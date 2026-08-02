@@ -1,5 +1,5 @@
 import { FC, Fragment, ReactNode } from "react"
-import { Linking, TextStyle, View, ViewStyle } from "react-native"
+import { Linking, ScrollView, StyleSheet, TextStyle, View, ViewStyle } from "react-native"
 
 import { CODE_STYLE, headingStyle, ITALIC_STYLE } from "@/components/markdownStyles"
 import { Text } from "@/components/Text"
@@ -101,6 +101,39 @@ export const Markdown: FC<{ source: string }> = ({ source }) => {
       case "rule":
         return <View key={key} style={[$rule, { backgroundColor: colors.border }]} />
 
+      case "table":
+        return (
+          <ScrollView
+            key={key}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            style={$tableScroll}
+          >
+            <View style={[$table, { borderColor: colors.border }]}>
+              <View style={[$tableRow, { backgroundColor: colors.subtle }]}>
+                {block.header.map((cell, c) => (
+                  <View key={c} style={[$cell, { borderColor: colors.border }]}>
+                    <Text weight="semiBold" size="xs" style={{ textAlign: block.align[c] }}>
+                      {renderSpans(parseInline(cell), `${key}h${c}`)}
+                    </Text>
+                  </View>
+                ))}
+              </View>
+              {block.rows.map((row, r) => (
+                <View key={r} style={[$tableRow, { borderTopColor: colors.border }]}>
+                  {row.map((cell, c) => (
+                    <View key={c} style={[$cell, { borderColor: colors.border }]}>
+                      <Text size="xs" style={{ textAlign: block.align[c] }}>
+                        {renderSpans(parseInline(cell), `${key}r${r}c${c}`)}
+                      </Text>
+                    </View>
+                  ))}
+                </View>
+              ))}
+            </View>
+          </ScrollView>
+        )
+
       // Grammar the parser does not model (tables, HTML, footnotes) shows as
       // its own source rather than vanishing — visible beats silently dropped.
       case "raw":
@@ -130,3 +163,15 @@ const $codeText: TextStyle = { ...CODE_STYLE }
 const $quote: ViewStyle = { borderLeftWidth: 3, paddingLeft: 10 }
 const $rule: ViewStyle = { height: 1, marginVertical: 4 }
 const $para: TextStyle = { lineHeight: 22 }
+
+// A table can be wider than the phone; it scrolls itself rather than forcing
+// the description to wrap into unreadable columns.
+const $tableScroll: ViewStyle = { marginVertical: 2 }
+const $table: ViewStyle = { borderWidth: 1, borderRadius: 8, overflow: "hidden" }
+const $tableRow: ViewStyle = { flexDirection: "row", borderTopWidth: StyleSheet.hairlineWidth }
+const $cell: ViewStyle = {
+  minWidth: 96,
+  paddingHorizontal: 10,
+  paddingVertical: 6,
+  borderLeftWidth: StyleSheet.hairlineWidth,
+}

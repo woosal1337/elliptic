@@ -30,6 +30,14 @@ export type Block =
   | { kind: "quote"; lead: string; text: string }
   | { kind: "code"; fence: string; lang: string; lines: string[]; closed: boolean }
   | { kind: "rule"; text: string }
+  | {
+      kind: "table"
+      /** Source lines, re-emitted verbatim so the round trip stays exact. */
+      lines: string[]
+      header: string[]
+      rows: string[][]
+      align: ("left" | "center" | "right")[]
+    }
   | { kind: "blank" }
   /** Anything unmodelled — preserved verbatim so a round trip cannot lose it. */
   | { kind: "raw"; text: string }
@@ -40,8 +48,21 @@ const ORDERED = /^(([ \t]*)(\d{1,9}[.)])[ \t]+)(.*)$/
 const QUOTE = /^(>[ \t]?)(.*)$/
 const FENCE = /^([ \t]*)(```|~~~)[ \t]*(\S*)[ \t]*$/
 const RULE = /^[ \t]*((?:-[ \t]*){3,}|(?:\*[ \t]*){3,}|(?:_[ \t]*){3,})$/
-/** A table row, an HTML block, a footnote — modelled as raw, never rewritten. */
-const RAW_HINT = /^[ \t]*(\||<[a-zA-Z/!]|\[\^)/
+/** An HTML block or a footnote — modelled as raw, never rewritten. */
+const RAW_HINT = /^[ \t]*(<[a-zA-Z/!]|\[\^)/
+const TABLE_ROW = /^[ \t]*\|.*\|[ \t]*$/
+/** The `|---|:--:|` line under a table's header. Its dashes set alignment. */
+const TABLE_DIVIDER = /^[ \t]*\|(?:[ \t]*:?-+:?[ \t]*\|)+[ \t]*$/
+
+/** Split "| a | b |" into its cells, dropping the outer pipes. */
+function tableCells(line: string): string[] {
+  return line
+    .trim()
+    .replace(/^\|/, "")
+    .replace(/\|$/, "")
+    .split("|")
+    .map((cell) => cell.trim())
+}
 
 /** Width of a leading indent, counting a tab as four columns. */
 function indentWidth(prefix: string): number {
@@ -81,6 +102,28 @@ export function parseBlocks(source: string): Block[] {
 
     if (line.trim().length === 0) {
       blocks.push({ kind: "blank" })
+      continue
+    }
+
+    // A table is a header row, a divider, then rows until the pipes stop. It
+    // has to be recognised as a unit — a lone "| a | b |" is just a paragraph.
+    if (TABLE_ROW.test(line) && TABLE_DIVIDER.test(lines[i + 1] ?? "")) {
+      const source = [line, lines[i + 1] ?? ""]
+      const rows: string[][] = []
+      let j = i + 2
+      for (; j < lines.length; j += 1) {
+        const row = lines[j] ?? ""
+        if (!TABLE_ROW.test(row)) break
+        source.push(row)
+        rows.push(tableCells(row))
+      }
+      const align = tableCells(source[1] ?? "").map((spec) => {
+        const left = spec.startsWith(":")
+        const right = spec.endsWith(":")
+        return right && left ? "center" : right ? "right" : "left"
+      }) as ("left" | "center" | "right")[]
+      blocks.push({ kind: "table", lines: source, header: tableCells(line), rows, align })
+      i = j - 1
       continue
     }
 
@@ -156,6 +199,9 @@ export function serializeBlocks(blocks: Block[]): string {
       case "ordered":
       case "quote":
         lines.push(`${block.lead}${block.text}`)
+        break
+      case "table":
+        lines.push(...block.lines)
         break
       case "code":
         lines.push(`${block.fence}${block.lang}`)

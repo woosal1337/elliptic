@@ -53,6 +53,8 @@ describe("round trip", () => {
     ["setext-ish underline", "Title\n===="],
     ["html block", "<div class='x'>\nhi\n</div>"],
     ["table", "| a | b |\n| - | - |\n| 1 | 2 |"],
+    ["table with alignment", "| a | b |\n| :-- | --: |\n| 1 | 2 |"],
+    ["table then text", "| a |\n| - |\n| 1 |\nafter"],
     ["footnote", "text[^1]\n\n[^1]: the note"],
     ["ordered with paren", "1) one\n2) two"],
     ["deep nesting", "- a\n  - b\n    - c\n      - d"],
@@ -127,9 +129,26 @@ describe("parseBlocks", () => {
     expect(kinds("***")).toEqual(["rule"])
   })
 
-  it("models tables and html as raw rather than rewriting them", () => {
-    expect(kinds("| a | b |")).toEqual(["raw"])
+  it("models html as raw rather than rewriting it", () => {
     expect(kinds("<div>")).toEqual(["raw"])
+  })
+
+  it("reads a table as one block, with its cells and alignment", () => {
+    const [block] = parseBlocks("| Token | Value |\n| :--- | ---: |\n| --yellow | #F4C400 |")
+    expect(block).toMatchObject({
+      kind: "table",
+      header: ["Token", "Value"],
+      rows: [["--yellow", "#F4C400"]],
+      align: ["left", "right"],
+    })
+  })
+
+  it("needs the divider — a lone pipe row is a paragraph", () => {
+    expect(kinds("| not | a table |")).toEqual(["paragraph"])
+  })
+
+  it("stops the table at the first non-row line", () => {
+    expect(kinds("| a |\n| - |\n| 1 |\nafter")).toEqual(["table", "paragraph"])
   })
 })
 
