@@ -239,11 +239,6 @@ class Task(BaseModel):
     external_id: Mapped[str | None] = mapped_column(String(255), nullable=True)
     snoozed_till: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     archived_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
-    # A tombstone, not an archive. `archived_at` hides a row from the default
-    # view while it stays real; `deleted_at` means the user removed it, and a
-    # delta reader needs to see that it happened so clients drop their copy.
-    # Purged for real after the retention window, like projects (SAFE-06).
-    deleted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
     labels: Mapped[list[Label]] = relationship(secondary=task_labels, lazy="selectin")
 

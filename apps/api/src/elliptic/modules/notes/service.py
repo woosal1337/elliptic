@@ -23,6 +23,7 @@ from elliptic.modules.notifications.models import NotificationType
 from elliptic.modules.notifications.service import notify
 from elliptic.modules.orgs.models import ROLE_ORDER, OrganizationMember, OrgRole
 from elliptic.modules.projects.models import Project
+from elliptic.modules.sync import service as sync_service
 
 _EXCERPT_CHARS = 140
 
@@ -285,6 +286,7 @@ async def duplicate_note(session: AsyncSession, ctx: OrgContext, note_id: uuid.U
 async def delete_note(session: AsyncSession, ctx: OrgContext, note_id: uuid.UUID) -> None:
     """Delete a note."""
     note = await get_note(session, ctx, note_id)
+    sync_service.record_deletion(session, ctx, entity_type="notes", entity_id=note.id)
     await session.delete(note)
     await record_activity(
         session,

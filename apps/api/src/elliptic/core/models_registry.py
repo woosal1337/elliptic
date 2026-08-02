@@ -89,6 +89,7 @@ from elliptic.modules.scim.models import ScimToken
 from elliptic.modules.sso.models import SSOConnection
 from elliptic.modules.stickies.models import Sticky
 from elliptic.modules.storage.models import StoredObject
+from elliptic.modules.sync.models import DeletedEntity
 from elliptic.modules.tasks.models import (
     Label,
     NotDuplicatePair,
@@ -137,6 +138,7 @@ __all__ = [
     "Cycle",
     "Dashboard",
     "DashboardWidget",
+    "DeletedEntity",
     "DeviceToken",
     "EmailIntake",
     "Event",

@@ -25,6 +25,7 @@ _SCHEDULE: tuple[tuple[str, int, JobRunner], ...] = (
     ("dispatch_pending_emails", 300, _dispatch_emails),
     ("archive_stale_tasks", _DAY, jobs.archive_stale_tasks),
     ("purge_deleted_projects", _DAY, jobs.purge_deleted_projects),
+    ("purge_sync_tombstones", _DAY, jobs.purge_sync_tombstones),
     ("apply_project_lifecycle", _DAY, jobs.apply_project_lifecycle),
     ("materialize_recurring_tasks", 3_600, jobs.materialize_recurring_tasks),
     ("drain_outbox", 60, jobs.drain_outbox),

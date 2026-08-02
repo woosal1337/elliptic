@@ -11,16 +11,17 @@ from pydantic import BaseModel, ConfigDict
 class SyncedRow(BaseModel):
     """One changed row.
 
-    Deliberately thin. A delta feed says *what changed*; the client already
-    knows how to fetch or render the full entity, and sending every column of
-    every changed row would make the feed as expensive as the list it replaces.
-    `deleted_at` is the load-bearing field — set means "drop your copy".
+    Deliberately thin. A delta feed says *what* changed; the client already
+    knows how to fetch or render the entity, and sending every column of every
+    changed row would make the feed as costly as the list it replaces.
     """
 
     model_config = ConfigDict(from_attributes=True)
 
     id: uuid.UUID
     updated_at: datetime
+    #: Only projects can carry this — they soft-delete for the restore window.
+    #: Everything else reports removals through `deletions`.
     deleted_at: datetime | None = None
 
 
@@ -33,3 +34,6 @@ class ChangesOut(BaseModel):
     has_more: bool
     #: Collection name -> changed rows.
     changes: dict[str, list[SyncedRow]]
+    #: Collection name -> ids the client should drop. Empty on a bootstrap,
+    #: which has no local copy to forget.
+    deletions: dict[str, list[uuid.UUID]] = {}

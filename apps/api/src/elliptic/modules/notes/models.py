@@ -65,11 +65,6 @@ class Note(BaseModel):
         String(64), nullable=True, unique=True, index=True
     )
     archived_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
-    # A tombstone, not an archive. `archived_at` hides a row from the default
-    # view while it stays real; `deleted_at` means the user removed it, and a
-    # delta reader needs to see that it happened so clients drop their copy.
-    # Purged for real after the retention window, like projects (SAFE-06).
-    deleted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     created_by: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
     updated_by: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
 

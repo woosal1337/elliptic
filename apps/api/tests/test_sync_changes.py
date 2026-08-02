@@ -164,3 +164,76 @@ async def test_a_member_can_read_the_feed(client: AsyncClient) -> None:
 
     response = await client.get(f"{API}/orgs/{org['id']}/sync/changes", headers=member["headers"])
     assert response.status_code == 200
+
+
+async def test_a_deleted_task_is_reported_as_a_deletion(client: AsyncClient) -> None:
+    owner = await register_and_login(client)
+    org = await create_org(client, owner["headers"])
+    project = await create_project(client, owner["headers"], org["id"], key="SYN")
+    task = await create_task(client, owner["headers"], org["id"], project["id"], title="Doomed")
+
+    cursor = (await _changes(client, owner["headers"], org["id"]))["cursor"]
+    response = await client.delete(
+        f"{API}/orgs/{org['id']}/tasks/{task['id']}", headers=owner["headers"]
+    )
+    assert response.status_code in (200, 204), response.text
+
+    after = await _changes(client, owner["headers"], org["id"], since=cursor)
+    assert task["id"] in after["deletions"]["tasks"]
+
+
+async def test_the_row_really_is_gone_not_merely_flagged(client: AsyncClient) -> None:
+    # The whole reason deletions are recorded separately: tasks are the parent
+    # of 16 cascading foreign keys, so the delete has to stay a real delete.
+    owner = await register_and_login(client)
+    org = await create_org(client, owner["headers"])
+    project = await create_project(client, owner["headers"], org["id"], key="SYN")
+    task = await create_task(client, owner["headers"], org["id"], project["id"], title="Doomed")
+
+    await client.delete(f"{API}/orgs/{org['id']}/tasks/{task['id']}", headers=owner["headers"])
+
+    fetched = await client.get(
+        f"{API}/orgs/{org['id']}/tasks/{task['id']}", headers=owner["headers"]
+    )
+    assert fetched.status_code == 404
+
+
+async def test_a_deleted_task_stops_appearing_in_changed_rows(client: AsyncClient) -> None:
+    owner = await register_and_login(client)
+    org = await create_org(client, owner["headers"])
+    project = await create_project(client, owner["headers"], org["id"], key="SYN")
+    task = await create_task(client, owner["headers"], org["id"], project["id"], title="Doomed")
+    await client.delete(f"{API}/orgs/{org['id']}/tasks/{task['id']}", headers=owner["headers"])
+
+    boot = await _changes(client, owner["headers"], org["id"])
+    assert task["id"] not in [row["id"] for row in boot["changes"]["tasks"]]
+
+
+async def test_bootstrap_reports_no_deletions(client: AsyncClient) -> None:
+    owner = await register_and_login(client)
+    org = await create_org(client, owner["headers"])
+    project = await create_project(client, owner["headers"], org["id"], key="SYN")
+    task = await create_task(client, owner["headers"], org["id"], project["id"], title="Doomed")
+    await client.delete(f"{API}/orgs/{org['id']}/tasks/{task['id']}", headers=owner["headers"])
+
+    boot = await _changes(client, owner["headers"], org["id"])
+    assert boot["deletions"] in ({}, {"tasks": [], "notes": [], "projects": []})
+
+
+async def test_another_orgs_deletions_are_never_returned(client: AsyncClient) -> None:
+    owner = await register_and_login(client)
+    org = await create_org(client, owner["headers"])
+    cursor = (await _changes(client, owner["headers"], org["id"]))["cursor"]
+
+    stranger = await register_and_login(client)
+    other = await create_org(client, stranger["headers"])
+    other_project = await create_project(client, stranger["headers"], other["id"], key="OTH")
+    theirs = await create_task(
+        client, stranger["headers"], other["id"], other_project["id"], title="Theirs"
+    )
+    await client.delete(
+        f"{API}/orgs/{other['id']}/tasks/{theirs['id']}", headers=stranger["headers"]
+    )
+
+    after = await _changes(client, owner["headers"], org["id"], since=cursor)
+    assert theirs["id"] not in after["deletions"].get("tasks", [])

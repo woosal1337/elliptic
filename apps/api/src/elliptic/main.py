@@ -44,7 +44,6 @@ from elliptic.modules.domains.router import router as domains_router
 from elliptic.modules.embeds.router import router as embeds_router
 from elliptic.modules.events.router import router as events_router
 from elliptic.modules.favorites.router import router as favorites_router
-from elliptic.modules.sync.router import router as sync_router
 from elliptic.modules.idp_sync.router import router as idp_sync_router
 from elliptic.modules.initiatives.router import router as initiatives_router
 from elliptic.modules.instance.router import router as instance_router
@@ -106,6 +105,7 @@ from elliptic.modules.sso.router import admin_router as sso_admin_router
 from elliptic.modules.sso.router import public_router as sso_public_router
 from elliptic.modules.stickies.router import router as stickies_router
 from elliptic.modules.storage.router import router as storage_router
+from elliptic.modules.sync.router import router as sync_router
 from elliptic.modules.tasks.router import router as tasks_router
 from elliptic.modules.tasks.type_levels_router import router as type_levels_router
 from elliptic.modules.teams.router import router as teams_router

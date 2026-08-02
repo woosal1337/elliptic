@@ -7,10 +7,18 @@ contains what a writer remembered to emit, whereas ``updated_at`` is maintained
 by the ORM on every write. A feed built on the outbox is silently incomplete the
 first time somebody adds a mutation and forgets the event; this one cannot be.
 
-Deleted rows are part of the answer. A hard delete leaves nothing to report, so
-a client holding the row would keep showing it forever — which is why tasks and
-notes gained tombstones. A tombstoned row comes back in the feed with
-``deleted_at`` set and the client drops it.
+Deletions are part of the answer, and they are recorded separately rather than
+flagged on the row. Tasks and notes are the parents of 16 and 6 cascading
+foreign keys and both are self-referential: a real DELETE takes the children and
+the subtree with it, which is what the user asked for. Flagging instead would
+leave live children pointing at a row that is meant to be gone, hold unique
+values hostage, and put a ``deleted_at IS NULL`` filter on every read in the
+codebase — where one omission silently resurrects deleted data. So the delete
+stays a delete and ``DeletedEntity`` records that it happened.
+
+Projects are the exception and keep their own ``deleted_at``: they already
+soft-delete for the 30-day restore window (SAFE-06), so a deleted project
+surfaces through the normal changed-rows path with its flag set.
 """
 
 from __future__ import annotations
@@ -26,6 +34,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from elliptic.core.deps import OrgContext
 from elliptic.modules.notes.models import Note
 from elliptic.modules.projects.models import Project
+from elliptic.modules.sync.models import DeletedEntity
 from elliptic.modules.tasks.models import Task
 
 # Re-read a little of what was already sent. A row's updated_at is stamped when
@@ -56,10 +65,8 @@ class Changes:
     #: immediately rather than waiting for its normal interval.
     has_more: bool = False
     collections: dict[str, list[Any]] = field(default_factory=dict)
-
-
-def _has_column(model: Any, name: str) -> bool:
-    return hasattr(model, name)
+    #: Collection name -> ids the client should drop.
+    deletions: dict[str, list[uuid.UUID]] = field(default_factory=dict)
 
 
 async def changes_since(
@@ -93,8 +100,9 @@ async def changes_since(
         query = select(model).where(model.org_id == ctx.org.id)
 
         if floor is None:
-            # Bootstrap: live rows only.
-            if _has_column(model, "deleted_at"):
+            # Bootstrap: live rows only. Projects are the one collection that
+            # can carry a soft-deleted row.
+            if hasattr(model, "deleted_at"):
                 query = query.where(model.deleted_at.is_(None))
         else:
             query = query.where(model.updated_at > floor)
@@ -108,29 +116,62 @@ async def changes_since(
             result.has_more = True
         result.collections[kind] = rows
 
+    # A bootstrapping client holds nothing, so it has nothing to forget.
+    if floor is not None:
+        deletions = list(
+            await session.scalars(
+                select(DeletedEntity)
+                .where(
+                    DeletedEntity.org_id == ctx.org.id,
+                    DeletedEntity.entity_type.in_(requested),
+                    DeletedEntity.created_at > floor,
+                )
+                .order_by(DeletedEntity.created_at.asc(), DeletedEntity.id.asc())
+                .limit(limit)
+            )
+        )
+        if len(deletions) == limit:
+            result.has_more = True
+        for kind in requested:
+            result.deletions[kind] = [
+                row.entity_id for row in deletions if row.entity_type == kind
+            ]
+
     return result
 
 
-async def purge_tombstones(
-    session: AsyncSession, model: Any, *, retention_days: int = 30
-) -> int:
-    """Delete tombstones older than the retention window.
+def record_deletion(
+    session: AsyncSession, ctx: OrgContext, *, entity_type: str, entity_id: uuid.UUID
+) -> None:
+    """Note that something was deleted, in the caller's transaction.
 
-    A tombstone only exists to tell clients to forget a row. Past the window,
-    any client still carrying that row is far past a full resync anyway, so the
-    tombstone is dead weight. Mirrors purge_deleted_projects (SAFE-06).
+    Added to the session rather than committed: if the delete rolls back, so
+    does its tombstone. A tombstone for a row that still exists would make
+    clients drop data that is really there.
+    """
+    session.add(
+        DeletedEntity(
+            org_id=ctx.org.id,
+            entity_type=entity_type,
+            entity_id=entity_id,
+            deleted_by=ctx.user.id if ctx.user else None,
+        )
+    )
+
+
+async def purge_tombstones(session: AsyncSession, *, retention_days: int = 30) -> int:
+    """Drop tombstones older than the retention window.
+
+    A tombstone exists only to tell clients to forget a row. Past the window any
+    client still carrying it is long overdue a full bootstrap anyway, so keeping
+    the record would grow the table forever for no reader. Mirrors
+    purge_deleted_projects (SAFE-06).
     """
     cutoff = datetime.now(UTC) - timedelta(days=retention_days)
     rows = list(
-        await session.scalars(
-            select(model).where(model.deleted_at.is_not(None), model.deleted_at < cutoff)
-        )
+        await session.scalars(select(DeletedEntity).where(DeletedEntity.created_at < cutoff))
     )
     for row in rows:
         await session.delete(row)
     await session.commit()
     return len(rows)
-
-
-def entity_ids(rows: list[Any]) -> list[uuid.UUID]:
-    return [row.id for row in rows]

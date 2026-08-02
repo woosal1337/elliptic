@@ -10,6 +10,7 @@ from elliptic.core.email import EmailSender, deliver_email
 from elliptic.core.models_base import utcnow
 from elliptic.modules.notifications.models import Notification
 from elliptic.modules.projects.models import Project
+from elliptic.modules.sync import service as sync_service
 from elliptic.modules.tasks.models import Task, TaskStatus
 from elliptic.modules.users.models import User
 
@@ -188,3 +189,13 @@ async def drain_outbox(session: AsyncSession) -> int:
         total += await outbox_service.dispatch_pending(session, org_id)
         await session.commit()
     return total
+
+
+async def purge_sync_tombstones(session: AsyncSession, *, retention_days: int = 30) -> int:
+    """Drop delta-sync tombstones past the retention window.
+
+    A tombstone exists only so a client learns to forget a row. Past the window
+    any client still holding it is long overdue a full bootstrap, so the record
+    has no reader left and would otherwise grow the table forever.
+    """
+    return await sync_service.purge_tombstones(session, retention_days=retention_days)

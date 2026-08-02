@@ -32,6 +32,7 @@ from elliptic.modules.projects.service import (
     require_project_role,
 )
 from elliptic.modules.releases.models import Release
+from elliptic.modules.sync import service as sync_service
 from elliptic.modules.tasks import type_levels
 from elliptic.modules.tasks.models import (
     BOARD_STATUSES,
@@ -1333,6 +1334,9 @@ async def delete_task(session: AsyncSession, ctx: OrgContext, task_id: uuid.UUID
     task, project = await get_task_with_project(session, ctx, task_id)
     _require_not_archived(project)
     identifier = f"{project.key}-{task.number}"
+    # Recorded before the delete so the id is still readable, and in the same
+    # transaction so a rollback takes the tombstone with it.
+    sync_service.record_deletion(session, ctx, entity_type="tasks", entity_id=task.id)
     await session.delete(task)
     await record_activity(
         session,

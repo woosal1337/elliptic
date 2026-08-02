@@ -50,5 +50,6 @@ async def list_changes(
                 kind: [SyncedRow.model_validate(row) for row in rows]
                 for kind, rows in changes.collections.items()
             },
+            deletions=changes.deletions,
         )
     )
