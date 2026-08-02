@@ -26,6 +26,7 @@ export const STATUS_TO_CATEGORY: Record<TaskStatus, StatusCategory> = {
   in_review: "started",
   done: "completed",
   cancelled: "cancelled",
+  duplicate: "cancelled",
 };
 
 export const CATEGORY_LABELS: Record<StatusCategory, string> = {
@@ -79,6 +80,7 @@ export const STATUS_LABELS: Record<TaskStatus, string> = {
   in_review: "In Review",
   done: "Done",
   cancelled: "Cancelled",
+  duplicate: "Duplicate",
 };
 
 export const STATUS_DOT_CLASSES: Record<TaskStatus, string> = {
@@ -88,6 +90,7 @@ export const STATUS_DOT_CLASSES: Record<TaskStatus, string> = {
   in_review: "bg-accent",
   done: "bg-success",
   cancelled: "bg-danger/60",
+  duplicate: "bg-muted-foreground/60",
 };
 
 export const PRIORITY_SORT: readonly TaskPriority[] = ["urgent", "high", "medium", "low", "none"];

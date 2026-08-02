@@ -3,6 +3,9 @@
 @source "./lib";
 
 @custom-variant light (&:where(.light, .light *));
+/* Without this, `dark:` utilities fall back to prefers-color-scheme and ignore the
+   class applyTheme() toggles, so an in-app theme switch does not reach them. */
+@custom-variant dark (&:where(.dark, .dark *));
 
 :root {
     --theme-base: oklch(0.166 0.005 279);

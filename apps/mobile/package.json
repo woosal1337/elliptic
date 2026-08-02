@@ -38,6 +38,7 @@
     "@expo-google-fonts/space-grotesk": "^0.4.0",
     "@expo/metro-runtime": "~55.0.6",
     "@expo/ui": "~55.0.17",
+    "@expo/vector-icons": "^15.1.1",
     "@react-native-community/datetimepicker": "8.6.0",
     "@react-native-community/netinfo": "11.5.2",
     "@react-native-segmented-control/segmented-control": "2.5.7",

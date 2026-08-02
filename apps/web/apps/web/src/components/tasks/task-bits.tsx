@@ -65,6 +65,7 @@ const STATUS_ICON_COLORS: Record<TaskStatus, string> = {
   in_review: "text-accent",
   done: "text-success",
   cancelled: "text-muted-foreground",
+  duplicate: "text-muted-foreground",
 };
 
 /** Linear-style status glyph: a progress ring that fills as the task moves through its lifecycle. */

@@ -2,7 +2,7 @@ export type OrgRole = "owner" | "admin" | "member" | "guest";
 
 export type InviteStatus = "pending" | "accepted" | "revoked" | "expired";
 
-export type TaskStatus = "backlog" | "todo" | "in_progress" | "in_review" | "done" | "cancelled";
+export type TaskStatus = "backlog" | "todo" | "in_progress" | "in_review" | "done" | "cancelled" | "duplicate";
 
 export type ApprovalState = "pending" | "approved" | "rejected";
 
