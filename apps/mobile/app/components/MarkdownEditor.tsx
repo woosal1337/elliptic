@@ -1,4 +1,4 @@
-import { FC, ReactNode, useCallback, useMemo, useRef, useState } from "react"
+import { FC, ReactNode, useCallback, useMemo, useState } from "react"
 // The app's Text wrapper is the right default everywhere else, but children of
 // a TextInput must be plain RN Text: they contribute fragments to the native
 // attributed string instead of mounting views, which is the whole mechanism
@@ -10,18 +10,10 @@ import { BODY_STYLE, lineStyle } from "@/components/markdownStyles"
 import { useAppTheme } from "@/theme/context"
 import { typography } from "@/theme/typography"
 import { parseInline } from "@/utils/markdown"
-import {
-  applyEdit,
-  caretAfterEdit,
-  displayLead,
-  toDisplay,
-  toLines,
-  toMarkdown,
-  type EditorLine,
-} from "@/utils/markdownEditor"
+import { toLines } from "@/utils/markdownEditor"
 
 export interface MarkdownEditorProps {
-  /** Markdown source. Read once on mount; the editor owns it afterwards. */
+  /** Markdown source. Also the buffer — the two are the same string. */
   value: string
   onChangeMarkdown: (markdown: string) => void
   onBlur?: () => void
@@ -34,15 +26,18 @@ export interface MarkdownEditorProps {
 /**
  * A description editor that stays formatted while you type.
  *
- * It is one `TextInput` rendered in children mode: the nested `<Text>` nodes
- * become fragments of the native attributed string, so a heading is drawn at
- * heading size inside the live input rather than in a separate preview. Using
- * one input rather than one per line is deliberate — iOS selection cannot span
- * two text views, and losing select-all across a description would be a worse
- * regression than anything this feature fixes.
+ * One `TextInput` rendered in children mode: the nested `<Text>` nodes become
+ * fragments of the native attributed string, so a heading is drawn at heading
+ * size inside the live input rather than in a separate preview. One input
+ * rather than one per line is deliberate — iOS selection cannot span two text
+ * views, and losing select-all across a description would be worse than
+ * anything this fixes.
  *
- * The buffer the user sees is marker-free (see `utils/markdownEditor`), so
- * typing "# " leaves a heading with no visible "#".
+ * The markers stay on screen, dimmed. That is not a styling compromise but a
+ * consequence of how RN works: children updates restyle the text, they do not
+ * rewrite it, so an editor of this shape can make "# " grey but cannot make it
+ * disappear. Everything else — heading type, bullet, code face, strikethrough
+ * — is live as you type.
  */
 export const MarkdownEditor: FC<MarkdownEditorProps> = ({
   value,
@@ -57,40 +52,32 @@ export const MarkdownEditor: FC<MarkdownEditorProps> = ({
     theme: { colors, spacing, radius },
   } = useAppTheme()
 
-  // The markdown prop seeds the document; after that the line model is the
-  // source of truth, because re-deriving it from markdown on every keystroke
-  // would discard the kinds the input rules just assigned.
-  const [lines, setLines] = useState<EditorLine[]>(() => toLines(value))
-  const [selection, setSelection] = useState<{ start: number; end: number } | undefined>()
-  const display = useMemo(() => toDisplay(lines), [lines])
-  const displayRef = useRef(display)
-  displayRef.current = display
+  const [markdown, setMarkdown] = useState(value)
+  // Re-derived on every keystroke rather than maintained incrementally.
+  // Parsing is cheap, and unlike bookkeeping it cannot fall out of step with
+  // the text the user can see.
+  const lines = useMemo(() => toLines(markdown), [markdown])
 
   const handleChange = useCallback(
     (next: string) => {
-      const caret = caretAfterEdit(displayRef.current, next)
-      const result = applyEdit(lines, next, caret)
-      setLines(result.lines)
-      // Only pin the caret when a rule moved it; otherwise controlling
-      // selection every keystroke fights the user's own taps and drags.
-      setSelection(result.caret === caret ? undefined : { start: result.caret, end: result.caret })
-      onChangeMarkdown(toMarkdown(result.lines))
+      setMarkdown(next)
+      onChangeMarkdown(next)
     },
-    [lines, onChangeMarkdown],
+    [onChangeMarkdown],
   )
 
   const children: ReactNode[] = []
   lines.forEach((line, index) => {
-    const text = `${displayLead(line)}${line.text}`
     children.push(
       <RNText key={`l${index}`} style={lineStyle(line.kind, colors)}>
+        {line.lead ? <RNText style={{ color: colors.textDim }}>{line.lead}</RNText> : null}
         {line.kind.type === "code" || line.kind.type === "raw"
-          ? text
-          : renderInline(text, colors, `${index}`)}
+          ? line.text
+          : renderInline(line.text, colors, `${index}`)}
       </RNText>,
     )
     // The newline is a character of the buffer; it has to be emitted or the
-    // input's value stops matching the model.
+    // input's text stops matching the value handed back to the caller.
     if (index < lines.length - 1) children.push(<RNText key={`n${index}`}>{"\n"}</RNText>)
   })
 
@@ -110,14 +97,12 @@ export const MarkdownEditor: FC<MarkdownEditorProps> = ({
     >
       {/* Never add `value` here. iOS appends the value fragment *and* the
           children fragments, so the description renders twice — and the
-          invariant that catches it is inside React Native's Android branch. */}
+          invariant that catches it lives in React Native's Android branch. */}
       <TextInput
         multiline
         autoFocus={autoFocus}
         onChangeText={handleChange}
         onBlur={onBlur}
-        onSelectionChange={() => setSelection(undefined)}
-        selection={selection}
         placeholder={placeholder}
         placeholderTextColor={colors.textDim}
         textAlignVertical="top"
@@ -129,46 +114,39 @@ export const MarkdownEditor: FC<MarkdownEditorProps> = ({
   )
 }
 
-/**
- * Inline emphasis, styled in place. Unlike the block markers these are left
- * visible: eating `**` mid-line would mean rewriting text the caret is sitting
- * inside on every keystroke, and that is exactly the caret arithmetic this
- * design avoids. Dimming them keeps the sentence readable.
- */
+/** Inline emphasis, styled in place with its own markers dimmed. */
 function renderInline(
   text: string,
   colors: ReturnType<typeof useAppTheme>["theme"]["colors"],
   keyPrefix: string,
 ): ReactNode[] {
+  const dim = { color: colors.textDim }
   return parseInline(text).map((span, i) => {
     const key = `${keyPrefix}-${i}`
+    const wrapped = (marker: string, inner: TextStyle) => (
+      <RNText key={key}>
+        <RNText style={dim}>{marker}</RNText>
+        <RNText style={inner}>{span.text}</RNText>
+        <RNText style={dim}>{marker}</RNText>
+      </RNText>
+    )
     switch (span.kind) {
       case "bold":
-        return (
-          <RNText key={key} style={{ fontFamily: typography.primary.semiBold }}>
-            {`**${span.text}**`}
-          </RNText>
-        )
+        return wrapped("**", { fontFamily: typography.primary.semiBold })
       case "italic":
-        return <RNText key={key} style={$italic}>{`*${span.text}*`}</RNText>
+        return wrapped("*", $italic)
       case "boldItalic":
-        return (
-          <RNText key={key} style={[$italic, { fontFamily: typography.primary.semiBold }]}>
-            {`***${span.text}***`}
-          </RNText>
-        )
+        return wrapped("***", { ...$italic, fontFamily: typography.primary.semiBold })
       case "strike":
-        return <RNText key={key} style={$strike}>{`~~${span.text}~~`}</RNText>
+        return wrapped("~~", $strike)
       case "code":
-        return (
-          <RNText key={key} style={{ fontFamily: typography.code.normal }}>
-            {`\`${span.text}\``}
-          </RNText>
-        )
+        return wrapped("`", { fontFamily: typography.code.normal })
       case "link":
         return (
-          <RNText key={key} style={{ color: colors.tint }}>
-            {`[${span.text}](${span.href})`}
+          <RNText key={key}>
+            <RNText style={dim}>[</RNText>
+            <RNText style={{ color: colors.tint }}>{span.text}</RNText>
+            <RNText style={dim}>{`](${span.href})`}</RNText>
           </RNText>
         )
       default:
