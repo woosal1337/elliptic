@@ -1,0 +1,48 @@
+# The create-task sheet, after it became a native SwiftUI Form in a
+# UISheetPresentationController.
+#
+# The previous version was a hand-rolled modal, and its lower fields ended up
+# behind the keyboard. UIKit owns that now, so the check is that focusing the
+# title still leaves the Create button reachable — plus that the pickers are
+# real system pickers rather than our own modals.
+#
+# Run:  scripts/maestro.sh ios .maestro/flows/CreateTaskSheet.yaml
+# Point the app at the local stack first so this never writes to production:
+#   EXPO_PUBLIC_API_URL=http://localhost:8000/api/v1 npx expo start --clear
+appId: sh.elliptic
+---
+- launchApp
+- waitForAnimationToEnd
+
+- tapOn: "Tasks"
+- waitForAnimationToEnd
+- tapOn: "New task"
+- waitForAnimationToEnd
+- takeScreenshot: .maestro/output/create-sheet/00-open
+
+# Every row should be a Form row: system pickers, not our OptionSheet modals.
+- assertVisible: "Project"
+- assertVisible: "Status"
+- assertVisible: "Priority"
+- assertVisible: "Assignee"
+- assertVisible: "Due date"
+- assertVisible: "Create task"
+
+# The bug this surface used to have: with the keyboard up, everything below the
+# fold became unreachable.
+- tapOn: "Task title"
+- inputText: "Native sheet check"
+- waitForAnimationToEnd
+- takeScreenshot: .maestro/output/create-sheet/01-keyboard-up
+- assertVisible: "Create task"
+
+# A system picker opens in place rather than pushing another modal.
+- tapOn: "Priority"
+- waitForAnimationToEnd
+- takeScreenshot: .maestro/output/create-sheet/02-picker
+
+# Leave without creating anything.
+- swipe:
+    start: "50%,20%"
+    end: "50%,90%"
+- waitForAnimationToEnd
