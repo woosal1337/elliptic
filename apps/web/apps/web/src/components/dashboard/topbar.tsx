@@ -31,7 +31,7 @@ export function Topbar({ orgId, onMenuClick }: { orgId: string; onMenuClick?: ()
   const title = deriveTitle(pathname, orgId);
 
   return (
-    <header className="flex h-13 shrink-0 items-center justify-between gap-3 border-b border-border bg-surface/80 px-5 backdrop-blur-sm">
+    <header className="flex h-10 shrink-0 items-center justify-between gap-3 border-b border-border px-4">
       <div className="flex min-w-0 items-center gap-2">
         <button
           type="button"

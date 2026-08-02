@@ -68,7 +68,7 @@ export default function OrgLayout({ children }: { children: React.ReactNode }) {
     <TooltipProvider delayDuration={300}>
       <CommandMenuProvider orgId={params.orgId}>
         <SettingsCommands orgId={params.orgId} />
-        <div className="flex h-dvh overflow-hidden bg-background">
+        <div className="flex h-dvh overflow-hidden bg-shell">
           <Sidebar orgId={params.orgId} className="hidden md:flex" collapsible />
           <Sheet open={navOpen} onOpenChange={setNavOpen}>
             <SheetContent>
@@ -76,9 +76,11 @@ export default function OrgLayout({ children }: { children: React.ReactNode }) {
               <Sidebar orgId={params.orgId} className="w-full border-r-0" />
             </SheetContent>
           </Sheet>
-          <div className="flex min-w-0 flex-1 flex-col">
-            <Topbar orgId={params.orgId} onMenuClick={() => setNavOpen(true)} />
-            <main className="flex-1 overflow-y-auto">{children}</main>
+          <div className="flex min-w-0 flex-1 flex-col lg:py-2 lg:pr-2">
+            <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-container lg:rounded-md lg:border lg:border-border">
+              <Topbar orgId={params.orgId} onMenuClick={() => setNavOpen(true)} />
+              <main className="flex-1 overflow-y-auto">{children}</main>
+            </div>
           </div>
           <StickyDock orgId={params.orgId} />
         </div>
