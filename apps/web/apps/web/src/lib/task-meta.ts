@@ -2,6 +2,8 @@ import type { TaskPriority, TaskStatus } from "./types";
 
 export type StatusCategory = "backlog" | "unstarted" | "started" | "completed" | "cancelled";
 
+// Must list every TaskStatus: tasks-table.tsx groups by walking this array and
+// drops anything it does not contain, so an omission hides tasks entirely.
 export const STATUS_ORDER: readonly TaskStatus[] = [
   "backlog",
   "todo",
@@ -9,6 +11,7 @@ export const STATUS_ORDER: readonly TaskStatus[] = [
   "in_review",
   "done",
   "cancelled",
+  "duplicate",
 ];
 
 export const CATEGORY_ORDER: readonly StatusCategory[] = [

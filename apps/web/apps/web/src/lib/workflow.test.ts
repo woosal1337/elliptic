@@ -7,10 +7,21 @@ import {
 } from "./workflow";
 
 describe("defaultWorkflow", () => {
-  it("maps the six built-in statuses into their fixed categories", () => {
+  it("maps every built-in status into its fixed category", () => {
     const wf = defaultWorkflow();
-    expect(wf).toHaveLength(6);
+    // Must match the API's TaskStatus enum exactly. A status missing here is
+    // dropped from the grouped list, which hides its tasks outright.
+    expect(wf.map((s) => s.id)).toEqual([
+      "backlog",
+      "todo",
+      "in_progress",
+      "in_review",
+      "done",
+      "cancelled",
+      "duplicate",
+    ]);
     expect(wf.find((s) => s.id === "in_progress")!.category).toBe("started");
+    expect(wf.find((s) => s.id === "duplicate")!.category).toBe("cancelled");
     expect(wf.filter((s) => s.is_default)).toHaveLength(1);
   });
 });
