@@ -1,4 +1,4 @@
-import { FC, useCallback, useState } from "react"
+import { FC, useCallback } from "react"
 import { SectionList, ViewStyle } from "react-native"
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs"
 
@@ -15,6 +15,7 @@ import type { Task } from "@/services/api/types"
 import { queryKeys } from "@/services/query"
 import { openEntity } from "@/utils/openEntity"
 import { prettyLabel, STATUS_OPTIONS } from "@/utils/taskOptions"
+import { useCollapsedSections } from "@/utils/useCollapsedSections"
 import { useListQuery } from "@/utils/useListQuery"
 
 const ORDER = ["in_progress", "in_review", "todo", "backlog", "done", "cancelled"]
@@ -34,13 +35,7 @@ export const ProjectDetailScreen: FC<HomeStackScreenProps<"ProjectDetail">> = ({
     fetcher,
   )
 
-  const [collapsed, setCollapsed] = useState<ReadonlySet<string>>(new Set())
-  const toggle = (status: string) =>
-    setCollapsed((prev) => {
-      const next = new Set(prev)
-      if (!next.delete(status)) next.add(status)
-      return next
-    })
+  const { collapsed, toggle } = useCollapsedSections(`project.${projectId}`)
 
   // `count` is the real size; `data` empties when collapsed so the section keeps
   // its header while its rows disappear.

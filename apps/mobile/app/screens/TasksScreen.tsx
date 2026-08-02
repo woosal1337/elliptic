@@ -19,6 +19,7 @@ import { invalidate, queryKeys } from "@/services/query"
 import { useAppTheme } from "@/theme/context"
 import { hapticSuccess } from "@/utils/haptics"
 import { prettyLabel, STATUS_OPTIONS } from "@/utils/taskOptions"
+import { useCollapsedSections } from "@/utils/useCollapsedSections"
 import { useListQuery } from "@/utils/useListQuery"
 
 // Active work first, closed work last.
@@ -30,13 +31,7 @@ export const TasksScreen: FC<TasksStackScreenProps<"TasksList">> = ({ navigation
     theme: { colors },
   } = useAppTheme()
   const [showCreate, setShowCreate] = useState(false)
-  const [collapsed, setCollapsed] = useState<ReadonlySet<string>>(new Set())
-  const toggle = (status: string) =>
-    setCollapsed((prev) => {
-      const next = new Set(prev)
-      if (!next.delete(status)) next.add(status)
-      return next
-    })
+  const { collapsed, toggle } = useCollapsedSections("tasks")
   const cacheKey = activeOrg ? queryKeys.tasks(activeOrg.id, "all") : null
   const fetcher = useCallback(
     () => (activeOrg ? api.listTasks(activeOrg.id, "all") : Promise.resolve<Task[]>([])),

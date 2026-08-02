@@ -22,6 +22,7 @@ import { useAppTheme } from "@/theme/context"
 import { hapticSuccess } from "@/utils/haptics"
 import { openEntity } from "@/utils/openEntity"
 import { relativeTime } from "@/utils/relativeTime"
+import { useCollapsedSections } from "@/utils/useCollapsedSections"
 import { useListQuery } from "@/utils/useListQuery"
 
 type Filter = "all" | "unread"
@@ -88,6 +89,7 @@ export const NotificationsScreen: FC<InboxStackScreenProps<"Notifications">> = (
   const { data, loading, refreshing, refresh } = useListQuery<NotificationItem>(cacheKey, fetcher)
   const toast = useToast()
 
+  const { collapsed, toggle } = useCollapsedSections("notifications")
   const sections = useMemo(() => {
     const groups = new Map<string, NotificationItem[]>()
     for (const n of data) {
@@ -96,8 +98,14 @@ export const NotificationsScreen: FC<InboxStackScreenProps<"Notifications">> = (
       arr.push(n)
       groups.set(label, arr)
     }
-    return [...groups.entries()].map(([title, items]) => ({ title, data: items }))
-  }, [data])
+    // `count` stays the real size while `data` empties, so a collapsed day
+    // still shows how much it is hiding.
+    return [...groups.entries()].map(([title, items]) => ({
+      title,
+      count: items.length,
+      data: collapsed.has(title) ? [] : items,
+    }))
+  }, [data, collapsed])
 
   const refetchInbox = () => {
     if (activeOrg) invalidate(activeOrg.id, "notifications")
@@ -180,7 +188,12 @@ export const NotificationsScreen: FC<InboxStackScreenProps<"Notifications">> = (
           }
           contentContainerStyle={sections.length === 0 ? $grow : $bottomClearance}
           renderSectionHeader={({ section }) => (
-            <SectionHeader title={section.title} count={section.data.length} />
+            <SectionHeader
+              title={section.title}
+              count={section.count}
+              collapsed={collapsed.has(section.title)}
+              onToggle={() => toggle(section.title)}
+            />
           )}
           ListEmptyComponent={
             <EmptyState
