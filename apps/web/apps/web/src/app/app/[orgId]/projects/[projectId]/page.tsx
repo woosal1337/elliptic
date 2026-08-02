@@ -240,8 +240,8 @@ function ProjectDetailContent() {
         }}
       >
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-4 border-b border-border">
-            <TabsList className="border-b-0">
+          <div className="flex items-center gap-1">
+            <TabsList>
               {primaryTabs.map((tab) => (
                 <TabsTrigger key={tab.value} value={tab.value}>
                   {tab.label}
@@ -261,7 +261,7 @@ function ProjectDetailContent() {
                   <button
                     type="button"
                     aria-label="More project views"
-                    className="-mb-px inline-flex h-9 items-center gap-1 rounded-t-sm border-b-2 border-transparent px-1 text-small font-medium text-muted-foreground transition-colors duration-150 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 [&_svg]:size-4"
+                    className="inline-flex h-7 items-center gap-1 whitespace-nowrap rounded-full border border-transparent px-2.5 text-caption font-medium text-muted-foreground transition-colors duration-150 hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 [&_svg]:size-3.5"
                   >
                     More
                     <ChevronDown className="opacity-60" />

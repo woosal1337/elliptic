@@ -12,7 +12,7 @@ export const TabsList = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <TabsPrimitive.List
     ref={ref}
-    className={cn("flex items-center gap-4 border-b border-border", className)}
+    className={cn("flex flex-wrap items-center gap-1", className)}
     {...props}
   />
 ));
@@ -25,7 +25,11 @@ export const TabsTrigger = React.forwardRef<
   <TabsPrimitive.Trigger
     ref={ref}
     className={cn(
-      "-mb-px inline-flex h-9 items-center gap-2 rounded-t-sm border-b-2 border-transparent px-1 text-small font-medium text-muted-foreground transition-colors duration-150 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:border-foreground data-[state=active]:text-foreground [&_svg]:size-4",
+      // A pill rather than an underline: the strip sits inline with page
+      // controls, where an underline competes with every other horizontal rule
+      // around it. The active fill is `subtle` — a neutral surface — because
+      // `accent` here is the brand colour and would make a plain tab shout.
+      "inline-flex h-7 items-center gap-1.5 whitespace-nowrap rounded-full border border-transparent px-2.5 text-caption font-medium text-muted-foreground transition-colors duration-150 hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:border-border data-[state=active]:bg-subtle data-[state=active]:text-foreground [&_svg]:size-3.5",
       className
     )}
     {...props}
