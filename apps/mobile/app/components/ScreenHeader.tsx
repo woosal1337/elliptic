@@ -1,7 +1,7 @@
 import { FC, ReactNode } from "react"
 import { View, ViewStyle } from "react-native"
-import { Ionicons } from "@expo/vector-icons"
 
+import { AppIcon, type IconName } from "@/components/AppIcon"
 import { GlassContainer, GlassIconButton } from "@/components/Glass"
 import { Text } from "@/components/Text"
 import { useAppTheme } from "@/theme/context"
@@ -9,7 +9,7 @@ import { hapticSelection } from "@/utils/haptics"
 
 export interface HeaderAction {
   key: string
-  icon: keyof typeof Ionicons.glyphMap
+  icon: IconName
   /** Spoken label — also how test flows and screen readers find the button. */
   label: string
   onPress: () => void
@@ -60,7 +60,7 @@ export const ScreenHeader: FC<{
                   a.onPress()
                 }}
               >
-                <Ionicons
+                <AppIcon
                   name={a.icon}
                   size={19}
                   color={a.emphasis ? colors.tint : colors.textDim}

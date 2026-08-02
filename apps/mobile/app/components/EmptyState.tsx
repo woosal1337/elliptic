@@ -1,14 +1,14 @@
 import { FC } from "react"
 import { View, ViewStyle } from "react-native"
-import { Ionicons } from "@expo/vector-icons"
 
+import { AppIcon, type IconName } from "@/components/AppIcon"
 import { Button } from "@/components/Button"
 import { Text } from "@/components/Text"
 import { useAppTheme } from "@/theme/context"
 
 export interface EmptyStateProps {
-  /** Optional Ionicons glyph shown above the title. */
-  icon?: keyof typeof Ionicons.glyphMap
+  /** Optional glyph shown above the title. */
+  icon?: IconName
   title: string
   caption?: string
   /** Optional call-to-action. */
@@ -17,7 +17,13 @@ export interface EmptyStateProps {
 }
 
 /** A compact, centered empty state — used across every list screen. */
-export const EmptyState: FC<EmptyStateProps> = ({ icon, title, caption, actionLabel, onAction }) => {
+export const EmptyState: FC<EmptyStateProps> = ({
+  icon,
+  title,
+  caption,
+  actionLabel,
+  onAction,
+}) => {
   const {
     theme: { colors, spacing, radius },
   } = useAppTheme()
@@ -25,7 +31,7 @@ export const EmptyState: FC<EmptyStateProps> = ({ icon, title, caption, actionLa
     <View style={$wrap}>
       {icon ? (
         <View style={[$iconWrap, { backgroundColor: colors.subtle, borderRadius: radius.full }]}>
-          <Ionicons name={icon} size={26} color={colors.textDim} />
+          <AppIcon name={icon} size={26} color={colors.textDim} />
         </View>
       ) : null}
       <Text preset="subheading" text={title} style={{ color: colors.text, textAlign: "center" }} />

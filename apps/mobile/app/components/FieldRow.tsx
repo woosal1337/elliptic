@@ -1,7 +1,7 @@
 import { FC } from "react"
 import { Pressable, View, ViewStyle } from "react-native"
-import { Ionicons } from "@expo/vector-icons"
 
+import { AppIcon } from "@/components/AppIcon"
 import { Text } from "@/components/Text"
 import { useAppTheme } from "@/theme/context"
 
@@ -27,7 +27,7 @@ export const FieldRow: FC<{
           numberOfLines={1}
           style={{ color: muted ? colors.textDim : colors.text }}
         />
-        <Ionicons name="chevron-forward" size={16} color={colors.textDim} />
+        <AppIcon name="chevron-right" size={16} color={colors.textDim} />
       </View>
     </Pressable>
   )

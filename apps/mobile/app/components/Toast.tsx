@@ -9,7 +9,6 @@ import {
   useState,
 } from "react"
 import { Pressable, View, ViewStyle } from "react-native"
-import { Ionicons } from "@expo/vector-icons"
 import { Gesture, GestureDetector } from "react-native-gesture-handler"
 import Animated, {
   runOnJS,
@@ -20,6 +19,7 @@ import Animated, {
 } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
+import { AppIcon, type IconName } from "@/components/AppIcon"
 import { Text } from "@/components/Text"
 import { useAppTheme } from "@/theme/context"
 import { hapticSuccess, hapticWarning } from "@/utils/haptics"
@@ -54,10 +54,10 @@ const ToastContext = createContext<{ show: ShowFn } | null>(null)
 /** Returns a `show(message, { variant, action })` function; a no-op outside the provider. */
 export const useToast = (): ShowFn => useContext(ToastContext)?.show ?? (() => {})
 
-const ICON: Record<ToastVariant, keyof typeof Ionicons.glyphMap | null> = {
+const ICON: Record<ToastVariant, IconName | null> = {
   default: null,
-  success: "checkmark-circle",
-  error: "alert-circle",
+  success: "circle-check",
+  error: "circle-alert",
 }
 
 const HIDDEN_Y = 12
@@ -182,7 +182,7 @@ export const ToastProvider: FC<PropsWithChildren> = ({ children }) => {
               $anim,
             ]}
           >
-            {icon ? <Ionicons name={icon} size={18} color={fg} /> : null}
+            {icon ? <AppIcon name={icon} size={18} color={fg} /> : null}
             <Text
               text={current.message}
               size="sm"

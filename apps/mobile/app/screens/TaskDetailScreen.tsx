@@ -9,7 +9,6 @@ import {
   ViewStyle,
 } from "react-native"
 import * as ImagePicker from "expo-image-picker"
-import { Ionicons } from "@expo/vector-icons"
 import { useFocusEffect } from "@react-navigation/native"
 import {
   KeyboardAwareScrollView,
@@ -18,6 +17,7 @@ import {
 } from "react-native-keyboard-controller"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
+import { AppIcon } from "@/components/AppIcon"
 import { Avatar } from "@/components/Avatar"
 import { Badge } from "@/components/Badge"
 import { DatePickerSheet } from "@/components/DatePickerSheet"
@@ -360,7 +360,7 @@ export const TaskDetailScreen: FC<TasksStackScreenProps<"TaskDetail">> = ({
     return (
       <Screen preset="fixed" contentContainerStyle={$fill}>
         <EmptyState
-          icon="alert-circle-outline"
+          icon="circle-alert"
           title="Couldn't open this task"
           caption="It may have been deleted, or you no longer have access."
           actionLabel="Try again"
@@ -439,7 +439,7 @@ export const TaskDetailScreen: FC<TasksStackScreenProps<"TaskDetail">> = ({
             {task.assignee_id ? (
               <Avatar name={memberName(task.assignee_id)} size={16} />
             ) : (
-              <Ionicons name="person-circle-outline" size={16} color={colors.textDim} />
+              <AppIcon name="circle-user" size={16} color={colors.textDim} />
             )}
             <Text
               text={task.assignee_id ? memberName(task.assignee_id) : "Assignee"}
@@ -449,8 +449,8 @@ export const TaskDetailScreen: FC<TasksStackScreenProps<"TaskDetail">> = ({
             />
           </PropChip>
           <PropChip onPress={() => setPicker("due")} testID="prop-due" label="Due date">
-            <Ionicons
-              name="calendar-outline"
+            <AppIcon
+              name="calendar"
               size={14}
               color={task.due_date ? colors.text : colors.textDim}
             />
@@ -462,8 +462,8 @@ export const TaskDetailScreen: FC<TasksStackScreenProps<"TaskDetail">> = ({
             />
           </PropChip>
           <PropChip onPress={openLabels} testID="prop-labels" label="Labels">
-            <Ionicons
-              name="pricetag-outline"
+            <AppIcon
+              name="tag"
               size={14}
               color={task.labels?.length ? colors.text : colors.textDim}
             />
@@ -485,7 +485,7 @@ export const TaskDetailScreen: FC<TasksStackScreenProps<"TaskDetail">> = ({
                 },
               ]}
             >
-              <Ionicons name="cube-outline" size={14} color={colors.textDim} />
+              <AppIcon name="box" size={14} color={colors.textDim} />
               <Text text={projectName} size="xs" weight="medium" numberOfLines={1} />
             </View>
           ) : null}
@@ -562,8 +562,8 @@ export const TaskDetailScreen: FC<TasksStackScreenProps<"TaskDetail">> = ({
                   accessibilityRole="button"
                   accessibilityLabel={st.status === "done" ? "Reopen subtask" : "Complete subtask"}
                 >
-                  <Ionicons
-                    name={st.status === "done" ? "checkbox" : "square-outline"}
+                  <AppIcon
+                    name={st.status === "done" ? "square-check" : "square"}
                     size={20}
                     color={st.status === "done" ? colors.tint : colors.textDim}
                   />
@@ -597,8 +597,8 @@ export const TaskDetailScreen: FC<TasksStackScreenProps<"TaskDetail">> = ({
                 accessibilityLabel="Add subtask"
                 style={!newSubtask.trim() || creatingSubtask ? $dim : undefined}
               >
-                <Ionicons
-                  name="add"
+                <AppIcon
+                  name="plus"
                   size={20}
                   color={newSubtask.trim() ? colors.tint : colors.textDim}
                 />
@@ -671,7 +671,7 @@ export const TaskDetailScreen: FC<TasksStackScreenProps<"TaskDetail">> = ({
                       weight="medium"
                       style={{ color: colors.tint }}
                     />
-                    <Ionicons name="close" size={12} color={colors.tint} />
+                    <AppIcon name="x" size={12} color={colors.tint} />
                   </Pressable>
                 ))}
               </View>
@@ -679,11 +679,11 @@ export const TaskDetailScreen: FC<TasksStackScreenProps<"TaskDetail">> = ({
             <View style={$composerRow}>
               <GlassContainer spacing={8} style={$controls}>
                 <GlassIconButton onPress={() => setPicker("mention")} label="Mention someone">
-                  <Ionicons name="at" size={18} color={colors.textDim} />
+                  <AppIcon name="at-sign" size={18} color={colors.textDim} />
                 </GlassIconButton>
                 <GlassIconButton onPress={() => void pickAttachment()} label="Attach an image">
-                  <Ionicons
-                    name="image-outline"
+                  <AppIcon
+                    name="image"
                     size={18}
                     color={attaching ? colors.tint : colors.textDim}
                   />
@@ -703,7 +703,7 @@ export const TaskDetailScreen: FC<TasksStackScreenProps<"TaskDetail">> = ({
                 tint={colors.tint}
                 size={38}
               >
-                <Ionicons name="arrow-up" size={18} color={colors.onTint} />
+                <AppIcon name="arrow-up" size={18} color={colors.onTint} />
               </GlassIconButton>
             </View>
           </GlassSurface>
@@ -786,7 +786,7 @@ const CommentRow: FC<{
   if (isActivity(comment)) {
     return (
       <View style={$activityRow}>
-        <Ionicons name="git-commit-outline" size={14} color={colors.textDim} />
+        <AppIcon name="git-commit-horizontal" size={14} color={colors.textDim} />
         <View style={$grow}>
           <Text
             text={comment.content.replace(/\*\*/g, "").replace(/^↩︎\s*/, "")}
@@ -825,7 +825,7 @@ const CommentRow: FC<{
               onPress={() => void Linking.openURL(a.download_url)}
               style={[$attachChip, { borderColor: colors.border, borderRadius: radius.sm }]}
             >
-              <Ionicons name="document-attach-outline" size={14} color={colors.tint} />
+              <AppIcon name="paperclip" size={14} color={colors.tint} />
               <Text text={a.filename} size="xxs" numberOfLines={1} style={{ color: colors.tint }} />
             </Pressable>
           ))}

@@ -1,8 +1,8 @@
 import { FC, useCallback } from "react"
 import { FlatList, Pressable, View, ViewStyle } from "react-native"
-import { Ionicons } from "@expo/vector-icons"
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs"
 
+import { AppIcon, type IconName } from "@/components/AppIcon"
 import { EmptyState } from "@/components/EmptyState"
 import { Screen } from "@/components/Screen"
 import { SearchBar } from "@/components/SearchBar"
@@ -16,12 +16,12 @@ import { useAppTheme } from "@/theme/context"
 import { openEntity } from "@/utils/openEntity"
 import { useDebouncedSearch } from "@/utils/useDebouncedSearch"
 
-const TYPE_META: Record<string, { label: string; icon: keyof typeof Ionicons.glyphMap }> = {
-  task: { label: "Task", icon: "checkbox-outline" },
-  note: { label: "Note", icon: "document-text-outline" },
-  project: { label: "Project", icon: "folder-outline" },
-  meeting: { label: "Meeting", icon: "calendar-outline" },
-  cycle: { label: "Cycle", icon: "repeat-outline" },
+const TYPE_META: Record<string, { label: string; icon: IconName }> = {
+  task: { label: "Task", icon: "square-check" },
+  note: { label: "Note", icon: "file-text" },
+  project: { label: "Project", icon: "folder" },
+  meeting: { label: "Meeting", icon: "calendar" },
+  cycle: { label: "Cycle", icon: "repeat" },
 }
 
 export const SearchScreen: FC<HomeStackScreenProps<"Search">> = ({ navigation }) => {
@@ -69,7 +69,7 @@ export const SearchScreen: FC<HomeStackScreenProps<"Search">> = ({ navigation })
         ListEmptyComponent={
           q.trim().length < 2 ? (
             <EmptyState
-              icon="search-outline"
+              icon="search"
               title="Search everything"
               caption="Find tasks, notes, and projects across your workspace."
             />
@@ -77,7 +77,7 @@ export const SearchScreen: FC<HomeStackScreenProps<"Search">> = ({ navigation })
             <EmptyState title="Searching…" />
           ) : (
             <EmptyState
-              icon="search-outline"
+              icon="search"
               title="No results"
               caption={`Nothing matched "${q.trim()}".`}
             />
@@ -86,7 +86,7 @@ export const SearchScreen: FC<HomeStackScreenProps<"Search">> = ({ navigation })
         renderItem={({ item }) => {
           const meta = TYPE_META[item.type] ?? {
             label: item.type,
-            icon: "ellipse-outline" as const,
+            icon: "circle" as const,
           }
           return (
             <Pressable
@@ -99,7 +99,7 @@ export const SearchScreen: FC<HomeStackScreenProps<"Search">> = ({ navigation })
                 },
               ]}
             >
-              <Ionicons name={meta.icon} size={18} color={colors.textDim} />
+              <AppIcon name={meta.icon} size={18} color={colors.textDim} />
               <View style={$grow}>
                 <Text text={item.title} size="sm" weight="medium" numberOfLines={1} />
                 <Text

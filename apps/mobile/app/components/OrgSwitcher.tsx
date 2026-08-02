@@ -1,8 +1,8 @@
 import { FC } from "react"
 import { Pressable, ViewStyle } from "react-native"
-import { Ionicons } from "@expo/vector-icons"
 import { useNavigation } from "@react-navigation/native"
 
+import { AppIcon } from "@/components/AppIcon"
 import { Avatar } from "@/components/Avatar"
 import { Text } from "@/components/Text"
 import { useOrg } from "@/context/OrgContext"
@@ -26,7 +26,7 @@ export const OrgSwitcher: FC = () => {
     >
       <Avatar name={activeOrg?.name ?? "?"} size={24} />
       <Text text={activeOrg?.name ?? "Select workspace"} weight="medium" />
-      <Ionicons name="chevron-down" size={16} color={colors.textDim} />
+      <AppIcon name="chevron-down" size={16} color={colors.textDim} />
     </Pressable>
   )
 }

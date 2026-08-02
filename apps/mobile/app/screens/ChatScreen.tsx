@@ -1,10 +1,10 @@
 import { FC, useEffect, useLayoutEffect, useRef, useState } from "react"
 import { Pressable, ScrollView, View, ViewStyle } from "react-native"
 import * as ImagePicker from "expo-image-picker"
-import { Ionicons } from "@expo/vector-icons"
 import { KeyboardStickyView } from "react-native-keyboard-controller"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
+import { AppIcon } from "@/components/AppIcon"
 import { Option, OptionSheet } from "@/components/OptionSheet"
 import { Screen } from "@/components/Screen"
 import { Text } from "@/components/Text"
@@ -88,7 +88,7 @@ export const ChatScreen: FC<HomeStackScreenProps<"Chat">> = ({ navigation }) => 
                 )
             }}
           >
-            <Ionicons name="time-outline" size={20} color={colors.text} />
+            <AppIcon name="clock" size={20} color={colors.text} />
           </Pressable>
           <Pressable onPress={() => void newChat()}>
             <Text text="New" weight="medium" style={{ color: colors.tint }} />
@@ -167,7 +167,7 @@ export const ChatScreen: FC<HomeStackScreenProps<"Chat">> = ({ navigation }) => 
         <KeyboardStickyView offset={{ closed: 0, opened: insets.bottom }}>
           {pending.length > 0 || uploading ? (
             <View style={[$pendingRow, { backgroundColor: colors.background }]}>
-              <Ionicons name="image" size={14} color={colors.tint} />
+              <AppIcon name="image" size={14} color={colors.tint} />
               <Text
                 text={uploading ? "Uploading…" : `${pending.length} image(s) attached`}
                 size="xs"
@@ -186,7 +186,7 @@ export const ChatScreen: FC<HomeStackScreenProps<"Chat">> = ({ navigation }) => 
             ]}
           >
             <Pressable onPress={() => void pickImage()} style={$attach}>
-              <Ionicons name="add" size={24} color={colors.textDim} />
+              <AppIcon name="plus" size={24} color={colors.textDim} />
             </Pressable>
             <TextField
               value={input}
@@ -199,7 +199,7 @@ export const ChatScreen: FC<HomeStackScreenProps<"Chat">> = ({ navigation }) => 
               onPress={() => void send()}
               style={[$send, { backgroundColor: colors.tint }]}
             >
-              <Ionicons name="arrow-up" size={20} color={colors.palette.neutral100} />
+              <AppIcon name="arrow-up" size={20} color={colors.palette.neutral100} />
             </Pressable>
           </View>
         </KeyboardStickyView>

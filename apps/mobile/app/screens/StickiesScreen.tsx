@@ -1,7 +1,7 @@
 import { FC, useCallback, useLayoutEffect, useState } from "react"
 import { FlatList, Pressable, RefreshControl, View, ViewStyle } from "react-native"
-import { Ionicons } from "@expo/vector-icons"
 
+import { AppIcon } from "@/components/AppIcon"
 import { Button } from "@/components/Button"
 import { EmptyState } from "@/components/EmptyState"
 import { Screen } from "@/components/Screen"
@@ -51,7 +51,7 @@ export const StickiesScreen: FC<ProfileStackScreenProps<"Stickies">> = ({ naviga
             hitSlop={8}
             onPress={openNew}
           >
-            <Ionicons name="add" size={24} color={colors.tint} />
+            <AppIcon name="plus" size={24} color={colors.tint} />
           </Pressable>
         ) : null,
     })
@@ -105,7 +105,7 @@ export const StickiesScreen: FC<ProfileStackScreenProps<"Stickies">> = ({ naviga
         }
         ListEmptyComponent={
           <EmptyState
-            icon="reader-outline"
+            icon="sticky-note"
             title="No stickies yet"
             caption="Jot a quick thought and convert it into a task later."
           />
@@ -115,11 +115,11 @@ export const StickiesScreen: FC<ProfileStackScreenProps<"Stickies">> = ({ naviga
             <Text text={item.content || "Empty"} numberOfLines={4} />
             <View style={$actions}>
               <Pressable onPress={() => convert(item)} style={$action}>
-                <Ionicons name="git-branch-outline" size={16} color={colors.textDim} />
+                <AppIcon name="git-branch" size={16} color={colors.textDim} />
                 <Text text="To task" size="xxs" style={{ color: colors.textDim }} />
               </Pressable>
               <Pressable onPress={() => del(item)} style={$action}>
-                <Ionicons name="trash-outline" size={16} color={colors.error} />
+                <AppIcon name="trash-2" size={16} color={colors.error} />
               </Pressable>
             </View>
           </Pressable>

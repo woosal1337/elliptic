@@ -97,7 +97,7 @@ export const TasksScreen: FC<TasksStackScreenProps<"TasksList">> = ({ navigation
             ? [
                 {
                   key: "create",
-                  icon: "add",
+                  icon: "plus",
                   label: "New task",
                   emphasis: true,
                   onPress: () => setShowCreate(true),
@@ -120,7 +120,7 @@ export const TasksScreen: FC<TasksStackScreenProps<"TasksList">> = ({ navigation
           contentContainerStyle={sections.length === 0 ? $grow : $bottomClearance}
           ListEmptyComponent={
             <EmptyState
-              icon="checkmark-done-outline"
+              icon="check-check"
               title="No tasks here"
               caption="Create one with the + button."
             />
@@ -143,7 +143,7 @@ export const TasksScreen: FC<TasksStackScreenProps<"TasksList">> = ({ navigation
                       {
                         key: "done",
                         label: "Done",
-                        icon: "checkmark",
+                        icon: "check",
                         background: colors.statusDone,
                         onPress: () => transition(item, "done"),
                       },

@@ -1,7 +1,7 @@
 import { FC, useState } from "react"
 import { TextStyle, View, ViewStyle } from "react-native"
-import { Ionicons } from "@expo/vector-icons"
 
+import { AppIcon } from "@/components/AppIcon"
 import { Button } from "@/components/Button"
 import { Screen } from "@/components/Screen"
 import { SocialSignIn } from "@/components/SocialSignIn"
@@ -64,7 +64,7 @@ export const RegisterScreen: FC<AppStackScreenProps<"Register">> = ({ navigation
         <View
           style={[$errorPill, { backgroundColor: colors.errorBackground, borderRadius: radius.md }]}
         >
-          <Ionicons name="alert-circle" size={16} color={colors.error} />
+          <AppIcon name="circle-alert" size={16} color={colors.error} />
           <Text text={error} size="xs" style={[$errorText, { color: colors.error }]} />
         </View>
       ) : null}

@@ -1,7 +1,7 @@
 import { FC } from "react"
 import { Pressable, ScrollView, View, ViewStyle } from "react-native"
-import { Ionicons } from "@expo/vector-icons"
 
+import { AppIcon } from "@/components/AppIcon"
 import { Sheet } from "@/components/Sheet"
 import { Text } from "@/components/Text"
 import { useAppTheme } from "@/theme/context"
@@ -44,7 +44,7 @@ export const OptionSheet: FC<{
                   style={{ color: active ? colors.tint : colors.text }}
                 />
               </View>
-              {active ? <Ionicons name="checkmark" size={20} color={colors.tint} /> : null}
+              {active ? <AppIcon name="check" size={20} color={colors.tint} /> : null}
             </Pressable>
           )
         })}

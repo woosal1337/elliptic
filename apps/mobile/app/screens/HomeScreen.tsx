@@ -1,8 +1,8 @@
 import { FC, useCallback } from "react"
 import { Pressable, RefreshControl, View, ViewStyle } from "react-native"
-import { Ionicons } from "@expo/vector-icons"
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs"
 
+import { AppIcon } from "@/components/AppIcon"
 import { GlassSurface, LIQUID_GLASS } from "@/components/Glass"
 import { OrgSwitcher } from "@/components/OrgSwitcher"
 import { ProjectRow } from "@/components/ProjectRow"
@@ -72,7 +72,7 @@ export const HomeScreen: FC<HomeStackScreenProps<"HomeMain">> = ({ navigation })
 
       {pending > 0 ? (
         <View style={[$pending, { backgroundColor: colors.subtle }]}>
-          <Ionicons name="cloud-offline-outline" size={14} color={colors.textDim} />
+          <AppIcon name="cloud-off" size={14} color={colors.textDim} />
           <Text
             text={`${pending} change${pending > 1 ? "s" : ""} waiting to sync`}
             size="xs"
@@ -96,7 +96,7 @@ export const HomeScreen: FC<HomeStackScreenProps<"HomeMain">> = ({ navigation })
             !LIQUID_GLASS && [$bordered, { borderColor: colors.inputBorder }],
           ]}
         >
-          <Ionicons name="search" size={18} color={colors.textDim} />
+          <AppIcon name="search" size={18} color={colors.textDim} />
           <Text text="Search tasks, notes, projects…" style={{ color: colors.textDim }} />
         </GlassSurface>
       </Pressable>

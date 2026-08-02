@@ -1,7 +1,7 @@
 import { ComponentType, FC, useState } from "react"
 import { Pressable, TextStyle, View, ViewStyle } from "react-native"
-import { Ionicons } from "@expo/vector-icons"
 
+import { AppIcon } from "@/components/AppIcon"
 import { Button } from "@/components/Button"
 import { Screen } from "@/components/Screen"
 import { SocialSignIn } from "@/components/SocialSignIn"
@@ -29,11 +29,7 @@ export const LoginScreen: FC<LoginScreenProps> = ({ navigation }) => {
 
   const PwToggle: ComponentType<TextFieldAccessoryProps> = (props) => (
     <Pressable onPress={() => setShowPw((s) => !s)} hitSlop={8} style={props.style}>
-      <Ionicons
-        name={showPw ? "eye-off-outline" : "eye-outline"}
-        size={20}
-        color={colors.textDim}
-      />
+      <AppIcon name={showPw ? "eye-off" : "eye"} size={20} color={colors.textDim} />
     </Pressable>
   )
 
@@ -71,7 +67,7 @@ export const LoginScreen: FC<LoginScreenProps> = ({ navigation }) => {
         <View
           style={[$errorPill, { backgroundColor: colors.errorBackground, borderRadius: radius.md }]}
         >
-          <Ionicons name="alert-circle" size={16} color={colors.error} />
+          <AppIcon name="circle-alert" size={16} color={colors.error} />
           <Text text={error} size="xs" style={[$errorText, { color: colors.error }]} />
         </View>
       ) : null}

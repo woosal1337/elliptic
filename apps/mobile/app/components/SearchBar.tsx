@@ -1,8 +1,8 @@
 import { FC } from "react"
 // eslint-disable-next-line no-restricted-imports
 import { ActivityIndicator, Pressable, TextInput, View, ViewStyle } from "react-native"
-import { Ionicons } from "@expo/vector-icons"
 
+import { AppIcon } from "@/components/AppIcon"
 import { GlassSurface, LIQUID_GLASS } from "@/components/Glass"
 import { Text } from "@/components/Text"
 import { useAppTheme } from "@/theme/context"
@@ -34,7 +34,7 @@ export const SearchBar: FC<{
         ],
       ]}
     >
-      <Ionicons name="search" size={18} color={colors.textDim} />
+      <AppIcon name="search" size={18} color={colors.textDim} />
       <TextInput
         value={value}
         onChangeText={onChangeText}
@@ -55,7 +55,7 @@ export const SearchBar: FC<{
           accessibilityRole="button"
           accessibilityLabel="Clear search"
         >
-          <Ionicons name="close-circle" size={18} color={colors.textDim} />
+          <AppIcon name="circle-x" size={18} color={colors.textDim} />
         </Pressable>
       ) : null}
     </GlassSurface>

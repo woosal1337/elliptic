@@ -47,7 +47,7 @@ export const ProjectsScreen: FC<HomeStackScreenProps<"Projects">> = ({ navigatio
         }
         ListEmptyComponent={
           <EmptyState
-            icon="folder-open-outline"
+            icon="folder-open"
             title="No projects"
             caption="Projects you can access will appear here."
           />

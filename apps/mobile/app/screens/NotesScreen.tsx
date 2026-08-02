@@ -1,7 +1,7 @@
 import { FC, useCallback, useState } from "react"
 import { FlatList, Pressable, RefreshControl, TextStyle, View, ViewStyle } from "react-native"
-import { Ionicons } from "@expo/vector-icons"
 
+import { AppIcon } from "@/components/AppIcon"
 import { Button } from "@/components/Button"
 import { EmptyState } from "@/components/EmptyState"
 import { Screen } from "@/components/Screen"
@@ -56,7 +56,7 @@ export const NotesScreen: FC<NotesStackScreenProps<"NotesList">> = ({ navigation
             ? [
                 {
                   key: "create",
-                  icon: "add",
+                  icon: "plus",
                   label: "New note",
                   emphasis: true,
                   onPress: () => setShowCreate(true),
@@ -77,7 +77,7 @@ export const NotesScreen: FC<NotesStackScreenProps<"NotesList">> = ({ navigation
           contentContainerStyle={notes.length === 0 ? $grow : $bottomClearance}
           ListEmptyComponent={
             <EmptyState
-              icon="document-text-outline"
+              icon="file-text"
               title="No notes yet"
               caption="Capture docs, specs, and meeting notes here."
             />
@@ -98,7 +98,7 @@ export const NotesScreen: FC<NotesStackScreenProps<"NotesList">> = ({ navigation
               {item.icon ? (
                 <Text text={item.icon} style={$emoji} />
               ) : (
-                <Ionicons name="document-text-outline" size={18} color={colors.textDim} />
+                <AppIcon name="file-text" size={18} color={colors.textDim} />
               )}
               <Text text={item.title} size="sm" weight="medium" numberOfLines={1} style={$title} />
             </Pressable>

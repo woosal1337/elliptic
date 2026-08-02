@@ -1,7 +1,7 @@
 import { FC } from "react"
 import { Pressable, TextStyle, View, ViewStyle } from "react-native"
-import { Ionicons } from "@expo/vector-icons"
 
+import { AppIcon } from "@/components/AppIcon"
 import { StatusIcon, TaskStatus } from "@/components/StatusIcon"
 import { Text } from "@/components/Text"
 import { useAppTheme } from "@/theme/context"
@@ -43,8 +43,8 @@ export const SectionHeader: FC<SectionHeaderProps> = ({
       {onToggle ? (
         <>
           <View style={$spacer} />
-          <Ionicons
-            name={collapsed ? "chevron-forward" : "chevron-down"}
+          <AppIcon
+            name={collapsed ? "chevron-right" : "chevron-down"}
             size={14}
             color={colors.textDim}
           />

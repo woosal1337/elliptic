@@ -1,8 +1,8 @@
 import { FC } from "react"
 import { TextStyle, View } from "react-native"
-import { Ionicons } from "@expo/vector-icons"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
+import { AppIcon } from "@/components/AppIcon"
 import { Avatar } from "@/components/Avatar"
 import { ListRow } from "@/components/ListRow"
 import { Text } from "@/components/Text"
@@ -45,7 +45,7 @@ export const SwitchWorkspaceScreen: FC<AppStackScreenProps<"SwitchWorkspace">> =
           left={<Avatar name={org.name} size={32} />}
           right={
             activeOrg?.id === org.id ? (
-              <Ionicons name="checkmark" size={18} color={colors.tint} />
+              <AppIcon name="check" size={18} color={colors.tint} />
             ) : undefined
           }
           onPress={() => {

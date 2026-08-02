@@ -1,7 +1,7 @@
 import { FC, useEffect, useLayoutEffect, useState } from "react"
 import { Alert, Pressable, TextStyle, View, ViewStyle } from "react-native"
-import { Ionicons } from "@expo/vector-icons"
 
+import { AppIcon } from "@/components/AppIcon"
 import { Markdown } from "@/components/Markdown"
 import { Screen } from "@/components/Screen"
 import { Skeleton } from "@/components/Skeleton"
@@ -106,14 +106,10 @@ export const NoteDetailScreen: FC<NotesStackScreenProps<"NoteDetail">> = ({
             hitSlop={8}
             accessibilityLabel={mode === "preview" ? "Edit note" : "Preview note"}
           >
-            <Ionicons
-              name={mode === "preview" ? "create-outline" : "eye-outline"}
-              size={20}
-              color={colors.text}
-            />
+            <AppIcon name={mode === "preview" ? "pencil" : "eye"} size={20} color={colors.text} />
           </Pressable>
           <Pressable onPress={remove} hitSlop={8}>
-            <Ionicons name="trash-outline" size={20} color={colors.error} />
+            <AppIcon name="trash-2" size={20} color={colors.error} />
           </Pressable>
         </View>
       ),

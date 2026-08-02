@@ -1,7 +1,7 @@
 import { FC, useCallback } from "react"
 import { Pressable, ScrollView, View, ViewStyle } from "react-native"
-import { Ionicons } from "@expo/vector-icons"
 
+import { AppIcon } from "@/components/AppIcon"
 import { EmptyState } from "@/components/EmptyState"
 import { Sheet } from "@/components/Sheet"
 import { Text } from "@/components/Text"
@@ -43,7 +43,7 @@ export const LabelPickerSheet: FC<{
       <ScrollView style={$list}>
         {labels.length === 0 ? (
           <EmptyState
-            icon="pricetag-outline"
+            icon="tag"
             title="No labels yet"
             caption="Labels are created in the web app, then apply to any task here."
           />
@@ -75,7 +75,7 @@ export const LabelPickerSheet: FC<{
                     },
                   ]}
                 >
-                  {active ? <Ionicons name="checkmark" size={14} color={colors.onTint} /> : null}
+                  {active ? <AppIcon name="check" size={14} color={colors.onTint} /> : null}
                 </View>
               </Pressable>
             )

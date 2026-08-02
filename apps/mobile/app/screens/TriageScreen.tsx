@@ -87,7 +87,7 @@ export const TriageScreen: FC<InboxStackScreenProps<"Triage">> = ({ navigation }
           contentContainerStyle={items.length === 0 ? $grow : $bottomClearance}
           ListEmptyComponent={
             <EmptyState
-              icon="albums-outline"
+              icon="layers"
               title="Nothing to triage"
               caption="Incoming work will land here for you to accept."
             />
@@ -98,7 +98,7 @@ export const TriageScreen: FC<InboxStackScreenProps<"Triage">> = ({ navigation }
                 {
                   key: "accept",
                   label: "Accept",
-                  icon: "checkmark",
+                  icon: "check",
                   background: colors.success,
                   onPress: () => accept(item),
                 },
@@ -107,14 +107,14 @@ export const TriageScreen: FC<InboxStackScreenProps<"Triage">> = ({ navigation }
                 {
                   key: "snooze",
                   label: "Snooze",
-                  icon: "time-outline",
+                  icon: "clock",
                   background: colors.warning,
                   onPress: () => snooze(item),
                 },
                 {
                   key: "decline",
                   label: "Decline",
-                  icon: "close",
+                  icon: "x",
                   background: colors.error,
                   onPress: () => setDeclineFor(item),
                 },

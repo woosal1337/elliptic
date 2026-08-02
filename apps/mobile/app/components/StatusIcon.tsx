@@ -1,7 +1,7 @@
 import { FC } from "react"
 import { View, ViewStyle } from "react-native"
-import { Ionicons } from "@expo/vector-icons"
 
+import { AppIcon } from "@/components/AppIcon"
 import { useAppTheme } from "@/theme/context"
 
 export type TaskStatus =
@@ -35,14 +35,14 @@ export const StatusIcon: FC<{ status: TaskStatus; size?: number }> = ({ status, 
   if (status === "done") {
     return (
       <View style={[ring, { backgroundColor: color }]}>
-        <Ionicons name="checkmark" size={size * 0.68} color={colors.onTint} />
+        <AppIcon name="check" size={size * 0.68} color={colors.onTint} />
       </View>
     )
   }
   if (status === "cancelled") {
     return (
       <View style={[ring, { backgroundColor: color }]}>
-        <Ionicons name="close" size={size * 0.68} color={colors.onTint} />
+        <AppIcon name="x" size={size * 0.68} color={colors.onTint} />
       </View>
     )
   }
@@ -75,7 +75,10 @@ export const StatusIcon: FC<{ status: TaskStatus; size?: number }> = ({ status, 
   )
 }
 
-function statusColor(status: TaskStatus, colors: ReturnType<typeof useAppTheme>["theme"]["colors"]) {
+function statusColor(
+  status: TaskStatus,
+  colors: ReturnType<typeof useAppTheme>["theme"]["colors"],
+) {
   switch (status) {
     case "todo":
       return colors.statusTodo

@@ -85,7 +85,7 @@ export const ProjectDetailScreen: FC<HomeStackScreenProps<"ProjectDetail">> = ({
         )}
         ListEmptyComponent={
           <EmptyState
-            icon="cube-outline"
+            icon="box"
             title="No tasks yet"
             caption="Tasks in this project will show up here."
           />

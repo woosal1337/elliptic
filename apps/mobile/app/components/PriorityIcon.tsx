@@ -1,7 +1,7 @@
 import { FC } from "react"
 import { View, ViewStyle } from "react-native"
-import { Ionicons } from "@expo/vector-icons"
 
+import { AppIcon } from "@/components/AppIcon"
 import { useAppTheme } from "@/theme/context"
 
 export type TaskPriority = "none" | "low" | "medium" | "high" | "urgent" | string
@@ -31,7 +31,7 @@ export const PriorityIcon: FC<{ priority: TaskPriority; size?: number }> = ({
           justifyContent: "center",
         }}
       >
-        <Ionicons name="alert" size={size * 0.82} color={colors.onError} />
+        <AppIcon name="triangle-alert" size={size * 0.82} color={colors.onError} />
       </View>
     )
   }

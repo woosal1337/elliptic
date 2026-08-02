@@ -1,8 +1,8 @@
 import { FC, useCallback, useMemo, useState } from "react"
 import { Pressable, RefreshControl, SectionList, View, ViewStyle } from "react-native"
-import { Ionicons } from "@expo/vector-icons"
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs"
 
+import { AppIcon, type IconName } from "@/components/AppIcon"
 import { EmptyState } from "@/components/EmptyState"
 import { Screen } from "@/components/Screen"
 import { ScreenHeader } from "@/components/ScreenHeader"
@@ -31,12 +31,12 @@ const FILTERS: { key: Filter; label: string }[] = [
 ]
 
 /** Icon for the entity a notification points at (Linear-style, not the actor). */
-const ENTITY_ICONS: Record<string, keyof typeof Ionicons.glyphMap> = {
-  task: "checkbox-outline",
-  note: "document-text-outline",
-  project: "folder-open-outline",
-  meeting: "calendar-outline",
-  sticky: "reader-outline",
+const ENTITY_ICONS: Record<string, IconName> = {
+  task: "square-check",
+  note: "file-text",
+  project: "folder-open",
+  meeting: "calendar",
+  sticky: "sticky-note",
 }
 
 /** Map a notification type to a short human reason line. */
@@ -152,13 +152,13 @@ export const NotificationsScreen: FC<InboxStackScreenProps<"Notifications">> = (
         actions={[
           {
             key: "read-all",
-            icon: "checkmark-done-outline",
+            icon: "check-check",
             label: "Mark all read",
             onPress: markAll,
           },
           {
             key: "triage",
-            icon: "file-tray-outline",
+            icon: "inbox",
             label: "Triage",
             emphasis: true,
             onPress: () => navigation.navigate("Triage"),
@@ -184,7 +184,7 @@ export const NotificationsScreen: FC<InboxStackScreenProps<"Notifications">> = (
           )}
           ListEmptyComponent={
             <EmptyState
-              icon="file-tray-outline"
+              icon="inbox"
               title="You're all caught up"
               caption="New activity will show up here."
             />
@@ -199,7 +199,7 @@ export const NotificationsScreen: FC<InboxStackScreenProps<"Notifications">> = (
                         {
                           key: "read",
                           label: "Read",
-                          icon: "mail-open-outline",
+                          icon: "mail-open",
                           background: colors.tint,
                           onPress: () => markRead(item),
                         },
@@ -210,14 +210,14 @@ export const NotificationsScreen: FC<InboxStackScreenProps<"Notifications">> = (
                   {
                     key: "snooze",
                     label: "Snooze",
-                    icon: "time-outline",
+                    icon: "clock",
                     background: colors.warning,
                     onPress: () => snooze(item),
                   },
                   {
                     key: "archive",
                     label: "Archive",
-                    icon: "archive-outline",
+                    icon: "archive",
                     background: colors.textDim,
                     onPress: () => archive(item),
                   },
@@ -237,7 +237,7 @@ export const NotificationsScreen: FC<InboxStackScreenProps<"Notifications">> = (
                   <View
                     style={[$iconTile, { backgroundColor: colors.muted, borderRadius: radius.md }]}
                   >
-                    <Ionicons
+                    <AppIcon
                       name={ENTITY_ICONS[item.entity_type] ?? "notifications-outline"}
                       size={18}
                       color={unread ? colors.tint : colors.textDim}
