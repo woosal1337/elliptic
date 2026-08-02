@@ -1,15 +1,6 @@
 "use client";
 
-import {
-  AlertOctagon,
-  Ban,
-  Bug,
-  MoreHorizontal,
-  SignalHigh,
-  SignalLow,
-  SignalMedium,
-  type LucideIcon,
-} from "lucide-react";
+import { Ban, Bug } from "lucide-react";
 import {
   Badge,
   Select,
@@ -168,12 +159,75 @@ export function PriorityDot({ priority }: { priority: TaskPriority }) {
   );
 }
 
-export const PRIORITY_ICONS: Record<TaskPriority, LucideIcon> = {
-  none: MoreHorizontal,
-  low: SignalLow,
-  medium: SignalMedium,
-  high: SignalHigh,
-  urgent: AlertOctagon,
+/**
+ * Priority bars, after the circle reference (MIT, ln-dev7/circle).
+ *
+ * lucide's Signal* glyphs are wifi arcs, which read as connectivity rather than
+ * urgency. Three ascending bars — dimmed for the levels a task has not reached —
+ * is the language this kind of tool uses, and the mobile app already draws it.
+ */
+type GlyphProps = { className?: string };
+
+const BAR_LOW = { x: 1.5, y: 8, width: 3, height: 6 } as const;
+const BAR_MID = { x: 6.5, y: 5, width: 3, height: 9 } as const;
+const BAR_HIGH = { x: 11.5, y: 2, width: 3, height: 12 } as const;
+const DIM = 0.35;
+
+function Bars({ lit, className }: { lit: 0 | 1 | 2 | 3 } & GlyphProps) {
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      fill="currentColor"
+      className={className}
+      role="img"
+      focusable="false"
+      aria-hidden="true"
+    >
+      <rect {...BAR_LOW} rx={1} fillOpacity={lit >= 1 ? 1 : DIM} />
+      <rect {...BAR_MID} rx={1} fillOpacity={lit >= 2 ? 1 : DIM} />
+      <rect {...BAR_HIGH} rx={1} fillOpacity={lit >= 3 ? 1 : DIM} />
+    </svg>
+  );
+}
+
+function NoPriorityGlyph({ className }: GlyphProps) {
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      fill="currentColor"
+      className={className}
+      role="img"
+      focusable="false"
+      aria-hidden="true"
+    >
+      <rect x={1.5} y={7.25} width={3} height={1.5} rx={0.5} opacity={0.9} />
+      <rect x={6.5} y={7.25} width={3} height={1.5} rx={0.5} opacity={0.9} />
+      <rect x={11.5} y={7.25} width={3} height={1.5} rx={0.5} opacity={0.9} />
+    </svg>
+  );
+}
+
+function UrgentGlyph({ className }: GlyphProps) {
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      fill="currentColor"
+      className={className}
+      role="img"
+      focusable="false"
+      aria-hidden="true"
+    >
+      <path d="M3 1C1.91067 1 1 1.91067 1 3V13C1 14.0893 1.91067 15 3 15H13C14.0893 15 15 14.0893 15 13V3C15 1.91067 14.0893 1 13 1H3ZM7 4L9 4L8.75391 8.99836H7.25L7 4ZM9 11C9 11.5523 8.55228 12 8 12C7.44772 12 7 11.5523 7 11C7 10.4477 7.44772 10 8 10C8.55228 10 9 10.4477 9 11Z" />
+    </svg>
+  );
+}
+
+const PRIORITY_GLYPHS: Record<TaskPriority, (p: GlyphProps) => React.ReactElement> = {
+  none: NoPriorityGlyph,
+  low: (p) => <Bars lit={1} {...p} />,
+  medium: (p) => <Bars lit={2} {...p} />,
+  high: (p) => <Bars lit={3} {...p} />,
+  urgent: UrgentGlyph,
 };
 
 export const PRIORITY_ICON_CLASSES: Record<TaskPriority, string> = {
@@ -191,15 +245,10 @@ export function PriorityGlyph({
   priority: TaskPriority;
   className?: string;
 }) {
-  const Icon = PRIORITY_ICONS[priority];
-  const isUrgent = priority === "urgent";
+  const Glyph = PRIORITY_GLYPHS[priority];
   return (
     <span className={cn("inline-flex shrink-0", PRIORITY_ICON_CLASSES[priority], className)}>
-      <Icon
-        className={cn("size-3.5", isUrgent && "fill-danger/15")}
-        strokeWidth={isUrgent ? 2.25 : 2}
-        aria-hidden="true"
-      />
+      <Glyph className="size-3.5" />
     </span>
   );
 }
