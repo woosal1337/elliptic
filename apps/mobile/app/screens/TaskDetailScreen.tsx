@@ -26,6 +26,7 @@ import { GlassContainer, GlassField, GlassIconButton, GlassSurface } from "@/com
 import { LabelRow } from "@/components/LabelChip"
 import { LabelPickerSheet } from "@/components/LabelPickerSheet"
 import { Markdown } from "@/components/Markdown"
+import { MarkdownEditor } from "@/components/MarkdownEditor"
 import { OptionSheet } from "@/components/OptionSheet"
 import { PriorityIcon } from "@/components/PriorityIcon"
 import { Screen } from "@/components/Screen"
@@ -101,10 +102,6 @@ export const TaskDetailScreen: FC<TasksStackScreenProps<"TaskDetail">> = ({
   // Title and description edit in place and commit on blur; null means "reading".
   const [titleDraft, setTitleDraft] = useState<string | null>(null)
   const [descriptionDraft, setDescriptionDraft] = useState<string | null>(null)
-  // Pin the caret to the top for the first frame, then hand control back.
-  const [descriptionCaret, setDescriptionCaret] = useState<
-    { start: number; end: number } | undefined
-  >()
 
   const load = useCallback(async () => {
     if (!activeOrg) return
@@ -502,7 +499,6 @@ export const TaskDetailScreen: FC<TasksStackScreenProps<"TaskDetail">> = ({
           {descriptionDraft === null ? (
             <Pressable
               onPress={() => {
-                setDescriptionCaret({ start: 0, end: 0 })
                 setDescriptionDraft(task.description ?? "")
               }}
               accessible
@@ -521,18 +517,13 @@ export const TaskDetailScreen: FC<TasksStackScreenProps<"TaskDetail">> = ({
               )}
             </Pressable>
           ) : (
-            <GlassField
+            <MarkdownEditor
               value={descriptionDraft}
-              onChangeText={setDescriptionDraft}
+              onChangeMarkdown={setDescriptionDraft}
               placeholder="Describe this task…"
-              multiline
               autoFocus
               minHeight={220}
-              maxHeight={520}
-              style={$descriptionInput}
-              selection={descriptionCaret}
-              onSelectionChange={() => setDescriptionCaret(undefined)}
-              containerStyle={{ marginTop: spacing.xs }}
+              style={{ marginTop: spacing.xs }}
               onBlur={() => void commitDescription()}
             />
           )}

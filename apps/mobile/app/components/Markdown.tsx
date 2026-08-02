@@ -1,79 +1,132 @@
 import { FC, Fragment, ReactNode } from "react"
 import { Linking, TextStyle, View, ViewStyle } from "react-native"
 
+import { CODE_STYLE, headingStyle } from "@/components/markdownStyles"
 import { Text } from "@/components/Text"
 import { useAppTheme } from "@/theme/context"
 import { typography } from "@/theme/typography"
+import { parseBlocks, parseInline, type Block, type Span } from "@/utils/markdown"
 
-const INLINE = /(\*\*[^*]+\*\*|`[^`]+`|\[[^\]]+\]\([^)]+\))/g
-
-/** Lightweight read-only markdown for task descriptions / comments (RN). */
+/**
+ * Read-only markdown for task descriptions, comments and notes.
+ *
+ * The grammar it understands is deliberately the same one the web's TipTap
+ * editor can write, because both surfaces read and write the same column — a
+ * description composed on the web used to arrive here with its `####`, `1.`,
+ * `>`, fences and `~~` showing as literal characters.
+ */
 export const Markdown: FC<{ source: string }> = ({ source }) => {
   const {
     theme: { colors },
   } = useAppTheme()
 
-  const renderInline = (text: string): ReactNode[] =>
-    text.split(INLINE).map((part, i) => {
-      if (part.startsWith("**") && part.endsWith("**")) {
-        return <Text key={i} weight="semiBold" text={part.slice(2, -2)} />
-      }
-      if (part.startsWith("`") && part.endsWith("`") && part.length > 2) {
-        return (
-          <Text
-            key={i}
-            text={part.slice(1, -1)}
-            style={[$code, { backgroundColor: colors.subtle, color: colors.text }]}
-          />
-        )
-      }
-      const link = /^\[([^\]]+)\]\(([^)]+)\)$/.exec(part)
-      if (link && link[1] && link[2]) {
-        const href = link[2]
-        const safe = href.startsWith("/") || /^https?:\/\/|^mailto:/i.test(href)
-        if (safe) {
+  const renderSpans = (spans: Span[], keyPrefix: string): ReactNode[] =>
+    spans.map((span, i) => {
+      const key = `${keyPrefix}-${i}`
+      switch (span.kind) {
+        case "bold":
+          return <Text key={key} weight="semiBold" text={span.text} />
+        case "italic":
+          return <Text key={key} style={$italic} text={span.text} />
+        case "boldItalic":
+          return <Text key={key} weight="semiBold" style={$italic} text={span.text} />
+        case "strike":
+          return <Text key={key} style={$strike} text={span.text} />
+        case "code":
           return (
             <Text
-              key={i}
-              text={link[1]}
-              style={{ color: colors.tint }}
-              onPress={() => void Linking.openURL(href)}
+              key={key}
+              text={span.text}
+              style={[$code, { backgroundColor: colors.subtle, color: colors.text }]}
             />
           )
-        }
-        return <Fragment key={i}>{link[1]}</Fragment>
+        case "link":
+          return (
+            <Text
+              key={key}
+              text={span.text}
+              style={{ color: colors.tint }}
+              onPress={() => void Linking.openURL(span.href)}
+            />
+          )
+        default:
+          return <Fragment key={key}>{span.text}</Fragment>
       }
-      return <Fragment key={i}>{part}</Fragment>
     })
 
-  const lines = source.split("\n")
-  return (
-    <View style={$block}>
-      {lines.map((line, idx) => {
-        if (line.trim().length === 0) return null
-        const heading = /^(#{1,3})\s+(.*)$/.exec(line)
-        if (heading && heading[2] !== undefined) {
-          return (
-            <Text key={idx} style={$heading}>
-              {renderInline(heading[2])}
-            </Text>
-          )
-        }
-        const bullet = /^\s*[-*]\s+(.*)$/.exec(line)
-        if (bullet && bullet[1] !== undefined) {
-          return <Text key={idx}>{["•  ", ...renderInline(bullet[1])]}</Text>
-        }
+  const renderBlock = (block: Block, key: number): ReactNode => {
+    switch (block.kind) {
+      case "blank":
+        return null
+
+      case "heading":
         return (
-          <Text key={idx} style={$para}>
-            {renderInline(line)}
+          <Text key={key} style={headingStyle(block.level)}>
+            {renderSpans(parseInline(block.text), String(key))}
           </Text>
         )
-      })}
-    </View>
-  )
+
+      case "bullet":
+        return (
+          <View key={key} style={[$row, { paddingLeft: block.indent * 8 }]}>
+            <Text text="•" style={[$marker, { color: colors.textDim }]} />
+            <Text style={$flex}>{renderSpans(parseInline(block.text), String(key))}</Text>
+          </View>
+        )
+
+      case "ordered":
+        return (
+          <View key={key} style={[$row, { paddingLeft: block.indent * 8 }]}>
+            <Text text={block.marker} style={[$marker, { color: colors.textDim }]} />
+            <Text style={$flex}>{renderSpans(parseInline(block.text), String(key))}</Text>
+          </View>
+        )
+
+      case "quote":
+        return (
+          <View key={key} style={[$quote, { borderLeftColor: colors.borderStrong }]}>
+            <Text style={{ color: colors.textDim }}>
+              {renderSpans(parseInline(block.text), String(key))}
+            </Text>
+          </View>
+        )
+
+      case "code":
+        return (
+          <View key={key} style={[$codeBlock, { backgroundColor: colors.subtle }]}>
+            <Text text={block.lines.join("\n")} style={[$codeText, { color: colors.text }]} />
+          </View>
+        )
+
+      case "rule":
+        return <View key={key} style={[$rule, { backgroundColor: colors.border }]} />
+
+      // Grammar the parser does not model (tables, HTML, footnotes) shows as
+      // its own source rather than vanishing — visible beats silently dropped.
+      case "raw":
+        return <Text key={key} text={block.text} style={[$para, { color: colors.textDim }]} />
+
+      default:
+        return (
+          <Text key={key} style={$para}>
+            {renderSpans(parseInline(block.text), String(key))}
+          </Text>
+        )
+    }
+  }
+
+  return <View style={$block}>{parseBlocks(source).map(renderBlock)}</View>
 }
 
 const $block: ViewStyle = { gap: 6 }
+const $flex: ViewStyle = { flex: 1 }
+const $row: ViewStyle = { flexDirection: "row", gap: 8 }
+const $marker: TextStyle = { minWidth: 16 }
+const $italic: TextStyle = { fontStyle: "italic" }
+const $strike: TextStyle = { textDecorationLine: "line-through" }
 const $code: TextStyle = { fontFamily: typography.code.normal, fontSize: 13, borderRadius: 4 }
-const $heading: TextStyle = { fontFamily: typography.display.semiBold, fontSize: 17 }
+const $codeBlock: ViewStyle = { borderRadius: 8, padding: 10 }
+const $codeText: TextStyle = { ...CODE_STYLE }
+const $quote: ViewStyle = { borderLeftWidth: 3, paddingLeft: 10 }
+const $rule: ViewStyle = { height: 1, marginVertical: 4 }
 const $para: TextStyle = { lineHeight: 22 }
