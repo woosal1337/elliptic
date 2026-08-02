@@ -1,7 +1,7 @@
 import { FC, Fragment, ReactNode } from "react"
 import { Linking, TextStyle, View, ViewStyle } from "react-native"
 
-import { CODE_STYLE, headingStyle } from "@/components/markdownStyles"
+import { CODE_STYLE, headingStyle, ITALIC_STYLE } from "@/components/markdownStyles"
 import { Text } from "@/components/Text"
 import { useAppTheme } from "@/theme/context"
 import { typography } from "@/theme/typography"
@@ -27,9 +27,9 @@ export const Markdown: FC<{ source: string }> = ({ source }) => {
         case "bold":
           return <Text key={key} weight="semiBold" text={span.text} />
         case "italic":
-          return <Text key={key} style={$italic} text={span.text} />
+          return <Text key={key} style={ITALIC_STYLE} text={span.text} />
         case "boldItalic":
-          return <Text key={key} weight="semiBold" style={$italic} text={span.text} />
+          return <Text key={key} weight="semiBold" style={ITALIC_STYLE} text={span.text} />
         case "strike":
           return <Text key={key} style={$strike} text={span.text} />
         case "code":
@@ -122,7 +122,7 @@ const $block: ViewStyle = { gap: 6 }
 const $flex: ViewStyle = { flex: 1 }
 const $row: ViewStyle = { flexDirection: "row", gap: 8 }
 const $marker: TextStyle = { minWidth: 16 }
-const $italic: TextStyle = { fontStyle: "italic" }
+
 const $strike: TextStyle = { textDecorationLine: "line-through" }
 const $code: TextStyle = { fontFamily: typography.code.normal, fontSize: 13, borderRadius: 4 }
 const $codeBlock: ViewStyle = { borderRadius: 8, padding: 10 }

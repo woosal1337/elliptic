@@ -866,7 +866,6 @@ const $fill: ViewStyle = { flex: 1 }
 // Both editors mirror what they replace: the title is the `heading` preset,
 // the description is body text as the Markdown renderer sets it.
 const $titleInput: TextStyle = { ...textSizeStyles.xxl, ...displayFontStyles.bold }
-const $descriptionInput: TextStyle = { ...textSizeStyles.sm }
 const $scrollContent: ViewStyle = { paddingBottom: 24 }
 // The composer is pinned below the scrolling body (C2) — Screen's keyboard
 // avoidance lifts it, so it stays reachable with the keyboard up.

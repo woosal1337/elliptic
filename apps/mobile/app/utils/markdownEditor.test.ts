@@ -72,7 +72,7 @@ describe("round trip", () => {
 
   it("classifies every line kind the renderer styles", () => {
     const kinds = toLines("# h\ntext\n- b\n1. o\n> q\n```\ncode\n```\n| t |").map(
-      (l) => l.kind.type
+      (l) => l.kind.type,
     )
     expect(kinds).toEqual([
       "heading",

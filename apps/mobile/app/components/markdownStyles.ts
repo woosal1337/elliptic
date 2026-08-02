@@ -32,6 +32,17 @@ export const CODE_STYLE: TextStyle = {
   lineHeight: 19,
 }
 
+/**
+ * Italic runs.
+ *
+ * Inter ships no italic face here, and iOS will not synthesise one for a
+ * custom family — `fontStyle: "italic"` on Inter silently renders upright. The
+ * system face does have a true italic, so emphasis borrows it. The family
+ * shifts for those few words, which is a smaller wrong than emphasis that does
+ * not show at all.
+ */
+export const ITALIC_STYLE: TextStyle = { fontFamily: "System", fontStyle: "italic" }
+
 export function headingStyle(level: number): TextStyle {
   return { ...HEADING_SIZES[level], fontFamily: typography.display.semiBold }
 }
@@ -42,7 +53,7 @@ export function lineStyle(kind: LineKind, colors: Theme["colors"]): TextStyle {
     case "heading":
       return headingStyle(kind.level)
     case "quote":
-      return { ...BODY_STYLE, color: colors.textDim, fontStyle: "italic" }
+      return { ...BODY_STYLE, ...ITALIC_STYLE, color: colors.textDim }
     case "code":
       return { ...CODE_STYLE, color: colors.textDim }
     case "raw":

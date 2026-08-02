@@ -6,7 +6,7 @@ import { FC, ReactNode, useCallback, useMemo, useState } from "react"
 // eslint-disable-next-line no-restricted-imports
 import { Text as RNText, TextInput, TextStyle, View, ViewStyle } from "react-native"
 
-import { BODY_STYLE, lineStyle } from "@/components/markdownStyles"
+import { BODY_STYLE, ITALIC_STYLE, lineStyle } from "@/components/markdownStyles"
 import { useAppTheme } from "@/theme/context"
 import { typography } from "@/theme/typography"
 import { parseInline } from "@/utils/markdown"
@@ -134,9 +134,9 @@ function renderInline(
       case "bold":
         return wrapped("**", { fontFamily: typography.primary.semiBold })
       case "italic":
-        return wrapped("*", $italic)
+        return wrapped("*", ITALIC_STYLE)
       case "boldItalic":
-        return wrapped("***", { ...$italic, fontFamily: typography.primary.semiBold })
+        return wrapped("***", { ...ITALIC_STYLE, fontWeight: "600" })
       case "strike":
         return wrapped("~~", $strike)
       case "code":
@@ -157,5 +157,5 @@ function renderInline(
 
 const $wrap: ViewStyle = { borderWidth: 1 }
 const $input: TextStyle = { ...BODY_STYLE, fontFamily: typography.primary.normal }
-const $italic: TextStyle = { fontStyle: "italic" }
+
 const $strike: TextStyle = { textDecorationLine: "line-through" }
