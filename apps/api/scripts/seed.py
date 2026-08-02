@@ -28,15 +28,120 @@ from elliptic.modules.tasks.models import TaskPriority, TaskStatus
 DEMO_EMAIL = "ege@elliptic.sh"
 DEMO_PASSWORD = "password"
 
-TASKS: list[tuple[str, TaskStatus, TaskPriority]] = [
-    ("Set up CI pipeline", TaskStatus.DONE, TaskPriority.HIGH),
-    ("Design the org settings page", TaskStatus.IN_REVIEW, TaskPriority.MEDIUM),
-    ("Implement BYOK key rotation", TaskStatus.IN_PROGRESS, TaskPriority.URGENT),
-    ("Write onboarding docs", TaskStatus.IN_PROGRESS, TaskPriority.LOW),
-    ("Folio import edge cases", TaskStatus.TODO, TaskPriority.HIGH),
-    ("Meeting chat streaming v2", TaskStatus.TODO, TaskPriority.MEDIUM),
-    ("Audit log retention policy", TaskStatus.BACKLOG, TaskPriority.NONE),
-    ("Evaluate RLS rollout", TaskStatus.BACKLOG, TaskPriority.LOW),
+TASKS: list[tuple[str, TaskStatus, TaskPriority, str]] = [
+    # Deliberately silly, so it is obvious at a glance that you are looking at
+    # seeded data and not somebody's real board.
+    (
+        "Teach the standup bot to read the room",
+        TaskStatus.IN_PROGRESS,
+        TaskPriority.URGENT,
+        'It currently replies **"great question!"** to silence. Twice.',
+    ),
+    (
+        "Rename `utils2.ts` before anyone notices",
+        TaskStatus.IN_PROGRESS,
+        TaskPriority.HIGH,
+        "There is also a `utils2.final.ts`. We do not talk about it.",
+    ),
+    (
+        "Convince the CSS to centre the div",
+        TaskStatus.IN_PROGRESS,
+        TaskPriority.MEDIUM,
+        "Tried `flex`. Tried `grid`. Tried asking nicely.\n\nNext: `margin: 0 auto` and a candle.",
+    ),
+    (
+        "Reply to the email from three weeks ago",
+        TaskStatus.IN_PROGRESS,
+        TaskPriority.LOW,
+        'Opening line options:\n\n- "Apologies for the delay"\n- "Circling back"\n- emigrate',
+    ),
+    (
+        "Add a loading spinner that spins the right way",
+        TaskStatus.TODO,
+        TaskPriority.HIGH,
+        "Widdershins is apparently *not* a supported value.",
+    ),
+    (
+        "Investigate why the tests pass on Fridays",
+        TaskStatus.TODO,
+        TaskPriority.URGENT,
+        "Hypothesis: the tests are also tired.",
+    ),
+    (
+        "Write a changelog nobody will read",
+        TaskStatus.TODO,
+        TaskPriority.MEDIUM,
+        "Include one lie to see if anyone is paying attention.",
+    ),
+    (
+        "Buy a bigger monitor to fit the stack trace",
+        TaskStatus.TODO,
+        TaskPriority.LOW,
+        "Current record: 41 frames, 9 of them `node_modules`.",
+    ),
+    (
+        "Name the staging server something dignified",
+        TaskStatus.TODO,
+        TaskPriority.NONE,
+        "`beefy-badger-2` has been in production for a year.",
+    ),
+    (
+        "Explain the sprint to the cat",
+        TaskStatus.IN_REVIEW,
+        TaskPriority.MEDIUM,
+        "She has notes. They are mostly about the sprint being too long.",
+    ),
+    (
+        "Remove the `// TODO: fix this properly` from 2019",
+        TaskStatus.IN_REVIEW,
+        TaskPriority.LOW,
+        "It has outlasted two rewrites and one company rename.",
+    ),
+    ("Ship it", TaskStatus.DONE, TaskPriority.URGENT, "It shipped. Nobody is entirely sure how."),
+    (
+        "Turn it off and on again",
+        TaskStatus.DONE,
+        TaskPriority.HIGH,
+        "Worked. Filed under *engineering*.",
+    ),
+    ("Blame the cache", TaskStatus.DONE, TaskPriority.MEDIUM, "It was, in fairness, the cache."),
+    (
+        "Add one more `!important`",
+        TaskStatus.DONE,
+        TaskPriority.LOW,
+        "That makes four on the same rule. The div is centred now.",
+    ),
+    (
+        "Read the documentation",
+        TaskStatus.BACKLOG,
+        TaskPriority.NONE,
+        "Filed under *someday*, next to *learn Rust properly*.",
+    ),
+    ("Refactor everything, tastefully", TaskStatus.BACKLOG, TaskPriority.LOW, "Scope: yes."),
+    (
+        "Achieve inbox zero",
+        TaskStatus.BACKLOG,
+        TaskPriority.NONE,
+        "Current: 4,812. Trending the wrong way.",
+    ),
+    (
+        "Migrate off the thing we migrated to last year",
+        TaskStatus.BACKLOG,
+        TaskPriority.MEDIUM,
+        "It is fine. It is just that there is a newer one now.",
+    ),
+    (
+        'Duplicate of "Ship it"',
+        TaskStatus.DUPLICATE,
+        TaskPriority.LOW,
+        "Kept so the duplicate status has something to render.",
+    ),
+    (
+        "Rewrite it in a language with no users",
+        TaskStatus.CANCELLED,
+        TaskPriority.LOW,
+        "Cancelled after the third meeting about the meeting.",
+    ),
 ]
 
 SEGMENTS: list[tuple[str, float, float, str]] = [
@@ -84,13 +189,14 @@ async def seed() -> None:
         await session.flush()
         session.add(ProjectMember(org_id=org.id, project_id=project.id, user_id=user.id))
 
-        for index, (title, task_status, priority) in enumerate(TASKS, start=1):
+        for index, (title, task_status, priority, description) in enumerate(TASKS, start=1):
             session.add(
                 Task(
                     org_id=org.id,
                     project_id=project.id,
                     number=index,
                     title=title,
+                    description=description,
                     status=task_status,
                     priority=priority,
                     assignee_id=user.id if index % 2 == 0 else None,
