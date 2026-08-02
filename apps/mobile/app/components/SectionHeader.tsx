@@ -87,4 +87,6 @@ const $header: ViewStyle = {
   paddingBottom: 8,
 }
 const $spacer: ViewStyle = { flex: 1 }
-const $title: TextStyle = { textTransform: "uppercase", letterSpacing: 0.5 }
+// Set in the label's own case. Uppercasing shouts, and at this size it also
+// costs legibility — "In Progress" reads faster than "IN PROGRESS".
+const $title: TextStyle = { letterSpacing: -0.1 }

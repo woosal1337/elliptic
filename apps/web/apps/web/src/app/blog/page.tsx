@@ -24,7 +24,7 @@ export default function BlogIndexPage() {
       <SiteNav />
       <main className="flex-1">
         <div className="mx-auto flex w-full max-w-3xl flex-col px-6 py-16 lg:py-24">
-          <p className="font-mono text-mono-label uppercase text-muted-foreground">Blog</p>
+          <p className="font-mono text-mono-label text-muted-foreground">Blog</p>
           <h1 className="mt-3 font-display text-h1 font-semibold tracking-[-0.02em] text-foreground">
             The Elliptic blog
           </h1>
@@ -36,7 +36,7 @@ export default function BlogIndexPage() {
             {sortedPosts.map((post) => (
               <li key={post.slug} className="border-t border-border first:border-t-0">
                 <Link href={`/blog/${post.slug}`} className="group flex flex-col gap-2 py-8">
-                  <span className="font-mono text-mono-label uppercase text-muted-foreground">
+                  <span className="font-mono text-mono-label text-muted-foreground">
                     {formatPostDate(post.date)}
                   </span>
                   <span className="font-display text-h3 font-semibold text-foreground transition-colors duration-150 group-hover:text-accent">

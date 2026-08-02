@@ -34,7 +34,7 @@ export function DayEventsPopover({
         </button>
       </PopoverTrigger>
       <PopoverContent align="start" side="bottom" sideOffset={6} className="w-64 p-2">
-        <p className="px-1.5 pb-1.5 text-caption font-mono uppercase tracking-wide text-muted-foreground">
+        <p className="px-1.5 pb-1.5 text-caption font-mono text-muted-foreground">
           {formatDayHeading(date)}
         </p>
         <div className="flex flex-col gap-0.5">

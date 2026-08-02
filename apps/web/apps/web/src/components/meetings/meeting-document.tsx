@@ -351,7 +351,7 @@ function SummarySectionBlock({
     <section className="flex flex-col gap-2">
       <header className="flex items-center gap-2">
         <Icon className={`size-3.5 ${meta.tone}`} aria-hidden />
-        <h4 className="text-mono-label font-mono uppercase tracking-wide text-muted-foreground">
+        <h4 className="text-mono-label font-mono text-muted-foreground">
           {meta.label}
         </h4>
         <span className="text-caption tabular-nums text-muted-foreground/60">

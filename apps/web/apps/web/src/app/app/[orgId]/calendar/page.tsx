@@ -145,7 +145,7 @@ export default function CalendarPage() {
             {WEEKDAY_LABELS.map((label) => (
               <div
                 key={label}
-                className="px-2 py-2 text-center text-mono-label font-mono uppercase text-muted-foreground"
+                className="px-2 py-2 text-center text-mono-label font-mono text-muted-foreground"
               >
                 {label}
               </div>

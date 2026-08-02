@@ -219,7 +219,7 @@ export function ProjectBrief({ orgId, projectId }: { orgId: string; projectId: s
 
       <aside className="flex flex-col gap-5">
         <section className="flex flex-col gap-3">
-          <h2 className="text-mono-label font-mono uppercase text-muted-foreground">
+          <h2 className="text-mono-label font-mono text-muted-foreground">
             Metadata
           </h2>
           <dl className="flex flex-col gap-2.5">
@@ -251,7 +251,7 @@ export function ProjectBrief({ orgId, projectId }: { orgId: string; projectId: s
         <Separator />
 
         <section className="flex flex-col gap-3">
-          <h2 className="text-mono-label font-mono uppercase text-muted-foreground">
+          <h2 className="text-mono-label font-mono text-muted-foreground">
             Linked artifacts
           </h2>
           {artifacts.length === 0 ? (

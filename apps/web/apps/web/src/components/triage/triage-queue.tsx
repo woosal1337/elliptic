@@ -163,7 +163,7 @@ function FocusedCard({
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <StatusDot status={task.status} />
-          <span className="text-caption font-medium uppercase tracking-wider text-muted-foreground">
+          <span className="text-caption font-medium text-muted-foreground">
             {CATEGORY_LABELS.backlog}
           </span>
           <Badge variant="outline" className="font-mono">

@@ -25,7 +25,7 @@ export function DocsSidebar({ basePath }: { basePath: string }) {
     <nav className="flex flex-col px-3 pb-12 pt-2" aria-label="Documentation">
       {DOCS_NAV.map((group) => (
         <div key={group.heading}>
-          <div className="px-2.5 pb-1 pt-5 text-caption font-medium uppercase tracking-wider text-muted-foreground/70">
+          <div className="px-2.5 pb-1 pt-5 text-caption font-medium tracking-wider text-muted-foreground/70">
             {group.heading}
           </div>
           <div className="flex flex-col gap-0.5">

@@ -429,7 +429,7 @@ export function ActivityList({
       {groups.map((group) => (
         <section key={group.key} className="flex flex-col">
           <div className="sticky top-0 z-10 -mx-2 mb-2 flex items-baseline gap-2 bg-surface/85 px-2 py-1 backdrop-blur">
-            <h3 className="text-mono-label font-mono uppercase text-muted-foreground">
+            <h3 className="text-mono-label font-mono text-muted-foreground">
               {group.label}
             </h3>
             <span className="tabular text-caption text-muted-foreground/70">
@@ -471,7 +471,7 @@ function SinceDivider() {
   return (
     <div className="my-2 flex items-center gap-3" role="separator">
       <span className="h-px flex-1 bg-accent/40" />
-      <span className="text-mono-label font-mono uppercase text-accent">
+      <span className="text-mono-label font-mono text-accent">
         Since your last visit
       </span>
       <span className="h-px flex-1 bg-accent/40" />

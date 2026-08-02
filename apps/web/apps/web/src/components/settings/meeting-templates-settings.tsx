@@ -147,7 +147,7 @@ export function MeetingTemplatesSettings({ orgId }: { orgId: string }) {
       </CardHeader>
       <CardContent className="flex flex-col gap-5">
         <div className="flex flex-col gap-2">
-          <span className="text-caption font-medium uppercase tracking-wide text-muted-foreground">
+          <span className="text-caption font-medium text-muted-foreground">
             Built-in
           </span>
           <div className="flex flex-col gap-1.5">
@@ -168,7 +168,7 @@ export function MeetingTemplatesSettings({ orgId }: { orgId: string }) {
 
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between">
-            <span className="text-caption font-medium uppercase tracking-wide text-muted-foreground">
+            <span className="text-caption font-medium text-muted-foreground">
               Custom
             </span>
             {!adding ? (

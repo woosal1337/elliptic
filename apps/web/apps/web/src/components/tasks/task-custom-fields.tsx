@@ -117,7 +117,7 @@ export function TaskCustomFields({
 
   return (
     <section className="flex flex-col gap-3">
-      <h3 className="text-mono-label font-mono uppercase tracking-wide text-muted-foreground/70">
+      <h3 className="text-mono-label font-mono text-muted-foreground/70">
         Custom fields
       </h3>
       {props.map((property) => (

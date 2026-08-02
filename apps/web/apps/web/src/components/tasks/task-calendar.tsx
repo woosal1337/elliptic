@@ -104,7 +104,7 @@ export function TaskCalendar({ orgId, projectId }: { orgId: string; projectId: s
         {WEEKDAYS.map((label) => (
           <div
             key={label}
-            className="bg-surface px-2 py-1.5 text-mono-label font-mono uppercase tracking-wide text-muted-foreground/70"
+            className="bg-surface px-2 py-1.5 text-mono-label font-mono text-muted-foreground/70"
           >
             {label}
           </div>

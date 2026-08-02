@@ -75,7 +75,7 @@ export default function TermsPage() {
       <SiteNav />
       <main className="flex-1">
         <div className="mx-auto flex w-full max-w-3xl flex-col px-6 py-16 lg:py-24">
-          <p className="font-mono text-mono-label uppercase text-muted-foreground">Legal</p>
+          <p className="font-mono text-mono-label text-muted-foreground">Legal</p>
           <h1 className="mt-3 font-display text-h1 font-semibold tracking-[-0.02em] text-foreground">
             Terms of Service
           </h1>

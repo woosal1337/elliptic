@@ -204,7 +204,7 @@ export function AutomationsSettings({ orgId }: { orgId: string }) {
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
-          <span className="text-caption font-medium uppercase tracking-wide text-muted-foreground">
+          <span className="text-caption font-medium text-muted-foreground">
             Rules
           </span>
           {!adding ? (

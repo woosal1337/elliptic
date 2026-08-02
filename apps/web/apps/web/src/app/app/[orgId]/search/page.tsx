@@ -107,7 +107,7 @@ export default function SearchPage() {
         <div className="flex flex-col gap-6">
           {projectMatches.length > 0 ? (
             <section className="flex flex-col gap-1.5">
-              <h2 className="text-mono-label font-mono uppercase tracking-wide text-muted-foreground/70">
+              <h2 className="text-mono-label font-mono text-muted-foreground/70">
                 Projects
               </h2>
               <ul className="overflow-hidden rounded-lg border border-border bg-surface">
@@ -134,7 +134,7 @@ export default function SearchPage() {
 
           {taskMatches.length > 0 ? (
             <section className="flex flex-col gap-1.5">
-              <h2 className="text-mono-label font-mono uppercase tracking-wide text-muted-foreground/70">
+              <h2 className="text-mono-label font-mono text-muted-foreground/70">
                 Tasks
               </h2>
               <ul className="overflow-hidden rounded-lg border border-border bg-surface">

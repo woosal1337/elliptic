@@ -55,7 +55,7 @@ function SceneFrame({ scene, className }: { scene: Scene; className?: string }) 
         className="pointer-events-none absolute inset-0 bg-gradient-to-t from-canvas via-canvas/40 to-transparent"
       />
       <figcaption className="absolute inset-x-0 bottom-0 flex flex-col gap-1 p-4">
-        <span className="font-mono text-mono-label uppercase tracking-wide text-bold">
+        <span className="font-mono text-mono-label text-bold">
           {scene.eyebrow}
         </span>
         <span className="text-balance text-small font-medium text-foreground">{scene.outcome}</span>

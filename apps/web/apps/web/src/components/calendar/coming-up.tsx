@@ -67,7 +67,7 @@ export function ComingUp({
       </span>
       <div className="flex min-w-0 flex-1 flex-col gap-0.5">
         <div className="flex items-center gap-2">
-          <span className="text-mono-label font-mono uppercase tracking-wide text-muted-foreground">
+          <span className="text-mono-label font-mono text-muted-foreground">
             Coming up
           </span>
           <span

@@ -625,7 +625,7 @@ export function WorkflowSettings({ orgId }: { orgId: string }) {
           <div key={group.category} className="flex flex-col gap-2">
             <div className="flex items-center gap-2">
               <Lock className="size-3 text-muted-foreground" />
-              <span className="text-caption font-medium uppercase tracking-wide text-muted-foreground">
+              <span className="text-caption font-medium text-muted-foreground">
                 {group.label}
               </span>
             </div>

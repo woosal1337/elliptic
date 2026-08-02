@@ -273,7 +273,7 @@ export function CodeShowcase({
         <span className="size-3 rounded-full bg-danger/50" aria-hidden="true" />
         <span className="size-3 rounded-full bg-warning/50" aria-hidden="true" />
         <span className="size-3 rounded-full bg-success/50" aria-hidden="true" />
-        <span className="ml-3 font-mono text-mono-label uppercase tracking-wide text-muted-foreground">
+        <span className="ml-3 font-mono text-mono-label text-muted-foreground">
           {caption}
         </span>
       </div>

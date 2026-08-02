@@ -35,8 +35,8 @@ const projectSchema = z.object({
   name: z.string().min(2, "Name is too short"),
   key: z
     .string()
-    .min(2, "2-6 uppercase letters")
-    .max(6, "2-6 uppercase letters")
+    .min(2, "2-6 letters")
+    .max(6, "2-6 letters")
     .regex(/^[A-Z]+$/, "Uppercase letters only"),
   description: z.string().optional(),
 });
@@ -134,7 +134,7 @@ export function CreateProjectDialog({
               <Input
                 id="project-key"
                 placeholder="WEB"
-                className="font-mono uppercase"
+                className="font-mono"
                 {...form.register("key")}
               />
               {form.formState.errors.key ? (

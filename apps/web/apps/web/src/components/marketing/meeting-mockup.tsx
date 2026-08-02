@@ -65,7 +65,7 @@ export function MeetingMockup() {
 
       <div className="grid bg-surface lg:grid-cols-3">
         <div className="flex flex-col gap-4 border-b border-border p-4 lg:col-span-2 lg:border-b-0 lg:border-r">
-          <div className="flex items-center gap-2 text-mono-label uppercase text-muted-foreground">
+          <div className="flex items-center gap-2 text-mono-label text-muted-foreground">
             <UserRound className="size-3.5" aria-hidden="true" />
             Transcript
           </div>
@@ -93,7 +93,7 @@ export function MeetingMockup() {
           <div className="flex flex-1 flex-col gap-3 rounded-lg border border-accent-subtle bg-accent-muted/40 p-4">
             <div className="flex items-center gap-2 text-accent">
               <Sparkles className="size-3.5" aria-hidden="true" />
-              <span className="font-mono text-mono-label uppercase">AI summary</span>
+              <span className="font-mono text-mono-label">AI summary</span>
             </div>
             <ul className="flex flex-col gap-3">
               {SUMMARY.map((line) => (

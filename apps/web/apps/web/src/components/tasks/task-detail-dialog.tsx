@@ -215,7 +215,7 @@ function SidebarSection({
         type="button"
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
-        className="flex items-center gap-1 text-mono-label font-mono uppercase tracking-wide text-muted-foreground/70 transition-colors hover:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
+        className="flex items-center gap-1 text-mono-label font-mono text-muted-foreground/70 transition-colors hover:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
       >
         {open ? <ChevronDown className="size-3" /> : <ChevronRight className="size-3" />}
         {title}

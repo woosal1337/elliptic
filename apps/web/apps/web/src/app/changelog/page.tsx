@@ -17,7 +17,7 @@ export default function ChangelogPage() {
       <SiteNav />
       <main className="flex-1">
         <div className="mx-auto flex w-full max-w-3xl flex-col px-6 py-16 lg:py-24">
-          <p className="font-mono text-mono-label uppercase text-muted-foreground">Changelog</p>
+          <p className="font-mono text-mono-label text-muted-foreground">Changelog</p>
           <h1 className="mt-3 font-display text-h1 font-semibold tracking-[-0.02em] text-foreground">
             Changelog
           </h1>
@@ -32,7 +32,7 @@ export default function ChangelogPage() {
                   <h2 className="font-display text-h2 font-semibold tracking-[-0.02em] text-foreground">
                     {release.version}
                   </h2>
-                  <span className="font-mono text-mono-label uppercase text-muted-foreground">
+                  <span className="font-mono text-mono-label text-muted-foreground">
                     {formatDate(release.date)}
                   </span>
                 </div>

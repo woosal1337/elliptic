@@ -15,7 +15,7 @@ export default async function DocsLayout({ children }: { children: ReactNode }) 
           <a href={home} aria-label="Elliptic docs home" className="flex items-center">
             <Logo />
           </a>
-          <span className="text-mono-label font-mono uppercase tracking-wide text-muted-foreground">
+          <span className="text-mono-label font-mono text-muted-foreground">
             Docs
           </span>
         </div>

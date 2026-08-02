@@ -44,7 +44,7 @@ export default async function DocsPage({ params }: DocsPageProps) {
   return (
     <div className="mx-auto flex max-w-3xl flex-col px-6 py-10 lg:px-10 lg:py-12">
       <div className="flex items-center justify-between gap-4">
-        <span className="text-eyebrow font-semibold uppercase text-muted-foreground">
+        <span className="text-eyebrow font-semibold text-muted-foreground">
           Documentation
         </span>
         <CopyPageButton markdown={markdown} />

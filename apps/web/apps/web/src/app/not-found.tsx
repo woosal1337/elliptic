@@ -18,7 +18,7 @@ export default function NotFound() {
         </Link>
       </header>
       <main className="relative flex flex-1 flex-col items-center justify-center px-6 pb-24 text-center">
-        <span className="font-mono text-mono-label uppercase tracking-wide text-accent">
+        <span className="font-mono text-mono-label text-accent">
           Error 404
         </span>
         <h1 className="mt-3 font-display text-h1 font-semibold tracking-[-0.02em] text-foreground">

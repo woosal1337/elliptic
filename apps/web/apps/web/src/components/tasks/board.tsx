@@ -794,7 +794,7 @@ export function Board({
     <>
       <div className="mb-3 flex flex-wrap items-center justify-between gap-3 px-0.5">
         <div className="flex items-center gap-2.5">
-          <span className="font-mono text-mono-label uppercase text-muted-foreground">Progress</span>
+          <span className="font-mono text-mono-label text-muted-foreground">Progress</span>
           <div
             className="h-1.5 w-28 overflow-hidden rounded-full bg-subtle"
             role="progressbar"

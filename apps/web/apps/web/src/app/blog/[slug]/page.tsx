@@ -72,7 +72,7 @@ export default async function BlogPostPage({ params }: BlogPostProps) {
             ← Blog
           </Link>
 
-          <p className="mt-8 font-mono text-mono-label uppercase text-muted-foreground">
+          <p className="mt-8 font-mono text-mono-label text-muted-foreground">
             {formatPostDate(post.date)} · {readingMinutes(post)} min read
           </p>
           <h1 className="mt-3 font-display text-h1 font-semibold tracking-[-0.02em] text-foreground">

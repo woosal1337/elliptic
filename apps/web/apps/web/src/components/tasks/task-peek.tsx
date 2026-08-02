@@ -78,21 +78,21 @@ export function TaskPeek({
 
             <dl className="grid grid-cols-2 gap-x-4 gap-y-2.5 p-4">
               <div className="flex items-center gap-2">
-                <dt className="text-caption uppercase tracking-wide text-muted-foreground">Status</dt>
+                <dt className="text-caption text-muted-foreground">Status</dt>
                 <dd className="flex items-center gap-1.5 text-small text-foreground">
                   <StatusDot status={task.data.status} />
                   {STATUS_LABELS[task.data.status]}
                 </dd>
               </div>
               <div className="flex items-center gap-2">
-                <dt className="text-caption uppercase tracking-wide text-muted-foreground">Priority</dt>
+                <dt className="text-caption text-muted-foreground">Priority</dt>
                 <dd className="flex items-center gap-1.5 text-small text-foreground">
                   <PriorityIcon priority={task.data.priority} />
                   {PRIORITY_LABELS[task.data.priority]}
                 </dd>
               </div>
               <div className="flex items-center gap-2">
-                <dt className="text-caption uppercase tracking-wide text-muted-foreground">Assignee</dt>
+                <dt className="text-caption text-muted-foreground">Assignee</dt>
                 <dd className="flex items-center gap-1.5 text-small text-foreground">
                   {task.data.assignee_id ? (
                     <>
@@ -105,7 +105,7 @@ export function TaskPeek({
                 </dd>
               </div>
               <div className="flex items-center gap-2">
-                <dt className="text-caption uppercase tracking-wide text-muted-foreground">Due</dt>
+                <dt className="text-caption text-muted-foreground">Due</dt>
                 <dd className="text-small text-foreground">
                   {task.data.due_date ? formatRelative(task.data.due_date) : "—"}
                 </dd>

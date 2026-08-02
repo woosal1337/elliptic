@@ -475,7 +475,7 @@ export function ChatPanel({ orgId, meetingId }: { orgId: string; meetingId: stri
         </div>
         {showRecipeMenu ? (
           <div className="flex flex-col gap-0.5 rounded-md border border-border bg-elevated p-1 shadow-sm">
-            <span className="px-2 py-1 text-caption font-medium uppercase tracking-wide text-muted-foreground">
+            <span className="px-2 py-1 text-caption font-medium text-muted-foreground">
               Recipes
             </span>
             {matchedRecipes.map((recipe) => (

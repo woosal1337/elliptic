@@ -92,7 +92,7 @@ export function ShortcutHelp() {
           ) : (
             groups.map((group) => (
               <section key={group.scope} className="flex flex-col gap-1.5">
-                <h3 className="text-mono-label font-mono uppercase tracking-wider text-muted-foreground">
+                <h3 className="text-mono-label font-mono text-muted-foreground">
                   {group.heading}
                 </h3>
                 <ul className="flex flex-col">

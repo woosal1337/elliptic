@@ -283,7 +283,7 @@ function Sidebar() {
       </nav>
 
       <div className="flex flex-col gap-1">
-        <span className="px-2 font-mono text-mono-label uppercase text-muted-foreground/60">Projects</span>
+        <span className="px-2 font-mono text-mono-label text-muted-foreground/60">Projects</span>
         <span className="relative flex items-center gap-2 rounded-md bg-subtle px-2 py-1.5 text-small font-medium text-foreground">
           <span aria-hidden="true" className="absolute inset-y-1 left-0 w-0.5 rounded-full bg-accent" />
           <LayoutGrid aria-hidden="true" className="size-4 text-accent" />
@@ -306,7 +306,7 @@ function BoardHeader() {
           <LayoutGrid className="size-3" />
         </span>
         <span className="text-small font-semibold tracking-tight text-foreground">Q3 Platform</span>
-        <span className="rounded border border-border bg-subtle px-1.5 py-0.5 font-mono text-mono-label uppercase text-muted-foreground">
+        <span className="rounded border border-border bg-subtle px-1.5 py-0.5 font-mono text-mono-label text-muted-foreground">
           Q3
         </span>
         <Badge variant="warning" size="sm" dot>
@@ -373,7 +373,7 @@ export function ProductMockup() {
             <section key={column.status} className="flex min-w-0 flex-col gap-3">
               <div className="flex items-center gap-2 px-0.5">
                 <span aria-hidden="true" className={cn("size-2 rounded-full", column.dot)} />
-                <span className="text-caption font-semibold uppercase tracking-wide text-muted-foreground">
+                <span className="text-caption font-semibold text-muted-foreground">
                   {column.status}
                 </span>
                 <span className="text-caption font-medium tabular-nums text-muted-foreground/60">

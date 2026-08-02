@@ -102,7 +102,7 @@ export function ComplianceSettings({ orgId }: { orgId: string }) {
           <span className="text-caption text-muted-foreground">Frameworks</span>
           <div className="flex flex-wrap gap-3">
             {FRAMEWORKS.map((key) => (
-              <label key={key} className="flex items-center gap-1.5 text-small uppercase text-foreground">
+              <label key={key} className="flex items-center gap-1.5 text-small text-foreground">
                 <input
                   type="checkbox"
                   checked={frameworks.includes(key)}

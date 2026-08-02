@@ -10,7 +10,7 @@ export default async function DocsNotFound() {
       <span className="flex size-12 items-center justify-center rounded-full border border-border bg-canvas text-muted-foreground">
         <FileQuestion className="size-6" aria-hidden="true" />
       </span>
-      <span className="mt-5 font-mono text-mono-label uppercase tracking-wide text-accent">
+      <span className="mt-5 font-mono text-mono-label text-accent">
         Error 404
       </span>
       <h1 className="mt-2 font-display text-h2 font-semibold tracking-[-0.02em] text-foreground">

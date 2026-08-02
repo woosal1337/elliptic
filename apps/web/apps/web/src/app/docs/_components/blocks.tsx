@@ -155,7 +155,7 @@ function Block({ block }: { block: DocBlock }) {
       return (
         <div className="mt-5 overflow-hidden rounded-lg border border-border bg-canvas">
           {block.lang ? (
-            <div className="border-b border-border bg-surface px-4 py-2 font-mono text-mono-label uppercase tracking-wide text-muted-foreground">
+            <div className="border-b border-border bg-surface px-4 py-2 font-mono text-mono-label text-muted-foreground">
               {block.lang}
             </div>
           ) : null}

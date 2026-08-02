@@ -80,7 +80,7 @@ export function PropertyPalette<T>({
         <Command
           loop
           label={ariaLabel}
-          className="[&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-caption [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-wider [&_[cmdk-group-heading]]:text-muted-foreground/70 [&_[cmdk-group]]:px-2"
+          className="[&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-caption [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground/70 [&_[cmdk-group]]:px-2"
         >
           <CommandInput placeholder={placeholder} autoFocus />
           <CommandList className="max-h-64">
@@ -228,7 +228,7 @@ export function AssigneePalette({
       label: member.full_name,
       keywords: [member.email, "assignee", "owner"],
       leading: (
-        <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-muted text-mono-label font-mono uppercase text-muted-foreground">
+        <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-muted text-mono-label font-mono text-muted-foreground">
           {member.full_name.charAt(0)}
         </span>
       ),

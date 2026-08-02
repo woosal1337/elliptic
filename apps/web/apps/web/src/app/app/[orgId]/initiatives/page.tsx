@@ -389,7 +389,7 @@ export default function InitiativesPage() {
             const column = items.filter((initiative) => initiative.status === status);
             return (
               <div key={status} className="flex flex-col gap-2">
-                <h3 className="px-1 text-caption font-medium uppercase tracking-wide text-muted-foreground">
+                <h3 className="px-1 text-caption font-medium text-muted-foreground">
                   {STATUS_META[status].label} · {column.length}
                 </h3>
                 {column.map((initiative) => (

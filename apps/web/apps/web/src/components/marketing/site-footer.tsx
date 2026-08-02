@@ -112,7 +112,7 @@ export function SiteFooter() {
           <div className="grid grid-cols-2 gap-x-12 gap-y-12 sm:grid-cols-3 lg:grid-cols-5 lg:gap-x-16">
             {COLUMNS.map((column) => (
               <div key={column.heading} className="flex flex-col gap-4">
-                <p className="flex items-center gap-2 font-mono text-mono-label uppercase text-muted-foreground">
+                <p className="flex items-center gap-2 font-mono text-mono-label text-muted-foreground">
                   <span className="text-foreground/50">{column.index}</span>
                   <span>{column.heading}</span>
                 </p>

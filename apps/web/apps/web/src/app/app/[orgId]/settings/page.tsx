@@ -102,7 +102,7 @@ export default function SettingsPage() {
   const renderGroups = (grouped: { group: string; items: SettingsSection[] }[]) =>
     grouped.map(({ group, items }) => (
       <div key={group} className="flex flex-col gap-0.5">
-        <p className="px-2.5 pb-1 text-caption font-medium uppercase tracking-wider text-muted-foreground/70">
+        <p className="px-2.5 pb-1 text-caption font-medium text-muted-foreground/70">
           {group}
         </p>
         {items.map((section) => {
@@ -186,7 +186,7 @@ export default function SettingsPage() {
                         type="button"
                         aria-expanded={moreOpen}
                         onClick={() => setShowMore((open) => !open)}
-                        className="flex w-full items-center gap-1.5 rounded-md px-2.5 py-1 text-caption font-medium uppercase tracking-wider text-muted-foreground/70 transition-colors duration-150 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
+                        className="flex w-full items-center gap-1.5 rounded-md px-2.5 py-1 text-caption font-medium text-muted-foreground/70 transition-colors duration-150 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
                       >
                         <ChevronRight
                           aria-hidden="true"

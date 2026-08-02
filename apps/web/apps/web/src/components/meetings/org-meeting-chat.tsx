@@ -156,7 +156,7 @@ export function OrgMeetingChat({ orgId }: { orgId: string }) {
           ) : (
             turns.map((turn, index) => (
               <div key={index} className="flex flex-col gap-2">
-                <span className="text-caption font-medium uppercase tracking-wide text-muted-foreground">
+                <span className="text-caption font-medium text-muted-foreground">
                   {turn.role === "user" ? "You" : "Elliptic"}
                 </span>
                 <p className="whitespace-pre-wrap text-small text-foreground">{turn.content}</p>

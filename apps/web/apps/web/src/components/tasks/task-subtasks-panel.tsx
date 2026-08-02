@@ -189,7 +189,7 @@ export function TaskSubtasksPanel({
     <div className="flex flex-col gap-1.5">
       {items.length > 0 ? (
         <div className="flex items-center justify-between gap-2">
-          <span className="text-mono-label font-mono uppercase tracking-wide text-muted-foreground/70">
+          <span className="text-mono-label font-mono text-muted-foreground/70">
             Sub-tasks
           </span>
           <div className="flex items-center gap-2">

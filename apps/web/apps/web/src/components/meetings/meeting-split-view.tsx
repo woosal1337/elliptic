@@ -191,7 +191,7 @@ export function MeetingSplitView({
         <div className="flex flex-col gap-4 rounded-lg border border-accent-subtle bg-accent-muted/30 p-4 shadow-xs">
           {sections.map((section) => (
             <section key={section.kind} className="flex flex-col gap-1.5">
-              <h4 className="text-mono-label font-mono uppercase tracking-wide text-muted-foreground">
+              <h4 className="text-mono-label font-mono text-muted-foreground">
                 {section.kind}
               </h4>
               <ul className="flex flex-col gap-1">
