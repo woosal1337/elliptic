@@ -1,0 +1,47 @@
+# Rich markdown editing of a task description.
+#
+# The fixture this expects is a task whose description uses the full grammar
+# the web's TipTap editor can write — headings 1-4, ordered and nested lists,
+# a blockquote, a fenced code block, a rule and a table. The point of the flow
+# is that opening that description in the editor and closing it again leaves
+# the text alone, while typing "# " still produces a real heading.
+#
+# Run:  scripts/maestro.sh ios .maestro/flows/DescriptionEditor.yaml
+#
+# Point the app at the local stack first, so this never writes to production:
+#   EXPO_PUBLIC_API_URL=http://localhost:8000/api/v1 npx expo start --clear
+appId: sh.elliptic
+---
+- launchApp
+- waitForAnimationToEnd
+
+- tapOn: "Tasks"
+- waitForAnimationToEnd
+- takeScreenshot: .maestro/output/description/00-list
+
+# The fixture task. Scroll to it rather than assuming a position.
+- scrollUntilVisible:
+    element:
+      text: "ROUND-TRIP"
+    direction: DOWN
+    timeout: 10000
+- tapOn:
+    text: "ROUND-TRIP"
+- waitForAnimationToEnd
+# Every construct should be drawn, not shown as its source: no visible "####",
+# "```", "~~" or "1." markers in the rendered view.
+- takeScreenshot: .maestro/output/description/01-rendered
+
+- tapOn: "Describe this task…"
+- waitForAnimationToEnd
+# The editor keeps the formatting. Headings stay heading-sized and their
+# markers are gone; bullets show a glyph.
+- takeScreenshot: .maestro/output/description/02-editing
+
+# The behaviour the whole feature exists for.
+- inputText: "\n# Typed heading"
+- waitForAnimationToEnd
+- takeScreenshot: .maestro/output/description/03-typed-heading
+
+- assertNotVisible: "# Typed heading"
+- assertVisible: "Typed heading"

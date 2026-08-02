@@ -1,17 +1,22 @@
 import { FC, useEffect, useState } from "react"
-import { View, ViewStyle } from "react-native"
+import { StyleSheet } from "react-native"
+import {
+  BottomSheet,
+  Button,
+  DatePicker,
+  Form,
+  Host,
+  Picker,
+  Section,
+  Text as NativeText,
+  TextField,
+  Toggle,
+} from "@expo/ui/swift-ui"
+import { disabled, tag } from "@expo/ui/swift-ui/modifiers"
 
-import { Button } from "@/components/Button"
-import { DatePickerSheet } from "@/components/DatePickerSheet"
-import { FieldRow } from "@/components/FieldRow"
-import { LabelPickerSheet } from "@/components/LabelPickerSheet"
-import { Option, OptionSheet } from "@/components/OptionSheet"
-import { Sheet } from "@/components/Sheet"
-import { Text } from "@/components/Text"
-import { TextField } from "@/components/TextField"
 import { useAuth } from "@/context/AuthContext"
 import { api } from "@/services/api"
-import type { Member, Project } from "@/services/api/types"
+import type { Member, Project, TaskLabel } from "@/services/api/types"
 import { invalidate } from "@/services/query"
 import { useAppTheme } from "@/theme/context"
 import {
@@ -21,10 +26,23 @@ import {
   PRIORITY_OPTIONS,
   prettyLabel,
   STATUS_OPTIONS,
+  toISODate,
 } from "@/utils/taskOptions"
 
-type Picker = "project" | "priority" | "assignee" | "due" | "status"
+const UNASSIGNED = "__unassigned__"
 
+/**
+ * Create a task.
+ *
+ * This is a real `UISheetPresentationController` wrapping a SwiftUI `Form`,
+ * not a hand-rolled modal wrapping our own components. That is the point: the
+ * pickers are system pickers, the rows are Form rows, and keyboard avoidance,
+ * scrolling and drag-to-dismiss are UIKit's problem rather than ours — which
+ * is where the previous version's keyboard bug came from.
+ *
+ * Labels are `Toggle` rows rather than a `Picker` because a picker is
+ * single-selection and a task can carry several labels.
+ */
 export const CreateTaskSheet: FC<{
   orgId: string
   visible: boolean
@@ -32,9 +50,7 @@ export const CreateTaskSheet: FC<{
   onCreated?: () => void
 }> = ({ orgId, visible, onClose, onCreated }) => {
   const { user } = useAuth()
-  const {
-    theme: { colors, spacing },
-  } = useAppTheme()
+  const { themeContext } = useAppTheme()
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
   const [projectId, setProjectId] = useState<string | null>(null)
@@ -42,14 +58,13 @@ export const CreateTaskSheet: FC<{
   const [priority, setPriority] = useState("none")
   const [assigneeId, setAssigneeId] = useState<string | null>(user?.id ?? null)
   const [due, setDue] = useState("")
+  const [customDue, setCustomDue] = useState(false)
   const [projects, setProjects] = useState<Project[]>([])
   const [members, setMembers] = useState<Member[]>([])
+  const [labels, setLabels] = useState<TaskLabel[]>([])
+  const [labelIds, setLabelIds] = useState<string[]>([])
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [picker, setPicker] = useState<Picker | null>(null)
-  const [showDatePicker, setShowDatePicker] = useState(false)
-  const [labelIds, setLabelIds] = useState<string[]>([])
-  const [showLabels, setShowLabels] = useState(false)
 
   useEffect(() => {
     if (!visible) return
@@ -58,13 +73,8 @@ export const CreateTaskSheet: FC<{
       setProjectId((cur) => cur ?? p[0]?.id ?? null)
     })
     void api.listMembers(orgId).then(setMembers)
+    void api.listLabels(orgId).then(setLabels)
   }, [visible, orgId])
-
-  const projectName = projects.find((p) => p.id === projectId)?.name ?? "Select…"
-  const assigneeName = assigneeId
-    ? (members.find((m) => m.user_id === assigneeId)?.full_name ?? "Me")
-    : "Unassigned"
-  const dueLabel = due ? (DUE_OPTIONS.find((o) => o.value === due)?.label ?? due) : "No due date"
 
   const submit = async () => {
     if (!title.trim() || !projectId || saving) return
@@ -86,6 +96,7 @@ export const CreateTaskSheet: FC<{
       setStatus("backlog")
       setPriority("none")
       setDue("")
+      setCustomDue(false)
       setLabelIds([])
       invalidate(orgId, "tasks")
       onCreated?.()
@@ -95,114 +106,133 @@ export const CreateTaskSheet: FC<{
     }
   }
 
-  const memberOptions: Option[] = [
-    { label: "Unassigned", value: "" },
-    ...members.map((m) => ({ label: m.full_name, value: m.user_id })),
-  ]
-  const projectOptions: Option[] = projects.map((p) => ({
-    label: `${p.name} (${p.key})`,
-    value: p.id,
-  }))
+  const toggleLabel = (id: string, on: boolean) =>
+    setLabelIds((current) =>
+      on ? [...new Set([...current, id])] : current.filter((x) => x !== id),
+    )
+
+  // A preset that is not one of the offered dates is a date the user picked,
+  // so the inline calendar stays open on it.
+  const dueSelection = customDue ? CUSTOM_DUE : due
 
   return (
-    <>
-      <Sheet visible={visible} onClose={onClose} title="New task">
-        <View style={{ paddingHorizontal: spacing.lg, gap: spacing.xs }}>
-          <TextField value={title} onChangeText={setTitle} placeholder="Task title" autoFocus />
-          <TextField
-            value={description}
-            onChangeText={setDescription}
-            placeholder="Add description…"
-            multiline
-          />
-          <FieldRow
-            label="Project"
-            value={projectName}
-            muted={!projectId}
-            onPress={() => setPicker("project")}
-          />
-          <FieldRow
-            label="Status"
-            value={prettyLabel(status, STATUS_OPTIONS)}
-            onPress={() => setPicker("status")}
-          />
-          <FieldRow label="Priority" value={cap(priority)} onPress={() => setPicker("priority")} />
-          <FieldRow label="Assignee" value={assigneeName} onPress={() => setPicker("assignee")} />
-          <FieldRow label="Due" value={dueLabel} onPress={() => setPicker("due")} />
-          <FieldRow
-            label="Labels"
-            value={labelIds.length ? `${labelIds.length} selected` : "None"}
-            muted={labelIds.length === 0}
-            onPress={() => setShowLabels(true)}
-          />
-          {error ? (
-            <Text text={error} size="xs" style={{ color: colors.error, marginTop: spacing.xs }} />
-          ) : null}
-          <Button
-            text={saving ? "Creating…" : "Create task"}
-            preset="filled"
-            disabled={!title.trim() || !projectId || saving}
-            onPress={() => void submit()}
-            style={$createBtn}
-          />
-        </View>
-      </Sheet>
+    // The host itself draws nothing; the sheet is presented above everything.
+    <Host style={StyleSheet.absoluteFill} colorScheme={themeContext}>
+      <BottomSheet
+        isPresented={visible}
+        onIsPresentedChange={(presented) => {
+          if (!presented) onClose()
+        }}
+      >
+        <Form>
+          <Section title="New task">
+            <TextField defaultValue={title} placeholder="Task title" onValueChange={setTitle} />
+            <TextField
+              defaultValue={description}
+              placeholder="Add description…"
+              axis="vertical"
+              onValueChange={setDescription}
+            />
+          </Section>
 
-      <OptionSheet
-        visible={picker === "project"}
-        onClose={() => setPicker(null)}
-        title="Project"
-        options={projectOptions}
-        selected={projectId}
-        onSelect={setProjectId}
-      />
-      <OptionSheet
-        visible={picker === "status"}
-        onClose={() => setPicker(null)}
-        title="Status"
-        options={STATUS_OPTIONS}
-        selected={status}
-        onSelect={setStatus}
-      />
-      <OptionSheet
-        visible={picker === "priority"}
-        onClose={() => setPicker(null)}
-        title="Priority"
-        options={PRIORITY_OPTIONS}
-        selected={priority}
-        onSelect={setPriority}
-      />
-      <OptionSheet
-        visible={picker === "assignee"}
-        onClose={() => setPicker(null)}
-        title="Assignee"
-        options={memberOptions}
-        selected={assigneeId ?? ""}
-        onSelect={(v) => setAssigneeId(v || null)}
-      />
-      <OptionSheet
-        visible={picker === "due"}
-        onClose={() => setPicker(null)}
-        title="Due date"
-        options={DUE_OPTIONS}
-        selected={due}
-        onSelect={(v) => (v === CUSTOM_DUE ? setShowDatePicker(true) : setDue(v))}
-      />
-      <LabelPickerSheet
-        visible={showLabels}
-        onClose={() => setShowLabels(false)}
-        orgId={orgId}
-        value={labelIds}
-        onChange={setLabelIds}
-      />
-      <DatePickerSheet
-        visible={showDatePicker}
-        onClose={() => setShowDatePicker(false)}
-        initial={due || null}
-        onPick={setDue}
-      />
-    </>
+          <Section title="Details">
+            <Picker
+              label="Project"
+              selection={projectId ?? ""}
+              onSelectionChange={(value) => setProjectId(value || null)}
+            >
+              {projects.map((p) => (
+                <NativeText key={p.id} modifiers={[tag(p.id)]}>
+                  {`${p.name} (${p.key})`}
+                </NativeText>
+              ))}
+            </Picker>
+
+            <Picker label="Status" selection={status} onSelectionChange={setStatus}>
+              {STATUS_OPTIONS.map((o) => (
+                <NativeText key={o.value} modifiers={[tag(o.value)]}>
+                  {prettyLabel(o.value, STATUS_OPTIONS)}
+                </NativeText>
+              ))}
+            </Picker>
+
+            <Picker label="Priority" selection={priority} onSelectionChange={setPriority}>
+              {PRIORITY_OPTIONS.map((o) => (
+                <NativeText key={o.value} modifiers={[tag(o.value)]}>
+                  {cap(o.value)}
+                </NativeText>
+              ))}
+            </Picker>
+
+            <Picker
+              label="Assignee"
+              selection={assigneeId ?? UNASSIGNED}
+              onSelectionChange={(value) =>
+                setAssigneeId(value === UNASSIGNED ? null : String(value))
+              }
+            >
+              <NativeText modifiers={[tag(UNASSIGNED)]}>Unassigned</NativeText>
+              {members.map((m) => (
+                <NativeText key={m.user_id} modifiers={[tag(m.user_id)]}>
+                  {m.full_name}
+                </NativeText>
+              ))}
+            </Picker>
+          </Section>
+
+          <Section title="Due">
+            <Picker
+              label="Due date"
+              selection={dueSelection}
+              onSelectionChange={(value) => {
+                if (value === CUSTOM_DUE) {
+                  setCustomDue(true)
+                  if (!due) setDue(toISODate(new Date()))
+                } else {
+                  setCustomDue(false)
+                  setDue(String(value))
+                }
+              }}
+            >
+              {DUE_OPTIONS.map((o) => (
+                <NativeText key={o.value} modifiers={[tag(o.value)]}>
+                  {o.label}
+                </NativeText>
+              ))}
+            </Picker>
+            {customDue ? (
+              <DatePicker
+                title="Pick a date"
+                selection={due ? new Date(`${due}T00:00:00`) : new Date()}
+                displayedComponents={["date"]}
+                onDateChange={(date) => setDue(toISODate(date))}
+              />
+            ) : null}
+          </Section>
+
+          {labels.length > 0 ? (
+            <Section title="Labels">
+              {labels.map((label) => (
+                <Toggle
+                  key={label.id}
+                  label={label.name}
+                  isOn={labelIds.includes(label.id)}
+                  onIsOnChange={(on) => toggleLabel(label.id, on)}
+                />
+              ))}
+            </Section>
+          ) : null}
+
+          <Section>
+            {error ? <NativeText>{error}</NativeText> : null}
+            <Button
+              label={saving ? "Creating…" : "Create task"}
+              modifiers={[disabled(!title.trim() || !projectId || saving)]}
+              onPress={() => void submit()}
+            />
+          </Section>
+        </Form>
+      </BottomSheet>
+    </Host>
   )
 }
-
-const $createBtn: ViewStyle = { marginTop: 12 }
