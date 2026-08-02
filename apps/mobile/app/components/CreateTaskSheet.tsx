@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react"
-import { StyleSheet } from "react-native"
+import { ViewStyle } from "react-native"
 import {
   BottomSheet,
   Button,
@@ -116,8 +116,10 @@ export const CreateTaskSheet: FC<{
   const dueSelection = customDue ? CUSTOM_DUE : due
 
   return (
-    // The host itself draws nothing; the sheet is presented above everything.
-    <Host style={StyleSheet.absoluteFill} colorScheme={themeContext}>
+    // Zero-sized on purpose. The sheet is presented by UIKit above everything,
+    // so the host needs no area of its own — and an absoluteFill host silently
+    // covers the screen and swallows every touch behind it.
+    <Host style={$host} colorScheme={themeContext}>
       <BottomSheet
         isPresented={visible}
         onIsPresentedChange={(presented) => {
@@ -236,3 +238,5 @@ export const CreateTaskSheet: FC<{
     </Host>
   )
 }
+
+const $host: ViewStyle = { position: "absolute", width: 0, height: 0 }
