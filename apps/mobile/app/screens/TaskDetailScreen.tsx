@@ -39,7 +39,7 @@ import type { TasksStackScreenProps } from "@/navigators/navigationTypes"
 import { useHideTabBar } from "@/navigators/tabBarVisibility"
 import { api } from "@/services/api"
 import type { Comment, Member, Project, Task } from "@/services/api/types"
-import { invalidate } from "@/services/query"
+import { invalidate, patchCachedEntity } from "@/services/query"
 import { uploadAsset } from "@/services/upload"
 import { useAppTheme } from "@/theme/context"
 import { hapticSelection, hapticSuccess } from "@/utils/haptics"
@@ -147,14 +147,17 @@ export const TaskDetailScreen: FC<TasksStackScreenProps<"TaskDetail">> = ({
     const previous = task.status
     if (status === "done") hapticSuccess()
     else hapticSelection()
+    const before = task
     setTask({ ...task, status })
+    const rollback = patchCachedEntity<Task>(orgId, "tasks", task.id, { status } as Partial<Task>)
     const ok = await api.transitionTaskStatus(orgId, task.id, status)
-    invalidate(orgId, "tasks") // keep the Tasks/Home lists in step with the detail
     if (!ok) {
+      rollback()
+      setTask(before)
       toast("Couldn't update the status", { variant: "error" })
-      void load()
       return
     }
+    invalidate(orgId, "tasks") // confirm against the server, list is already right
     if (undoable && status !== previous) {
       toast(prettyLabel(status, STATUS_OPTIONS), {
         action: { label: "Undo", onPress: () => void changeStatus(previous, false) },
@@ -169,12 +172,19 @@ export const TaskDetailScreen: FC<TasksStackScreenProps<"TaskDetail">> = ({
   }) => {
     if (!activeOrg || !task) return
     hapticSelection()
+    const previous = task
     setTask({ ...task, ...p })
+    // Patch the cached lists rather than dropping them: the Tasks and Home
+    // lists are already correct by the time the back gesture finishes, and the
+    // refetch below only confirms it.
+    const rollback = patchCachedEntity<Task>(activeOrg.id, "tasks", task.id, p as Partial<Task>)
     const ok = await api.updateTask(activeOrg.id, task.id, p)
-    invalidate(activeOrg.id, "tasks")
-    if (!ok) {
+    if (ok) {
+      invalidate(activeOrg.id, "tasks")
+    } else {
+      rollback()
+      setTask(previous)
       toast("Couldn't save that change", { variant: "error" })
-      void load()
     }
   }
 

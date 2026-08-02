@@ -47,3 +47,71 @@ export const queryKeys = {
 export function invalidate(...prefix: string[]) {
   void queryClient.invalidateQueries({ queryKey: prefix })
 }
+
+/** The shape every cached task list shares. */
+interface Identified {
+  id: string
+}
+
+/**
+ * Write a change straight into every cached list that already holds the row,
+ * instead of throwing the lists away and refetching them.
+ *
+ * Editing a task from its detail screen used to invalidate the whole "tasks"
+ * prefix, so going back to the list meant waiting on a request that returned
+ * data we had already computed. Patching in place means the list is correct
+ * before the navigation animation finishes, and the background refetch that
+ * follows is a confirmation rather than the thing being waited on.
+ *
+ * Returns a rollback restoring exactly the entries this touched. The real
+ * query keys are read first rather than reusing the filter — a prefix filter
+ * matches several distinct keys, and writing the rollback back to the prefix
+ * would create a bogus cache entry while leaving the real ones patched.
+ */
+function patchLists<T extends Identified>(
+  orgId: string,
+  kind: string,
+  apply: (list: T[]) => T[],
+  holds: (list: T[]) => boolean,
+): () => void {
+  const snapshots: [readonly unknown[], T[]][] = []
+
+  for (const [key, list] of queryClient.getQueriesData<T[]>({ queryKey: [orgId, kind] })) {
+    if (!list || !holds(list)) continue
+    snapshots.push([key, list])
+    queryClient.setQueryData<T[]>(key, apply(list))
+  }
+
+  return () => {
+    for (const [key, previous] of snapshots) queryClient.setQueryData(key, previous)
+  }
+}
+
+/** Merge `change` into a cached row wherever it appears. */
+export function patchCachedEntity<T extends Identified>(
+  orgId: string,
+  kind: string,
+  id: string,
+  change: Partial<T>,
+): () => void {
+  return patchLists<T>(
+    orgId,
+    kind,
+    (list) => list.map((row) => (row.id === id ? { ...row, ...change } : row)),
+    (list) => list.some((row) => row.id === id),
+  )
+}
+
+/** Drop a row from every cached list under a prefix. */
+export function removeCachedEntity<T extends Identified>(
+  orgId: string,
+  kind: string,
+  id: string,
+): () => void {
+  return patchLists<T>(
+    orgId,
+    kind,
+    (list) => list.filter((row) => row.id !== id),
+    (list) => list.some((row) => row.id === id),
+  )
+}

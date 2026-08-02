@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "@elliptic/ui";
 import { api, errorMessage } from "@/lib/api";
 import type { LoginResult, Org, User } from "@/lib/types";
+import { clearPersistedCache } from "@/lib/query";
 
 export const authKeys = {
   all: ["auth"] as const,
@@ -70,6 +71,7 @@ export function useSignup() {
     },
     onSuccess: () => {
       queryClient.clear();
+      clearPersistedCache();
     },
     onError: (error) => {
       toast.error(errorMessage(error));
@@ -84,6 +86,7 @@ export function useVerifyEmail() {
       api.post<LoginResult>("/api/v1/auth/verify-email", input),
     onSuccess: () => {
       queryClient.clear();
+      clearPersistedCache();
     },
   });
 }
@@ -107,6 +110,7 @@ export function useLogout() {
     mutationFn: () => api.post<null>("/api/v1/auth/logout"),
     onSuccess: () => {
       queryClient.clear();
+      clearPersistedCache();
       window.location.assign("/login");
     },
     onError: (error) => {
