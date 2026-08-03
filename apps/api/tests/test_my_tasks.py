@@ -51,9 +51,7 @@ async def test_all_lists_every_task_in_the_org(client: AsyncClient) -> None:
         client, owner["headers"], org["id"], project["id"], title="Owner's task"
     )
 
-    assigned = await client.get(
-        f"{API}/orgs/{org['id']}/tasks/assigned", headers=member["headers"]
-    )
+    assigned = await client.get(f"{API}/orgs/{org['id']}/tasks/assigned", headers=member["headers"])
     assert someone_elses["id"] not in {i["id"] for i in assigned.json()["data"]["items"]}
 
     response = await client.get(f"{API}/orgs/{org['id']}/tasks/all", headers=member["headers"])

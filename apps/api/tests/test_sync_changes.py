@@ -150,9 +150,7 @@ async def test_a_non_member_cannot_read_the_feed(client: AsyncClient) -> None:
     org = await create_org(client, owner["headers"])
     outsider = await register_and_login(client)
 
-    response = await client.get(
-        f"{API}/orgs/{org['id']}/sync/changes", headers=outsider["headers"]
-    )
+    response = await client.get(f"{API}/orgs/{org['id']}/sync/changes", headers=outsider["headers"])
     assert response.status_code in (403, 404)
 
 

@@ -133,9 +133,7 @@ async def changes_since(
         if len(deletions) == limit:
             result.has_more = True
         for kind in requested:
-            result.deletions[kind] = [
-                row.entity_id for row in deletions if row.entity_type == kind
-            ]
+            result.deletions[kind] = [row.entity_id for row in deletions if row.entity_type == kind]
 
     return result
 
