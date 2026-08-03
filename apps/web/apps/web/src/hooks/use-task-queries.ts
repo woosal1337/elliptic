@@ -323,7 +323,6 @@ export function useCommentVersions(orgId: string, commentId: string, enabled: bo
 export interface AddCommentVariables {
   content: string;
   parentId?: string | null;
-  visibility?: "internal" | "external";
   attachmentIds?: string[];
 }
 
@@ -337,7 +336,6 @@ export function useAddTaskComment(orgId: string, taskId: string) {
         entity_id: taskId,
         content: variables.content,
         parent_id: variables.parentId ?? null,
-        visibility: variables.visibility ?? "internal",
         attachment_ids: variables.attachmentIds ?? [],
       }),
     onMutate: async (variables) => {
@@ -353,7 +351,6 @@ export function useAddTaskComment(orgId: string, taskId: string) {
         author_id: me?.id ?? "",
         content: variables.content,
         parent_id: variables.parentId ?? null,
-        visibility: variables.visibility ?? "internal",
         anchor: null,
         resolved_at: null,
         edited_at: null,

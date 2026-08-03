@@ -5,7 +5,7 @@ from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from elliptic.modules.comments.models import CommentEntityType, CommentVisibility
+from elliptic.modules.comments.models import CommentEntityType
 from elliptic.modules.storage.schemas import StoredObjectOut
 
 
@@ -16,7 +16,6 @@ class CommentCreateIn(BaseModel):
     entity_id: uuid.UUID
     content: str = Field(min_length=1)
     parent_id: uuid.UUID | None = None
-    visibility: CommentVisibility = CommentVisibility.INTERNAL
     anchor: str | None = Field(default=None, max_length=2000)
     mention_user_ids: list[uuid.UUID] = Field(default_factory=list)
     attachment_ids: list[uuid.UUID] = Field(default_factory=list)
@@ -60,7 +59,6 @@ class CommentOut(BaseModel):
     author_id: uuid.UUID
     content: str
     parent_id: uuid.UUID | None
-    visibility: CommentVisibility = CommentVisibility.INTERNAL
     anchor: str | None = None
     resolved_at: datetime | None
     edited_at: datetime | None = None

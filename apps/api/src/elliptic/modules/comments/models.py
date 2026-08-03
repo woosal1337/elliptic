@@ -18,13 +18,6 @@ class CommentEntityType(enum.StrEnum):
     NOTE = "note"
 
 
-class CommentVisibility(enum.StrEnum):
-    """Who may read a comment (COS-92)."""
-
-    INTERNAL = "internal"
-    EXTERNAL = "external"
-
-
 class Comment(BaseModel):
     """A markdown comment attached to a task, meeting, or note."""
 
@@ -46,11 +39,6 @@ class Comment(BaseModel):
     resolved_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     edited_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     anchor: Mapped[str | None] = mapped_column(Text, nullable=True)
-    visibility: Mapped[CommentVisibility] = mapped_column(
-        Enum(CommentVisibility, native_enum=False, length=20),
-        default=CommentVisibility.INTERNAL,
-        server_default=CommentVisibility.INTERNAL.name,
-    )
 
 
 class CommentVersion(BaseModel):

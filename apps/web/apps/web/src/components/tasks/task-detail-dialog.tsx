@@ -305,7 +305,6 @@ function ActivityFeed({
   const [feedTab, setFeedTab] = useState<
     "all" | "comments" | "history" | "transitions" | "worklogs"
   >("all");
-  const [commentVisibility, setCommentVisibility] = useState<"internal" | "external">("internal");
 
   const repliesByParent = useMemo(() => {
     const map = new Map<string, Comment[]>();
@@ -346,7 +345,6 @@ function ActivityFeed({
     addComment.mutate(
       {
         content: trimmed,
-        visibility: commentVisibility,
         attachmentIds: pendingAttachments.map((a) => a.objectId),
       },
       {
@@ -463,11 +461,6 @@ function ActivityFeed({
                       >
                         <LinkIcon className="size-3" />
                       </button>
-                      {item.comment.visibility === "external" ? (
-                        <span className="inline-flex items-center gap-1 rounded-full bg-accent-muted px-1.5 text-accent">
-                          External
-                        </span>
-                      ) : null}
                       {item.comment.edited_at ? (
                         <CommentEditedHistory orgId={orgId} commentId={item.comment.id} />
                       ) : null}
@@ -630,16 +623,6 @@ function ActivityFeed({
                 ])
               }
             />
-            <button
-              type="button"
-              onClick={() =>
-                setCommentVisibility((v) => (v === "internal" ? "external" : "internal"))
-              }
-              className="text-caption text-muted-foreground hover:text-foreground"
-              title="Toggle who can see this comment"
-            >
-              {commentVisibility === "internal" ? "🔒 Internal" : "🌐 External"}
-            </button>
             <Button
               size="sm"
               onClick={submit}

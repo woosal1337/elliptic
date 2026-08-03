@@ -273,15 +273,6 @@ export interface ThroughputPoint {
   resolved: number;
 }
 
-export interface Sticky {
-  id: string;
-  content: string;
-  color: string;
-  position: number;
-  created_at: string;
-  updated_at: string;
-}
-
 export type InitiativeStatus = "active" | "completed" | "archived";
 
 export interface Initiative {
@@ -557,7 +548,6 @@ export interface Comment {
   author_id: string;
   content: string;
   parent_id: string | null;
-  visibility: "internal" | "external";
   anchor: string | null;
   resolved_at: string | null;
   edited_at: string | null;

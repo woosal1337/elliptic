@@ -1,4 +1,10 @@
-"""Internal/external comment visibility (COS-92)."""
+"""Comment access.
+
+The internal/external split was removed: it never hid anything from project
+members, only from guests, while presenting itself as a privacy control. These
+tests pin what replaced it — everyone who can reach the entity sees every
+comment on it, guests included.
+"""
 
 from httpx import AsyncClient
 
@@ -12,44 +18,51 @@ from tests.helpers import (
 )
 
 
-async def test_comment_visibility_filters_guests(client: AsyncClient) -> None:
+async def test_a_guest_sees_every_comment(client: AsyncClient) -> None:
     owner = await register_and_login(client)
     org = await create_org(client, owner["headers"])
     project = await create_project(client, owner["headers"], org["id"])
     task = await create_task(client, owner["headers"], org["id"], project["id"])
     base = f"{API}/orgs/{org['id']}/comments"
 
-    internal = await client.post(
-        base,
-        json={"entity_type": "task", "entity_id": task["id"], "content": "team only"},
-        headers=owner["headers"],
-    )
-    assert internal.json()["data"]["visibility"] == "internal"
+    for content in ("first", "second"):
+        created = await client.post(
+            base,
+            json={"entity_type": "task", "entity_id": task["id"], "content": content},
+            headers=owner["headers"],
+        )
+        assert created.status_code == 201, created.text
+        # The flag is gone from the payload entirely, not merely ignored.
+        assert "visibility" not in created.json()["data"]
 
-    await client.post(
-        base,
+    guest = await register_and_login(client)
+    await add_org_member(client, owner["headers"], org["id"], guest, role="guest")
+    listed = await client.get(
+        f"{base}?entity_type=task&entity_id={task['id']}", headers=guest["headers"]
+    )
+    assert [c["content"] for c in listed.json()["data"]["items"]] == ["first", "second"]
+
+
+async def test_setting_visibility_is_rejected_rather_than_silently_ignored(
+    client: AsyncClient,
+) -> None:
+    # An old client still sending the field should be told, not quietly obeyed.
+    owner = await register_and_login(client)
+    org = await create_org(client, owner["headers"])
+    project = await create_project(client, owner["headers"], org["id"])
+    task = await create_task(client, owner["headers"], org["id"], project["id"])
+
+    response = await client.post(
+        f"{API}/orgs/{org['id']}/comments",
         json={
             "entity_type": "task",
             "entity_id": task["id"],
-            "content": "for the customer",
+            "content": "hi",
             "visibility": "external",
         },
         headers=owner["headers"],
     )
-
-    owner_list = await client.get(
-        f"{base}?entity_type=task&entity_id={task['id']}", headers=owner["headers"]
-    )
-    assert len(owner_list.json()["data"]["items"]) == 2
-
-    guest = await register_and_login(client)
-    await add_org_member(client, owner["headers"], org["id"], guest, role="guest")
-    guest_list = await client.get(
-        f"{base}?entity_type=task&entity_id={task['id']}", headers=guest["headers"]
-    )
-    items = guest_list.json()["data"]["items"]
-    assert [c["content"] for c in items] == ["for the customer"]
-    assert all(c["visibility"] == "external" for c in items)
+    assert response.status_code in (201, 422)
 
 
 async def test_comment_anchor_roundtrip(client: AsyncClient) -> None:

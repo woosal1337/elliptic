@@ -16,7 +16,6 @@ from elliptic.modules.comments.models import (
     CommentEntityType,
     CommentReaction,
     CommentVersion,
-    CommentVisibility,
 )
 from elliptic.modules.comments.schemas import (
     CommentCreateIn,
@@ -75,7 +74,6 @@ async def create_comment(
         author_id=ctx.user.id,
         content=payload.content,
         parent_id=payload.parent_id,
-        visibility=payload.visibility,
         anchor=payload.anchor,
     )
     session.add(comment)
@@ -206,8 +204,6 @@ async def list_comments(
         query = query.where(Comment.entity_type == entity_type)
     if entity_id is not None:
         query = query.where(Comment.entity_id == entity_id)
-    if ctx.role is OrgRole.GUEST:
-        query = query.where(Comment.visibility == CommentVisibility.EXTERNAL)
     total = await session.scalar(select(func.count()).select_from(query.subquery())) or 0
     result = await session.scalars(
         query.order_by(Comment.created_at).limit(page.limit).offset(page.offset)
