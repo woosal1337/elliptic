@@ -36,7 +36,6 @@ export const queryKeys = {
   triage: (orgId: string) => [orgId, "triage"] as const,
   notifications: (orgId: string, filter: string) => [orgId, "notifications", filter] as const,
   notes: (orgId: string) => [orgId, "notes"] as const,
-  stickies: (orgId: string) => [orgId, "stickies"] as const,
   projects: (orgId: string) => [orgId, "projects"] as const,
   labels: (orgId: string) => [orgId, "labels"] as const,
   projectTasks: (orgId: string, projectId: string) =>

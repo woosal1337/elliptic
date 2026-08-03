@@ -32,7 +32,6 @@ export type InboxStackParamList = {
 
 export type ProfileStackParamList = {
   ProfileMain: undefined
-  Stickies: undefined
   Settings: undefined
 }
 

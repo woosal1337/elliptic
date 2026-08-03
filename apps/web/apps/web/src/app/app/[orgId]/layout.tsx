@@ -10,7 +10,6 @@ import { SettingsCommands } from "@/components/command/settings-commands";
 import { ErrorState } from "@/components/error-state";
 import { useActivityStream } from "@/hooks/use-activity-stream";
 import { useOrgs } from "@/hooks/use-org-queries";
-import { StickyDock } from "@/components/stickies/sticky-dock";
 import { clearLastOrgId, setLastOrgId } from "@/lib/storage";
 import { isUuid } from "@/lib/uuid";
 
@@ -82,7 +81,6 @@ export default function OrgLayout({ children }: { children: React.ReactNode }) {
               <main className="flex-1 overflow-y-auto">{children}</main>
             </div>
           </div>
-          <StickyDock orgId={params.orgId} />
         </div>
       </CommandMenuProvider>
     </TooltipProvider>

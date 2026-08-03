@@ -37,7 +37,6 @@ const ENTITY_ICONS: Record<string, IconName> = {
   note: "file-text",
   project: "folder-open",
   meeting: "calendar",
-  sticky: "sticky-note",
 }
 
 /** Map a notification type to a short human reason line. */

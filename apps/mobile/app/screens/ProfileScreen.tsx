@@ -33,9 +33,6 @@ export const ProfileScreen: FC<ProfileStackScreenProps<"ProfileMain">> = ({ navi
           </Section>
 
           <Section>
-            <Button onPress={() => navigation.navigate("Stickies")}>
-              <Label title="Stickies" systemImage="note.text" />
-            </Button>
             <Button onPress={() => navigation.navigate("Settings")}>
               <Label title="Settings" systemImage="gearshape" />
             </Button>

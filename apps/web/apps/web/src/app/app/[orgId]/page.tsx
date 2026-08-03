@@ -8,25 +8,14 @@ import {
   Badge as BadgeIcon,
   FolderKanban,
   Star,
-  StickyNote,
 } from "lucide-react";
 import { Badge, Skeleton } from "@elliptic/ui";
 import { useMe } from "@/hooks/use-auth-queries";
 import { useProjects } from "@/hooks/use-project-queries";
 import { useFavorites } from "@/hooks/use-favorite-queries";
-import { useStickies } from "@/hooks/use-sticky-queries";
 import { useActivity } from "@/hooks/use-activity-queries";
 import { useActiveCycles } from "@/hooks/use-cycle-queries";
 import { ActivityList } from "@/components/activity/activity-list";
-
-const STICKY_BG: Record<string, string> = {
-  yellow: "bg-amber-100 dark:bg-amber-500/15",
-  green: "bg-emerald-100 dark:bg-emerald-500/15",
-  blue: "bg-sky-100 dark:bg-sky-500/15",
-  pink: "bg-pink-100 dark:bg-pink-500/15",
-  purple: "bg-violet-100 dark:bg-violet-500/15",
-  orange: "bg-orange-100 dark:bg-orange-500/15",
-};
 
 function greeting(): string {
   const hour = new Date().getHours();
@@ -67,7 +56,6 @@ export default function HomePage() {
   const me = useMe();
   const projects = useProjects(orgId);
   const favorites = useFavorites(orgId);
-  const stickies = useStickies(orgId);
   const activity = useActivity(orgId);
   const activeCycles = useActiveCycles(orgId);
 
@@ -93,12 +81,6 @@ export default function HomePage() {
           icon={<FolderKanban className="size-4" />}
           value={activeProjects.length}
           label={activeProjects.length === 1 ? "Active project" : "Active projects"}
-        />
-        <StatCard
-          href={`/app/${orgId}/stickies`}
-          icon={<StickyNote className="size-4" />}
-          value={(stickies.data ?? []).length}
-          label="Stickies"
         />
         <StatCard
           href={`/app/${orgId}/projects`}
@@ -190,34 +172,6 @@ export default function HomePage() {
             )}
           </div>
 
-          <div className="flex flex-col gap-2">
-            <h2 className="flex items-center gap-2 text-small font-semibold text-foreground">
-              <StickyNote className="size-4 text-muted-foreground" />
-              Stickies
-            </h2>
-            {(stickies.data ?? []).length === 0 ? (
-              <Link
-                href={`/app/${orgId}/stickies`}
-                className="text-caption text-accent hover:underline"
-              >
-                Add your first sticky →
-              </Link>
-            ) : (
-              <div className="flex flex-col gap-1.5">
-                {(stickies.data ?? []).slice(0, 4).map((sticky) => (
-                  <Link
-                    key={sticky.id}
-                    href={`/app/${orgId}/stickies`}
-                    className={`line-clamp-2 rounded-md border border-border px-3 py-2 text-caption text-foreground ${
-                      STICKY_BG[sticky.color] ?? STICKY_BG.yellow
-                    }`}
-                  >
-                    {sticky.content || "Empty sticky"}
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
         </section>
       </div>
     </div>

@@ -77,12 +77,6 @@ export interface SearchResult {
   project_id: string | null
 }
 
-export interface Sticky {
-  id: string
-  content: string
-  color: string
-}
-
 export interface Note {
   id: string
   title: string

@@ -103,7 +103,6 @@ from elliptic.modules.scim.router import scim_router
 from elliptic.modules.search.router import router as search_router
 from elliptic.modules.sso.router import admin_router as sso_admin_router
 from elliptic.modules.sso.router import public_router as sso_public_router
-from elliptic.modules.stickies.router import router as stickies_router
 from elliptic.modules.storage.router import router as storage_router
 from elliptic.modules.sync.router import router as sync_router
 from elliptic.modules.tasks.router import router as tasks_router
@@ -275,7 +274,6 @@ def create_app() -> FastAPI:  # noqa: PLR0915 — flat router registration list
     api.include_router(scim_router)
     api.include_router(sso_admin_router)
     api.include_router(sso_public_router)
-    api.include_router(stickies_router)
     api.include_router(meetings_router)
     api.include_router(embeds_router)
     api.include_router(notes_router)

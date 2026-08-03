@@ -16,7 +16,7 @@
 //
 //   node scripts/check-theme-tokens.mjs
 
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { join, relative } from "node:path";
 
@@ -69,7 +69,9 @@ const files = execFileSync(
       !f.endsWith(".d.ts") &&
       // Documentation bodies are English prose in template literals, not markup.
       !f.includes("/docs/_content/") &&
-      !f.includes("/llms")
+      !f.includes("/llms") &&
+      // git still lists a file that has been deleted but not yet staged.
+      existsSync(join(ROOT, f))
   );
 
 // A utility, optionally behind variants (hover:, dark:, group-hover/x:) and

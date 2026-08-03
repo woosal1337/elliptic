@@ -17,7 +17,6 @@ export const SIDEBAR_ITEMS: readonly SidebarItemDef[] = [
   { key: "assistant", label: "Assistant", segment: "assistant", section: "personal" },
   { key: "triage", label: "Triage", segment: "triage", section: "personal" },
   { key: "notes", label: "Notes", segment: "notes", section: "personal" },
-  { key: "stickies", label: "Stickies", segment: "stickies", section: "personal" },
   { key: "projects", label: "Projects", segment: "projects", section: "team" },
   { key: "initiatives", label: "Initiatives", segment: "initiatives", section: "team" },
   { key: "releases", label: "Releases", segment: "releases", section: "team" },
@@ -37,7 +36,6 @@ const ITEM_KEYS = SIDEBAR_ITEMS.map((item) => item.key);
 const DEFAULT_HIDDEN: readonly string[] = [
   "assistant",
   "triage",
-  "stickies",
   "initiatives",
   "releases",
   "customers",

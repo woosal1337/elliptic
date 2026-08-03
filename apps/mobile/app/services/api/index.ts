@@ -19,7 +19,6 @@ import type {
   Org,
   Project,
   SearchResult,
-  Sticky,
   Task,
   TaskLabel,
   User,
@@ -570,36 +569,10 @@ export class Api {
   }
 
   // ---- Stickies ----
-  async listStickies(orgId: string): Promise<Sticky[]> {
-    const res = await this.apisauce.get<Envelope<Sticky[] | { items: Sticky[] }>>(
-      `/orgs/${orgId}/stickies`,
-    )
-    if (!res.ok || !res.data) return []
-    const d = res.data.data
-    return Array.isArray(d) ? d : (d?.items ?? [])
-  }
 
-  async createSticky(orgId: string, content: string): Promise<Sticky | null> {
-    const res = await this.apisauce.post<Envelope<Sticky>>(`/orgs/${orgId}/stickies`, { content })
-    return res.ok && res.data ? res.data.data : null
-  }
 
-  async updateSticky(orgId: string, stickyId: string, content: string): Promise<boolean> {
-    const res = await this.apisauce.patch(`/orgs/${orgId}/stickies/${stickyId}`, { content })
-    return res.ok
-  }
 
-  async deleteSticky(orgId: string, stickyId: string): Promise<boolean> {
-    const res = await this.apisauce.delete(`/orgs/${orgId}/stickies/${stickyId}`)
-    return res.ok
-  }
 
-  async convertSticky(orgId: string, stickyId: string): Promise<boolean> {
-    const res = await this.apisauce.post(`/orgs/${orgId}/stickies/${stickyId}/convert`, {
-      kind: "task",
-    })
-    return res.ok
-  }
 
   // ---- AI conversations (list, for history) ----
   async listConversations(orgId: string): Promise<{ id: string; title?: string }[]> {

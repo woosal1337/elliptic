@@ -87,7 +87,6 @@ from elliptic.modules.retrospectives.models import Retrospective
 from elliptic.modules.runner.models import RunnerExecution, RunnerScript
 from elliptic.modules.scim.models import ScimToken
 from elliptic.modules.sso.models import SSOConnection
-from elliptic.modules.stickies.models import Sticky
 from elliptic.modules.storage.models import StoredObject
 from elliptic.modules.sync.models import DeletedEntity
 from elliptic.modules.tasks.models import (
@@ -203,7 +202,6 @@ __all__ = [
     "ScimToken",
     "SentryIntake",
     "SlackConnection",
-    "Sticky",
     "StoredObject",
     "Task",
     "TaskApproval",
