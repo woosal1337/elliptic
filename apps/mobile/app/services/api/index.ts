@@ -352,6 +352,8 @@ export class Api {
       description?: string
       status?: string
       assignee_id?: string | null
+      /** Create with nobody assigned, skipping the creator/project-default fallbacks. */
+      unassigned?: boolean
       priority?: string
       due_date?: string | null
       parent_task_id?: string

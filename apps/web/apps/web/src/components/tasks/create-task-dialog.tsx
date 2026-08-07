@@ -22,6 +22,7 @@ import {
 } from "@elliptic/ui";
 import type { BugSeverity, TaskKind, TaskPriority, TaskStatus } from "@/lib/types";
 import { useCreateTask } from "@/hooks/use-task-queries";
+import { useMe } from "@/hooks/use-auth-queries";
 import { useDuplicateCheck } from "@/hooks/use-duplicate-check";
 import { useOrgMembers } from "@/hooks/use-org-queries";
 import { useProjectMembers } from "@/hooks/use-project-queries";
@@ -113,6 +114,7 @@ export function CreateTaskDialog({
   defaultAssigneeId?: string | null;
 }) {
   const createTask = useCreateTask(orgId, projectId);
+  const me = useMe();
   const orgMembers = useOrgMembers(orgId);
   const projectMembers = useProjectMembers(orgId, projectId);
   const [status, setStatus] = useState<TaskStatus>(defaultStatus);
@@ -159,6 +161,17 @@ export function CreateTaskDialog({
     (member) => projectMemberIds.has(member.user_id) && member.role !== "guest"
   );
 
+  // Work lands on whoever creates it unless the caller names someone else, so the
+  // picker opens pre-filled — visible, and changeable before saving. An admin who
+  // isn't on this project can't be assigned, so they start Unassigned instead.
+  const creatorId = me.data?.id ?? null;
+  const creatorIsAssignable = assignableMembers.some((member) => member.user_id === creatorId);
+  const initialAssigneeId = defaultAssigneeId ?? (creatorIsAssignable ? creatorId : null);
+  useEffect(() => {
+    if (!open) return;
+    setAssigneeId(initialAssigneeId);
+  }, [open, initialAssigneeId]);
+
   const applyTemplate = (templateId: string) => {
     const template = templates.data?.find((item) => item.id === templateId);
     if (!template) return;
@@ -176,6 +189,7 @@ export function CreateTaskDialog({
         status,
         priority,
         assignee_id: assigneeId,
+        unassigned: assigneeId === null,
         kind,
         severity: kind === "bug" ? severity : null,
       },
@@ -187,7 +201,7 @@ export function CreateTaskDialog({
           form.reset();
           setStatus(defaultStatus);
           setPriority("none");
-          setAssigneeId(null);
+          setAssigneeId(initialAssigneeId);
           setKind("task");
           setSeverity(DEFAULT_SEVERITY);
         },

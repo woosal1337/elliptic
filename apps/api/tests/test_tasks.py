@@ -412,9 +412,23 @@ async def test_task_filters_and_search(client: AsyncClient) -> None:
     auth = await register_and_login(client)
     org = await create_org(client, auth["headers"])
     project = await create_project(client, auth["headers"], org["id"], key="FILT")
-    await create_task(client, auth["headers"], org["id"], project["id"], title="Fix login bug")
+    # The other two stay unassigned so the assignee filter has something to exclude.
+    await create_task(
+        client,
+        auth["headers"],
+        org["id"],
+        project["id"],
+        title="Fix login bug",
+        unassigned=True,
+    )
     todo = await create_task(
-        client, auth["headers"], org["id"], project["id"], title="Ship dashboard", status="todo"
+        client,
+        auth["headers"],
+        org["id"],
+        project["id"],
+        title="Ship dashboard",
+        status="todo",
+        unassigned=True,
     )
     assigned = await create_task(
         client,
@@ -672,3 +686,58 @@ async def test_deleting_creator_nulls_task_created_by(client: AsyncClient) -> No
         stored = await session.scalar(select(Task).where(Task.id == task_id))
         assert stored is not None
         assert stored.created_by is None
+
+
+async def test_new_task_defaults_to_its_creator(client: AsyncClient) -> None:
+    owner = await register_and_login(client)
+    creator = await register_and_login(client)
+    org = await create_org(client, owner["headers"])
+    await add_org_member(client, owner["headers"], org["id"], creator)
+    project = await create_project(client, owner["headers"], org["id"], key="MINE")
+    assigned = await client.post(
+        f"{API}/orgs/{org['id']}/projects/{project['id']}/members",
+        json={"user_id": creator["user_id"]},
+        headers=owner["headers"],
+    )
+    assert assigned.status_code == 201
+
+    mine = await create_task(client, creator["headers"], org["id"], project["id"], title="Mine")
+    assert mine["assignee_id"] == creator["user_id"]
+
+    theirs = await client.post(
+        f"{API}/orgs/{org['id']}/projects/{project['id']}/tasks",
+        json={"title": "Theirs", "assignee_id": owner["user_id"]},
+        headers=creator["headers"],
+    )
+    assert theirs.status_code == 201, theirs.text
+    assert theirs.json()["data"]["assignee_id"] == owner["user_id"]
+
+    nobody = await client.post(
+        f"{API}/orgs/{org['id']}/projects/{project['id']}/tasks",
+        json={"title": "Nobody", "unassigned": True},
+        headers=creator["headers"],
+    )
+    assert nobody.status_code == 201, nobody.text
+    assert nobody.json()["data"]["assignee_id"] is None
+
+
+async def test_project_default_assignee_outranks_the_creator(client: AsyncClient) -> None:
+    owner = await register_and_login(client)
+    creator = await register_and_login(client)
+    org = await create_org(client, owner["headers"])
+    await add_org_member(client, owner["headers"], org["id"], creator)
+    project = await create_project(client, owner["headers"], org["id"], key="PDA")
+    assigned = await client.post(
+        f"{API}/orgs/{org['id']}/projects/{project['id']}/members",
+        json={"user_id": creator["user_id"]},
+        headers=owner["headers"],
+    )
+    assert assigned.status_code == 201
+    await client.patch(
+        f"{API}/orgs/{org['id']}/projects/{project['id']}",
+        json={"default_assignee_id": owner["user_id"]},
+        headers=owner["headers"],
+    )
+
+    task = await create_task(client, creator["headers"], org["id"], project["id"], title="Routed")
+    assert task["assignee_id"] == owner["user_id"]

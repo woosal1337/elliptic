@@ -52,7 +52,6 @@ export const InlineTaskComposer = forwardRef<
         title: trimmed,
         status,
         priority: "none",
-        assignee_id: null,
         kind,
         severity: kind === "bug" ? "medium" : null,
       },

@@ -566,9 +566,17 @@ async def _upsert_external_task(
 
 
 async def _resolve_create_assignee(
-    session: AsyncSession, ctx: OrgContext, project: Project, payload: TaskCreateIn
+    session: AsyncSession,
+    ctx: OrgContext,
+    project: Project,
+    payload: TaskCreateIn,
+    *,
+    assign_to_creator: bool,
 ) -> uuid.UUID | None:
-    """Pick the effective assignee: explicit, else intake-owner (triage), else default."""
+    """Pick the effective assignee: explicit, else intake-owner (triage), else the
+    project default, else the creator. `unassigned` opts out of every fallback."""
+    if payload.unassigned:
+        return None
     if payload.assignee_id is not None:
         await _validate_assignee(session, ctx, project.id, payload.assignee_id)
         return payload.assignee_id
@@ -585,13 +593,28 @@ async def _resolve_create_assignee(
         and not await _is_guest(session, ctx, project.default_assignee_id)
     ):
         return project.default_assignee_id
+    if (
+        assign_to_creator
+        and await is_project_member(session, ctx, project.id, ctx.user.id)
+        and not await _is_guest(session, ctx, ctx.user.id)
+    ):
+        return ctx.user.id
     return None
 
 
 async def create_task(
-    session: AsyncSession, ctx: OrgContext, project_id: uuid.UUID, payload: TaskCreateIn
+    session: AsyncSession,
+    ctx: OrgContext,
+    project_id: uuid.UUID,
+    payload: TaskCreateIn,
+    *,
+    assign_to_creator: bool = True,
 ) -> tuple[Task, Project]:
-    """Create a task with a concurrency-safe per-project number."""
+    """Create a task with a concurrency-safe per-project number.
+
+    Bulk callers pass `assign_to_creator=False` so an import doesn't land every
+    row on whoever ran it.
+    """
     await _require_project_access(session, ctx, project_id)
     if payload.external_source and payload.external_id:
         upserted = await _upsert_external_task(session, ctx, payload)
@@ -599,7 +622,9 @@ async def create_task(
             return upserted
     project = await lock_project(session, ctx, project_id)
     _require_not_archived(project)
-    effective_assignee = await _resolve_create_assignee(session, ctx, project, payload)
+    effective_assignee = await _resolve_create_assignee(
+        session, ctx, project, payload, assign_to_creator=assign_to_creator
+    )
     if payload.parent_task_id is not None:
         await _validate_parent(session, ctx, project.id, payload.parent_task_id, payload.kind)
     if payload.source_meeting_id is not None:

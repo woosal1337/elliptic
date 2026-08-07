@@ -132,7 +132,8 @@ async def test_guest_default_assignee_not_auto_assigned(client: AsyncClient) -> 
         headers=owner["headers"],
     )
     assert created.status_code == 201, created.text
-    assert created.json()["data"]["assignee_id"] is None
+    # The guest default is skipped, so it falls through to the creator.
+    assert created.json()["data"]["assignee_id"] == owner["user_id"]
 
 
 async def test_guest_invite_to_project_capped(client: AsyncClient) -> None:

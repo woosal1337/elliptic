@@ -68,13 +68,16 @@ export const CreateTaskSheet: FC<{
 
   useEffect(() => {
     if (!visible) return
+    // Work lands on whoever creates it until the picker says otherwise, so the
+    // sheet re-seeds on every open rather than keeping the last pick.
+    setAssigneeId(user?.id ?? null)
     void api.listProjects(orgId).then((p) => {
       setProjects(p)
       setProjectId((cur) => cur ?? p[0]?.id ?? null)
     })
     void api.listMembers(orgId).then(setMembers)
     void api.listLabels(orgId).then(setLabels)
-  }, [visible, orgId])
+  }, [visible, orgId, user?.id])
 
   const submit = async () => {
     if (!title.trim() || !projectId || saving) return
@@ -86,6 +89,7 @@ export const CreateTaskSheet: FC<{
       status,
       priority,
       assignee_id: assigneeId,
+      unassigned: assigneeId === null,
       due_date: due || null,
       label_ids: labelIds,
     })

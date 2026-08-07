@@ -968,7 +968,7 @@ export const DOC_PAGES: DocPage[] = [
           [
             "Default assignee",
             "Yes",
-            "Optional person new tasks are assigned to when you do not pick someone."
+            "Optional person new tasks are assigned to when you do not pick someone. Without one, a new task falls to whoever created it."
           ],
           [
             "Target date",
@@ -1454,7 +1454,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Press the `c` shortcut anywhere on a project's Board or Tasks tab (any text you have selected is carried into the title), or use the board's Add details button or the Tasks tab's New task button. Here you set the **title** (required), a **description**, the **kind** (with **severity** when it is a bug), and the starting **status**, **priority**, and **assignee**, along with labels, dates, component, and estimate. The assignee list is limited to project members. The dialog can surface duplicate candidates as you type the title."
+        "text": "Press the `c` shortcut anywhere on a project's Board or Tasks tab (any text you have selected is carried into the title), or use the board's Add details button or the Tasks tab's New task button. Here you set the **title** (required), a **description**, the **kind** (with **severity** when it is a bug), and the starting **status**, **priority**, and **assignee**, along with labels, dates, component, and estimate. The assignee is pre-filled with you, so work you create is yours until you hand it over; change it in the dialog or reassign the item at any time afterwards. The assignee list is limited to project members. The dialog can surface duplicate candidates as you type the title."
       },
       {
         "type": "h3",

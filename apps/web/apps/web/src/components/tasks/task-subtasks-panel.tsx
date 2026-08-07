@@ -93,7 +93,6 @@ function AddSubtask({
         title: trimmed,
         status: "todo",
         priority: "none",
-        assignee_id: null,
         parent_task_id: parentTaskId,
       },
       {

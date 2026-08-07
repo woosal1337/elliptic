@@ -80,6 +80,7 @@ async def create_task(
     status: str = "backlog",
     priority: str = "none",
     assignee_id: str | None = None,
+    unassigned: bool = False,
     due_date: str | None = None,
     label_ids: list[str] | None = None,
     parent_task_id: str | None = None,
@@ -95,6 +96,9 @@ async def create_task(
 ) -> dict[str, Any]:
     """Create a task; inherits Linear numbering, project gates, automations, and activity.
 
+    Without an assignee_id the task falls to the project's default assignee, or to
+    the caller; pass unassigned=True to leave it with nobody assigned.
+
     Pass org_id to target a specific organization when using a multi-organization token."""
     async with mcp_call("tasks:write", org_id=org_id) as call:
 
@@ -105,6 +109,7 @@ async def create_task(
                 status=TaskStatus(status),
                 priority=TaskPriority(priority),
                 assignee_id=_opt_uuid(assignee_id),
+                unassigned=unassigned,
                 due_date=_opt_date(due_date),
                 label_ids=[uuid.UUID(value) for value in (label_ids or [])],
                 parent_task_id=_opt_uuid(parent_task_id),

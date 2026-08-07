@@ -51,6 +51,7 @@ class TaskCreateIn(BaseModel):
     status: TaskStatus = TaskStatus.BACKLOG
     priority: TaskPriority = TaskPriority.NONE
     assignee_id: uuid.UUID | None = None
+    unassigned: bool = False
     start_date: date | None = None
     due_date: date | None = None
     label_ids: list[uuid.UUID] = Field(default_factory=list)

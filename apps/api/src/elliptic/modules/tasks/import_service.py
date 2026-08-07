@@ -101,7 +101,9 @@ async def import_csv(
             skipped += 1
             continue
         try:
-            task, project = await create_task(session, ctx, project_id, payload)
+            task, project = await create_task(
+                session, ctx, project_id, payload, assign_to_creator=False
+            )
             created.append(f"{project.key}-{task.number}")
         except Exception as exc:
             with suppress(Exception):

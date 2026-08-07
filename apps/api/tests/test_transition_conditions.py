@@ -26,7 +26,7 @@ async def test_require_assignee_condition_blocks_move(client: AsyncClient) -> No
     )
     assert created.status_code == 201, created.text
 
-    task = await create_task(client, h, org["id"], project["id"])
+    task = await create_task(client, h, org["id"], project["id"], unassigned=True)
     me_id = auth["user_id"]
 
     blocked = await client.post(

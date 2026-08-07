@@ -51,6 +51,8 @@ export interface CreateTaskInput {
   status: TaskStatus;
   priority: TaskPriority;
   assignee_id?: string | null;
+  /** Create with nobody assigned, skipping the creator/project-default fallbacks. */
+  unassigned?: boolean;
   due_date?: string | null;
   parent_task_id?: string | null;
   source_meeting_id?: string | null;

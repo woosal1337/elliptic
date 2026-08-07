@@ -2,7 +2,14 @@
 
 from httpx import AsyncClient
 
-from tests.helpers import API, create_org, create_project, create_task, register_and_login
+from tests.helpers import (
+    API,
+    add_org_member,
+    create_org,
+    create_project,
+    create_task,
+    register_and_login,
+)
 
 
 async def _setup(client: AsyncClient) -> tuple[dict[str, str], str, str]:
@@ -29,24 +36,35 @@ async def test_triage_count_badge(client: AsyncClient) -> None:
 
 
 async def test_intake_owner_auto_assigns_triage(client: AsyncClient) -> None:
-    headers, org_id, project_id = await _setup(client)
-    me = (await client.get(f"{API}/users/me", headers=headers)).json()["data"]
+    auth = await register_and_login(client)
+    org = await create_org(client, auth["headers"])
+    project = await create_project(client, auth["headers"], org["id"], key="TRI")
+    headers, org_id, project_id = auth["headers"], org["id"], project["id"]
 
+    # The intake owner is deliberately someone other than the creator, so the
+    # triage task and the normal one can't both be explained by one rule.
+    owner = await register_and_login(client)
+    await add_org_member(client, headers, org_id, owner)
+    await client.post(
+        f"{API}/orgs/{org_id}/projects/{project_id}/members",
+        json={"user_id": owner["user_id"], "role": "member"},
+        headers=headers,
+    )
     set_owner = await client.patch(
         f"{API}/orgs/{org_id}/projects/{project_id}",
-        json={"intake_owner_id": me["id"]},
+        json={"intake_owner_id": owner["user_id"]},
         headers=headers,
     )
     assert set_owner.status_code == 200, set_owner.text
-    assert set_owner.json()["data"]["intake_owner_id"] == me["id"]
+    assert set_owner.json()["data"]["intake_owner_id"] == owner["user_id"]
 
     triaged = await create_task(
         client, headers, org_id, project_id, title="Inbound", is_triage=True
     )
-    assert triaged["assignee_id"] == me["id"]
+    assert triaged["assignee_id"] == owner["user_id"]
 
     normal = await create_task(client, headers, org_id, project_id, title="Normal")
-    assert normal["assignee_id"] != me["id"]
+    assert normal["assignee_id"] == auth["user_id"]
 
 
 async def test_accept_with_chosen_status(client: AsyncClient) -> None:
