@@ -54,7 +54,7 @@ in-product assistant and AI agents run on **your own keys (BYOK)**, and the whol
 
 **Collaboration**
 - Threaded comments, reactions, and resolve across every entity
-- Activity feeds, notifications, full-text search, favorites, and stickies
+- Activity feeds, notifications, full-text search, and favorites
 - Public embeds and shareable links
 
 **Enterprise & platform**

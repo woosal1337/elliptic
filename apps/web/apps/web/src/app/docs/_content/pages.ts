@@ -319,11 +319,6 @@ export const DOC_PAGES: DocPage[] = [
             "Your notes and documents."
           ],
           [
-            "Personal",
-            "Stickies",
-            "Quick sticky notes for fleeting thoughts."
-          ],
-          [
             "Workspace",
             "Projects",
             "All projects and their task boards. The default landing page."
@@ -3836,14 +3831,6 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "h2",
         "text": "Personal surfaces"
-      },
-      {
-        "type": "h3",
-        "text": "Stickies"
-      },
-      {
-        "type": "p",
-        "text": "Stickies are your private scratchpad, a wall of quick notes only you can see. Each sticky is a small color-coded card (yellow, green, blue, pink, purple, or orange) that autosaves as you type. When a fleeting thought turns into real work you can convert a sticky into a task or a page in one step, optionally into a specific project, and optionally clearing the sticky afterward."
       },
       {
         "type": "h3",

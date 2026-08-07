@@ -570,12 +570,6 @@ export class Api {
     return res.ok
   }
 
-  // ---- Stickies ----
-
-
-
-
-
   // ---- AI conversations (list, for history) ----
   async listConversations(orgId: string): Promise<{ id: string; title?: string }[]> {
     const res = await this.apisauce.get<

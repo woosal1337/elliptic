@@ -119,8 +119,8 @@ const CAPABILITIES = [
     description: "Search across tasks, notes, meetings, and people from one box.",
   },
   {
-    title: "Favorites and stickies",
-    description: "Pin the work you care about and keep quick notes close, per person.",
+    title: "Favorites",
+    description: "Pin the work you care about for quick access, per person.",
   },
 ];
 
