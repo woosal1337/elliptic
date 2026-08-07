@@ -149,7 +149,7 @@ export default function ProjectsPage() {
       const ordered = states.data ?? [];
       const sections = [
         ...ordered.map((s) => ({ id: s.id, label: s.name, color: s.color })),
-        { id: UNSET, label: "No state", color: "#cbd5e1" },
+        { id: UNSET, label: "No state", color: "#F5F5F5" },
       ];
       return sections
         .map((section) => ({
@@ -162,8 +162,8 @@ export default function ProjectsPage() {
     }
     const labels = [...new Set(sorted.flatMap((p) => p.labels))].sort((a, b) => a.localeCompare(b));
     const sections = [
-      ...labels.map((label) => ({ id: label, label, color: "#94a3b8" })),
-      { id: UNSET, label: "No label", color: "#cbd5e1" },
+      ...labels.map((label) => ({ id: label, label, color: "#C4C4C4" })),
+      { id: UNSET, label: "No label", color: "#9A9A9A" },
     ];
     return sections
       .map((section) => ({

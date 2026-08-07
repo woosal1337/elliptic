@@ -57,8 +57,16 @@ for app in web mobile; do
   files=$(filter "^apps/$app/.*\.(ts|tsx|js|jsx)$")
   [ -n "$files" ] || continue
   echo "pre-commit: eslint (apps/$app)"
+  # node_modules/.bin, not bunx: bunx resolved eslint@latest from the network
+  # and linted with a version the repo's plugins do not support, which failed a
+  # commit that had nothing wrong with it.
+  bin="apps/$app/node_modules/.bin/eslint"
+  if [ ! -x "$bin" ]; then
+    echo "  skipped — $bin missing (run bun install)"
+    continue
+  fi
   # shellcheck disable=SC2086
-  (cd "apps/$app" && bunx eslint --fix $(echo "$files" | sed "s|^apps/$app/||")) || fail=1
+  (cd "apps/$app" && ./node_modules/.bin/eslint --fix $(echo "$files" | sed "s|^apps/$app/||")) || fail=1
   # shellcheck disable=SC2086
   restage $files
 done

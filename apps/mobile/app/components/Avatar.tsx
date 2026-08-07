@@ -3,20 +3,22 @@ import { Image, ImageStyle, TextStyle, View, ViewStyle } from "react-native"
 
 import { Text } from "@/components/Text"
 
-// Saturated tints (shared with the web collab-cursor palette). Initials are
-// always rendered white for contrast — never a theme neutral (which flips to
-// black in dark mode).
+// A grey ramp, seeded per name, replacing the saturated tints this shared with
+// the web collab-cursor palette. Identity is still legible — the initials carry
+// most of it and the ten steps are far enough apart to tell two people's circles
+// apart side by side — but nothing here introduces a hue into a monochrome UI.
+// Every step stays dark enough that white initials clear 4.5:1.
 const AVATAR_COLORS = [
-  "#ef4444",
-  "#f97316",
-  "#eab308",
-  "#22c55e",
-  "#06b6d4",
-  "#6366f1",
-  "#8b5cf6",
-  "#ec4899",
-  "#14b8a6",
-  "#f43f5e",
+  "#333333",
+  "#3D3D3D",
+  "#474747",
+  "#515151",
+  "#5B5B5B",
+  "#656565",
+  "#6B6B6B",
+  "#707070",
+  "#737373",
+  "#767676",
 ]
 
 /**
@@ -26,7 +28,7 @@ const AVATAR_COLORS = [
  * Named here so the intent survives the next person who tries to "fix" them.
  */
 const AVATAR_FG = "#FFFFFF"
-const OVERFLOW_BG = "#6B7280"
+const OVERFLOW_BG = "#5A5A5A"
 
 function colorForName(seed: string): string {
   let hash = 0

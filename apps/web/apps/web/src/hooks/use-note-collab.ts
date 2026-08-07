@@ -12,8 +12,8 @@ export interface NoteCollab {
 }
 
 const COLORS = [
-  "#ef4444", "#f97316", "#eab308", "#22c55e", "#06b6d4",
-  "#3b82f6", "#8b5cf6", "#ec4899", "#14b8a6", "#f43f5e",
+  "#F5F5F5", "#DCDCDC", "#C4C4C4", "#ADADAD", "#9A9A9A",
+  "#8A8A8A", "#7C7C7C", "#6E6E6E", "#616161", "#545454",
 ];
 function colorFor(id: string): string {
   let hash = 0;

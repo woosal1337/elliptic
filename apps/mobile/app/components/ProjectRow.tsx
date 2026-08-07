@@ -8,14 +8,16 @@ import { typography } from "@/theme/typography"
 import { hapticPress } from "@/utils/haptics"
 
 const TILE_COLORS = [
-  "#6366f1",
-  "#8b5cf6",
-  "#ec4899",
-  "#f97316",
-  "#eab308",
-  "#22c55e",
-  "#06b6d4",
-  "#14b8a6",
+  "#333333",
+  "#3D3D3D",
+  "#474747",
+  "#515151",
+  "#5B5B5B",
+  "#656565",
+  "#6B6B6B",
+  "#707070",
+  "#737373",
+  "#767676",
 ]
 
 /** Stable per-project colour, so a project looks the same everywhere. */

@@ -22,7 +22,7 @@
     "package": "sh.elliptic",
     "adaptiveIcon": {
       "foregroundImage": "./assets/images/app-icon.png",
-      "backgroundColor": "#0E0E11"
+      "backgroundColor": "#101010"
     },
     "allowBackup": false,
     "edgeToEdgeEnabled": true
@@ -58,7 +58,7 @@
         "image": "./assets/images/splash-icon.png",
         "imageWidth": 160,
         "resizeMode": "contain",
-        "backgroundColor": "#0E0E11"
+        "backgroundColor": "#101010"
       }
     ],
     [

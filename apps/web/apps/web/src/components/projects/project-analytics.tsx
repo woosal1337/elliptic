@@ -83,11 +83,11 @@ const CATEGORY_LABELS: Record<string, string> = {
 };
 
 const CATEGORY_COLORS: Record<string, string> = {
-  backlog: "#94a3b8",
-  unstarted: "#6366f1",
-  started: "#d97706",
-  completed: "#15803d",
-  cancelled: "#be123c",
+  backlog: "#F5F5F5",
+  unstarted: "#C4C4C4",
+  started: "#9A9A9A",
+  completed: "#767676",
+  cancelled: "#5A5A5A",
 };
 
 function StatCard({ label, value }: { label: string; value: string }) {
@@ -138,7 +138,7 @@ function Breakdown({
                     className="h-full rounded-full"
                     style={{
                       width: `${(count / max) * 100}%`,
-                      backgroundColor: colors?.[key] ?? "#6366f1",
+                      backgroundColor: colors?.[key] ?? "#8C8C8C",
                     }}
                   />
                 </div>

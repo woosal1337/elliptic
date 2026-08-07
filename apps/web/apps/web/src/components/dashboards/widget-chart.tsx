@@ -3,14 +3,14 @@
 import type { ChartPoint } from "@/hooks/use-dashboard-queries";
 
 const PALETTE = [
-  "var(--color-accent, #6366f1)",
-  "#0891b2",
-  "#15803d",
-  "#d97706",
-  "#db2777",
-  "#7c3aed",
-  "#dc2626",
-  "#0d9488",
+  "var(--color-accent, #F5F5F5)",
+  "#C4C4C4",
+  "#9A9A9A",
+  "#767676",
+  "#5A5A5A",
+  "#8C8C8C",
+  "#B0B0B0",
+  "#6E6E6E",
 ];
 
 function labelize(key: string): string {
