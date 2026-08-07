@@ -723,6 +723,7 @@ export const TaskDetailScreen: FC<TasksStackScreenProps<"TaskDetail">> = ({
         options={STATUS_OPTIONS}
         selected={task.status}
         onSelect={(v) => void changeStatus(v)}
+        renderLeading={(o) => <StatusIcon status={o.value} />}
       />
       <OptionSheet
         visible={picker === "priority"}
@@ -731,6 +732,7 @@ export const TaskDetailScreen: FC<TasksStackScreenProps<"TaskDetail">> = ({
         options={PRIORITY_OPTIONS}
         selected={task.priority}
         onSelect={(v) => void patch({ priority: v })}
+        renderLeading={(o) => <PriorityIcon priority={o.value} />}
       />
       <OptionSheet
         visible={picker === "assignee"}
