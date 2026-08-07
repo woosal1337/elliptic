@@ -37,6 +37,26 @@ export function hapticImpact() {
   safe(() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium))
 }
 
+/**
+ * Wrap a press handler so it ticks before running.
+ *
+ * Lives here, and is applied inside the shared row/button primitives rather than
+ * at each call site, so a new screen gets feedback by building out of the same
+ * components instead of by remembering. Returns undefined when handed undefined,
+ * which keeps `onPress={undefined}` meaning "not pressable" — wrapping it would
+ * make inert rows tick.
+ */
+export function hapticPress<A extends unknown[]>(
+  fn: ((...args: A) => void) | undefined,
+  tick: () => void = hapticSelection,
+): ((...args: A) => void) | undefined {
+  if (!fn) return undefined
+  return (...args: A) => {
+    tick()
+    fn(...args)
+  }
+}
+
 export const haptics = {
   selection: hapticSelection,
   success: hapticSuccess,

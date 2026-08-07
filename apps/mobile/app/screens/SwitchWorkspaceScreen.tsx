@@ -9,7 +9,6 @@ import { Text } from "@/components/Text"
 import { useOrg } from "@/context/OrgContext"
 import type { AppStackScreenProps } from "@/navigators/navigationTypes"
 import { useAppTheme } from "@/theme/context"
-import { hapticSelection } from "@/utils/haptics"
 
 /**
  * Workspace picker. The root stack presents it as a native form sheet, so the
@@ -49,7 +48,7 @@ export const SwitchWorkspaceScreen: FC<AppStackScreenProps<"SwitchWorkspace">> =
             ) : undefined
           }
           onPress={() => {
-            hapticSelection()
+            // ListRow ticks for us — a second call here would double-fire.
             setActiveOrgId(org.id)
             navigation.goBack()
           }}

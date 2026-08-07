@@ -8,6 +8,7 @@ import { Text } from "@/components/Text"
 import { useOrg } from "@/context/OrgContext"
 import type { AppStackScreenProps } from "@/navigators/navigationTypes"
 import { useAppTheme } from "@/theme/context"
+import { hapticPress } from "@/utils/haptics"
 
 /** Opens the workspace picker, which the root stack presents as a native sheet. */
 export const OrgSwitcher: FC = () => {
@@ -19,7 +20,7 @@ export const OrgSwitcher: FC = () => {
 
   return (
     <Pressable
-      onPress={() => navigation.navigate("SwitchWorkspace")}
+      onPress={hapticPress(() => navigation.navigate("SwitchWorkspace"))}
       accessibilityRole="button"
       accessibilityLabel="Switch workspace"
       style={[$trigger, { gap: spacing.xs }]}

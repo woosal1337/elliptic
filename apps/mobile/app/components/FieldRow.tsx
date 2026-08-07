@@ -4,6 +4,7 @@ import { Pressable, View, ViewStyle } from "react-native"
 import { AppIcon } from "@/components/AppIcon"
 import { Text } from "@/components/Text"
 import { useAppTheme } from "@/theme/context"
+import { hapticPress } from "@/utils/haptics"
 
 /** A tappable labeled field that opens a picker (used in create/edit sheets). */
 export const FieldRow: FC<{
@@ -17,7 +18,7 @@ export const FieldRow: FC<{
   } = useAppTheme()
   return (
     <Pressable
-      onPress={onPress}
+      onPress={hapticPress(onPress)}
       style={[$row, { borderBottomColor: colors.separator, paddingVertical: spacing.sm }]}
     >
       <Text text={label} size="xs" style={{ color: colors.textDim }} />

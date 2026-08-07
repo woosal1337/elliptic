@@ -5,6 +5,7 @@ import { AppIcon } from "@/components/AppIcon"
 import { Sheet } from "@/components/Sheet"
 import { Text } from "@/components/Text"
 import { useAppTheme } from "@/theme/context"
+import { hapticPress } from "@/utils/haptics"
 
 export interface Option {
   label: string
@@ -39,10 +40,10 @@ export const OptionSheet: FC<{
           return (
             <Pressable
               key={opt.value}
-              onPress={() => {
+              onPress={hapticPress(() => {
                 onSelect(opt.value)
                 onClose()
-              }}
+              })}
               style={[
                 $row,
                 { paddingHorizontal: spacing.lg, paddingVertical: spacing.md, gap: spacing.sm },

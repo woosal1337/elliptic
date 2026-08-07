@@ -13,6 +13,7 @@ import { GlassContainer, GlassView, isLiquidGlassAvailable } from "expo-glass-ef
 
 import { useAppTheme } from "@/theme/context"
 import { typography } from "@/theme/typography"
+import { hapticPress } from "@/utils/haptics"
 
 /**
  * Liquid Glass building blocks (iOS 26). Everything here degrades to the themed
@@ -80,7 +81,7 @@ export const GlassIconButton: FC<{
   }
   return (
     <Pressable
-      onPress={onPress}
+      onPress={hapticPress(onPress)}
       disabled={disabled}
       testID={testID}
       accessible

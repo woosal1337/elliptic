@@ -8,6 +8,7 @@ import { Text } from "@/components/Text"
 import type { Task } from "@/services/api/types"
 import { useAppTheme } from "@/theme/context"
 import { typography } from "@/theme/typography"
+import { hapticPress } from "@/utils/haptics"
 
 /** Is an ISO date string strictly before today (local)? */
 function isOverdue(due?: string | null): boolean {
@@ -57,7 +58,7 @@ export const TaskRow: FC<{
   }
 
   return (
-    <Pressable onPress={onPress} style={$row}>
+    <Pressable onPress={hapticPress(onPress)} style={$row}>
       <StatusIcon status={task.status} />
 
       <View style={$center}>

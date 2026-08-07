@@ -5,6 +5,7 @@ import { Text } from "@/components/Text"
 import type { Project } from "@/services/api/types"
 import { useAppTheme } from "@/theme/context"
 import { typography } from "@/theme/typography"
+import { hapticPress } from "@/utils/haptics"
 
 const TILE_COLORS = [
   "#6366f1",
@@ -36,7 +37,7 @@ export const ProjectRow: FC<{ project: Project; onPress: () => void; divider?: b
 
   return (
     <Pressable
-      onPress={onPress}
+      onPress={hapticPress(onPress)}
       // Without an explicit label the row reads out as "R, Dataland, RAS" —
       // the tile letter and key merged in with the name.
       accessible

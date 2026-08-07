@@ -3,6 +3,7 @@ import { Pressable, View, ViewStyle } from "react-native"
 
 import { Text } from "@/components/Text"
 import { useAppTheme } from "@/theme/context"
+import { hapticPress } from "@/utils/haptics"
 
 export interface ListRowProps {
   title: string
@@ -30,7 +31,7 @@ export const ListRow: FC<ListRowProps> = ({ title, subtitle, left, right, onPres
   })
 
   return (
-    <Pressable onPress={onPress} style={$row}>
+    <Pressable onPress={hapticPress(onPress)} style={$row}>
       {left}
       <View style={$content}>
         <Text text={title} weight="medium" numberOfLines={1} />
