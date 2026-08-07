@@ -1,20 +1,109 @@
-import { FC } from "react"
+import { FC, useEffect, useState } from "react"
 import { Alert, View, ViewStyle } from "react-native"
-import { Button, Form, Host, Label, Section, Text as NativeText } from "@expo/ui/swift-ui"
+import {
+  Button,
+  Form,
+  Host,
+  Picker,
+  Section,
+  Text as NativeText,
+  TextField,
+  Toggle,
+} from "@expo/ui/swift-ui"
+import {
+  background,
+  listRowBackground,
+  pickerStyle,
+  scrollContentBackground,
+  tag,
+} from "@expo/ui/swift-ui/modifiers"
+import { useMMKVBoolean } from "react-native-mmkv"
 
 import { useAuth } from "@/context/AuthContext"
 import { useOrg } from "@/context/OrgContext"
 import type { ProfileStackScreenProps } from "@/navigators/navigationTypes"
+import { api } from "@/services/api"
+import type { NotificationPrefs } from "@/services/api/types"
 import { useAppTheme } from "@/theme/context"
 
+type EmailPrefs = Omit<NotificationPrefs, "project_id">
+
+const PREF_ROWS: { key: keyof EmailPrefs; label: string }[] = [
+  { key: "email_mentions", label: "Mentions" },
+  { key: "email_comments", label: "Comments" },
+  { key: "email_state_change", label: "Status changes" },
+  { key: "email_property_change", label: "Property changes" },
+  { key: "email_completed", label: "Completed" },
+]
+
+const ALL_ON: EmailPrefs = {
+  email_property_change: true,
+  email_state_change: true,
+  email_completed: true,
+  email_comments: true,
+  email_mentions: true,
+}
+
+const THEMES = ["system", "light", "dark"] as const
+const THEME_LABEL: Record<(typeof THEMES)[number], string> = {
+  system: "System",
+  light: "Light",
+  dark: "Dark",
+}
+
 /**
- * Profile is a SwiftUI `Form`, like Settings — grouped rows, system labels with
- * SF Symbols, and a destructive button, all drawn by UIKit.
+ * Profile and settings on one screen.
+ *
+ * These were two screens, and the first was a title, an email and a single row
+ * that pushed you to the second. That is a navigation step to reach four
+ * sections that fit on one page — the settings here are few enough that a
+ * grouped form holds all of them without scrolling far, so the split cost a tap
+ * and bought nothing.
+ *
+ * Still a SwiftUI `Form`, so the rows, toggles and pickers are UIKit's,
+ * including whatever iOS does to them on 26 and later. What changed is the
+ * backdrop: the form's own grouped background is hidden and the app's canvas
+ * drawn behind it, with rows on the surface token. Left alone it renders
+ * systemGroupedBackground, which is close to the app's dark canvas but not the
+ * same, and the seam showed as a panel that did not belong to the app.
  */
-export const ProfileScreen: FC<ProfileStackScreenProps<"ProfileMain">> = ({ navigation }) => {
+export const ProfileScreen: FC<ProfileStackScreenProps<"ProfileMain">> = () => {
   const { user, logout } = useAuth()
   const { activeOrg } = useOrg()
-  const { themeContext } = useAppTheme()
+  const { themeOverride, setThemeContextOverride, themeContext, theme } = useAppTheme()
+  const [name, setName] = useState(user?.full_name ?? "")
+  const [pushEnabled, setPushEnabled] = useMMKVBoolean("push.enabled")
+  const [prefs, setPrefs] = useState<EmailPrefs | null>(null)
+
+  useEffect(() => {
+    if (!activeOrg) return
+    void api.getNotificationPrefs(activeOrg.id).then((p) =>
+      setPrefs(
+        p
+          ? {
+              email_property_change: p.email_property_change,
+              email_state_change: p.email_state_change,
+              email_completed: p.email_completed,
+              email_comments: p.email_comments,
+              email_mentions: p.email_mentions,
+            }
+          : ALL_ON,
+      ),
+    )
+  }, [activeOrg])
+
+  // The field commits on change with a trailing save, so there is no button.
+  const saveName = (value: string) => {
+    setName(value)
+    if (value.trim()) void api.updateProfile(value.trim())
+  }
+
+  const togglePref = (key: keyof EmailPrefs, value: boolean) => {
+    if (!activeOrg || !prefs) return
+    const next = { ...prefs, [key]: value }
+    setPrefs(next)
+    void api.updateNotificationPrefs(activeOrg.id, next)
+  }
 
   const confirmSignOut = () => {
     Alert.alert("Sign out", "You'll need to sign in again to use Elliptic.", [
@@ -23,22 +112,59 @@ export const ProfileScreen: FC<ProfileStackScreenProps<"ProfileMain">> = ({ navi
     ])
   }
 
+  const row = [listRowBackground(theme.colors.surface)]
+
   return (
-    <View style={$fill}>
+    <View style={[$fill, { backgroundColor: theme.colors.background }]}>
       <Host style={$fill} colorScheme={themeContext}>
-        <Form>
-          <Section title={user?.full_name ?? "Me"}>
+        <Form modifiers={[scrollContentBackground("hidden"), background(theme.colors.background)]}>
+          <Section title="Account" modifiers={row}>
+            <TextField defaultValue={name} placeholder="Full name" onValueChange={saveName} />
             <NativeText>{user?.email ?? ""}</NativeText>
             {activeOrg ? <NativeText>{activeOrg.name}</NativeText> : null}
           </Section>
 
-          <Section>
-            <Button onPress={() => navigation.navigate("Settings")}>
-              <Label title="Settings" systemImage="gearshape" />
-            </Button>
+          <Section title="Appearance" modifiers={row}>
+            <Picker
+              label="Theme"
+              selection={themeOverride ?? "system"}
+              onSelectionChange={(value) =>
+                setThemeContextOverride(
+                  value === "system" ? undefined : (value as "light" | "dark"),
+                )
+              }
+              modifiers={[pickerStyle("segmented")]}
+            >
+              {THEMES.map((t) => (
+                <NativeText key={t} modifiers={[tag(t)]}>
+                  {THEME_LABEL[t]}
+                </NativeText>
+              ))}
+            </Picker>
           </Section>
 
-          <Section>
+          <Section title="Notifications" modifiers={row}>
+            <Toggle
+              label="Push notifications"
+              isOn={pushEnabled ?? true}
+              onIsOnChange={setPushEnabled}
+            />
+          </Section>
+
+          {prefs ? (
+            <Section title="Email me about" modifiers={row}>
+              {PREF_ROWS.map((r) => (
+                <Toggle
+                  key={r.key}
+                  label={r.label}
+                  isOn={prefs[r.key]}
+                  onIsOnChange={(value) => togglePref(r.key, value)}
+                />
+              ))}
+            </Section>
+          ) : null}
+
+          <Section modifiers={row}>
             <Button role="destructive" label="Sign out" onPress={confirmSignOut} />
           </Section>
         </Form>

@@ -1,7 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
 import { ProfileScreen } from "@/screens/ProfileScreen"
-import { SettingsScreen } from "@/screens/SettingsScreen"
 
 import type { ProfileStackParamList } from "./navigationTypes"
 import { useStackScreenOptions } from "./stackScreenOptions"
@@ -17,7 +16,6 @@ export function ProfileNavigator() {
         component={ProfileScreen}
         options={{ headerShown: false, title: "Profile" }}
       />
-      <Stack.Screen name="Settings" component={SettingsScreen} options={{ title: "Settings" }} />
     </Stack.Navigator>
   )
 }
