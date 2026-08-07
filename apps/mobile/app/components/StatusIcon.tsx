@@ -11,6 +11,7 @@ export type TaskStatus =
   | "in_review"
   | "done"
   | "cancelled"
+  | "duplicate"
   | string
 
 /**
@@ -47,32 +48,22 @@ export const StatusIcon: FC<{ status: TaskStatus; size?: number }> = ({ status, 
     )
   }
 
-  // backlog / todo / in_progress / in_review are outlined circles with an
-  // increasingly-filled center.
+  // backlog / todo / in_progress / in_review / duplicate are outlined circles
+  // with an increasingly-filled center. Duplicate is a closed state but draws
+  // like todo — an empty ring — matching web, where only done and cancelled fill.
   const innerRatio = status === "in_review" ? 0.62 : status === "in_progress" ? 0.42 : 0
-  return (
-    <View
-      style={[
-        ring,
-        {
-          borderWidth: 1.6,
-          borderColor: color,
-          borderStyle: status === "backlog" ? "dashed" : "solid",
-        },
-      ]}
-    >
-      {innerRatio > 0 ? (
-        <View
-          style={{
-            width: size * innerRatio,
-            height: size * innerRatio,
-            borderRadius: (size * innerRatio) / 2,
-            backgroundColor: color,
-          }}
-        />
-      ) : null}
-    </View>
-  )
+  const outline: ViewStyle = {
+    borderWidth: 1.6,
+    borderColor: color,
+    borderStyle: status === "backlog" ? "dashed" : "solid",
+  }
+  const inner: ViewStyle = {
+    width: size * innerRatio,
+    height: size * innerRatio,
+    borderRadius: (size * innerRatio) / 2,
+    backgroundColor: color,
+  }
+  return <View style={[ring, outline]}>{innerRatio > 0 ? <View style={inner} /> : null}</View>
 }
 
 function statusColor(
@@ -90,6 +81,8 @@ function statusColor(
       return colors.statusDone
     case "cancelled":
       return colors.statusCancelled
+    case "duplicate":
+      return colors.statusDuplicate
     case "backlog":
     default:
       return colors.statusBacklog

@@ -59,7 +59,12 @@ export const HomeScreen: FC<HomeStackScreenProps<"HomeMain">> = ({ navigation })
       safeAreaEdges={["top"]}
       ScrollViewProps={{
         refreshControl: (
-          <RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={colors.tint} />
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={refresh}
+            tintColor={colors.textDim}
+            colors={[colors.textDim]}
+          />
         ),
       }}
     >

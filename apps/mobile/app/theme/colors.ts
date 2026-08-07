@@ -97,6 +97,9 @@ export const colors = {
   statusInReview: "#515BE4",
   statusDone: "#25975B",
   statusCancelled: "rgba(212, 25, 32, 0.6)",
+  // Matches web, where duplicate carries muted-foreground like todo — a closed
+  // state, but not a failure, so it stays neutral rather than borrowing red.
+  statusDuplicate: "#6A6868",
 
   priorityNone: "rgba(106, 104, 104, 0.5)",
   priorityLow: "#6A6868",

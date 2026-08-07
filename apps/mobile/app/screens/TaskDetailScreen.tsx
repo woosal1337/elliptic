@@ -403,7 +403,12 @@ export const TaskDetailScreen: FC<TasksStackScreenProps<"TaskDetail">> = ({
         // Keep a focused field clear of both the keyboard and the composer.
         bottomOffset={(editing ? 0 : composerHeight) + 16}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={colors.tint} />
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={refresh}
+            tintColor={colors.textDim}
+            colors={[colors.textDim]}
+          />
         }
       >
         {titleDraft === null ? (

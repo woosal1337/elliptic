@@ -15,6 +15,7 @@ export const STATUS_OPTIONS: Option[] = [
   { label: "In review", value: "in_review" },
   { label: "Done", value: "done" },
   { label: "Cancelled", value: "cancelled" },
+  { label: "Duplicate", value: "duplicate" },
 ]
 
 export function isoInDays(n: number): string {

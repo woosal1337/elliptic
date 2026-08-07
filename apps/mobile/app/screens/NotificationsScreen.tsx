@@ -183,7 +183,12 @@ export const NotificationsScreen: FC<InboxStackScreenProps<"Notifications">> = (
           keyExtractor={(n) => n.id}
           stickySectionHeadersEnabled={false}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={colors.tint} />
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={refresh}
+              tintColor={colors.textDim}
+              colors={[colors.textDim]}
+            />
           }
           contentContainerStyle={sections.length === 0 ? $grow : $bottomClearance}
           renderSectionHeader={({ section }) => (

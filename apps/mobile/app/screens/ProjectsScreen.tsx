@@ -43,7 +43,12 @@ export const ProjectsScreen: FC<HomeStackScreenProps<"Projects">> = ({ navigatio
         keyExtractor={(p) => p.id}
         contentContainerStyle={data.length === 0 ? $flex : $bottomClearance}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={colors.tint} />
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={refresh}
+            tintColor={colors.textDim}
+            colors={[colors.textDim]}
+          />
         }
         ListEmptyComponent={
           <EmptyState

@@ -72,7 +72,12 @@ export const NotesScreen: FC<NotesStackScreenProps<"NotesList">> = ({ navigation
           data={notes}
           keyExtractor={(n) => n.id}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={colors.tint} />
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={refresh}
+              tintColor={colors.textDim}
+              colors={[colors.textDim]}
+            />
           }
           contentContainerStyle={notes.length === 0 ? $grow : $bottomClearance}
           ListEmptyComponent={

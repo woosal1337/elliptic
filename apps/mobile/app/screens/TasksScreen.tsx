@@ -22,8 +22,18 @@ import { prettyLabel, STATUS_OPTIONS } from "@/utils/taskOptions"
 import { useCollapsedSections } from "@/utils/useCollapsedSections"
 import { useListQuery } from "@/utils/useListQuery"
 
-// Active work first, closed work last.
-const STATUS_ORDER = ["in_progress", "in_review", "todo", "backlog", "done", "cancelled"]
+// Active work first, closed work last. Every status the API can return must
+// appear here: sections are built by filtering this list, so a status missing
+// from it has no section and its tasks are silently invisible on mobile.
+const STATUS_ORDER = [
+  "in_progress",
+  "in_review",
+  "todo",
+  "backlog",
+  "done",
+  "cancelled",
+  "duplicate",
+]
 
 export const TasksScreen: FC<TasksStackScreenProps<"TasksList">> = ({ navigation }) => {
   const { activeOrg } = useOrg()
@@ -110,7 +120,12 @@ export const TasksScreen: FC<TasksStackScreenProps<"TasksList">> = ({ navigation
           keyExtractor={(t) => t.id}
           stickySectionHeadersEnabled={false}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={colors.tint} />
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={refresh}
+              tintColor={colors.textDim}
+              colors={[colors.textDim]}
+            />
           }
           contentContainerStyle={sections.length === 0 ? $grow : $bottomClearance}
           ListEmptyComponent={
