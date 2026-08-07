@@ -22,18 +22,26 @@ import { prettyLabel, STATUS_OPTIONS } from "@/utils/taskOptions"
 import { useCollapsedSections } from "@/utils/useCollapsedSections"
 import { useListQuery } from "@/utils/useListQuery"
 
-// Active work first, closed work last. Every status the API can return must
-// appear here: sections are built by filtering this list, so a status missing
-// from it has no section and its tasks are silently invisible on mobile.
-const STATUS_ORDER = [
-  "in_progress",
-  "in_review",
-  "todo",
-  "backlog",
-  "done",
-  "cancelled",
-  "duplicate",
-]
+// Active work only. Every status the API can return must be accounted for
+// here or in CLOSED_STATUSES: sections are built by filtering this list, so a
+// status in neither has no section and its tasks are silently invisible.
+const STATUS_ORDER = ["in_progress", "in_review", "todo", "backlog"]
+
+/**
+ * Closed work, left off the list entirely rather than shown as a collapsed
+ * header. A finished task is not something you scroll past on the way to work —
+ * it is history, and it belongs on the task itself or in search. Keeping the
+ * headers would still cost a row each and still show a count that invites a tap.
+ */
+const CLOSED_STATUSES = new Set(["done", "cancelled", "duplicate"])
+
+/**
+ * Folded shut on every visit. These two carry the long tail — backlog is
+ * everything not yet started, and in-progress accumulates whatever was left
+ * open — so opening Tasks to a wall of them buries the middle of the board.
+ * Expanding one holds while you are on the screen, then resets.
+ */
+const COLLAPSED_ON_MOUNT = ["backlog", "in_progress"]
 
 export const TasksScreen: FC<TasksStackScreenProps<"TasksList">> = ({ navigation }) => {
   const { activeOrg } = useOrg()
@@ -41,7 +49,7 @@ export const TasksScreen: FC<TasksStackScreenProps<"TasksList">> = ({ navigation
     theme: { colors },
   } = useAppTheme()
   const [showCreate, setShowCreate] = useState(false)
-  const { collapsed, toggle } = useCollapsedSections("tasks")
+  const { collapsed, toggle } = useCollapsedSections("tasks", COLLAPSED_ON_MOUNT)
   const cacheKey = activeOrg ? queryKeys.tasks(activeOrg.id, "all") : null
   const fetcher = useCallback(
     () => (activeOrg ? api.listTasks(activeOrg.id, "all") : Promise.resolve<Task[]>([])),
@@ -78,6 +86,7 @@ export const TasksScreen: FC<TasksStackScreenProps<"TasksList">> = ({ navigation
   const sections = useMemo(() => {
     const groups = new Map<string, Task[]>()
     for (const t of tasks) {
+      if (CLOSED_STATUSES.has(t.status)) continue
       const arr = groups.get(t.status) ?? []
       arr.push(t)
       groups.set(t.status, arr)
