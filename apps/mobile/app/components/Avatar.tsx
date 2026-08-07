@@ -1,5 +1,5 @@
 import { FC } from "react"
-import { Image, ImageStyle, View, ViewStyle } from "react-native"
+import { Image, ImageStyle, TextStyle, View, ViewStyle } from "react-native"
 
 import { Text } from "@/components/Text"
 
@@ -18,6 +18,15 @@ const AVATAR_COLORS = [
   "#14b8a6",
   "#f43f5e",
 ]
+
+/**
+ * Initials and the overflow chip are fixed values, not theme tokens, and the
+ * lint rule that objects to colour literals is right to ask why: a theme neutral
+ * would flip to black in dark mode and vanish against these saturated circles.
+ * Named here so the intent survives the next person who tries to "fix" them.
+ */
+const AVATAR_FG = "#FFFFFF"
+const OVERFLOW_BG = "#6B7280"
 
 function colorForName(seed: string): string {
   let hash = 0
@@ -59,13 +68,14 @@ export const Avatar: FC<AvatarProps> = ({ name, uri, size = 32 }) => {
     return <Image source={{ uri }} style={$img} />
   }
 
+  const $initials: TextStyle = {
+    color: AVATAR_FG,
+    fontSize: size * 0.4,
+    lineHeight: size * 0.5,
+  }
   return (
     <View style={$circle}>
-      <Text
-        text={initials(name)}
-        weight="semiBold"
-        style={{ color: "#FFFFFF", fontSize: size * 0.4, lineHeight: size * 0.5 }}
-      />
+      <Text text={initials(name)} weight="semiBold" style={$initials} />
     </View>
   )
 }
@@ -81,28 +91,30 @@ export const AvatarStack: FC<AvatarStackProps> = ({ people, size = 24, max = 3 }
   const shown = people.slice(0, max)
   const extra = people.length - shown.length
   const overlap = size * 0.32
+  const $overflow: ViewStyle = {
+    marginLeft: -overlap,
+    width: size,
+    height: size,
+    borderRadius: size / 2,
+    backgroundColor: OVERFLOW_BG,
+    alignItems: "center",
+    justifyContent: "center",
+  }
+  const $overflowText: TextStyle = { color: AVATAR_FG, fontSize: size * 0.34 }
   return (
-    <View style={{ flexDirection: "row" }}>
+    <View style={$stack}>
       {shown.map((p, i) => (
-        <View key={i} style={{ marginLeft: i === 0 ? 0 : -overlap }}>
+        <View key={i} style={i === 0 ? undefined : { marginLeft: -overlap }}>
           <Avatar name={p.name} uri={p.uri} size={size} />
         </View>
       ))}
       {extra > 0 ? (
-        <View
-          style={{
-            marginLeft: -overlap,
-            width: size,
-            height: size,
-            borderRadius: size / 2,
-            backgroundColor: "#6B7280",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Text text={`+${extra}`} style={{ color: "#FFFFFF", fontSize: size * 0.34 }} />
+        <View style={$overflow}>
+          <Text text={`+${extra}`} style={$overflowText} />
         </View>
       ) : null}
     </View>
   )
 }
+
+const $stack: ViewStyle = { flexDirection: "row" }

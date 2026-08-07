@@ -20,17 +20,16 @@ export const PriorityIcon: FC<{ priority: TaskPriority; size?: number }> = ({
   } = useAppTheme()
 
   if (priority === "urgent") {
+    const $badge: ViewStyle = {
+      width: size,
+      height: size,
+      borderRadius: size * 0.28,
+      backgroundColor: colors.priorityUrgent,
+      alignItems: "center",
+      justifyContent: "center",
+    }
     return (
-      <View
-        style={{
-          width: size,
-          height: size,
-          borderRadius: size * 0.28,
-          backgroundColor: colors.priorityUrgent,
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
+      <View style={$badge}>
         <AppIcon name="triangle-alert" size={size * 0.82} color={colors.onError} />
       </View>
     )
@@ -40,18 +39,17 @@ export const PriorityIcon: FC<{ priority: TaskPriority; size?: number }> = ({
   const active = level === 0 ? colors.priorityNone : priorityColor(priority, colors)
   const heights = [0.45, 0.7, 1]
 
+  const bar = (h: number, i: number): ViewStyle => ({
+    width: size * 0.2,
+    height: size * h,
+    borderRadius: 1,
+    backgroundColor: i < level ? active : colors.priorityNone,
+  })
+
   return (
     <View style={[$bars, { width: size, height: size }]}>
       {heights.map((h, i) => (
-        <View
-          key={i}
-          style={{
-            width: size * 0.2,
-            height: size * h,
-            borderRadius: 1,
-            backgroundColor: i < level ? active : colors.priorityNone,
-          }}
-        />
+        <View key={i} style={bar(h, i)} />
       ))}
     </View>
   )

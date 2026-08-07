@@ -187,6 +187,21 @@ uv run pytest -q                  # needs Postgres (docker compose up postgres)
 
 `make lint`, `make format`, `make typecheck`, and `make test` wrap these.
 
+**Pre-commit hooks**
+
+```bash
+scripts/setup-hooks.sh    # once per clone
+```
+
+Sets `core.hooksPath` to the tracked `.githooks/`, so staged files are formatted
+and linted on every commit — `ruff format` + `ruff check --fix` for the API,
+`eslint --fix` for web and mobile — and re-staged. Only the toolchains with
+staged changes run, so a mobile-only commit never starts uv.
+
+A file staged with further unstaged edits is formatted but not re-staged: `git
+add` would otherwise sweep the unstaged half into the commit. The hook says so
+when it happens. Skip once with `git commit --no-verify`.
+
 **Web** (`apps/web`)
 
 ```bash

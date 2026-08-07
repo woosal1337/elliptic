@@ -1,0 +1,72 @@
+#!/bin/sh
+#
+# Formats and lints staged files, then re-stages what it fixed.
+#
+# Git-native rather than husky + lint-staged: there is no root package.json and
+# three toolchains behind one repo (uv for the API, bun for web and mobile).
+# Adding a Node dependency at the root purely to shell out to uv would be a
+# fourth thing to install before the first commit.
+#
+# Only the toolchains with staged changes run, so a mobile-only commit never
+# starts uv, and an API-only commit never starts bun.
+#
+# Install: scripts/setup-hooks.sh   (sets core.hooksPath)
+# Skip once: git commit --no-verify
+
+set -eu
+
+ROOT=$(git rev-parse --show-toplevel)
+cd "$ROOT"
+
+staged=$(git diff --cached --name-only --diff-filter=ACMR)
+[ -n "$staged" ] || exit 0
+
+# A file staged with further unstaged edits must not be re-added: `git add` would
+# sweep the unstaged half into the commit, which is not what a formatter was
+# asked to do. Those get formatted but left for the author to stage.
+partial=$(git diff --name-only --diff-filter=ACMR)
+
+restage() {
+  for f in "$@"; do
+    if printf '%s\n' "$partial" | grep -qxF "$f"; then
+      echo "  note: $f has unstaged edits — formatted, not re-staged"
+    else
+      git add -- "$f"
+    fi
+  done
+}
+
+filter() { printf '%s\n' "$staged" | grep -E "$1" || true; }
+
+fail=0
+
+# ---- API: ruff format + fix -------------------------------------------------
+api=$(filter '^apps/api/.*\.py$')
+if [ -n "$api" ]; then
+  echo "pre-commit: ruff (apps/api)"
+  # shellcheck disable=SC2086
+  (cd apps/api && uv run ruff format -q $(echo "$api" | sed 's|^apps/api/||')) || fail=1
+  # shellcheck disable=SC2086
+  (cd apps/api && uv run ruff check -q --fix $(echo "$api" | sed 's|^apps/api/||')) || fail=1
+  # shellcheck disable=SC2086
+  restage $api
+fi
+
+# ---- Web / mobile: eslint --fix (prettier runs through it) ------------------
+for app in web mobile; do
+  files=$(filter "^apps/$app/.*\.(ts|tsx|js|jsx)$")
+  [ -n "$files" ] || continue
+  echo "pre-commit: eslint (apps/$app)"
+  # shellcheck disable=SC2086
+  (cd "apps/$app" && bunx eslint --fix $(echo "$files" | sed "s|^apps/$app/||")) || fail=1
+  # shellcheck disable=SC2086
+  restage $files
+done
+
+if [ "$fail" -ne 0 ]; then
+  echo
+  echo "pre-commit: unfixable problems above. Fix them, or commit with --no-verify."
+  exit 1
+fi
+
+exit 0

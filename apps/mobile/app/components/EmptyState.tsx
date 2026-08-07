@@ -1,5 +1,5 @@
 import { FC } from "react"
-import { View, ViewStyle } from "react-native"
+import { TextStyle, View, ViewStyle } from "react-native"
 
 import { AppIcon, type IconName } from "@/components/AppIcon"
 import { Button } from "@/components/Button"
@@ -34,10 +34,8 @@ export const EmptyState: FC<EmptyStateProps> = ({
           <AppIcon name={icon} size={26} color={colors.textDim} />
         </View>
       ) : null}
-      <Text preset="subheading" text={title} style={{ color: colors.text, textAlign: "center" }} />
-      {caption ? (
-        <Text text={caption} style={{ color: colors.textDim, textAlign: "center", marginTop: 4 }} />
-      ) : null}
+      <Text preset="subheading" text={title} style={[$center, { color: colors.text }]} />
+      {caption ? <Text text={caption} style={[$centerSpaced, { color: colors.textDim }]} /> : null}
       {actionLabel && onAction ? (
         <Button
           text={actionLabel}
@@ -65,3 +63,5 @@ const $iconWrap: ViewStyle = {
   justifyContent: "center",
   marginBottom: 12,
 }
+const $center: TextStyle = { textAlign: "center" }
+const $centerSpaced: TextStyle = { textAlign: "center", marginTop: 4 }

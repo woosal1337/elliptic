@@ -82,7 +82,7 @@ export const TaskRow: FC<{
         {task.due_date ? (
           <Text
             text={shortDue(task.due_date)}
-            style={{ fontSize: 12, color: overdue ? colors.error : colors.textDim }}
+            style={[$due, { color: overdue ? colors.error : colors.textDim }]}
           />
         ) : null}
         {task.priority && task.priority !== "none" ? (
@@ -99,3 +99,5 @@ const $sub: ViewStyle = { flexDirection: "row", alignItems: "center", gap: 8 }
 const $dots: ViewStyle = { flexDirection: "row", gap: 3 }
 const $labelDot: ViewStyle = { width: 6, height: 6, borderRadius: 3 }
 const $right: ViewStyle = { flexDirection: "row", alignItems: "center", gap: 10 }
+// The due date sits a step below body text so the title leads the row.
+const $due: TextStyle = { fontSize: 12 }
