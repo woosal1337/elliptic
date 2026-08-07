@@ -60,15 +60,21 @@ for app in web mobile; do
   # node_modules/.bin, not bunx: bunx resolved eslint@latest from the network
   # and linted with a version the repo's plugins do not support, which failed a
   # commit that had nothing wrong with it.
-  bin="apps/$app/node_modules/.bin/eslint"
-  if [ ! -x "$bin" ]; then
-    echo "  skipped — $bin missing (run bun install)"
-    continue
+  # web is a turborepo and hoists eslint into the workspace that owns the config,
+  # so the binary is not always at apps/<app>/node_modules/.bin.
+  if [ "$app" = "web" ]; then
+    (cd apps/web && bun run lint) || fail=1
+  else
+    bin="apps/$app/node_modules/.bin/eslint"
+    if [ ! -x "$bin" ]; then
+      echo "  skipped — $bin missing (run bun install)"
+      continue
+    fi
+    # shellcheck disable=SC2086
+    (cd "apps/$app" && ./node_modules/.bin/eslint --fix $(echo "$files" | sed "s|^apps/$app/||")) || fail=1
+    # shellcheck disable=SC2086
+    restage $files
   fi
-  # shellcheck disable=SC2086
-  (cd "apps/$app" && ./node_modules/.bin/eslint --fix $(echo "$files" | sed "s|^apps/$app/||")) || fail=1
-  # shellcheck disable=SC2086
-  restage $files
 done
 
 if [ "$fail" -ne 0 ]; then
