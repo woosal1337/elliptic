@@ -18,27 +18,27 @@ const palette = {
   neutral100: "#0E0E11",
 
   // Brand indigo (dark)
-  primary600: "#EBEFFE",
-  primary500: "#A9B4F5",
-  primary400: "#7079EC",
-  primary300: "#515BE4",
-  primary200: "#3E48C8",
-  primary100: "#2A317F",
+  primary600: "#F5F5F5",
+  primary500: "#D4D4D4",
+  primary400: "#A0A0A0",
+  primary300: "#787878",
+  primary200: "#5A5A5A",
+  primary100: "#404040",
 
-  secondary500: "#DCDDE9",
-  secondary400: "#BCC0D6",
-  secondary300: "#9196B9",
-  secondary200: "#626894",
-  secondary100: "#41476E",
+  secondary500: "#E5E5E5",
+  secondary400: "#C4C4C4",
+  secondary300: "#A0A0A0",
+  secondary200: "#787878",
+  secondary100: "#5A5A5A",
 
-  accent500: "#A5F3FC",
-  accent400: "#67E8F9",
-  accent300: "#22D3EE",
-  accent200: "#3FC0C0",
-  accent100: "#0891B2",
+  accent500: "#F5F5F5",
+  accent400: "#D4D4D4",
+  accent300: "#A0A0A0",
+  accent200: "#787878",
+  accent100: "#5A5A5A",
 
-  angry100: "#481B19",
-  angry500: "#DB2B33",
+  angry100: "#3A211E",
+  angry500: "#F08278",
 
   overlay20: "rgba(2, 2, 2, 0.4)",
   // Translucent fill over the blurred tab bar so icons keep contrast.
@@ -51,15 +51,15 @@ export const colors = {
   transparent: "rgba(0, 0, 0, 0)",
 
   // ---- Text ----
-  text: "#F7F7F7", // --foreground
-  textDim: "#909091", // --muted-foreground
+  text: "#F5F5F5", // --foreground
+  textDim: "#A0A0A0", // --muted-foreground
   navText: "#7C7C7E", // --nav-foreground (inactive tab)
 
   // ---- Layers ----
-  background: "#0E0E11", // --background (theme-base)
-  canvas: "#08080A", // --canvas
-  surface: "#151518", // --surface
-  elevated: "#1D1D20", // --elevated
+  background: "#101010", // --background (theme-base)
+  canvas: "#0A0A0A", // --canvas
+  surface: "#161616", // --surface
+  elevated: "#1C1C1C", // --elevated
   muted: "#1B1B1E", // --muted
   subtle: "#242427", // --subtle
 
@@ -70,38 +70,38 @@ export const colors = {
   separator: "#212124",
 
   // ---- Brand ----
-  tint: "#7079EC", // --accent
-  tintInactive: "#373B6A", // --accent-subtle
-  accentMuted: "#282B48", // chip fill behind tint text
+  tint: "#F5F5F5", // --accent
+  tintInactive: "#404040", // --accent-subtle
+  accentMuted: "#262626", // chip fill behind tint text
   onTint: "#F7F8FF", // text/icon on tint
   primary: "#F7F7F7", // primary button bg (light-on-dark)
   onPrimary: "#101013",
 
   // ---- Feedback ----
-  error: "#DB2B33",
-  errorBackground: "#481B19",
-  onError: "#FFF7F6",
-  success: "#52BE76",
-  successBackground: "#0D3119",
-  warning: "#E7B643",
-  warningBackground: "#3C2B02",
-  info: "#4FA6E9",
-  infoBackground: "#032E4B",
+  error: "#F08278",
+  errorBackground: "#3A211E",
+  onError: "#101010",
+  success: "#F5F5F5",
+  successBackground: "#1C1C1C",
+  warning: "#A0A0A0",
+  warningBackground: "#1C1C1C",
+  info: "#A0A0A0",
+  infoBackground: "#1C1C1C",
 
   // ---- Task board semantics ----
-  statusBacklog: "rgba(144, 144, 145, 0.4)",
-  statusTodo: "#909091",
-  statusInProgress: "#E7B643",
-  statusInReview: "#7079EC",
-  statusDone: "#52BE76",
-  statusCancelled: "rgba(219, 43, 51, 0.6)",
+  statusBacklog: "rgba(160, 160, 160, 0.4)",
+  statusTodo: "#A0A0A0",
+  statusInProgress: "#A0A0A0",
+  statusInReview: "#F5F5F5",
+  statusDone: "#F5F5F5",
+  statusCancelled: "rgba(240, 130, 120, 0.6)",
   // Matches web, where duplicate carries muted-foreground like todo — a closed
   // state, but not a failure, so it stays neutral rather than borrowing red.
-  statusDuplicate: "#909091",
+  statusDuplicate: "#787878",
 
-  priorityNone: "rgba(144, 144, 145, 0.5)",
-  priorityLow: "#909091",
-  priorityMedium: "#7079EC",
-  priorityHigh: "#E7B643",
-  priorityUrgent: "#DB2B33",
+  priorityNone: "rgba(160, 160, 160, 0.5)",
+  priorityLow: "#A0A0A0",
+  priorityMedium: "#A0A0A0",
+  priorityHigh: "#D4D4D4",
+  priorityUrgent: "#F08278",
 } as const
