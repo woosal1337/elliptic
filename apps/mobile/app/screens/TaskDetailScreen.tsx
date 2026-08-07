@@ -20,9 +20,10 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { AppIcon } from "@/components/AppIcon"
 import { Avatar } from "@/components/Avatar"
 import { Badge } from "@/components/Badge"
+import { CommentComposer } from "@/components/CommentComposer"
 import { DatePickerSheet } from "@/components/DatePickerSheet"
 import { EmptyState } from "@/components/EmptyState"
-import { GlassContainer, GlassField, GlassIconButton, GlassSurface } from "@/components/Glass"
+import { GlassField } from "@/components/Glass"
 import { LabelRow } from "@/components/LabelChip"
 import { LabelPickerSheet } from "@/components/LabelPickerSheet"
 import { Markdown } from "@/components/Markdown"
@@ -89,7 +90,6 @@ export const TaskDetailScreen: FC<TasksStackScreenProps<"TaskDetail">> = ({
   const [composerHeight, setComposerHeight] = useState(0)
   const scrollRef = useRef<KeyboardAwareScrollViewRef>(null)
   const [picker, setPicker] = useState<Picker | null>(null)
-  const [commentText, setCommentText] = useState("")
   const [mentionIds, setMentionIds] = useState<string[]>([])
   const [pendingAttach, setPendingAttach] = useState<string[]>([])
   const [attaching, setAttaching] = useState(false)
@@ -323,28 +323,31 @@ export const TaskDetailScreen: FC<TasksStackScreenProps<"TaskDetail">> = ({
     if (objectId) setPendingAttach((p) => [...p, objectId])
   }
 
-  const postComment = async () => {
-    if (!activeOrg || (!commentText.trim() && pendingAttach.length === 0) || posting) return
-    setPosting(true)
-    const ok = await api.createComment(
-      activeOrg.id,
-      "task",
-      taskId,
-      commentText.trim() || "(attachment)",
-      mentionIds,
-      pendingAttach,
-    )
-    setPosting(false)
-    if (ok) {
-      setCommentText("")
+  const postComment = useCallback(
+    async (text: string) => {
+      if (!activeOrg || (!text.trim() && pendingAttach.length === 0) || posting) return false
+      setPosting(true)
+      const ok = await api.createComment(
+        activeOrg.id,
+        "task",
+        taskId,
+        text.trim() || "(attachment)",
+        mentionIds,
+        pendingAttach,
+      )
+      setPosting(false)
+      if (!ok) {
+        toast("Couldn't post comment", { variant: "error" })
+        return false
+      }
       setMentionIds([])
       setPendingAttach([])
       setComments(await api.listComments(activeOrg.id, "task", taskId))
       requestAnimationFrame(() => scrollRef.current?.scrollToEnd({ animated: true }))
-    } else {
-      toast("Couldn't post comment", { variant: "error" })
-    }
-  }
+      return true
+    },
+    [activeOrg, pendingAttach, posting, taskId, mentionIds, toast],
+  )
 
   const addMention = (userId: string) => {
     if (!members.some((x) => x.user_id === userId)) return
@@ -646,73 +649,19 @@ export const TaskDetailScreen: FC<TasksStackScreenProps<"TaskDetail">> = ({
 
       {editing ? null : (
         <KeyboardStickyView offset={{ closed: 0, opened: insets.bottom }} style={$composerDock}>
-          <GlassSurface
+          <CommentComposer
+            mentionIds={mentionIds}
+            memberName={memberName}
+            onRemoveMention={removeMention}
+            onOpenMentionPicker={() => setPicker("mention")}
+            onPickAttachment={() => void pickAttachment()}
+            attaching={attaching}
+            pendingAttachCount={pendingAttach.length}
+            posting={posting}
+            onSubmit={postComment}
             onLayout={(e) => setComposerHeight(e.nativeEvent.layout.height)}
-            style={[$composerBar, { paddingBottom: insets.bottom || 8 }]}
-          >
-            {pendingAttach.length > 0 || attaching ? (
-              <Text
-                text={attaching ? "Uploading…" : `${pendingAttach.length} attachment(s)`}
-                size="xxs"
-                style={{ color: colors.textDim }}
-              />
-            ) : null}
-            {mentionIds.length > 0 ? (
-              <View style={$mentionRow}>
-                {mentionIds.map((id) => (
-                  <Pressable
-                    key={id}
-                    onPress={() => removeMention(id)}
-                    accessible
-                    accessibilityRole="button"
-                    accessibilityLabel={`Remove mention of ${memberName(id)}`}
-                    style={[
-                      $mentionChip,
-                      { backgroundColor: colors.accentMuted, borderRadius: radius.full },
-                    ]}
-                  >
-                    <Text
-                      text={`@${memberName(id)}`}
-                      size="xxs"
-                      weight="medium"
-                      style={{ color: colors.tint }}
-                    />
-                    <AppIcon name="x" size={12} color={colors.tint} />
-                  </Pressable>
-                ))}
-              </View>
-            ) : null}
-            <View style={$composerRow}>
-              <GlassContainer spacing={8} style={$controls}>
-                <GlassIconButton onPress={() => setPicker("mention")} label="Mention someone">
-                  <AppIcon name="at-sign" size={18} color={colors.textDim} />
-                </GlassIconButton>
-                <GlassIconButton onPress={() => void pickAttachment()} label="Attach an image">
-                  <AppIcon
-                    name="image"
-                    size={18}
-                    color={attaching ? colors.tint : colors.textDim}
-                  />
-                </GlassIconButton>
-              </GlassContainer>
-              <GlassField
-                value={commentText}
-                onChangeText={setCommentText}
-                placeholder="Add a comment…"
-                multiline
-                containerStyle={$grow}
-              />
-              <GlassIconButton
-                onPress={() => void postComment()}
-                disabled={(!commentText.trim() && pendingAttach.length === 0) || posting}
-                label="Send comment"
-                tint={colors.tint}
-                size={38}
-              >
-                <AppIcon name="arrow-up" size={18} color={colors.onTint} />
-              </GlassIconButton>
-            </View>
-          </GlassSurface>
+            bottomInset={insets.bottom}
+          />
         </KeyboardStickyView>
       )}
 
@@ -887,21 +836,6 @@ const $scrollContent: ViewStyle = { paddingBottom: 24 }
 // The composer is pinned below the scrolling body (C2) — Screen's keyboard
 // avoidance lifts it, so it stays reachable with the keyboard up.
 const $composerDock: ViewStyle = { position: "absolute", left: 0, right: 0, bottom: 0 }
-const $controls: ViewStyle = { flexDirection: "row", alignItems: "center", gap: 6 }
-const $composerBar: ViewStyle = {
-  borderTopWidth: 1,
-  paddingHorizontal: 12,
-  paddingVertical: 8,
-  gap: 6,
-}
-const $mentionRow: ViewStyle = { flexDirection: "row", flexWrap: "wrap", gap: 6 }
-const $mentionChip: ViewStyle = {
-  flexDirection: "row",
-  alignItems: "center",
-  gap: 4,
-  paddingHorizontal: 8,
-  paddingVertical: 4,
-}
 const $dim: ViewStyle = { opacity: 0.4 }
 const $propWrap: ViewStyle = { flexDirection: "row", flexWrap: "wrap", gap: 8 }
 const $propChip: ViewStyle = {
@@ -945,5 +879,4 @@ const $attachChip: ViewStyle = {
   paddingVertical: 4,
   maxWidth: "100%",
 }
-const $composerRow: ViewStyle = { flexDirection: "row", alignItems: "flex-end", gap: 8 }
 const $grow: ViewStyle = { flex: 1 }
