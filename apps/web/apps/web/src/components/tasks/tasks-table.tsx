@@ -243,6 +243,17 @@ export function TasksTable({
 
   // Linear-style grouping: partition the sorted list into status groups (keeping sort order
   // within each group), dropping empties unless the user opts to see them.
+  // Reserve one column width for every identifier on screen, measured from the
+  // longest one actually rendered. The font is already monospace and tabular, so
+  // digits line up — what did not was the character count: TD-9 is a character
+  // shorter than TD-10, and every row shifted the status glyph and title along
+  // with it. Measuring beats a fixed guess because project keys differ in length
+  // (TD, ATLAS, RAS), and it holds past 999 instead of breaking at the next digit.
+  const identifierWidth = useMemo(
+    () => filtered.reduce((widest, task) => Math.max(widest, task.identifier.length), 0),
+    [filtered]
+  );
+
   const groups = useMemo(() => {
     const byStatus = new Map<TaskStatus, Task[]>();
     for (const status of STATUS_ORDER) byStatus.set(status, []);
@@ -509,7 +520,12 @@ export function TasksTable({
                         >
                           {show.priority ? <PriorityIcon priority={task.priority} /> : null}
                           {show.identifier ? (
-                            <span className={cn(hierarchy.meta, "shrink-0")}>{task.identifier}</span>
+                            <span
+                              className={cn(hierarchy.meta, "shrink-0")}
+                              style={{ minWidth: `${identifierWidth}ch` }}
+                            >
+                              {task.identifier}
+                            </span>
                           ) : null}
                           {show.status ? <StatusIcon status={task.status} /> : null}
                           {display.showBlocked && task.kind === "bug" ? <BugGlyph /> : null}
