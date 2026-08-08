@@ -22,6 +22,16 @@ appId: sh.elliptic
     commands:
       - tapOn: "Not Now"
 
+# GUARD — this flow mutates data. It swipes a real row to Done, and the app
+# points at production unless EXPO_PUBLIC_API_URL says otherwise, so without
+# this it will complete someone's actual work. It did exactly that once: TD-7
+# and TD-8 in the Personal workspace, reverted by hand afterwards.
+#
+# Run it signed in as the QA account (mobile-e2e@chele.bi, workspace "Maestro
+# QA") per the harness README. The assertion below is what stops it otherwise —
+# the flow fails here rather than touching a row.
+- assertVisible: "Maestro QA"
+
 - tapOn: "Tasks"
 - waitForAnimationToEnd
 - assertVisible: "Todo"
