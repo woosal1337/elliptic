@@ -23,7 +23,9 @@ export interface SwipeAction {
   icon: IconName
   /** Background color of the action panel. */
   background: string
-  /** Icon/label color (defaults to white). */
+  /** Icon/label color. Defaults to the palette's on-error step, which inverts
+   *  with the theme — dark in dark mode, light in light mode — so it stays
+   *  readable on every action background here. It is not white. */
   foreground?: string
   onPress: () => void
 }
