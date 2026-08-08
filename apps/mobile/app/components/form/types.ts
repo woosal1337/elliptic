@@ -64,5 +64,22 @@ export interface FormTextFieldProps {
   defaultValue?: string
   placeholder?: string
   onValueChange?: (value: string) => void
+  /** SwiftUI grows the field along this axis; "vertical" means multiline. */
+  axis?: "vertical" | "horizontal"
+  modifiers?: unknown[]
+}
+
+export interface BottomSheetProps {
+  isPresented?: boolean
+  onIsPresentedChange?: (presented: boolean) => void
+  children?: ReactNode
+}
+
+export interface DatePickerProps {
+  title?: string
+  selection?: Date
+  /** iOS picks a SwiftUI style; Android always shows a date. */
+  displayedComponents?: string[]
+  onDateChange?: (date: Date) => void
   modifiers?: unknown[]
 }

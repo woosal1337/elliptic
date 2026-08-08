@@ -6,6 +6,16 @@
  * wrapper — re-exporting keeps the native behaviour, including the modifiers
  * the screens already pass.
  */
-export { Button, Form, Host, Picker, Section, TextField, Toggle } from "@expo/ui/swift-ui"
+export {
+  BottomSheet,
+  Button,
+  DatePicker,
+  Form,
+  Host,
+  Picker,
+  Section,
+  TextField,
+  Toggle,
+} from "@expo/ui/swift-ui"
 export { Text as NativeText } from "@expo/ui/swift-ui"
 export type * from "./types"

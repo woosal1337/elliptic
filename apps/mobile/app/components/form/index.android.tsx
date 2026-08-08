@@ -1,7 +1,9 @@
-import { Children, FC, isValidElement, ReactElement, ReactNode } from "react"
+import { Children, FC, isValidElement, ReactElement, ReactNode, useState } from "react"
 import { Platform, Pressable, ScrollView, TextStyle, View, ViewStyle } from "react-native"
 import { Switch } from "react-native"
+import DateTimePicker from "@react-native-community/datetimepicker"
 
+import { Sheet as AppSheet } from "@/components/Sheet"
 import { Text } from "@/components/Text"
 import { TextField as AppTextField } from "@/components/TextField"
 import { useAppTheme } from "@/theme/context"
@@ -17,6 +19,7 @@ import type {
   SectionProps,
   ToggleProps,
 } from "./types"
+import type { BottomSheetProps, DatePickerProps } from "./types"
 
 /**
  * Android implementations of the grouped-form primitives.
@@ -192,7 +195,12 @@ export const NativeText: FC<FormTextProps> = ({ children }) => {
 }
 
 /** A form field that reports edits as they happen, like the SwiftUI one. */
-export const TextField: FC<FormTextFieldProps> = ({ defaultValue, placeholder, onValueChange }) => {
+export const TextField: FC<FormTextFieldProps> = ({
+  defaultValue,
+  placeholder,
+  onValueChange,
+  axis,
+}) => {
   const {
     theme: { colors, spacing },
   } = useAppTheme()
@@ -202,6 +210,7 @@ export const TextField: FC<FormTextFieldProps> = ({ defaultValue, placeholder, o
         defaultValue={defaultValue}
         placeholder={placeholder}
         onChangeText={onValueChange}
+        multiline={axis === "vertical"}
         style={{ borderColor: colors.inputBorder }}
       />
     </View>
@@ -230,4 +239,64 @@ const $segment: ViewStyle = {
   alignItems: "center",
   paddingVertical: 7,
   borderRadius: 8,
+}
+
+/**
+ * A modal sheet.
+ *
+ * The app already has a `Sheet` with the right look and dismiss behaviour, so
+ * this only adapts the SwiftUI prop names onto it rather than growing a second
+ * modal implementation to keep in step.
+ */
+export const BottomSheet: FC<BottomSheetProps> = ({
+  isPresented,
+  onIsPresentedChange,
+  children,
+}) => (
+  <AppSheet visible={Boolean(isPresented)} onClose={() => onIsPresentedChange?.(false)}>
+    {children}
+  </AppSheet>
+)
+
+/**
+ * A date field.
+ *
+ * Android's picker is a dialog rather than an inline wheel, so the row shows the
+ * current date and opens the platform dialog on press — which is what an Android
+ * user expects, and avoids embedding a control that has no inline form here.
+ */
+export const DatePicker: FC<DatePickerProps> = ({ title, selection, onDateChange }) => {
+  const {
+    theme: { colors, spacing },
+  } = useAppTheme()
+  const [open, setOpen] = useState(false)
+  const value = selection ?? new Date()
+  return (
+    <>
+      <Pressable
+        onPress={hapticPress(() => setOpen(true))}
+        style={({ pressed }) => [
+          $row,
+          {
+            paddingHorizontal: spacing.lg,
+            borderBottomColor: colors.separator,
+            backgroundColor: pressed ? colors.muted : "transparent",
+          },
+        ]}
+      >
+        <Text text={title ?? "Date"} size="sm" style={$grow} />
+        <Text text={value.toISOString().slice(0, 10)} size="sm" style={{ color: colors.textDim }} />
+      </Pressable>
+      {open ? (
+        <DateTimePicker
+          value={value}
+          mode="date"
+          onChange={(_event, date) => {
+            setOpen(false)
+            if (date) onDateChange?.(date)
+          }}
+        />
+      ) : null}
+    </>
+  )
 }
