@@ -50,7 +50,12 @@ async def test_register_revoke_and_fanout(
     monkeypatch.setattr(get_settings(), "push_enabled", True)
     async with session_factory() as s:
         await notif_service._fanout_push(
-            s, uuid.UUID(me["id"]), "New mention", "hello", {"entity_type": "task"}
+            s,
+            uuid.UUID(me["id"]),
+            uuid.UUID(org["id"]),
+            "New mention",
+            "hello",
+            {"entity_type": "task"},
         )
     assert EXPO_TOKEN in captured.get("tokens", [])
     assert captured["title"] == "New mention"
@@ -58,7 +63,7 @@ async def test_register_revoke_and_fanout(
     captured.clear()
     monkeypatch.setattr(get_settings(), "push_enabled", False)
     async with session_factory() as s:
-        await notif_service._fanout_push(s, uuid.UUID(me["id"]), "x", "y", {})
+        await notif_service._fanout_push(s, uuid.UUID(me["id"]), uuid.UUID(org["id"]), "x", "y", {})
     assert captured == {}
 
     rev = await client.delete(f"{base}/{EXPO_TOKEN}", headers=h)

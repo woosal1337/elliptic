@@ -53,12 +53,25 @@ def _unread_predicate(now: datetime) -> ColumnElement[bool]:
     )
 
 
-async def _unread_count(session: AsyncSession, recipient_id: uuid.UUID, now: datetime) -> int:
+async def _unread_count(
+    session: AsyncSession, recipient_id: uuid.UUID, org_id: uuid.UUID, now: datetime
+) -> int:
+    """Unread for one recipient in one workspace.
+
+    Scoped to the org because the inbox it labels is: list_for_user filters by
+    org, so counting across all of them produced a badge the user could not
+    clear — unread in a workspace they were not looking at, over an inbox that
+    correctly showed nothing.
+    """
     return (
         await session.scalar(
             select(func.count())
             .select_from(Notification)
-            .where(Notification.recipient_id == recipient_id, _unread_predicate(now))
+            .where(
+                Notification.recipient_id == recipient_id,
+                Notification.org_id == org_id,
+                _unread_predicate(now),
+            )
         )
         or 0
     )
@@ -121,6 +134,7 @@ async def notify(
     await _fanout_push(
         session,
         recipient_id,
+        org_id,
         title,
         snippet or title,
         {
@@ -155,13 +169,13 @@ async def list_for_user(
     )
     notifications = list(result)
     actor_names = await _resolve_actor_names(session, notifications)
-    unread_count = await _unread_count(session, ctx.user.id, now)
+    unread_count = await _unread_count(session, ctx.user.id, ctx.org.id, now)
     return notifications, actor_names, unread_count
 
 
 async def unread_count(session: AsyncSession, ctx: OrgContext) -> int:
     """Return the caller's current unread notification count."""
-    return await _unread_count(session, ctx.user.id, utcnow())
+    return await _unread_count(session, ctx.user.id, ctx.org.id, utcnow())
 
 
 async def _get_own(
@@ -538,6 +552,7 @@ async def _send_expo_push(
 async def _fanout_push(
     session: AsyncSession,
     recipient_id: uuid.UUID,
+    org_id: uuid.UUID,
     title: str,
     body: str,
     data: dict[str, object],
@@ -551,7 +566,7 @@ async def _fanout_push(
             return
         # The badge is the unread inbox count rather than a per-message tally, so
         # the number on the icon matches what the inbox shows when it is opened.
-        badge = await _unread_count(session, recipient_id, utcnow())
+        badge = await _unread_count(session, recipient_id, org_id, utcnow())
         dead = await _send_expo_push(tokens, title, body, data, badge=badge)
         if dead:
             await session.execute(delete(DeviceToken).where(DeviceToken.token.in_(dead)))
