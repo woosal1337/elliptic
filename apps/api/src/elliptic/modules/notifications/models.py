@@ -76,11 +76,16 @@ class NotificationTrigger(enum.StrEnum):
 
 
 class NotificationPreference(BaseModel):
-    """A user's per-trigger email preferences, scoped to a workspace or a project.
+    """A user's per-trigger push preferences, scoped to a workspace or a project.
 
     The row with ``project_id IS NULL`` is the workspace default; a row with a
     ``project_id`` overrides the default for that project. The in-app inbox is
-    always on and not governed by these rows.
+    always on and not governed by these rows — turning a category off silences
+    the push, it does not hide the record.
+
+    These governed email until email delivery was switched off. They gate push
+    now, which is why they are named for the notification rather than the
+    transport.
     """
 
     __tablename__ = "notification_preferences"
@@ -97,13 +102,13 @@ class NotificationPreference(BaseModel):
     project_id: Mapped[uuid.UUID | None] = mapped_column(
         ForeignKey("projects.id", ondelete="CASCADE"), nullable=True
     )
-    email_property_change: Mapped[bool] = mapped_column(
+    notify_property_change: Mapped[bool] = mapped_column(
         Boolean, default=True, server_default=true()
     )
-    email_state_change: Mapped[bool] = mapped_column(Boolean, default=True, server_default=true())
-    email_completed: Mapped[bool] = mapped_column(Boolean, default=True, server_default=true())
-    email_comments: Mapped[bool] = mapped_column(Boolean, default=True, server_default=true())
-    email_mentions: Mapped[bool] = mapped_column(Boolean, default=True, server_default=true())
+    notify_state_change: Mapped[bool] = mapped_column(Boolean, default=True, server_default=true())
+    notify_completed: Mapped[bool] = mapped_column(Boolean, default=True, server_default=true())
+    notify_comments: Mapped[bool] = mapped_column(Boolean, default=True, server_default=true())
+    notify_mentions: Mapped[bool] = mapped_column(Boolean, default=True, server_default=true())
 
 
 class DeviceToken(BaseModel):

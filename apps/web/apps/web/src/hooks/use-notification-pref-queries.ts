@@ -6,11 +6,11 @@ import { api, errorMessage, orgPath } from "@/lib/api";
 
 export interface NotificationPrefs {
   project_id: string | null;
-  email_property_change: boolean;
-  email_state_change: boolean;
-  email_completed: boolean;
-  email_comments: boolean;
-  email_mentions: boolean;
+  notify_property_change: boolean;
+  notify_state_change: boolean;
+  notify_completed: boolean;
+  notify_comments: boolean;
+  notify_mentions: boolean;
 }
 
 export type NotificationPrefField = Exclude<keyof NotificationPrefs, "project_id">;

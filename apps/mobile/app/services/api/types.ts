@@ -109,10 +109,10 @@ export interface ChatMessage {
 }
 
 export interface NotificationPrefs {
-  email_property_change: boolean
-  email_state_change: boolean
-  email_completed: boolean
-  email_comments: boolean
-  email_mentions: boolean
+  notify_property_change: boolean
+  notify_state_change: boolean
+  notify_completed: boolean
+  notify_comments: boolean
+  notify_mentions: boolean
   project_id: string | null
 }

@@ -250,12 +250,27 @@ async def snooze(
 
 
 _PREF_FIELDS = (
-    "email_property_change",
-    "email_state_change",
-    "email_completed",
-    "email_comments",
-    "email_mentions",
+    "notify_property_change",
+    "notify_state_change",
+    "notify_completed",
+    "notify_comments",
+    "notify_mentions",
 )
+
+# Which toggle governs which notification. Everything aimed at a person lands
+# under the category a person would look for it in, rather than under the field
+# that technically changed — someone silencing "Comments" means comments, not
+# "the comment_count property".
+_PREF_FOR_TYPE: dict[str, str] = {
+    NotificationType.MENTIONED.value: "notify_mentions",
+    NotificationType.COMMENTED.value: "notify_comments",
+    NotificationType.STATUS_CHANGED.value: "notify_state_change",
+    NotificationType.TASK_CREATED.value: "notify_state_change",
+    NotificationType.ASSIGNED.value: "notify_property_change",
+    NotificationType.URGENT.value: "notify_property_change",
+    NotificationType.MEMBER_ADDED.value: "notify_property_change",
+    NotificationType.MEETING_ACTION_DONE.value: "notify_completed",
+}
 
 
 async def list_preferences(session: AsyncSession, ctx: OrgContext) -> list[NotificationPreference]:
@@ -296,7 +311,7 @@ async def set_preferences(
     return pref
 
 
-async def email_enabled_for(
+async def notification_enabled_for(
     session: AsyncSession,
     *,
     org_id: uuid.UUID,
@@ -304,8 +319,9 @@ async def email_enabled_for(
     project_id: uuid.UUID | None,
     field: str,
 ) -> bool:
-    """Resolve whether a user wants email for a trigger: per-project override wins
-    over the workspace default, which defaults to on. (The in-app inbox is always on.)"""
+    """Resolve whether a user wants push for a trigger: per-project override wins
+    over the workspace default, which defaults to on. (The in-app inbox is always
+    on — a silenced category still records, it just does not buzz.)"""
     if project_id is not None:
         override = await session.scalar(
             select(NotificationPreference).where(
@@ -566,6 +582,15 @@ async def _fanout_push(
     if not get_settings().push_enabled:
         return
     try:
+        field = _PREF_FOR_TYPE.get(str(data.get("type")))
+        if field is not None and not await notification_enabled_for(
+            session,
+            org_id=org_id,
+            user_id=recipient_id,
+            project_id=None,
+            field=field,
+        ):
+            return
         tokens = await _recipient_push_tokens(session, recipient_id)
         if not tokens:
             return

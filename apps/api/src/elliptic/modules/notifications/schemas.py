@@ -51,11 +51,11 @@ class SnoozeIn(BaseModel):
 class NotificationPrefsBody(BaseModel):
     """The five per-trigger email toggles for one scope."""
 
-    email_property_change: bool = True
-    email_state_change: bool = True
-    email_completed: bool = True
-    email_comments: bool = True
-    email_mentions: bool = True
+    notify_property_change: bool = True
+    notify_state_change: bool = True
+    notify_completed: bool = True
+    notify_comments: bool = True
+    notify_mentions: bool = True
 
 
 class NotificationPrefsIn(NotificationPrefsBody):

@@ -27,22 +27,29 @@ import { api } from "@/services/api"
 import type { NotificationPrefs } from "@/services/api/types"
 import { useAppTheme } from "@/theme/context"
 
-type EmailPrefs = Omit<NotificationPrefs, "project_id">
+type NotifyPrefs = Omit<NotificationPrefs, "project_id">
 
-const PREF_ROWS: { key: keyof EmailPrefs; label: string }[] = [
-  { key: "email_mentions", label: "Mentions" },
-  { key: "email_comments", label: "Comments" },
-  { key: "email_state_change", label: "Status changes" },
-  { key: "email_property_change", label: "Property changes" },
-  { key: "email_completed", label: "Completed" },
+/**
+ * Which kinds of push a person wants.
+ *
+ * These governed email until email delivery was switched off; they gate push
+ * now, which is instant and costs nothing. Turning one off silences the buzz —
+ * the notification is still recorded and still shows in the inbox.
+ */
+const PREF_ROWS: { key: keyof NotifyPrefs; label: string }[] = [
+  { key: "notify_mentions", label: "Mentions" },
+  { key: "notify_comments", label: "Comments" },
+  { key: "notify_state_change", label: "Status changes" },
+  { key: "notify_property_change", label: "Property changes" },
+  { key: "notify_completed", label: "Completed" },
 ]
 
-const ALL_ON: EmailPrefs = {
-  email_property_change: true,
-  email_state_change: true,
-  email_completed: true,
-  email_comments: true,
-  email_mentions: true,
+const ALL_ON: NotifyPrefs = {
+  notify_property_change: true,
+  notify_state_change: true,
+  notify_completed: true,
+  notify_comments: true,
+  notify_mentions: true,
 }
 
 const THEMES = ["system", "light", "dark"] as const
@@ -74,7 +81,7 @@ export const ProfileScreen: FC<ProfileStackScreenProps<"ProfileMain">> = () => {
   const { themeOverride, setThemeContextOverride, themeContext, theme } = useAppTheme()
   const [name, setName] = useState(user?.full_name ?? "")
   const [pushEnabled, setPushEnabled] = useMMKVBoolean("push.enabled")
-  const [prefs, setPrefs] = useState<EmailPrefs | null>(null)
+  const [prefs, setPrefs] = useState<NotifyPrefs | null>(null)
 
   useEffect(() => {
     if (!activeOrg) return
@@ -82,11 +89,11 @@ export const ProfileScreen: FC<ProfileStackScreenProps<"ProfileMain">> = () => {
       setPrefs(
         p
           ? {
-              email_property_change: p.email_property_change,
-              email_state_change: p.email_state_change,
-              email_completed: p.email_completed,
-              email_comments: p.email_comments,
-              email_mentions: p.email_mentions,
+              notify_property_change: p.notify_property_change,
+              notify_state_change: p.notify_state_change,
+              notify_completed: p.notify_completed,
+              notify_comments: p.notify_comments,
+              notify_mentions: p.notify_mentions,
             }
           : ALL_ON,
       ),
@@ -105,7 +112,7 @@ export const ProfileScreen: FC<ProfileStackScreenProps<"ProfileMain">> = () => {
   // against the off state, but dark enough for the thumb to show against it.
   const switchTint = useMemo(() => [tint(theme.colors.textDim)], [theme.colors.textDim])
 
-  const togglePref = (key: keyof EmailPrefs, value: boolean) => {
+  const togglePref = (key: keyof NotifyPrefs, value: boolean) => {
     if (!activeOrg || !prefs) return
     const next = { ...prefs, [key]: value }
     setPrefs(next)
@@ -150,6 +157,9 @@ export const ProfileScreen: FC<ProfileStackScreenProps<"ProfileMain">> = () => {
             </Picker>
           </Section>
 
+          {/* One section: the master switch and the categories it governs read
+              as one decision, which is what they are. They used to be split
+              because the categories were about email and the switch about push. */}
           <Section title="Notifications" modifiers={row}>
             <Toggle
               label="Push notifications"
@@ -160,7 +170,7 @@ export const ProfileScreen: FC<ProfileStackScreenProps<"ProfileMain">> = () => {
           </Section>
 
           {prefs ? (
-            <Section title="Email me about" modifiers={row}>
+            <Section title="Notify me about" modifiers={row}>
               {PREF_ROWS.map((r) => (
                 <Toggle
                   key={r.key}

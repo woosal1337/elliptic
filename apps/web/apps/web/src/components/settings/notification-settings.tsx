@@ -12,27 +12,27 @@ import { ErrorState } from "@/components/error-state";
 
 const TRIGGERS: { field: NotificationPrefField; label: string; description: string }[] = [
   {
-    field: "email_property_change",
+    field: "notify_property_change",
     label: "Property changes",
     description: "Priority, assignee, due date, labels and other field changes.",
   },
   {
-    field: "email_state_change",
+    field: "notify_state_change",
     label: "State changes",
     description: "When a work item moves to a new status.",
   },
-  { field: "email_completed", label: "Completed", description: "When a work item is completed." },
-  { field: "email_comments", label: "Comments", description: "New comments on items you follow." },
-  { field: "email_mentions", label: "Mentions", description: "When you are @-mentioned." },
+  { field: "notify_completed", label: "Completed", description: "When a work item is completed." },
+  { field: "notify_comments", label: "Comments", description: "New comments on items you follow." },
+  { field: "notify_mentions", label: "Mentions", description: "When you are @-mentioned." },
 ];
 
 const DEFAULTS: NotificationPrefs = {
   project_id: null,
-  email_property_change: true,
-  email_state_change: true,
-  email_completed: true,
-  email_comments: true,
-  email_mentions: true,
+  notify_property_change: true,
+  notify_state_change: true,
+  notify_completed: true,
+  notify_comments: true,
+  notify_mentions: true,
 };
 
 export function NotificationSettings({ orgId }: { orgId: string }) {
@@ -49,10 +49,11 @@ export function NotificationSettings({ orgId }: { orgId: string }) {
       <div className="flex flex-col gap-1">
         <h2 className="flex items-center gap-2 text-small font-semibold text-foreground">
           <Bell className="size-4 text-muted-foreground" />
-          Email notifications
+          Push notifications
         </h2>
         <p className="text-caption text-muted-foreground">
-          Choose which events email you. The in-app inbox is always on. These are your
+          Choose which events notify you on your devices. The in-app inbox is always on — a
+          silenced category is still recorded, it just does not buzz. These are your
           workspace-wide defaults.
         </p>
       </div>

@@ -49,15 +49,15 @@ async def test_notification_email_preferences(client: AsyncClient) -> None:
 
     assert (await client.get(base, headers=auth["headers"])).json()["data"] == []
 
-    ws = await client.put(base, json={"email_comments": False}, headers=auth["headers"])
+    ws = await client.put(base, json={"notify_comments": False}, headers=auth["headers"])
     assert ws.status_code == 200, ws.text
-    assert ws.json()["data"]["email_comments"] is False
-    assert ws.json()["data"]["email_mentions"] is True
+    assert ws.json()["data"]["notify_comments"] is False
+    assert ws.json()["data"]["notify_mentions"] is True
     assert ws.json()["data"]["project_id"] is None
 
     override = await client.put(
         base,
-        json={"project_id": project["id"], "email_mentions": False, "email_comments": True},
+        json={"project_id": project["id"], "notify_mentions": False, "notify_comments": True},
         headers=auth["headers"],
     )
     assert override.status_code == 200, override.text
@@ -66,11 +66,11 @@ async def test_notification_email_preferences(client: AsyncClient) -> None:
     rows = (await client.get(base, headers=auth["headers"])).json()["data"]
     assert len(rows) == 2
     by_scope = {r["project_id"]: r for r in rows}
-    assert by_scope[None]["email_comments"] is False
-    assert by_scope[project["id"]]["email_mentions"] is False
-    assert by_scope[project["id"]]["email_comments"] is True
+    assert by_scope[None]["notify_comments"] is False
+    assert by_scope[project["id"]]["notify_mentions"] is False
+    assert by_scope[project["id"]]["notify_comments"] is True
 
-    await client.put(base, json={"email_completed": False}, headers=auth["headers"])
+    await client.put(base, json={"notify_completed": False}, headers=auth["headers"])
     assert len((await client.get(base, headers=auth["headers"])).json()["data"]) == 2
 
 

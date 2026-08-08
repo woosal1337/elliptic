@@ -148,3 +148,57 @@ async def test_board_events_notify_including_the_actor(
     # The receipts landed in the actor's own inbox — nobody else exists here.
     assert all(n["recipient_id"] == me["id"] for n in inbox["items"] if "recipient_id" in n)
     assert inbox["unread_count"] >= 2
+
+
+async def test_a_silenced_category_records_but_does_not_push(
+    client: AsyncClient, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Turning a category off stops the push and keeps the inbox row.
+
+    The distinction is the point: silencing a category means "stop buzzing me",
+    not "hide this from me". A user who turns off status changes should still
+    find them in the inbox when they go looking.
+    """
+    auth = await register_and_login(client)
+    h = auth["headers"]
+    org = await create_org(client, h)
+    project = await create_project(client, h, org["id"], key="SIL", name="Silenced")
+
+    sent: list[str] = []
+
+    async def fake_send(
+        tokens: list[str],
+        title: str,
+        body: str,
+        data: dict[str, object],
+        *,
+        badge: int | None = None,
+    ) -> None:
+        sent.append(str(data.get("type")))
+
+    monkeypatch.setattr(notif_service, "_send_expo_push", fake_send)
+    monkeypatch.setattr(get_settings(), "push_enabled", True)
+    await client.post(
+        f"{API}/orgs/{org['id']}/notifications/devices",
+        json={"platform": "ios", "token": EXPO_TOKEN},
+        headers=h,
+    )
+
+    # Silence the category that task creation belongs to.
+    pref = await client.put(
+        f"{API}/orgs/{org['id']}/notifications/preferences",
+        json={"notify_state_change": False},
+        headers=h,
+    )
+    assert pref.status_code in (200, 201), pref.text
+
+    task = await create_task(client, h, org["id"], project["id"], title="Quietly created")
+    assert "task_created" not in sent, "a silenced category still pushed"
+
+    inbox = (
+        await client.get(f"{API}/orgs/{org['id']}/notifications?status=all", headers=h)
+    ).json()["data"]
+    assert any(n["type"] == "task_created" for n in inbox["items"]), (
+        "silencing a category must not stop it being recorded"
+    )
+    assert task["id"]
