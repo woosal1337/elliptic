@@ -76,15 +76,6 @@ export const Markdown: FC<{ source: string }> = ({ source }) => {
           </View>
         )
 
-      case "quote":
-        return (
-          <View key={key} style={[$quote, { borderLeftColor: colors.borderStrong }]}>
-            <Text style={{ color: colors.textDim }}>
-              {renderSpans(parseInline(block.text), String(key))}
-            </Text>
-          </View>
-        )
-
       case "code":
         return (
           <View key={key} style={[$codeBlock, { backgroundColor: colors.subtle }]}>
@@ -142,7 +133,42 @@ export const Markdown: FC<{ source: string }> = ({ source }) => {
     }
   }
 
-  return <View style={$block}>{parseBlocks(source).map(renderBlock)}</View>
+  /**
+   * Every `>` line is its own block, because the parser keeps one block per
+   * source line so a round trip cannot lose anything. A quote is not one line
+   * though, and rendering each block separately gave every line its own rule
+   * with the paragraph gap showing through — the bar down the side of a
+   * multi-line quote came out as a column of dashes. Consecutive quote lines
+   * are drawn inside one bordered group; anything else ends the run, so a
+   * blank line between two quotes still separates them.
+   */
+  const renderBlocks = (blocks: Block[]): ReactNode[] => {
+    const out: ReactNode[] = []
+    for (let i = 0; i < blocks.length; i++) {
+      if (blocks[i]!.kind !== "quote") {
+        out.push(renderBlock(blocks[i]!, i))
+        continue
+      }
+      const start = i
+      const run: Extract<Block, { kind: "quote" }>[] = []
+      while (i < blocks.length && blocks[i]!.kind === "quote") {
+        run.push(blocks[i++] as Extract<Block, { kind: "quote" }>)
+      }
+      i--
+      out.push(
+        <View key={start} style={[$quote, { borderLeftColor: colors.borderStrong }]}>
+          {run.map((line, n) => (
+            <Text key={n} style={{ color: colors.textDim }}>
+              {renderSpans(parseInline(line.text), `${start}-${n}`)}
+            </Text>
+          ))}
+        </View>,
+      )
+    }
+    return out
+  }
+
+  return <View style={$block}>{renderBlocks(parseBlocks(source))}</View>
 }
 
 const $block: ViewStyle = { gap: 6 }
@@ -154,7 +180,7 @@ const $strike: TextStyle = { textDecorationLine: "line-through" }
 const $code: TextStyle = { fontFamily: typography.code.normal, fontSize: 13, borderRadius: 4 }
 const $codeBlock: ViewStyle = { borderRadius: 8, padding: 10 }
 const $codeText: TextStyle = { ...CODE_STYLE }
-const $quote: ViewStyle = { borderLeftWidth: 3, paddingLeft: 10 }
+const $quote: ViewStyle = { borderLeftWidth: 3, paddingLeft: 10, gap: 4 }
 const $rule: ViewStyle = { height: 1, marginVertical: 4 }
 const $para: TextStyle = { lineHeight: 22 }
 

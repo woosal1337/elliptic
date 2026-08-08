@@ -229,18 +229,21 @@ const $bubble: ViewStyle = {
   paddingVertical: 8,
   paddingHorizontal: 12,
 }
+// Horizontally lg, matching the transcript's own inset above it — at 12 the
+// attach and send buttons sat outside the message bubbles' left and right edges.
 const $inputRow: ViewStyle = {
   flexDirection: "row",
   alignItems: "flex-end",
   gap: 8,
-  padding: 12,
+  paddingHorizontal: 24,
+  paddingVertical: 12,
   borderTopWidth: 1,
 }
 const $pendingRow: ViewStyle = {
   flexDirection: "row",
   alignItems: "center",
   gap: 6,
-  paddingHorizontal: 12,
+  paddingHorizontal: 24,
   paddingBottom: 4,
 }
 // One height for the composer row: the field's resting height and both buttons.

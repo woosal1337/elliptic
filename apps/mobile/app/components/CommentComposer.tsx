@@ -140,7 +140,11 @@ export const CommentComposer: FC<CommentComposerProps> = memo(function CommentCo
 // keeps a single-line composer aligned.
 const CONTROL_H = 38
 
-const $bar: ViewStyle = { gap: 8, paddingHorizontal: 12, paddingTop: 8 }
+// lg, the same inset TaskDetailScreen gives its body. At 12 the composer's
+// controls overhung the description and the metadata chips above them by 12pt
+// on each side, so the bar read as a strip bolted on rather than part of the
+// page.
+const $bar: ViewStyle = { gap: 8, paddingHorizontal: 24, paddingTop: 8 }
 const $row: ViewStyle = { flexDirection: "row", alignItems: "flex-end", gap: 8 }
 const $controls: ViewStyle = { flexDirection: "row", alignItems: "center", gap: 6 }
 const $grow: ViewStyle = { flex: 1 }
