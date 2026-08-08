@@ -260,9 +260,17 @@ export const NotificationsScreen: FC<InboxStackScreenProps<"Notifications">> = (
                       color={unread ? colors.tint : colors.textDim}
                     />
                   </View>
+                  {/* The dot sits beside the whole text block, not inside the
+                      title line. Inline it pushed the title right on unread rows
+                      only, so titles did not line up with each other or with the
+                      subtitle directly beneath them. The gutter is reserved
+                      whether or not a dot is drawn, which is what keeps every
+                      row's text starting at the same x. */}
+                  <View style={$dotGutter}>
+                    {unread ? <View style={[$dot, { backgroundColor: colors.tint }]} /> : null}
+                  </View>
                   <View style={$grow2}>
                     <View style={$titleRow}>
-                      {unread ? <View style={[$dot, { backgroundColor: colors.tint }]} /> : null}
                       <Text
                         text={item.title}
                         size="sm"
@@ -293,9 +301,11 @@ const $grow: ViewStyle = { flexGrow: 1 }
 // Let the last row scroll clear of the floating tab bar and any toast.
 const $bottomClearance: ViewStyle = { paddingBottom: TAB_BAR_CLEARANCE }
 const $grow2: ViewStyle = { flex: 1, gap: 3 }
-const $titleRow: ViewStyle = { flexDirection: "row", alignItems: "center", gap: 7 }
+const $titleRow: ViewStyle = { flexDirection: "row", alignItems: "center" }
 const $title: ViewStyle = { flex: 1 }
 const $dot: ViewStyle = { width: 8, height: 8, borderRadius: 4 }
+// Reserved whether or not a dot is drawn, so every title starts at the same x.
+const $dotGutter: ViewStyle = { width: 8, alignItems: "center" }
 const $iconTile: ViewStyle = {
   width: 36,
   height: 36,
