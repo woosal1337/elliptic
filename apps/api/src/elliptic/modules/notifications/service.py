@@ -5,7 +5,7 @@ from datetime import datetime
 
 import httpx
 from loguru import logger
-from sqlalchemy import Select, and_, func, or_, select, update
+from sqlalchemy import Select, and_, delete, func, or_, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.elements import ColumnElement
 
@@ -486,8 +486,11 @@ async def _send_expo_push(
     data: dict[str, object],
     *,
     badge: int | None = None,
-) -> None:
-    """Deliver via Expo Push (the default transport). Pluggable for APNs/FCM later."""
+) -> list[str]:
+    """Deliver via Expo Push (the default transport). Pluggable for APNs/FCM later.
+
+    Returns the tokens Expo reported as permanently dead, for the caller to prune.
+    """
     channel = _PUSH_CHANNEL.get(str(data.get("type")), _DEFAULT_CHANNEL)
     # iOS stacks notifications sharing a thread, so a task that moves three times
     # reads as one collapsible group rather than three separate rows.
@@ -505,9 +508,31 @@ async def _send_expo_push(
         envelope["badge"] = badge
     messages = [{"to": t, **envelope} for t in tokens if t.startswith("ExponentPushToken")]
     if not messages:
-        return
+        return []
     async with httpx.AsyncClient(timeout=8.0) as http:
-        await http.post(get_settings().expo_push_url, json=messages)
+        response = await http.post(get_settings().expo_push_url, json=messages)
+
+    # Expo answers 200 with a per-message ticket even when every message failed,
+    # so discarding the body hides a total outage: a project with no APNs key
+    # rejects everything with InvalidCredentials and looks exactly like success.
+    dead: list[str] = []
+    try:
+        tickets = response.json().get("data", [])
+    except ValueError:
+        logger.error(
+            "Expo push returned non-JSON ({}): {}", response.status_code, response.text[:200]
+        )
+        return dead
+    for message, ticket in zip(messages, tickets, strict=False):
+        if ticket.get("status") != "error":
+            continue
+        reason = ticket.get("details", {}).get("error")
+        logger.error("Expo push rejected: {} — {}", reason, ticket.get("message"))
+        # The device uninstalled or the token was reissued. Expo asks senders to
+        # stop using it, and keeping it means retrying a dead token forever.
+        if reason == "DeviceNotRegistered":
+            dead.append(str(message["to"]))
+    return dead
 
 
 async def _fanout_push(
@@ -527,6 +552,10 @@ async def _fanout_push(
         # The badge is the unread inbox count rather than a per-message tally, so
         # the number on the icon matches what the inbox shows when it is opened.
         badge = await _unread_count(session, recipient_id, utcnow())
-        await _send_expo_push(tokens, title, body, data, badge=badge)
+        dead = await _send_expo_push(tokens, title, body, data, badge=badge)
+        if dead:
+            await session.execute(delete(DeviceToken).where(DeviceToken.token.in_(dead)))
+            await session.flush()
+            logger.info("Pruned {} dead push token(s)", len(dead))
     except Exception:
         logger.exception("Push fan-out failed for recipient {}", recipient_id)
