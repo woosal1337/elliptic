@@ -17,9 +17,12 @@ async def list_calendar_events(
     from_date: str,
     to_date: str,
     scope: Literal["all", "team", "personal"] = "all",
+    org_id: str | None = None,
 ) -> dict[str, Any]:
-    """List calendar events in a window. from_date/to_date are ISO-8601 timestamps."""
-    async with mcp_call("events:read") as call:
+    """List calendar events in a window. from_date/to_date are ISO-8601 timestamps.
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("events:read", org_id=org_id) as call:
         events = await events_service.list_events(
             call.session,
             call.ctx,
@@ -37,17 +40,21 @@ async def list_calendar_events(
 
 
 @mcp.tool
-async def get_calendar_event(event_id: str) -> dict[str, Any]:
-    """Fetch one calendar event."""
-    async with mcp_call("events:read") as call:
+async def get_calendar_event(event_id: str, org_id: str | None = None) -> dict[str, Any]:
+    """Fetch one calendar event.
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("events:read", org_id=org_id) as call:
         event = await events_service.get_event(call.session, call.ctx, uuid.UUID(event_id))
         return event_to_out(event).model_dump(mode="json")
 
 
 @mcp.tool
-async def get_event_brief(event_id: str) -> dict[str, Any]:
-    """Generate a 2-3 bullet pre-meeting brief for a calendar event from existing data."""
-    async with mcp_call("events:read") as call:
+async def get_event_brief(event_id: str, org_id: str | None = None) -> dict[str, Any]:
+    """Generate a 2-3 bullet pre-meeting brief for a calendar event from existing data.
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("events:read", org_id=org_id) as call:
         brief = await events_service.generate_event_brief(
             call.session, call.ctx, uuid.UUID(event_id)
         )
@@ -64,9 +71,12 @@ async def create_calendar_event(
     all_day: bool = False,
     visibility: Literal["team", "personal"] = "team",
     idempotency_key: str | None = None,
+    org_id: str | None = None,
 ) -> dict[str, Any]:
-    """Create a team or personal calendar event. starts_at/ends_at are ISO-8601."""
-    async with mcp_call("events:write") as call:
+    """Create a team or personal calendar event. starts_at/ends_at are ISO-8601.
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("events:write", org_id=org_id) as call:
 
         async def _produce() -> dict[str, Any]:
             payload = EventCreateIn(
@@ -98,9 +108,12 @@ async def update_calendar_event(
     location: str | None = None,
     starts_at: str | None = None,
     ends_at: str | None = None,
+    org_id: str | None = None,
 ) -> dict[str, Any]:
-    """Edit a calendar event."""
-    async with mcp_call("events:write") as call:
+    """Edit a calendar event.
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("events:write", org_id=org_id) as call:
         payload = EventUpdateIn(
             title=title,
             description=description,
@@ -115,8 +128,10 @@ async def update_calendar_event(
 
 
 @mcp.tool
-async def delete_calendar_event(event_id: str) -> dict[str, Any]:
-    """Delete a calendar event."""
-    async with mcp_call("events:write") as call:
+async def delete_calendar_event(event_id: str, org_id: str | None = None) -> dict[str, Any]:
+    """Delete a calendar event.
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("events:write", org_id=org_id) as call:
         await events_service.delete_event(call.session, call.ctx, uuid.UUID(event_id))
         return {"deleted": True, "event_id": event_id}

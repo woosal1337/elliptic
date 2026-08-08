@@ -17,9 +17,11 @@ from elliptic.modules.vocabulary.schemas import (
 
 
 @mcp.tool
-async def list_vocabulary() -> dict[str, Any]:
-    """List the org's vocabulary terms alphabetically."""
-    async with mcp_call("vocabulary:read") as call:
+async def list_vocabulary(org_id: str | None = None) -> dict[str, Any]:
+    """List the org's vocabulary terms alphabetically.
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("vocabulary:read", org_id=org_id) as call:
         terms = await vocabulary_service.list_terms(call.session, call.ctx)
         items = [VocabularyOut.model_validate(term).model_dump(mode="json") for term in terms]
         return {"total": len(items), "items": items}
@@ -30,9 +32,12 @@ async def create_term(
     term: str,
     definition: str,
     idempotency_key: str | None = None,
+    org_id: str | None = None,
 ) -> dict[str, Any]:
-    """Add a vocabulary term (unique per org; requires admin)."""
-    async with mcp_call("vocabulary:write") as call:
+    """Add a vocabulary term (unique per org; requires admin).
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("vocabulary:write", org_id=org_id) as call:
 
         async def _produce() -> dict[str, Any]:
             payload = VocabularyCreateIn(term=term, definition=definition)
@@ -53,9 +58,12 @@ async def update_term(
     term_id: str,
     term: str | None = None,
     definition: str | None = None,
+    org_id: str | None = None,
 ) -> dict[str, Any]:
-    """Update a vocabulary term's name or definition (requires admin)."""
-    async with mcp_call("vocabulary:write") as call:
+    """Update a vocabulary term's name or definition (requires admin).
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("vocabulary:write", org_id=org_id) as call:
         payload = VocabularyUpdateIn(term=term, definition=definition)
         updated = await vocabulary_service.update_term(
             call.session, call.ctx, uuid.UUID(term_id), payload
@@ -64,9 +72,13 @@ async def update_term(
 
 
 @mcp.tool(annotations=ToolAnnotations(destructiveHint=True, idempotentHint=True))
-async def delete_term(term_id: str, confirm: bool = False) -> dict[str, Any]:
-    """Delete a vocabulary term. Call with confirm=false to preview, then confirm=true to delete."""
-    async with mcp_call("vocabulary:write") as call:
+async def delete_term(
+    term_id: str, confirm: bool = False, org_id: str | None = None
+) -> dict[str, Any]:
+    """Delete a vocabulary term. Call with confirm=false to preview, then confirm=true to delete.
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("vocabulary:write", org_id=org_id) as call:
         target = next(
             (
                 term

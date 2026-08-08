@@ -18,9 +18,13 @@ from elliptic.modules.workflow.schemas import (
 
 
 @mcp.tool
-async def list_workflow_statuses(team_id: str | None = None) -> dict[str, Any]:
-    """List workflow statuses for a scope: a team's override, or the org-level default."""
-    async with mcp_call("workflow:read") as call:
+async def list_workflow_statuses(
+    team_id: str | None = None, org_id: str | None = None
+) -> dict[str, Any]:
+    """List workflow statuses for a scope: a team's override, or the org-level default.
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("workflow:read", org_id=org_id) as call:
         statuses = await workflow_service.list_statuses(
             call.session, call.ctx, uuid.UUID(team_id) if team_id else None
         )
@@ -38,9 +42,12 @@ async def create_workflow_status(
     position: float | None = None,
     team_id: str | None = None,
     idempotency_key: str | None = None,
+    org_id: str | None = None,
 ) -> dict[str, Any]:
-    """Add a workflow status within a category and scope (requires admin)."""
-    async with mcp_call("workflow:write") as call:
+    """Add a workflow status within a category and scope (requires admin).
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("workflow:write", org_id=org_id) as call:
 
         async def _produce() -> dict[str, Any]:
             payload = WorkflowStatusIn(
@@ -69,9 +76,12 @@ async def update_workflow_status(
     color: str | None = None,
     position: float | None = None,
     is_default: bool | None = None,
+    org_id: str | None = None,
 ) -> dict[str, Any]:
-    """Rename, recolor, reorder, or set-default a workflow status (requires admin)."""
-    async with mcp_call("workflow:write") as call:
+    """Rename, recolor, reorder, or set-default a workflow status (requires admin).
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("workflow:write", org_id=org_id) as call:
         payload = WorkflowStatusUpdateIn(
             name=name, color=color, position=position, is_default=is_default
         )
@@ -82,9 +92,13 @@ async def update_workflow_status(
 
 
 @mcp.tool(annotations=ToolAnnotations(destructiveHint=True, idempotentHint=True))
-async def delete_workflow_status(status_id: str, confirm: bool = False) -> dict[str, Any]:
-    """Remove a workflow status. Call with confirm=false to preview, then confirm=true to delete."""
-    async with mcp_call("workflow:write") as call:
+async def delete_workflow_status(
+    status_id: str, confirm: bool = False, org_id: str | None = None
+) -> dict[str, Any]:
+    """Remove a workflow status. Call with confirm=false to preview, then confirm=true to delete.
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("workflow:write", org_id=org_id) as call:
         target = next(
             (
                 item

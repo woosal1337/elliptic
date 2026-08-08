@@ -13,9 +13,11 @@ from elliptic.modules.views.schemas import TaskViewIn, TaskViewUpdateIn
 
 
 @mcp.tool
-async def list_views() -> dict[str, Any]:
-    """List the caller's personal views plus all team views."""
-    async with mcp_call("views:read") as call:
+async def list_views(org_id: str | None = None) -> dict[str, Any]:
+    """List the caller's personal views plus all team views.
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("views:read", org_id=org_id) as call:
         views = await views_service.list_views(call.session, call.ctx)
         items = [views_service.view_to_out(view).model_dump(mode="json") for view in views]
         return {"total": len(items), "items": items}
@@ -29,9 +31,12 @@ async def create_view(
     team_id: str | None = None,
     is_default: bool = False,
     idempotency_key: str | None = None,
+    org_id: str | None = None,
 ) -> dict[str, Any]:
-    """Save a named view (scope: personal, team, or teamspace; teamspace needs team_id)."""
-    async with mcp_call("views:write") as call:
+    """Save a named view (scope: personal, team, or teamspace; teamspace needs team_id).
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("views:write", org_id=org_id) as call:
 
         async def _produce() -> dict[str, Any]:
             # Build via model_validate so the incoming `scope` string is validated
@@ -63,18 +68,25 @@ async def update_view(
     name: str | None = None,
     config: dict[str, Any] | None = None,
     is_default: bool | None = None,
+    org_id: str | None = None,
 ) -> dict[str, Any]:
-    """Update a view's name, config, or default flag."""
-    async with mcp_call("views:write") as call:
+    """Update a view's name, config, or default flag.
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("views:write", org_id=org_id) as call:
         payload = TaskViewUpdateIn(name=name, config=config, is_default=is_default)
         view = await views_service.update_view(call.session, call.ctx, uuid.UUID(view_id), payload)
         return views_service.view_to_out(view).model_dump(mode="json")
 
 
 @mcp.tool(annotations=ToolAnnotations(destructiveHint=True, idempotentHint=True))
-async def delete_view(view_id: str, confirm: bool = False) -> dict[str, Any]:
-    """Delete a saved view. Call with confirm=false to preview, then confirm=true to delete."""
-    async with mcp_call("views:write") as call:
+async def delete_view(
+    view_id: str, confirm: bool = False, org_id: str | None = None
+) -> dict[str, Any]:
+    """Delete a saved view. Call with confirm=false to preview, then confirm=true to delete.
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("views:write", org_id=org_id) as call:
         target = next(
             (
                 view

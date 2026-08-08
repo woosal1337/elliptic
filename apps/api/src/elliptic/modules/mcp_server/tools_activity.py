@@ -10,9 +10,13 @@ from elliptic.modules.mcp_server.principal import mcp_call
 
 
 @mcp.tool
-async def list_activity(limit: int = 50, offset: int = 0) -> dict[str, Any]:
-    """List the organization's recent activity feed, newest first."""
-    async with mcp_call("activity:read") as call:
+async def list_activity(
+    limit: int = 50, offset: int = 0, org_id: str | None = None
+) -> dict[str, Any]:
+    """List the organization's recent activity feed, newest first.
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("activity:read", org_id=org_id) as call:
         events, total = await activity_service.list_org_feed(
             call.session, call.ctx, PageParams(limit=limit, offset=offset)
         )
@@ -35,10 +39,16 @@ async def list_activity(limit: int = 50, offset: int = 0) -> dict[str, Any]:
 
 @mcp.tool
 async def get_entity_activity(
-    entity_type: str, entity_id: str, limit: int = 50, offset: int = 0
+    entity_type: str,
+    entity_id: str,
+    limit: int = 50,
+    offset: int = 0,
+    org_id: str | None = None,
 ) -> dict[str, Any]:
-    """List the activity timeline for one entity (e.g. task, note, project), newest first."""
-    async with mcp_call("activity:read") as call:
+    """List the activity timeline for one entity (e.g. task, note, project), newest first.
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("activity:read", org_id=org_id) as call:
         events, total = await activity_service.list_entity_feed(
             call.session,
             call.ctx,

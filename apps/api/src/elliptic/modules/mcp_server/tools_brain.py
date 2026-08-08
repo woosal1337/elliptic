@@ -32,9 +32,11 @@ def _event_dict(event: ActivityEvent) -> dict[str, Any]:
 
 
 @mcp.tool
-async def brain_open_threads(limit: int = 25) -> dict[str, Any]:
-    """What's on my plate: my open assigned and created tasks, plus the triage queue."""
-    async with mcp_call("brain:read") as call:
+async def brain_open_threads(limit: int = 25, org_id: str | None = None) -> dict[str, Any]:
+    """What's on my plate: my open assigned and created tasks, plus the triage queue.
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("brain:read", org_id=org_id) as call:
         page = PageParams(limit=limit, offset=0)
         assigned, _assigned_total = await tasks_service.list_user_tasks(
             call.session, call.ctx, "assigned", page
@@ -59,9 +61,13 @@ async def brain_open_threads(limit: int = 25) -> dict[str, Any]:
 
 
 @mcp.tool
-async def brain_changes_since(since: str, limit: int = 100) -> dict[str, Any]:
-    """What changed in the organization since an ISO-8601 timestamp."""
-    async with mcp_call("brain:read") as call:
+async def brain_changes_since(
+    since: str, limit: int = 100, org_id: str | None = None
+) -> dict[str, Any]:
+    """What changed in the organization since an ISO-8601 timestamp.
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("brain:read", org_id=org_id) as call:
         floor = datetime.fromisoformat(since)
         events, _total = await activity_service.list_org_feed(
             call.session, call.ctx, PageParams(limit=limit, offset=0)
@@ -71,9 +77,13 @@ async def brain_changes_since(since: str, limit: int = 100) -> dict[str, Any]:
 
 
 @mcp.tool
-async def brain_resume(project_id: str, limit: int = 20) -> dict[str, Any]:
-    """Where did we leave off on a project: in-flight tasks, recent notes, recent activity."""
-    async with mcp_call("brain:read") as call:
+async def brain_resume(
+    project_id: str, limit: int = 20, org_id: str | None = None
+) -> dict[str, Any]:
+    """Where did we leave off on a project: in-flight tasks, recent notes, recent activity.
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("brain:read", org_id=org_id) as call:
         pid = uuid.UUID(project_id)
         tasks, project, _total = await tasks_service.list_tasks(
             call.session, call.ctx, pid, PageParams(limit=limit, offset=0)

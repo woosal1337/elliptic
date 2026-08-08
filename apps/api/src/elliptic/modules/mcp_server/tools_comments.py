@@ -47,13 +47,16 @@ async def list_comments(
     entity_id: str,
     limit: int = 50,
     offset: int = 0,
+    org_id: str | None = None,
 ) -> dict[str, Any]:
     """List comments on an entity (task, meeting, or note), including any attachments.
 
     Each comment's `attachments` carries the file name, type, and a short-lived `url` you can
     fetch; call `view_image_attachment` to actually see an image inline.
+
+    Pass org_id to target a specific organization when using a multi-organization token.
     """
-    async with mcp_call("comments:read") as call:
+    async with mcp_call("comments:read", org_id=org_id) as call:
         comments, total = await comments_service.list_comments(
             call.session,
             call.ctx,
@@ -67,9 +70,11 @@ async def list_comments(
 
 
 @mcp.tool
-async def get_comment(comment_id: str) -> dict[str, Any]:
-    """Fetch one comment by id, including its attachments (name/type + fetchable url)."""
-    async with mcp_call("comments:read") as call:
+async def get_comment(comment_id: str, org_id: str | None = None) -> dict[str, Any]:
+    """Fetch one comment by id, including its attachments (name/type + fetchable url).
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("comments:read", org_id=org_id) as call:
         comment = await comments_service.get_comment(call.session, call.ctx, uuid.UUID(comment_id))
         item = CommentOut.model_validate(comment).model_dump(mode="json")
         await _attach_attachments(call, [item], [comment])
@@ -82,9 +87,12 @@ async def create_comment(
     entity_id: str,
     body: str,
     idempotency_key: str | None = None,
+    org_id: str | None = None,
 ) -> dict[str, Any]:
-    """Create a comment on an entity (task, meeting, or note)."""
-    async with mcp_call("comments:write") as call:
+    """Create a comment on an entity (task, meeting, or note).
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("comments:write", org_id=org_id) as call:
 
         async def _produce() -> dict[str, Any]:
             payload = CommentCreateIn(
@@ -107,9 +115,11 @@ async def create_comment(
 
 
 @mcp.tool
-async def update_comment(comment_id: str, body: str) -> dict[str, Any]:
-    """Edit a comment's content as its author or an admin."""
-    async with mcp_call("comments:write") as call:
+async def update_comment(comment_id: str, body: str, org_id: str | None = None) -> dict[str, Any]:
+    """Edit a comment's content as its author or an admin.
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("comments:write", org_id=org_id) as call:
         payload = CommentUpdateIn(content=body)
         comment = await comments_service.update_comment(
             call.session, call.ctx, uuid.UUID(comment_id), payload
@@ -120,9 +130,13 @@ async def update_comment(comment_id: str, body: str) -> dict[str, Any]:
 
 
 @mcp.tool(annotations=ToolAnnotations(destructiveHint=True, idempotentHint=True))
-async def delete_comment(comment_id: str, confirm: bool = False) -> dict[str, Any]:
-    """Delete a comment. Preview unless confirm=true."""
-    async with mcp_call("comments:write") as call:
+async def delete_comment(
+    comment_id: str, confirm: bool = False, org_id: str | None = None
+) -> dict[str, Any]:
+    """Delete a comment. Preview unless confirm=true.
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("comments:write", org_id=org_id) as call:
         comment = await comments_service.get_comment(call.session, call.ctx, uuid.UUID(comment_id))
         if not confirm:
             return {
@@ -137,10 +151,13 @@ async def delete_comment(comment_id: str, confirm: bool = False) -> dict[str, An
 
 
 @mcp.tool
-async def get_attachment(object_id: str) -> dict[str, Any]:
+async def get_attachment(object_id: str, org_id: str | None = None) -> dict[str, Any]:
     """Resolve a fresh, short-lived download URL + metadata for an attachment (image or file)
-    on a comment or note, so you can fetch it or hand the link to the user."""
-    async with mcp_call("comments:read") as call:
+    on a comment or note, so you can fetch it or hand the link to the user.
+
+    Pass org_id to target a specific organization when using a multi-organization token.
+    """
+    async with mcp_call("comments:read", org_id=org_id) as call:
         obj, url = await storage_service.create_presigned_download(
             call.session, call.ctx, uuid.UUID(object_id)
         )
@@ -152,10 +169,13 @@ async def get_attachment(object_id: str) -> dict[str, Any]:
 
 
 @mcp.tool
-async def view_image_attachment(object_id: str) -> Image:
+async def view_image_attachment(object_id: str, org_id: str | None = None) -> Image:
     """Return an image attachment's actual pixels so you can SEE it inline. For non-image
-    files use `get_attachment` to get a download link instead."""
-    async with mcp_call("comments:read") as call:
+    files use `get_attachment` to get a download link instead.
+
+    Pass org_id to target a specific organization when using a multi-organization token.
+    """
+    async with mcp_call("comments:read", org_id=org_id) as call:
         obj = await storage_service.get_object(call.session, call.ctx, uuid.UUID(object_id))
         if str(obj.kind) != "image" or not obj.is_uploaded:
             raise ValueError("That attachment is not a viewable image; use get_attachment instead")

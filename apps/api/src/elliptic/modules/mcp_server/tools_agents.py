@@ -22,9 +22,11 @@ from elliptic.modules.mcp_server.principal import mcp_call
 
 
 @mcp.tool
-async def list_ai_users() -> dict[str, Any]:
-    """List the organization's AI agents (personas)."""
-    async with mcp_call("agents:read") as call:
+async def list_ai_users(org_id: str | None = None) -> dict[str, Any]:
+    """List the organization's AI agents (personas).
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("agents:read", org_id=org_id) as call:
         agents = await ai_service.list_ai_users(call.session, call.ctx)
         return {
             "items": [AIUserOut.model_validate(agent).model_dump(mode="json") for agent in agents]
@@ -32,9 +34,11 @@ async def list_ai_users() -> dict[str, Any]:
 
 
 @mcp.tool
-async def get_ai_user(ai_user_id: str) -> dict[str, Any]:
-    """Fetch one AI agent."""
-    async with mcp_call("agents:read") as call:
+async def get_ai_user(ai_user_id: str, org_id: str | None = None) -> dict[str, Any]:
+    """Fetch one AI agent.
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("agents:read", org_id=org_id) as call:
         agent = await ai_service.get_ai_user(call.session, call.ctx, uuid.UUID(ai_user_id))
         return AIUserOut.model_validate(agent).model_dump(mode="json")
 
@@ -46,9 +50,12 @@ async def create_ai_user(
     model: str,
     system_prompt: str,
     is_active: bool = True,
+    org_id: str | None = None,
 ) -> dict[str, Any]:
-    """Define a new AI agent (name, provider, model, system prompt)."""
-    async with mcp_call("agents:write") as call:
+    """Define a new AI agent (name, provider, model, system prompt).
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("agents:write", org_id=org_id) as call:
         payload = AIUserCreateIn(
             name=name,
             provider=AIProviderType(provider),
@@ -66,9 +73,12 @@ async def update_ai_user(
     name: str | None = None,
     model: str | None = None,
     system_prompt: str | None = None,
+    org_id: str | None = None,
 ) -> dict[str, Any]:
-    """Edit an AI agent's name, model, or system prompt."""
-    async with mcp_call("agents:write") as call:
+    """Edit an AI agent's name, model, or system prompt.
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("agents:write", org_id=org_id) as call:
         payload = AIUserUpdateIn(name=name, model=model, system_prompt=system_prompt)
         agent = await ai_service.update_ai_user(
             call.session, call.ctx, uuid.UUID(ai_user_id), payload
@@ -77,9 +87,13 @@ async def update_ai_user(
 
 
 @mcp.tool
-async def pause_ai_user(ai_user_id: str, active: bool = False) -> dict[str, Any]:
-    """Pause (active=false) or resume (active=true) an AI agent."""
-    async with mcp_call("agents:write") as call:
+async def pause_ai_user(
+    ai_user_id: str, active: bool = False, org_id: str | None = None
+) -> dict[str, Any]:
+    """Pause (active=false) or resume (active=true) an AI agent.
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("agents:write", org_id=org_id) as call:
         payload = AIUserUpdateIn(is_active=active)
         agent = await ai_service.update_ai_user(
             call.session, call.ctx, uuid.UUID(ai_user_id), payload
@@ -88,9 +102,13 @@ async def pause_ai_user(ai_user_id: str, active: bool = False) -> dict[str, Any]
 
 
 @mcp.tool
-async def set_ai_user_budget(ai_user_id: str, budget_monthly_cents: int) -> dict[str, Any]:
-    """Set an AI agent's monthly spend cap in cents (Paperclip-style budget)."""
-    async with mcp_call("agents:write") as call:
+async def set_ai_user_budget(
+    ai_user_id: str, budget_monthly_cents: int, org_id: str | None = None
+) -> dict[str, Any]:
+    """Set an AI agent's monthly spend cap in cents (Paperclip-style budget).
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("agents:write", org_id=org_id) as call:
         payload = AIUserUpdateIn(budget_monthly_cents=budget_monthly_cents)
         agent = await ai_service.update_ai_user(
             call.session, call.ctx, uuid.UUID(ai_user_id), payload
@@ -99,9 +117,13 @@ async def set_ai_user_budget(ai_user_id: str, budget_monthly_cents: int) -> dict
 
 
 @mcp.tool(annotations=ToolAnnotations(destructiveHint=True))
-async def delete_ai_user(ai_user_id: str, confirm: bool = False) -> dict[str, Any]:
-    """Delete an AI agent. Preview unless confirm=true."""
-    async with mcp_call("agents:write") as call:
+async def delete_ai_user(
+    ai_user_id: str, confirm: bool = False, org_id: str | None = None
+) -> dict[str, Any]:
+    """Delete an AI agent. Preview unless confirm=true.
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("agents:write", org_id=org_id) as call:
         agent = await ai_service.get_ai_user(call.session, call.ctx, uuid.UUID(ai_user_id))
         if not confirm:
             return {
@@ -115,9 +137,13 @@ async def delete_ai_user(ai_user_id: str, confirm: bool = False) -> dict[str, An
 
 
 @mcp.tool
-async def list_agent_runs(limit: int = 50, offset: int = 0) -> dict[str, Any]:
-    """List the org's AI runs (provider calls), newest first."""
-    async with mcp_call("agents:read") as call:
+async def list_agent_runs(
+    limit: int = 50, offset: int = 0, org_id: str | None = None
+) -> dict[str, Any]:
+    """List the org's AI runs (provider calls), newest first.
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("agents:read", org_id=org_id) as call:
         runs, total = await ai_service.list_runs(
             call.session, call.ctx, PageParams(limit=limit, offset=offset)
         )
@@ -128,9 +154,11 @@ async def list_agent_runs(limit: int = 50, offset: int = 0) -> dict[str, Any]:
 
 
 @mcp.tool
-async def list_ai_keys() -> dict[str, Any]:
-    """List the org's BYOK provider keys (masked, showing only the last 4 characters)."""
-    async with mcp_call("agents:read") as call:
+async def list_ai_keys(org_id: str | None = None) -> dict[str, Any]:
+    """List the org's BYOK provider keys (masked, showing only the last 4 characters).
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("agents:read", org_id=org_id) as call:
         keys = await ai_service.list_keys(call.session, call.ctx)
         return {"items": [AIKeyOut.model_validate(key).model_dump(mode="json") for key in keys]}
 
@@ -142,9 +170,12 @@ async def create_ai_key(
     api_key: str,
     is_default: bool = False,
     validate_key: bool = False,
+    org_id: str | None = None,
 ) -> dict[str, Any]:
-    """Store a BYOK provider key; the secret is write-only and never returned."""
-    async with mcp_call("agents:keys") as call:
+    """Store a BYOK provider key; the secret is write-only and never returned.
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("agents:keys", org_id=org_id) as call:
         payload = AIKeyCreateIn(
             provider=AIProviderType(provider),
             name=name,
@@ -158,19 +189,28 @@ async def create_ai_key(
 
 @mcp.tool
 async def update_ai_key(
-    key_id: str, name: str | None = None, is_default: bool | None = None
+    key_id: str,
+    name: str | None = None,
+    is_default: bool | None = None,
+    org_id: str | None = None,
 ) -> dict[str, Any]:
-    """Update a provider key's metadata (name, default flag); the secret is immutable."""
-    async with mcp_call("agents:keys") as call:
+    """Update a provider key's metadata (name, default flag); the secret is immutable.
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("agents:keys", org_id=org_id) as call:
         payload = AIKeyUpdateIn(name=name, is_default=is_default)
         key = await ai_service.update_key(call.session, call.ctx, uuid.UUID(key_id), payload)
         return AIKeyOut.model_validate(key).model_dump(mode="json")
 
 
 @mcp.tool(annotations=ToolAnnotations(destructiveHint=True, idempotentHint=True))
-async def revoke_ai_key(key_id: str, confirm: bool = False) -> dict[str, Any]:
-    """Delete a provider key. Call with confirm=false to preview, then confirm=true to delete."""
-    async with mcp_call("agents:keys") as call:
+async def revoke_ai_key(
+    key_id: str, confirm: bool = False, org_id: str | None = None
+) -> dict[str, Any]:
+    """Delete a provider key. Call with confirm=false to preview, then confirm=true to delete.
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("agents:keys", org_id=org_id) as call:
         key = await ai_service.get_key(call.session, call.ctx, uuid.UUID(key_id))
         if not confirm:
             return {

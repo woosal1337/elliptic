@@ -22,9 +22,11 @@ def _actions(values: list[dict[str, Any]]) -> list[AutomationActionIn]:
 
 
 @mcp.tool
-async def list_automations() -> dict[str, Any]:
-    """List the org's automation rules (triggers, actions, skills)."""
-    async with mcp_call("automation:read") as call:
+async def list_automations(org_id: str | None = None) -> dict[str, Any]:
+    """List the org's automation rules (triggers, actions, skills).
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("automation:read", org_id=org_id) as call:
         rules = await automation_service.list_rules(call.session, call.ctx)
         items = [AutomationRuleOut.model_validate(rule).model_dump(mode="json") for rule in rules]
         return {"total": len(items), "items": items}
@@ -38,9 +40,12 @@ async def create_automation(
     is_skill: bool = False,
     enabled: bool = True,
     idempotency_key: str | None = None,
+    org_id: str | None = None,
 ) -> dict[str, Any]:
-    """Create an automation rule; actions are {type, value} dicts (admin only)."""
-    async with mcp_call("automation:write") as call:
+    """Create an automation rule; actions are {type, value} dicts (admin only).
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("automation:write", org_id=org_id) as call:
 
         async def _produce() -> dict[str, Any]:
             # model_validate so the `trigger` string is coerced/validated against the
@@ -74,9 +79,12 @@ async def update_automation(
     actions: list[dict[str, Any]] | None = None,
     is_skill: bool | None = None,
     enabled: bool | None = None,
+    org_id: str | None = None,
 ) -> dict[str, Any]:
-    """Update an automation rule's name, trigger, actions, skill flag, or enabled state."""
-    async with mcp_call("automation:write") as call:
+    """Update an automation rule's name, trigger, actions, skill flag, or enabled state.
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("automation:write", org_id=org_id) as call:
         # model_validate so the optional `trigger` string is validated against the
         # AutomationTrigger enum at runtime instead of asserted statically.
         payload = AutomationRuleUpdateIn.model_validate(
@@ -95,9 +103,13 @@ async def update_automation(
 
 
 @mcp.tool(annotations=ToolAnnotations(destructiveHint=True, idempotentHint=True))
-async def delete_automation(rule_id: str, confirm: bool = False) -> dict[str, Any]:
-    """Delete an automation rule. Call with confirm=false to preview, then confirm=true."""
-    async with mcp_call("automation:write") as call:
+async def delete_automation(
+    rule_id: str, confirm: bool = False, org_id: str | None = None
+) -> dict[str, Any]:
+    """Delete an automation rule. Call with confirm=false to preview, then confirm=true.
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("automation:write", org_id=org_id) as call:
         target = next(
             (
                 rule
@@ -121,9 +133,11 @@ async def delete_automation(rule_id: str, confirm: bool = False) -> dict[str, An
 
 
 @mcp.tool
-async def run_automation(rule_id: str, task_id: str) -> dict[str, Any]:
-    """Run an enabled skill rule against a task on demand."""
-    async with mcp_call("automation:write") as call:
+async def run_automation(rule_id: str, task_id: str, org_id: str | None = None) -> dict[str, Any]:
+    """Run an enabled skill rule against a task on demand.
+
+    Pass org_id to target a specific organization when using a multi-organization token."""
+    async with mcp_call("automation:write", org_id=org_id) as call:
         ran = await automation_service.run_skill(
             call.session, call.ctx, uuid.UUID(rule_id), uuid.UUID(task_id)
         )
