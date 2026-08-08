@@ -79,7 +79,18 @@ export const Section: FC<SectionProps> = ({ title, children }) => {
           style={[$sectionTitle, { color: colors.textDim, paddingHorizontal: spacing.lg }]}
         />
       ) : null}
-      <View style={[$card, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+      <View
+        style={[
+          $card,
+          {
+            backgroundColor: colors.surface,
+            borderColor: colors.border,
+            // SwiftUI's Form insets its sections from the screen edge; without
+            // this the cards ran the full width and sat against both bezels.
+            marginHorizontal: spacing.md,
+          },
+        ]}
+      >
         {children}
       </View>
     </View>
@@ -100,11 +111,16 @@ export const Toggle: FC<ToggleProps> = ({ label, isOn, onIsOnChange }) => {
   return (
     <View style={[$row, { paddingHorizontal: spacing.lg, borderBottomColor: colors.separator }]}>
       <Text text={label} size="sm" style={$grow} />
+      {/* The thumb is white in both themes, as Material's own is. Left to
+          the platform it comes out teal, which is its accent and not ours.
+          Given a dark colour it looked clipped — it was not: the thumb was
+          blending into the dark track and only the contrasting sliver showed.
+          The track is mid-grey in both themes, so white reads against it. */}
       <Switch
         value={isOn}
         onValueChange={onIsOnChange}
         trackColor={{ false: colors.subtle, true: colors.textDim }}
-        thumbColor={colors.surface}
+        thumbColor={SWITCH_THUMB}
       />
     </View>
   )
@@ -236,6 +252,10 @@ const $row: ViewStyle = {
   paddingVertical: 10,
   borderBottomWidth: 1,
 }
+// Not from the palette: a switch thumb is white on every Android app, and
+// both themes put a mid-grey track behind it.
+const SWITCH_THUMB = "#FFFFFF"
+
 const $grow: ViewStyle = { flex: 1 }
 const $pickerBlock: ViewStyle = { gap: 8 }
 const $fieldBlock: ViewStyle = { paddingVertical: 6 }
