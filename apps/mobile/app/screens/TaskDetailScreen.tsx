@@ -24,6 +24,7 @@ import { CommentComposer } from "@/components/CommentComposer"
 import { DatePickerSheet } from "@/components/DatePickerSheet"
 import { EmptyState } from "@/components/EmptyState"
 import { GlassField } from "@/components/Glass"
+import { InlineMarkdown } from "@/components/InlineMarkdown"
 import { LabelRow } from "@/components/LabelChip"
 import { LabelPickerSheet } from "@/components/LabelPickerSheet"
 import { Markdown } from "@/components/Markdown"
@@ -421,7 +422,7 @@ export const TaskDetailScreen: FC<TasksStackScreenProps<"TaskDetail">> = ({
             accessibilityRole="button"
             accessibilityLabel="Edit title"
           >
-            <Text preset="heading" text={task.title} />
+            <InlineMarkdown text={task.title} preset="heading" />
           </Pressable>
         ) : (
           <GlassField

@@ -4,6 +4,7 @@ import { FlatList, Pressable, RefreshControl, TextStyle, View, ViewStyle } from 
 import { AppIcon } from "@/components/AppIcon"
 import { Button } from "@/components/Button"
 import { EmptyState } from "@/components/EmptyState"
+import { InlineMarkdown } from "@/components/InlineMarkdown"
 import { OptionSheet } from "@/components/OptionSheet"
 import { Screen } from "@/components/Screen"
 import { ScreenHeader } from "@/components/ScreenHeader"
@@ -200,7 +201,13 @@ export const NotesScreen: FC<NotesStackScreenProps<"NotesList">> = ({ navigation
                   color={colors.textDim}
                 />
               )}
-              <Text text={item.title} size="sm" weight="medium" numberOfLines={1} style={$title} />
+              <InlineMarkdown
+                text={item.title}
+                size="sm"
+                weight="medium"
+                numberOfLines={1}
+                style={$title}
+              />
               {item.is_folder ? (
                 <AppIcon name="chevron-right" size={16} color={colors.textDim} />
               ) : null}

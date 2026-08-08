@@ -2,6 +2,7 @@ import { FC } from "react"
 import { Pressable, TextStyle, View, ViewStyle } from "react-native"
 
 import { Avatar } from "@/components/Avatar"
+import { InlineMarkdown } from "@/components/InlineMarkdown"
 import { PriorityIcon } from "@/components/PriorityIcon"
 import { StatusIcon } from "@/components/StatusIcon"
 import { Text } from "@/components/Text"
@@ -62,7 +63,7 @@ export const TaskRow: FC<{
       <StatusIcon status={task.status} />
 
       <View style={$center}>
-        <Text text={task.title} size="sm" weight="medium" numberOfLines={1} />
+        <InlineMarkdown text={task.title} size="sm" weight="medium" numberOfLines={1} />
         <View style={$sub}>
           <Text text={task.identifier} style={$mono} />
           {dotCount > 0 ? (
