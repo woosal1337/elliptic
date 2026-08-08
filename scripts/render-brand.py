@@ -281,6 +281,9 @@ TARGETS: list[tuple[str, int, bool, float, float, bool]] = [
     # optical treatment as the tab icons — at 1.0 the stroke never reaches full
     # white and the mark reads as grey smudge beside a crisp wordmark.
     (f"{WEB}/public/logo.png", 512, False, 0.0, UI_SCALE, False),
+    # The README renders on whichever theme the reader has, so this one keeps
+    # its plate: a bare white mark disappears against GitHub's light background.
+    (".github/assets/logo.png", 512, True, PLATE_R, 1.0, False),
 ]
 
 

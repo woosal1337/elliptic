@@ -9,12 +9,12 @@
 An agent-native work platform. Your agents run boards, tasks, sprints, meetings, and notes
 alongside your team, over a built-in MCP server, on your own keys.
 
-[![License](https://img.shields.io/badge/license-Apache--2.0-5B5BD6.svg)](LICENSE)
-[![Release](https://img.shields.io/github/v/release/woosal1337/elliptic?color=5B5BD6)](https://github.com/woosal1337/elliptic/releases)
+[![License](https://img.shields.io/badge/license-Apache--2.0-404040.svg)](LICENSE)
+[![Release](https://img.shields.io/github/v/release/woosal1337/elliptic?color=404040)](https://github.com/woosal1337/elliptic/releases)
 [![CI](https://github.com/woosal1337/elliptic/actions/workflows/ci.yml/badge.svg)](https://github.com/woosal1337/elliptic/actions/workflows/ci.yml)
-[![Stars](https://img.shields.io/github/stars/woosal1337/elliptic?style=flat&color=5B5BD6)](https://github.com/woosal1337/elliptic/stargazers)
-[![Containers](https://img.shields.io/badge/ghcr.io-elliptic-5B5BD6?logo=docker&logoColor=white)](https://github.com/woosal1337?tab=packages)
-[![Docs](https://img.shields.io/badge/docs.elliptic.sh-5B5BD6.svg)](https://docs.elliptic.sh)
+[![Stars](https://img.shields.io/github/stars/woosal1337/elliptic?style=flat&color=404040)](https://github.com/woosal1337/elliptic/stargazers)
+[![Containers](https://img.shields.io/badge/ghcr.io-elliptic-404040?logo=docker&logoColor=white)](https://github.com/woosal1337?tab=packages)
+[![Docs](https://img.shields.io/badge/docs.elliptic.sh-404040.svg)](https://docs.elliptic.sh)
 
 [Quick start](#quick-start) · [Docs](https://docs.elliptic.sh) · [Features](#features) · [Architecture](#architecture) · [Self-hosting](#self-hosting) · [Development](#development)
 
