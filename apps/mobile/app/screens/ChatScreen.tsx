@@ -193,6 +193,9 @@ export const ChatScreen: FC<HomeStackScreenProps<"Chat">> = ({ navigation }) => 
               onChangeText={setInput}
               placeholder="Message the assistant…"
               multiline
+              // Match the 40pt attach and send buttons either side of it; the
+              // default is an editor's height and dwarfed them.
+              multilineMinHeight={COMPOSER_H}
               containerStyle={$grow}
             />
             <Pressable
@@ -240,16 +243,19 @@ const $pendingRow: ViewStyle = {
   paddingHorizontal: 12,
   paddingBottom: 4,
 }
+// One height for the composer row: the field's resting height and both buttons.
+const COMPOSER_H = 40
+
 const $attach: ViewStyle = {
-  width: 40,
-  height: 40,
+  width: COMPOSER_H,
+  height: COMPOSER_H,
   alignItems: "center",
   justifyContent: "center",
 }
 const $send: ViewStyle = {
-  width: 40,
-  height: 40,
-  borderRadius: 20,
+  width: COMPOSER_H,
+  height: COMPOSER_H,
+  borderRadius: COMPOSER_H / 2,
   alignItems: "center",
   justifyContent: "center",
 }

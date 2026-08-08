@@ -27,6 +27,8 @@ export interface TextFieldAccessoryProps {
 }
 
 export interface TextFieldProps extends Omit<TextInputProps, "ref"> {
+  /** Resting height of a multiline field. Defaults to an editor-sized 112. */
+  multilineMinHeight?: number
   /**
    * A style modifier for different input states.
    */
@@ -122,6 +124,7 @@ export const TextField = forwardRef(function TextField(props: TextFieldProps, re
     helperTx,
     helperTxOptions,
     status,
+    multilineMinHeight,
     RightAccessory,
     LeftAccessory,
     HelperTextProps,
@@ -152,7 +155,10 @@ export const TextField = forwardRef(function TextField(props: TextFieldProps, re
     $styles.row,
     $inputWrapperStyle,
     status === "error" && { borderColor: colors.error },
-    TextInputProps.multiline && { minHeight: 112 },
+    // 112 suits an editor you write paragraphs in. A chat or comment bar is one
+    // line beside 40pt buttons, and inheriting an editor's height left the field
+    // towering over them — so callers can say what they need.
+    TextInputProps.multiline && { minHeight: multilineMinHeight ?? 112 },
     LeftAccessory && { paddingStart: 0 },
     RightAccessory && { paddingEnd: 0 },
     $inputWrapperStyleOverride,
