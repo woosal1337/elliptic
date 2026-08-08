@@ -83,6 +83,7 @@ export interface Note {
   content: string
   icon: string | null
   parent_id: string | null
+  is_folder: boolean
 }
 
 export interface StoredObject {

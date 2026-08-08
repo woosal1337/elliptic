@@ -555,9 +555,25 @@ export class Api {
   }
 
   // ---- Notes (create/delete/title) ----
-  async createNote(orgId: string, title: string): Promise<Note | null> {
-    const res = await this.apisauce.post<Envelope<Note>>(`/orgs/${orgId}/notes`, { title })
+  async createNote(
+    orgId: string,
+    title: string,
+    options: { parentId?: string | null; isFolder?: boolean } = {},
+  ): Promise<Note | null> {
+    const res = await this.apisauce.post<Envelope<Note>>(`/orgs/${orgId}/notes`, {
+      title,
+      parent_id: options.parentId ?? null,
+      is_folder: options.isFolder ?? false,
+    })
     return res.ok && res.data ? res.data.data : null
+  }
+
+  /** Move a note into a folder, or to the root when `parentId` is null. */
+  async moveNote(orgId: string, noteId: string, parentId: string | null): Promise<boolean> {
+    const res = await this.apisauce.patch(`/orgs/${orgId}/notes/${noteId}`, {
+      parent_id: parentId,
+    })
+    return res.ok
   }
 
   async updateNoteTitle(orgId: string, noteId: string, title: string): Promise<boolean> {

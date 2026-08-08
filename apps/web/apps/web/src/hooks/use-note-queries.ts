@@ -141,6 +141,7 @@ interface CreateNoteInput {
   project_id?: string | null;
   team_id?: string | null;
   parent_id?: string | null;
+  is_folder?: boolean;
 }
 
 function draftNote(orgId: string, id: string, input: CreateNoteInput): Note {
@@ -151,6 +152,7 @@ function draftNote(orgId: string, id: string, input: CreateNoteInput): Note {
     project_id: input.project_id ?? null,
     team_id: input.team_id ?? null,
     parent_id: input.parent_id ?? null,
+    is_folder: input.is_folder ?? false,
     title: input.title,
     content: input.content ?? "",
     icon: input.icon ?? null,
@@ -212,6 +214,9 @@ type UpdateNoteVariables = {
   title?: string;
   content?: string;
   icon?: string | null;
+  // null is a real value here — it moves the note back to the root — so the
+  // patch has to distinguish "not given" from "given as null".
+  parent_id?: string | null;
 };
 
 function applyNotePatch(note: Note, variables: UpdateNoteVariables): Note {
@@ -219,6 +224,7 @@ function applyNotePatch(note: Note, variables: UpdateNoteVariables): Note {
   if (variables.title !== undefined) next.title = variables.title;
   if (variables.content !== undefined) next.content = variables.content;
   if (variables.icon !== undefined) next.icon = variables.icon;
+  if (variables.parent_id !== undefined) next.parent_id = variables.parent_id;
   return next;
 }
 

@@ -737,6 +737,7 @@ export interface Note {
   project_id: string | null;
   team_id: string | null;
   parent_id: string | null;
+  is_folder: boolean;
   title: string;
   content: string;
   icon: string | null;

@@ -20,7 +20,10 @@ export interface ContentCardTag {
 }
 
 export interface ContentCardProps {
-  href: string;
+  /** Omit for cards that act in place — a folder opens inside the list, so it
+   *  has no address of its own to link to. Give it `onClick` instead. */
+  href?: string;
+  onClick?: () => void;
   title: string;
   summary?: string | null;
   tag?: ContentCardTag;
@@ -32,6 +35,7 @@ export interface ContentCardProps {
 
 export function ContentCard({
   href,
+  onClick,
   title,
   summary,
   tag,
@@ -40,14 +44,23 @@ export function ContentCard({
   trailing,
   className,
 }: ContentCardProps) {
+  const shell = cn(
+    "group flex w-full items-start gap-3 rounded-lg border border-border bg-surface px-4 py-3 text-left shadow-xs transition-all duration-150 hover:border-input hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40",
+    className
+  );
+  const Shell = href
+    ? ({ children }: { children: ReactNode }) => (
+        <Link href={href} className={shell}>
+          {children}
+        </Link>
+      )
+    : ({ children }: { children: ReactNode }) => (
+        <button type="button" onClick={onClick} className={shell}>
+          {children}
+        </button>
+      );
   return (
-    <Link
-      href={href}
-      className={cn(
-        "group flex items-start gap-3 rounded-lg border border-border bg-surface px-4 py-3 shadow-xs transition-all duration-150 hover:border-input hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40",
-        className
-      )}
-    >
+    <Shell>
       {leading ? <span className="mt-0.5 shrink-0">{leading}</span> : null}
       <div className="flex min-w-0 flex-1 flex-col gap-1">
         {tag || timestamp ? (
@@ -77,6 +90,6 @@ export function ContentCard({
       </div>
       {trailing ? <span className="shrink-0">{trailing}</span> : null}
       <ChevronRight className="mt-0.5 size-4 shrink-0 text-muted-foreground/50 transition-transform duration-150 group-hover:translate-x-0.5 group-hover:text-muted-foreground" />
-    </Link>
+    </Shell>
   );
 }
