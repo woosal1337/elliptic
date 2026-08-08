@@ -16,13 +16,8 @@ _DAY = 86_400
 _tasks: list[asyncio.Task[None]] = []
 
 
-async def _dispatch_emails(session: AsyncSession) -> int:
-    return await jobs.dispatch_pending_emails(session, delay_seconds=300)
-
-
 _SCHEDULE: tuple[tuple[str, int, JobRunner], ...] = (
     ("prune_notifications", _DAY, jobs.prune_notifications),
-    ("dispatch_pending_emails", 300, _dispatch_emails),
     ("archive_stale_tasks", _DAY, jobs.archive_stale_tasks),
     ("purge_deleted_projects", _DAY, jobs.purge_deleted_projects),
     ("purge_sync_tombstones", _DAY, jobs.purge_sync_tombstones),

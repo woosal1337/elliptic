@@ -1,4 +1,9 @@
-"""Scheduled maintenance jobs: notification retention, email dispatch, recovery."""
+"""Scheduled maintenance jobs: notification retention and recovery.
+
+No email job. Notifications reach people by push; email is reserved for the
+account itself — verification, password reset, invitations — where there is no
+device to push to yet.
+"""
 
 from datetime import timedelta
 from typing import Any, cast
@@ -6,16 +11,13 @@ from typing import Any, cast
 from sqlalchemy import CursorResult, delete, func, or_, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from elliptic.core.email import EmailSender, deliver_email
 from elliptic.core.models_base import utcnow
 from elliptic.modules.notifications.models import Notification
 from elliptic.modules.projects.models import Project
 from elliptic.modules.sync import service as sync_service
 from elliptic.modules.tasks.models import Task, TaskStatus
-from elliptic.modules.users.models import User
 
 NOTIFICATION_RETENTION = 100
-EMAIL_DELAY_SECONDS = 0
 STALE_TASK_DAYS = 30
 PROJECT_PURGE_DAYS = 30
 _CLOSED_STATUSES = (TaskStatus.DONE, TaskStatus.CANCELLED, TaskStatus.DUPLICATE)
@@ -49,40 +51,6 @@ async def prune_notifications(session: AsyncSession, *, keep: int = NOTIFICATION
         deleted += cast("CursorResult[Any]", result).rowcount or 0
     await session.commit()
     return deleted
-
-
-async def dispatch_pending_emails(
-    session: AsyncSession,
-    *,
-    delay_seconds: int = EMAIL_DELAY_SECONDS,
-    sender: EmailSender = deliver_email,
-) -> int:
-    """Email notifications still unread after a delay, once each (TRI-02-EMAIL).
-
-    A notification read before this runs is skipped, so users never get both an
-    in-app notification and an email for the same event.
-    """
-    cutoff = utcnow() - timedelta(seconds=delay_seconds)
-    pending = list(
-        await session.scalars(
-            select(Notification).where(
-                Notification.read_at.is_(None),
-                Notification.archived_at.is_(None),
-                Notification.email_sent_at.is_(None),
-                Notification.created_at <= cutoff,
-            )
-        )
-    )
-    sent = 0
-    for notification in pending:
-        user = await session.get(User, notification.recipient_id)
-        if user is None:
-            continue
-        sender(user.email, notification.title, notification.snippet or "")
-        notification.email_sent_at = utcnow()
-        sent += 1
-    await session.commit()
-    return sent
 
 
 async def archive_stale_tasks(

@@ -9,7 +9,6 @@ from sqlalchemy import func, select, update
 from elliptic.core.database import session_factory
 from elliptic.core.jobs import (
     archive_stale_tasks,
-    dispatch_pending_emails,
     prune_notifications,
     purge_deleted_projects,
 )
@@ -46,52 +45,6 @@ async def test_prune_keeps_newest_per_recipient(client: AsyncClient) -> None:
             .where(Notification.recipient_id == recipient)
         )
         assert remaining == 2
-
-
-async def test_email_dispatched_once_and_skipped_when_read(client: AsyncClient) -> None:
-    auth = await register_and_login(client)
-    org = await create_org(client, auth["headers"])
-    sent: list[tuple[str, str]] = []
-
-    def capture(to_email: str, subject: str, body: str) -> None:
-        sent.append((to_email, subject))
-
-    async with session_factory() as session:
-        note = Notification(
-            org_id=uuid.UUID(org["id"]),
-            recipient_id=uuid.UUID(auth["user_id"]),
-            type=NotificationType.ASSIGNED,
-            entity_type="task",
-            entity_id=None,
-            actor_id=None,
-            title="You were assigned",
-        )
-        session.add(note)
-        await session.commit()
-        first = await dispatch_pending_emails(session, delay_seconds=0, sender=capture)
-        assert first == 1
-        assert sent[0][0] == auth["email"]
-
-        again = await dispatch_pending_emails(session, delay_seconds=0, sender=capture)
-        assert again == 0
-
-    async with session_factory() as session:
-        another = Notification(
-            org_id=uuid.UUID(org["id"]),
-            recipient_id=uuid.UUID(auth["user_id"]),
-            type=NotificationType.MENTIONED,
-            entity_type="note",
-            entity_id=None,
-            actor_id=None,
-            title="Mentioned",
-            read_at=utcnow(),
-        )
-        session.add(another)
-        await session.commit()
-        sent.clear()
-        result = await dispatch_pending_emails(session, delay_seconds=0, sender=capture)
-        assert result == 0
-        assert sent == []
 
 
 async def test_archive_stale_tasks(client: AsyncClient) -> None:
