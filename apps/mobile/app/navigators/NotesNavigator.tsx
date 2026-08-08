@@ -15,7 +15,12 @@ export function NotesNavigator() {
       <Stack.Screen
         name="NotesList"
         component={NotesScreen}
-        options={{ headerShown: false, title: "Notes" }}
+        // The root keeps its large in-screen header; a folder uses the native
+        // one, which is what carries the back button and the swipe-back.
+        options={({ route }) => ({
+          headerShown: Boolean(route.params?.folderId),
+          title: route.params?.title ?? "Notes",
+        })}
       />
       <Stack.Screen
         name="NoteDetail"

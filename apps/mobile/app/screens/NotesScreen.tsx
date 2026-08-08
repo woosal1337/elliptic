@@ -1,4 +1,4 @@
-import { FC, useCallback, useMemo, useState } from "react"
+import { FC, useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react"
 import { FlatList, Pressable, RefreshControl, TextStyle, View, ViewStyle } from "react-native"
 
 import { AppIcon } from "@/components/AppIcon"
@@ -21,7 +21,7 @@ import { useAppTheme } from "@/theme/context"
 import { hapticPress, hapticSelection } from "@/utils/haptics"
 import { useListQuery } from "@/utils/useListQuery"
 
-export const NotesScreen: FC<NotesStackScreenProps<"NotesList">> = ({ navigation }) => {
+export const NotesScreen: FC<NotesStackScreenProps<"NotesList">> = ({ navigation, route }) => {
   const { activeOrg } = useOrg()
   const {
     theme: { colors, spacing },
@@ -36,28 +36,19 @@ export const NotesScreen: FC<NotesStackScreenProps<"NotesList">> = ({ navigation
   const [title, setTitle] = useState("")
   const [creating, setCreating] = useState(false)
   const [asFolder, setAsFolder] = useState(false)
-  const [folderId, setFolderId] = useState<string | null>(null)
   const [moving, setMoving] = useState<Note | null>(null)
+  const folderId = route.params?.folderId ?? null
 
   const byId = useMemo(() => new Map(notes.map((n) => [n.id, n])), [notes])
 
   // The open folder can vanish underneath us — deleted on another device, or
-  // moved out of this list — so fall back to the root rather than a blank screen.
-  const currentId = folderId && byId.has(folderId) ? folderId : null
-
-  const trail = useMemo(() => {
-    const path: Note[] = []
-    const seen = new Set<string>()
-    let cursor = currentId
-    while (cursor) {
-      const node = byId.get(cursor)
-      if (!node || seen.has(cursor)) break
-      seen.add(cursor)
-      path.unshift(node)
-      cursor = node.parent_id
-    }
-    return path
-  }, [currentId, byId])
+  // moved out of this list. Falling back to the root would silently show the
+  // wrong contents under the folder's name, so pop back instead.
+  const known = folderId === null || byId.has(folderId)
+  const currentId = known ? folderId : null
+  useEffect(() => {
+    if (!known && !loading) navigation.goBack()
+  }, [known, loading, navigation])
 
   // Folders first, then documents: the things you walk into sit above the
   // things you open, the same way every file browser does it.
@@ -105,6 +96,24 @@ export const NotesScreen: FC<NotesStackScreenProps<"NotesList">> = ({ navigation
     return moving.parent_id ? [{ label: "All notes", value: "" }, ...options] : options
   }, [moving, notes])
 
+  // Inside a folder the in-screen header is gone, so the create action moves to
+  // the native header rather than disappearing with it.
+  useLayoutEffect(() => {
+    if (currentId === null) return
+    navigation.setOptions({
+      headerRight: () => (
+        <Pressable
+          onPress={hapticPress(() => setShowCreate(true))}
+          hitSlop={12}
+          accessibilityRole="button"
+          accessibilityLabel="New note or folder"
+        >
+          <AppIcon name="plus" size={22} color={colors.text} />
+        </Pressable>
+      ),
+    })
+  }, [currentId, navigation, colors.text])
+
   const move = async (target: string) => {
     if (!activeOrg || !moving) return
     const ok = await api.moveNote(activeOrg.id, moving.id, target || null)
@@ -113,44 +122,28 @@ export const NotesScreen: FC<NotesStackScreenProps<"NotesList">> = ({ navigation
   }
 
   return (
-    <Screen preset="fixed" contentContainerStyle={$flex} safeAreaEdges={["top"]}>
-      <ScreenHeader
-        title={trail.length > 0 ? trail[trail.length - 1].title : "Notes"}
-        actions={
-          activeOrg
-            ? [
-                {
-                  key: "create",
-                  icon: "plus",
-                  label: "New",
-                  emphasis: true,
-                  onPress: () => setShowCreate(true),
-                },
-              ]
-            : []
-        }
-      />
-
-      {currentId ? (
-        <Pressable
-          onPress={hapticPress(() => setFolderId(trail[trail.length - 1]?.parent_id ?? null))}
-          style={({ pressed }) => [
-            $crumb,
-            {
-              paddingHorizontal: spacing.lg,
-              backgroundColor: pressed ? colors.muted : colors.background,
-              borderBottomColor: colors.separator,
-            },
-          ]}
-        >
-          <AppIcon name="chevron-left" size={16} color={colors.textDim} />
-          <Text
-            text={trail.length > 1 ? trail[trail.length - 2].title : "All notes"}
-            size="xs"
-            style={{ color: colors.textDim }}
-            numberOfLines={1}
-          />
-        </Pressable>
+    <Screen
+      preset="fixed"
+      contentContainerStyle={$flex}
+      safeAreaEdges={currentId === null ? ["top"] : []}
+    >
+      {currentId === null ? (
+        <ScreenHeader
+          title="Notes"
+          actions={
+            activeOrg
+              ? [
+                  {
+                    key: "create",
+                    icon: "plus",
+                    label: "New",
+                    emphasis: true,
+                    onPress: () => setShowCreate(true),
+                  },
+                ]
+              : []
+          }
+        />
       ) : null}
 
       {loading ? (
@@ -183,7 +176,7 @@ export const NotesScreen: FC<NotesStackScreenProps<"NotesList">> = ({ navigation
             <Pressable
               onPress={hapticPress(() =>
                 item.is_folder
-                  ? setFolderId(item.id)
+                  ? navigation.push("NotesList", { folderId: item.id, title: item.title })
                   : navigation.navigate("NoteDetail", { noteId: item.id, title: item.title }),
               )}
               onLongPress={() => {
@@ -272,12 +265,5 @@ const $row: ViewStyle = {
   gap: 12,
   paddingVertical: 13,
   paddingHorizontal: 24,
-  borderBottomWidth: 1,
-}
-const $crumb: ViewStyle = {
-  flexDirection: "row",
-  alignItems: "center",
-  gap: 6,
-  paddingVertical: 10,
   borderBottomWidth: 1,
 }

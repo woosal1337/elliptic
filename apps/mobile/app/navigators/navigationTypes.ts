@@ -21,7 +21,9 @@ export type TasksStackParamList = {
 }
 
 export type NotesStackParamList = {
-  NotesList: undefined
+  // Folders are pushed as their own screen rather than swapped in place, so the
+  // stack gives them the platform's own back button and its edge-swipe gesture.
+  NotesList: { folderId?: string; title?: string } | undefined
   NoteDetail: { noteId: string; title: string }
 }
 
