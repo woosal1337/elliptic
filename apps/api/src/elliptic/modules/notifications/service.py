@@ -85,13 +85,26 @@ async def notify(
     actor_id: uuid.UUID | None,
     title: str,
     snippet: str | None = None,
+    identifier: str | None = None,
+    allow_self: bool = False,
 ) -> Notification | None:
     """Insert a notification for a recipient, skipping self-notification.
 
-    Returns the created notification, or ``None`` when the recipient is the actor.
-    The notification is added to the caller's transaction and not committed here.
+    Returns the created notification, or ``None`` when the recipient is the actor
+    and ``allow_self`` is unset. The notification is added to the caller's
+    transaction and not committed here.
+
+    ``allow_self`` exists for the board events — a task appearing, a status
+    moving — which people want to see for their own actions too: the push is the
+    receipt that the change actually landed, which matters when it was made on
+    another device or by an agent acting for them. Everything aimed at a person
+    (assignment, mention, comment) keeps the default, where announcing your own
+    action back to you is just noise.
+
+    ``identifier`` is the human key (``COS-234``); it rides in the push payload
+    so a tapped notification can title its screen before the task has loaded.
     """
-    if actor_id is not None and recipient_id == actor_id:
+    if actor_id is not None and recipient_id == actor_id and not allow_self:
         return None
     notification = Notification(
         org_id=org_id,
@@ -114,6 +127,7 @@ async def notify(
             "entity_type": entity_type,
             "entity_id": str(entity_id) if entity_id else None,
             "type": type.value,
+            "identifier": identifier,
         },
     )
     return notification
@@ -449,15 +463,47 @@ async def _recipient_push_tokens(session: AsyncSession, recipient_id: uuid.UUID)
     return list(rows)
 
 
+# Android files every notification under a channel and lets the user set
+# importance per channel, so this split decides what they can mute without
+# muting everything: what was aimed at them, what was said, and what merely
+# happened. The board events are the chatty ones and sit alone in `activity`.
+#
+# Keyed by the enum's value, not the member: Enum hashes by name, so a member
+# key would never match the value string carried in the payload.
+_PUSH_CHANNEL = {
+    NotificationType.ASSIGNED.value: "direct",
+    NotificationType.MENTIONED.value: "direct",
+    NotificationType.URGENT.value: "direct",
+    NotificationType.COMMENTED.value: "comments",
+}
+_DEFAULT_CHANNEL = "activity"
+
+
 async def _send_expo_push(
-    tokens: list[str], title: str, body: str, data: dict[str, object]
+    tokens: list[str],
+    title: str,
+    body: str,
+    data: dict[str, object],
+    *,
+    badge: int | None = None,
 ) -> None:
     """Deliver via Expo Push (the default transport). Pluggable for APNs/FCM later."""
-    messages = [
-        {"to": t, "title": title, "body": body, "data": data}
-        for t in tokens
-        if t.startswith("ExponentPushToken")
-    ]
+    channel = _PUSH_CHANNEL.get(str(data.get("type")), _DEFAULT_CHANNEL)
+    # iOS stacks notifications sharing a thread, so a task that moves three times
+    # reads as one collapsible group rather than three separate rows.
+    thread = f"{data.get('entity_type')}:{data.get('entity_id')}"
+    envelope: dict[str, object] = {
+        "title": title,
+        "body": body,
+        "data": data,
+        "sound": "default",
+        "channelId": channel,
+        "threadId": thread,
+        "priority": "high" if channel == "direct" else "default",
+    }
+    if badge is not None:
+        envelope["badge"] = badge
+    messages = [{"to": t, **envelope} for t in tokens if t.startswith("ExponentPushToken")]
     if not messages:
         return
     async with httpx.AsyncClient(timeout=8.0) as http:
@@ -476,6 +522,11 @@ async def _fanout_push(
         return
     try:
         tokens = await _recipient_push_tokens(session, recipient_id)
-        await _send_expo_push(tokens, title, body, data)
+        if not tokens:
+            return
+        # The badge is the unread inbox count rather than a per-message tally, so
+        # the number on the icon matches what the inbox shows when it is opened.
+        badge = await _unread_count(session, recipient_id, utcnow())
+        await _send_expo_push(tokens, title, body, data, badge=badge)
     except Exception:
         logger.exception("Push fan-out failed for recipient {}", recipient_id)

@@ -30,6 +30,8 @@ class NotificationType(enum.StrEnum):
     MEMBER_ADDED = "member_added"
     MEETING_ACTION_DONE = "meeting_action_done"
     URGENT = "urgent"
+    TASK_CREATED = "task_created"
+    STATUS_CHANGED = "status_changed"
 
 
 class Notification(BaseModel):

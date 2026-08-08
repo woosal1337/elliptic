@@ -24,7 +24,7 @@ from elliptic.modules.notes.models import Note
 from elliptic.modules.notifications.models import NotificationType
 from elliptic.modules.notifications.service import notify
 from elliptic.modules.orgs.models import ROLE_ORDER, OrganizationMember, OrgRole
-from elliptic.modules.projects.models import Project, ProjectStatus
+from elliptic.modules.projects.models import Project, ProjectStatus, ProjectSubscription
 from elliptic.modules.projects.service import (
     is_project_member,
     lock_project,
@@ -701,6 +701,7 @@ async def create_task(
                 snippet=task.title,
             )
         await run_trigger(session, ctx, task, AutomationTrigger.ON_TRIAGE_ENTRY)
+    await _emit_task_created(session, ctx, task, project)
     return task, project
 
 
@@ -1133,6 +1134,89 @@ async def _emit_urgent(
         logger.exception("Failed to emit urgent notification for task {}", task.id)
 
 
+async def _board_recipients(
+    session: AsyncSession, ctx: OrgContext, task: Task, *, project_id: uuid.UUID | None = None
+) -> set[uuid.UUID]:
+    """Everyone who should hear that this task appeared or moved.
+
+    Subscribers are the opt-in signal, but the assignee and the creator are
+    included whether or not they ever pressed subscribe — they are the two people
+    the task is actually about. The actor stays in deliberately: these events are
+    receipts, so filtering them here would quietly undo ``allow_self`` at the
+    call site.
+
+    A brand-new task has no subscribers yet, so creation reads the project's
+    watchers instead; that is what ``project_id`` selects.
+    """
+    if project_id is not None:
+        rows = await session.scalars(
+            select(ProjectSubscription.user_id).where(ProjectSubscription.project_id == project_id)
+        )
+    else:
+        rows = await session.scalars(
+            select(TaskSubscription.user_id).where(TaskSubscription.task_id == task.id)
+        )
+    recipients = set(rows)
+    recipients.update(u for u in (task.assignee_id, task.created_by, ctx.user.id) if u is not None)
+    return recipients
+
+
+async def _emit_task_created(
+    session: AsyncSession, ctx: OrgContext, task: Task, project: Project
+) -> None:
+    """Tell the project's watchers that a task appeared, its creator included."""
+    try:
+        recipients = await _board_recipients(session, ctx, task, project_id=project.id)
+        # An assignee already receives the more specific "assigned to you" for
+        # this same creation, so they are dropped here rather than pushed twice
+        # for one event. Assigning to yourself is the exception: that one is
+        # suppressed as self-directed, leaving this as the only notification.
+        if task.assignee_id is not None and task.assignee_id != ctx.user.id:
+            recipients.discard(task.assignee_id)
+        identifier = f"{project.key}-{task.number}"
+        for recipient_id in recipients:
+            await notify(
+                session,
+                org_id=ctx.org.id,
+                recipient_id=recipient_id,
+                type=NotificationType.TASK_CREATED,
+                entity_type="task",
+                entity_id=task.id,
+                actor_id=ctx.user.id,
+                title=f"{identifier} created",
+                snippet=task.title,
+                identifier=identifier,
+                allow_self=True,
+            )
+    except Exception:
+        logger.exception("Failed to emit created notification for task {}", task.id)
+
+
+async def _emit_status_changed(
+    session: AsyncSession, ctx: OrgContext, task: Task, project: Project, previous: TaskStatus
+) -> None:
+    """Tell a task's watchers it moved, whoever moved it included."""
+    try:
+        recipients = await _board_recipients(session, ctx, task)
+        identifier = f"{project.key}-{task.number}"
+        for recipient_id in recipients:
+            await notify(
+                session,
+                org_id=ctx.org.id,
+                recipient_id=recipient_id,
+                type=NotificationType.STATUS_CHANGED,
+                entity_type="task",
+                entity_id=task.id,
+                actor_id=ctx.user.id,
+                title=f"{identifier} is {_status_label(task.status)}",
+                snippet=f"{task.title} — was {_status_label(previous)}",
+                identifier=identifier,
+                allow_self=True,
+            )
+    except Exception:
+        logger.exception("Failed to emit status notification for task {}", task.id)
+
+
 def _status_label(status: TaskStatus) -> str:
     return status.value.replace("_", " ").title()
 
@@ -1220,6 +1304,8 @@ async def transition_status(
             payload={"from": previous, "to": status},
         )
     await session.flush()
+    if not _within_creation_grace(task):
+        await _emit_status_changed(session, ctx, task, project, previous)
     if status == TaskStatus.DONE and task.source_meeting_id is not None:
         await _close_meeting_loop(session, ctx, task, project)
     await run_trigger(session, ctx, task, AutomationTrigger.ON_STATUS_CHANGE)
