@@ -7,6 +7,11 @@ import { useAppTheme } from "@/theme/context"
 import { typography } from "@/theme/typography"
 import { hapticPress } from "@/utils/haptics"
 
+// The tiles are a fixed dark ramp rather than the theme's tint, chosen so white
+// initials clear 4.5:1 on every step — so the letter is white in both themes and
+// does not follow onTint.
+const TILE_FG = "#FFFFFF"
+
 const TILE_COLORS = [
   "#333333",
   "#3D3D3D",
@@ -62,7 +67,7 @@ export const ProjectRow: FC<{ project: Project; onPress: () => void; divider?: b
       >
         <Text
           text={(project.key || project.name).charAt(0).toUpperCase()}
-          style={[$tileLetter, { color: colors.onTint }]}
+          style={[$tileLetter, { color: TILE_FG }]}
         />
       </View>
       <View style={$content}>

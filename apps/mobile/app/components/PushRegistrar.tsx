@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react"
+import { FC, useEffect, useRef } from "react"
 import * as Notifications from "expo-notifications"
 import { useMMKVBoolean } from "react-native-mmkv"
 
@@ -45,13 +45,27 @@ export const PushRegistrar: FC = () => {
     if (isAuthenticated && activeOrg && pushEnabled !== false) void registerForPush(activeOrg.id)
   }, [isAuthenticated, activeOrg, pushEnabled])
 
+  const coldStartHandled = useRef(false)
+
   useEffect(() => {
-    // Cold start: app opened from a notification.
+    // Cold start: the app was launched by tapping a notification.
+    //
+    // This waits for auth and the active org before routing. Navigating the
+    // moment the component mounts beat the org context to it, so the detail
+    // screen fetched with no org and rendered "Couldn't open this task" for a
+    // task that was there all along — the deep link looked broken when only its
+    // timing was. The ref keeps it to one navigation per launch, since the
+    // effect now re-runs as those values settle.
+    if (!isAuthenticated || !activeOrg || coldStartHandled.current) return
+    coldStartHandled.current = true
     void Notifications.getLastNotificationResponseAsync().then((response) => {
       if (response)
         routeFromData(response.notification.request.content.data as PushData | undefined)
     })
-    // Warm: tapped while the app is running.
+  }, [isAuthenticated, activeOrg])
+
+  useEffect(() => {
+    // Warm: tapped while the app is running, so the context is already up.
     const sub = Notifications.addNotificationResponseReceivedListener((response) => {
       routeFromData(response.notification.request.content.data as PushData | undefined)
     })

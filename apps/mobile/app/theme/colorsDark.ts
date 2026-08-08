@@ -73,7 +73,10 @@ export const colors = {
   tint: "#F5F5F5", // --accent
   tintInactive: "#404040", // --accent-subtle
   accentMuted: "#262626", // chip fill behind tint text
-  onTint: "#F7F8FF", // text/icon on tint
+  // tint is near-white in this theme, so anything drawn on it has to be dark.
+  // This stayed at the old near-white value through the retheme, which put white
+  // text on a white button and made every filled button unreadable.
+  onTint: "#101010", // text/icon on tint
   primary: "#F7F7F7", // primary button bg (light-on-dark)
   onPrimary: "#101013",
 
