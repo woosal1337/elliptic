@@ -2,6 +2,7 @@ import { Children, FC, isValidElement, ReactElement, ReactNode, useState } from 
 import { Platform, Pressable, ScrollView, TextStyle, View, ViewStyle } from "react-native"
 import { Switch } from "react-native"
 import DateTimePicker from "@react-native-community/datetimepicker"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { Sheet as AppSheet } from "@/components/Sheet"
 import { Text } from "@/components/Text"
@@ -50,7 +51,12 @@ export const Form: FC<FormProps> = ({ children }) => {
 }
 
 /** On iOS `Host` bridges into SwiftUI. Android has nothing to bridge to. */
-export const Host: FC<HostProps> = ({ children, style }) => <View style={style}>{children}</View>
+export const Host: FC<HostProps> = ({ children, style }) => {
+  // These screens carry no navigation header, so nothing else insets them and
+  // the first row drew under the clock. SwiftUI's Host handles this on iOS.
+  const insets = useSafeAreaInsets()
+  return <View style={[style, { paddingTop: insets.top }]}>{children}</View>
+}
 
 /**
  * A titled group of rows.
@@ -98,7 +104,7 @@ export const Toggle: FC<ToggleProps> = ({ label, isOn, onIsOnChange }) => {
         value={isOn}
         onValueChange={onIsOnChange}
         trackColor={{ false: colors.subtle, true: colors.textDim }}
-        thumbColor={colors.background}
+        thumbColor={colors.surface}
       />
     </View>
   )
