@@ -32,7 +32,6 @@ from elliptic.modules.auth.router import router as auth_router
 from elliptic.modules.auth_providers.router import admin_router as auth_providers_admin_router
 from elliptic.modules.auth_providers.router import public_router as auth_providers_public_router
 from elliptic.modules.automation.router import router as automation_router
-from elliptic.modules.coediting.router import router as coediting_router
 from elliptic.modules.comments.router import router as comments_router
 from elliptic.modules.compliance.router import router as compliance_router
 from elliptic.modules.config.router import router as config_router
@@ -183,9 +182,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     from elliptic.modules.webhooks import service as webhooks_service  # noqa: PLC0415
 
     register_event_handler(webhooks_service.dispatch_event)
-    from elliptic.modules.coediting.service import run_server  # noqa: PLC0415
-
-    async with run_server(), mcp_app.lifespan(app):
+    async with mcp_app.lifespan(app):
         yield
     await listener.stop()
     if scheduled:
@@ -282,7 +279,6 @@ def create_app() -> FastAPI:  # noqa: PLR0915 — flat router registration list
     api.include_router(note_templates_router)
     api.include_router(events_router)
     api.include_router(comments_router)
-    api.include_router(coediting_router)
     api.include_router(config_router)
     api.include_router(compliance_router)
     api.include_router(notifications_router)

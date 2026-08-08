@@ -7,10 +7,7 @@ import type { AnyExtension } from "@tiptap/core";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import { TaskItem, TaskList } from "@tiptap/extension-list";
-import Collaboration from "@tiptap/extension-collaboration";
-import { CollaborationCaret } from "@tiptap/extension-collaboration-caret";
 import { Markdown } from "tiptap-markdown";
-import type { NoteCollab } from "@/hooks/use-note-collab";
 import { ListChecks, RefreshCw, Sparkles, Wand2 } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import {
@@ -68,7 +65,6 @@ function buildExtensions(
     slash?: boolean;
     mention?: MentionConfig;
     taskActions?: NoteTaskActions;
-    collab?: NoteCollab;
   } = {}
 ): AnyExtension[] {
   const extensions: AnyExtension[] = [
@@ -78,7 +74,6 @@ function buildExtensions(
         openOnClick: false,
         HTMLAttributes: { rel: "noreferrer", target: "_blank" },
       },
-      ...(options.collab ? { undoRedo: false } : {}),
     }),
     TaskList,
     TaskItem.configure({ nested: true }),
@@ -91,15 +86,6 @@ function buildExtensions(
     }),
     Placeholder.configure({ placeholder }),
   ];
-  if (options.collab) {
-    extensions.push(
-      Collaboration.configure({ document: options.collab.doc }),
-      CollaborationCaret.configure({
-        provider: options.collab.provider,
-        user: options.collab.user,
-      })
-    );
-  }
   if (options.slash) {
     extensions.push(SlashCommand.configure({ taskActions: options.taskActions }));
   }
@@ -251,7 +237,6 @@ export function NoteEditor({
   mention,
   taskActions,
   orgId,
-  collab,
 }: {
   value: string;
   onChange: (markdown: string) => void;
@@ -261,7 +246,6 @@ export function NoteEditor({
   mention?: MentionConfig;
   taskActions?: NoteTaskActions;
   orgId?: string;
-  collab?: NoteCollab;
 }) {
   const routeTasks = useNoteTaskActions();
   const effectiveTaskActions = taskActions ?? routeTasks.taskActions;
@@ -272,9 +256,8 @@ export function NoteEditor({
         slash: slashCommands,
         mention,
         taskActions: effectiveTaskActions,
-        collab,
       }),
-    [placeholder, slashCommands, mention, effectiveTaskActions, collab]
+    [placeholder, slashCommands, mention, effectiveTaskActions]
   );
 
   const [selectionCount, setSelectionCount] = useState(0);
@@ -313,7 +296,7 @@ export function NoteEditor({
   const editor = useEditor({
     immediatelyRender: false,
     extensions,
-    content: collab ? undefined : value,
+    content: value,
     editorProps: {
       attributes: { class: cn(PROSE_CLASS, "min-h-[24rem]", className) },
       handleDrop: (view, event) => {
@@ -349,30 +332,10 @@ export function NoteEditor({
   valueRef.current = value;
 
   useEffect(() => {
-    if (collab) return;
     if (!editor || editor.isDestroyed) return;
     if (readMarkdown(editor) === value) return;
     editor.commands.setContent(value, { emitUpdate: false });
-  }, [editor, value, collab]);
-
-  useEffect(() => {
-    if (!collab || !editor) return;
-    let seeded = false;
-    const seedIfEmpty = () => {
-      if (seeded || editor.isDestroyed) return;
-      seeded = true;
-      if (editor.isEmpty && valueRef.current.trim()) {
-        editor.commands.setContent(valueRef.current, { emitUpdate: false });
-      }
-    };
-    if (collab.provider.synced) seedIfEmpty();
-    else
-      collab.provider.once("sync", (isSynced: boolean) => {
-        if (isSynced) seedIfEmpty();
-      });
-    const fallback = setTimeout(seedIfEmpty, 2500);
-    return () => clearTimeout(fallback);
-  }, [collab, editor]);
+  }, [editor, value]);
 
   const convertSelection = useCallback(() => {
     if (!editor) return;

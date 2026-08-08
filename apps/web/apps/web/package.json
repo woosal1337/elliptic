@@ -22,8 +22,6 @@
     "@tanstack/react-query": "^5.101.0",
     "@tanstack/react-query-persist-client": "5.101.0",
     "@tiptap/core": "^3.26.1",
-    "@tiptap/extension-collaboration": "^3.27.1",
-    "@tiptap/extension-collaboration-caret": "^3.27.1",
     "@tiptap/extension-placeholder": "^3.26.1",
     "@tiptap/pm": "^3.26.1",
     "@tiptap/react": "^3.26.1",
@@ -36,8 +34,6 @@
     "react-hook-form": "^7.78.0",
     "sonner": "^2.0.7",
     "tiptap-markdown": "^0.9.0",
-    "y-websocket": "^3.0.0",
-    "yjs": "^13.6.31",
     "zod": "^4.4.3"
   },
   "devDependencies": {

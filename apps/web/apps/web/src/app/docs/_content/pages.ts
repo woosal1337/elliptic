@@ -3406,7 +3406,7 @@ export const DOC_PAGES: DocPage[] = [
   {
     "title": "Notes, wiki & pages",
     "slug": "notes-wiki-pages",
-    "description": "Write rich Markdown pages in a block editor, organize them into a wiki, co-edit them live, comment and version them, and let your agents read and write the same pages over the MCP.",
+    "description": "Write rich Markdown pages in a block editor, organize them into a wiki, comment and version them, and let your agents read and write the same pages over the MCP.",
     "blocks": [
       {
         "type": "h2",
@@ -3414,7 +3414,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Pages in Elliptic are rich Markdown documents that live next to your tasks, meetings, and activity. They are where decisions, specs, runbooks, and handbooks get written down so the rest of the company, people and agents alike, can find them later. This page walks through creating and organizing pages, the wiki view over them, the block editor, mentions and references, real-time co-editing, version history and access control, templates and reuse, the link between pages and tasks, the on-page AI assistant, comments, your personal surfaces, and how agents work the same pages through the company-brain MCP."
+        "text": "Pages in Elliptic are rich Markdown documents that live next to your tasks, meetings, and activity. They are where decisions, specs, runbooks, and handbooks get written down so the rest of the company, people and agents alike, can find them later. This page walks through creating and organizing pages, the wiki view over them, the block editor, mentions and references, version history and access control, templates and reuse, the link between pages and tasks, the on-page AI assistant, comments, your personal surfaces, and how agents work the same pages through the company-brain MCP."
       },
       {
         "type": "callout",
@@ -3641,22 +3641,10 @@ export const DOC_PAGES: DocPage[] = [
         "text": "Mentioning a member notifies them. When you name someone in a page, they get a \"you were mentioned\" notification (you are never notified about mentioning yourself, and only org members are notified). When you mention someone in a comment on a task, they are additionally auto-subscribed to that task, so they keep getting updates without having to follow it manually."
       },
       {
-        "type": "h2",
-        "text": "Real-time co-editing"
-      },
-      {
-        "type": "p",
-        "text": "Pages support simultaneous editing. When more than one person has the same page open, edits merge in real time, you see each collaborator's live cursor and selection, and presence shows who else is in the document. There is no \"someone else is editing\" lock to fight over and no manual merge step."
-      },
-      {
-        "type": "p",
-        "text": "The session runs over a websocket at `/ws/notes/{id}`. Because the browser will not send its login cookie on a cross-origin websocket, the app first fetches a short-lived token from `/realtime/token` (valid for 30 minutes) and uses it to open the connection. Access is checked when the socket opens, so only members who can view the page can join its session."
-      },
-      {
         "type": "callout",
         "variant": "info",
         "title": "Autosave to durable Markdown",
-        "text": "The live session keeps everyone in sync, and the page's content is persisted back to durable Markdown automatically. There is no Save button. The same Markdown is what history, export, comments, and the MCP all read, so the collaborative copy and the stored copy stay in step."
+        "text": "Edits are persisted back to durable Markdown automatically. There is no Save button. The same Markdown is what history, export, comments, and the MCP all read."
       },
       {
         "type": "h2",
@@ -11022,7 +11010,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "info",
         "title": "Two app services and one database",
-        "text": "A Elliptic deployment is three containers: **postgres** (the only stateful dependency), **api** (Python / FastAPI, which also serves the MCP server and an in-process realtime relay for co-editing), and **web** (Next.js). The browser talks only to the web app, which proxies API calls same-origin under `/api`. Agents reach the workspace over the built-in MCP server on the same API, on your org's own key."
+        "text": "A Elliptic deployment is three containers: **postgres** (the only stateful dependency), **api** (Python / FastAPI, which also serves the MCP server), and **web** (Next.js). The browser talks only to the web app, which proxies API calls same-origin under `/api`. Agents reach the workspace over the built-in MCP server on the same API, on your org's own key."
       },
       {
         "type": "h2",

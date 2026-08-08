@@ -50,9 +50,6 @@ import {
 import { ErrorState } from "@/components/error-state";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { NoteEditor, NoteRenderer } from "@/components/notes/note-editor";
-import { CoeditingPresence } from "@/components/notes/coediting-presence";
-import { useNoteCollab } from "@/hooks/use-note-collab";
-import { useMe } from "@/hooks/use-auth-queries";
 import { NoteOutline } from "@/components/notes/note-outline";
 import { NoteAttachments } from "@/components/notes/note-attachments";
 import { NoteComments } from "@/components/notes/note-comments";
@@ -68,7 +65,6 @@ export default function NoteEditorPage() {
   const { orgId, noteId } = useParams<{ orgId: string; noteId: string }>();
   const router = useRouter();
   const note = useNote(orgId, noteId);
-  const me = useMe();
   const updateNote = useUpdateNote(orgId);
   const saveNote = updateNote.mutate;
   const deleteNote = useDeleteNote(orgId);
@@ -85,7 +81,6 @@ export default function NoteEditorPage() {
   const [showWorkItems, setShowWorkItems] = useState(false);
   const [showAi, setShowAi] = useState(false);
   const [showAttachments, setShowAttachments] = useState(false);
-  const collab = useNoteCollab(noteId, me.data?.id, me.data?.full_name, !preview && !focusMode);
 
   const savedRef = useRef({ title: "", content: "" });
   const latestRef = useRef({ title: "", content: "" });
@@ -360,20 +355,7 @@ export default function NoteEditorPage() {
               </CardContent>
             </Card>
           ) : (
-            <>
-              {collab ? (
-                <div className="mb-2 flex justify-end">
-                  <CoeditingPresence provider={collab.provider} />
-                </div>
-              ) : null}
-              <NoteEditor
-                key={collab ? "collab" : "solo"}
-                value={body}
-                onChange={setBody}
-                orgId={orgId}
-                collab={collab ?? undefined}
-              />
-            </>
+            <NoteEditor value={body} onChange={setBody} orgId={orgId} />
           )}
         </div>
         {!focusMode && sidecarOpen ? (
