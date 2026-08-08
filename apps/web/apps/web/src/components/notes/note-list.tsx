@@ -86,7 +86,12 @@ export function NoteList({
   const { folders, files } = React.useMemo(() => {
     const here = source.filter((note) => (note.parent_id ?? null) === currentId);
     return {
-      folders: here.filter((n) => n.is_folder),
+      // By name, numerically, so the date-named week folders read 07-20,
+      // 07-27, 08-03 instead of whatever order the API returned. Files keep
+      // that order, which is recency and is what you want for a document.
+      folders: here
+        .filter((n) => n.is_folder)
+        .sort((a, b) => a.title.localeCompare(b.title, undefined, { numeric: true })),
       files: here.filter((n) => !n.is_folder),
     };
   }, [source, currentId]);

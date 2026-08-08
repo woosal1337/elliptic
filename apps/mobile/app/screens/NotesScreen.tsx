@@ -53,9 +53,16 @@ export const NotesScreen: FC<NotesStackScreenProps<"NotesList">> = ({ navigation
 
   // Folders first, then documents: the things you walk into sit above the
   // things you open, the same way every file browser does it.
+  //
+  // Folders sort by name, numerically, so the date-named week folders come out
+  // 07-20, 07-27, 08-03 rather than in whatever order the API returned them.
+  // Documents keep the API's order, which is recency and is what you want.
   const rows = useMemo(() => {
     const here = notes.filter((n) => (n.parent_id ?? null) === currentId)
-    return [...here.filter((n) => n.is_folder), ...here.filter((n) => !n.is_folder)]
+    const folders = here
+      .filter((n) => n.is_folder)
+      .sort((a, b) => a.title.localeCompare(b.title, undefined, { numeric: true }))
+    return [...folders, ...here.filter((n) => !n.is_folder)]
   }, [notes, currentId])
 
   const create = async () => {
