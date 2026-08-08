@@ -55,6 +55,12 @@ class Note(BaseModel):
     parent_id: Mapped[uuid.UUID | None] = mapped_column(
         ForeignKey("notes.id", ondelete="CASCADE"), nullable=True, index=True
     )
+    # A folder is a note that is meant to hold others, not a separate kind of
+    # row. Notes already nested through parent_id, so this flag only says which
+    # of them the UI should let you walk into — one hierarchy rather than a
+    # second one alongside it. Folders keep their content field: a line about
+    # what belongs here is worth having when an agent is choosing where to file.
+    is_folder: Mapped[bool] = mapped_column(Boolean, default=False, server_default=false())
     visibility: Mapped[NoteVisibility] = mapped_column(
         Enum(NoteVisibility, native_enum=False, length=20),
         default=NoteVisibility.PUBLIC,

@@ -17,6 +17,7 @@ class NoteCreateIn(BaseModel):
     project_id: uuid.UUID | None = None
     team_id: uuid.UUID | None = None
     parent_id: uuid.UUID | None = None
+    is_folder: bool = False
     mention_user_ids: list[uuid.UUID] = Field(default_factory=list)
 
 
@@ -28,6 +29,7 @@ class NoteUpdateIn(BaseModel):
     icon: str | None = Field(default=None, max_length=16)
     project_id: uuid.UUID | None = None
     parent_id: uuid.UUID | None = None
+    is_folder: bool | None = None
     mention_user_ids: list[uuid.UUID] = Field(default_factory=list)
 
 
@@ -41,6 +43,7 @@ class NoteOut(BaseModel):
     project_id: uuid.UUID | None
     team_id: uuid.UUID | None = None
     parent_id: uuid.UUID | None
+    is_folder: bool = False
     title: str
     content: str
     icon: str | None = None

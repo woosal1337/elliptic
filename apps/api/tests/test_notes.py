@@ -189,3 +189,41 @@ async def test_note_crud_and_search(client: AsyncClient) -> None:
     assert deleted.status_code == 200
     gone = await client.get(f"{API}/orgs/{org['id']}/notes/{note['id']}", headers=auth["headers"])
     assert gone.status_code == 404
+
+
+async def test_folders_hold_notes_and_refuse_to_strand_them(client: AsyncClient) -> None:
+    """A folder is a note others sit under, and it cannot quietly abandon them."""
+    auth = await register_and_login(client)
+    h = auth["headers"]
+    org = await create_org(client, h)
+    base = f"{API}/orgs/{org['id']}/notes"
+
+    folder = (
+        await client.post(base, json={"title": "Runbooks", "is_folder": True}, headers=h)
+    ).json()["data"]
+    assert folder["is_folder"] is True
+
+    # A note created inside the folder carries it as its parent.
+    doc = (
+        await client.post(
+            base, json={"title": "Restore from backup", "parent_id": folder["id"]}, headers=h
+        )
+    ).json()["data"]
+    assert doc["parent_id"] == folder["id"]
+    assert doc["is_folder"] is False
+
+    # Demoting a folder that still holds something is refused rather than
+    # leaving the child pointing at a parent nobody can open.
+    refused = await client.patch(f"{base}/{folder['id']}", json={"is_folder": False}, headers=h)
+    assert refused.status_code == 400, refused.text
+
+    # Moving the child out is what makes it possible.
+    moved = await client.patch(f"{base}/{doc['id']}", json={"parent_id": None}, headers=h)
+    assert moved.status_code == 200, moved.text
+
+    assert moved.json()["data"]["parent_id"] is None, "a note must be able to leave a folder"
+
+    # With the folder empty, demoting it is allowed.
+    again = await client.patch(f"{base}/{folder['id']}", json={"is_folder": False}, headers=h)
+    assert again.status_code == 200, again.text
+    assert again.json()["data"]["is_folder"] is False

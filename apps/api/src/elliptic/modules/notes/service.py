@@ -140,6 +140,7 @@ async def create_note(session: AsyncSession, ctx: OrgContext, payload: NoteCreat
         project_id=payload.project_id,
         team_id=payload.team_id,
         parent_id=payload.parent_id,
+        is_folder=payload.is_folder,
         title=payload.title,
         content=payload.content,
         icon=payload.icon,
@@ -218,9 +219,24 @@ async def update_note(
     if payload.project_id is not None:
         await _validate_project(session, ctx, payload.project_id)
         note.project_id = payload.project_id
-    if payload.parent_id is not None:
-        await _validate_parent(session, ctx, payload.parent_id, note.id)
+    # "parent_id": null has to mean move to the root, not leave it alone, or a
+    # note can be filed into a folder and never taken back out. Presence in the
+    # payload is the only thing that separates the two, since both arrive as None.
+    if "parent_id" in payload.model_fields_set:
+        if payload.parent_id is not None:
+            await _validate_parent(session, ctx, payload.parent_id, note.id)
         note.parent_id = payload.parent_id
+    if payload.is_folder is not None:
+        # Turning a folder back into a document would strand whatever is filed
+        # under it: the children keep pointing at a parent nothing can be opened
+        # into. Emptying it first is the caller's decision to make, not ours.
+        if note.is_folder and not payload.is_folder:
+            child = await session.scalar(
+                select(Note.id).where(Note.parent_id == note.id, Note.archived_at.is_(None))
+            )
+            if child is not None:
+                raise BadRequestError("Move or delete what is inside this folder first")
+        note.is_folder = payload.is_folder
     title_changed = payload.title is not None and payload.title != note.title
     content_changed = payload.content is not None and payload.content != note.content
     if title_changed or content_changed:
