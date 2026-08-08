@@ -78,13 +78,17 @@ export const SectionHeader: FC<SectionHeaderProps> = ({
   )
 }
 
+// The gap above a section is margin, not padding. As padding it sat inside the
+// Pressable, so the pressed fill drew 18px above the label and 8px below it —
+// a highlight visibly off-centre from the row it belongs to. Same total
+// spacing, but now the fill is symmetric around the content.
 const $header: ViewStyle = {
   flexDirection: "row",
   alignItems: "center",
   gap: 8,
   paddingHorizontal: 24,
-  paddingTop: 18,
-  paddingBottom: 8,
+  paddingVertical: 8,
+  marginTop: 10,
 }
 const $spacer: ViewStyle = { flex: 1 }
 // Set in the label's own case. Uppercasing shouts, and at this size it also

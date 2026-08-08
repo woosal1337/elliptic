@@ -22,26 +22,29 @@ import { prettyLabel, STATUS_OPTIONS } from "@/utils/taskOptions"
 import { useCollapsedSections } from "@/utils/useCollapsedSections"
 import { useListQuery } from "@/utils/useListQuery"
 
-// Active work only. Every status the API can return must be accounted for
-// here or in CLOSED_STATUSES: sections are built by filtering this list, so a
-// status in neither has no section and its tasks are silently invisible.
-const STATUS_ORDER = ["in_progress", "in_review", "todo", "backlog"]
+// Every status the API can return must appear in one of these two lists:
+// sections are built by filtering them, so a status in neither has no section
+// and its tasks are silently invisible rather than merely tucked away.
+const ACTIVE_STATUSES = ["in_progress", "in_review", "todo", "backlog"]
 
 /**
- * Closed work, left off the list entirely rather than shown as a collapsed
- * header. A finished task is not something you scroll past on the way to work —
- * it is history, and it belongs on the task itself or in search. Keeping the
- * headers would still cost a row each and still show a count that invites a tap.
+ * Closed work, kept below the active statuses. These sit shut and show only a
+ * header and a count — enough to see that eleven things got finished without
+ * scrolling past them to reach the work that has not.
+ *
+ * A section appears only when something is in it, so a board with nothing
+ * cancelled never grows a Cancelled header.
  */
-const CLOSED_STATUSES = new Set(["done", "cancelled", "duplicate"])
+const CLOSED_STATUSES = ["done", "cancelled", "duplicate"]
+
+const STATUS_ORDER = [...ACTIVE_STATUSES, ...CLOSED_STATUSES]
 
 /**
- * Folded shut on every visit. These two carry the long tail — backlog is
- * everything not yet started, and in-progress accumulates whatever was left
- * open — so opening Tasks to a wall of them buries the middle of the board.
- * Expanding one holds while you are on the screen, then resets.
+ * Folded shut on every visit. Backlog and in-progress carry the long tail, and
+ * closed work is history — opening Tasks to a wall of either buries the middle
+ * of the board. Expanding one holds while you are on the screen, then resets.
  */
-const COLLAPSED_ON_MOUNT = ["backlog", "in_progress"]
+const COLLAPSED_ON_MOUNT = ["backlog", "in_progress", ...CLOSED_STATUSES]
 
 export const TasksScreen: FC<TasksStackScreenProps<"TasksList">> = ({ navigation }) => {
   const { activeOrg } = useOrg()
@@ -86,7 +89,6 @@ export const TasksScreen: FC<TasksStackScreenProps<"TasksList">> = ({ navigation
   const sections = useMemo(() => {
     const groups = new Map<string, Task[]>()
     for (const t of tasks) {
-      if (CLOSED_STATUSES.has(t.status)) continue
       const arr = groups.get(t.status) ?? []
       arr.push(t)
       groups.set(t.status, arr)
