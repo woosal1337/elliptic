@@ -166,3 +166,74 @@ async def test_profile_tools_need_no_org(app: FastAPI, client: AsyncClient) -> N
 
         updated = await mcp_client.call_tool("update_my_profile", {"full_name": "Renamed User"})
         assert updated.data["full_name"] == "Renamed User"
+
+
+async def test_search_finds_records_in_the_targeted_org(app: FastAPI, client: AsyncClient) -> None:
+    auth = await register_and_login(client)
+    await create_org(client, auth["headers"], name="First Org")
+    second = await create_org(client, auth["headers"], name="Second Org")
+    project = await create_project(client, auth["headers"], second["id"], key="SRCH")
+    await create_task(
+        client, auth["headers"], second["id"], project["id"], "Rebook the gallery visit"
+    )
+    token = await _pat(client, auth["headers"])
+
+    async with _mcp_client(app, token) as mcp_client:
+        hits = await mcp_client.call_tool("search", {"query": "gallery", "org_id": second["id"]})
+        assert hits.data["total"] >= 1
+        task_hits = [row for row in hits.data["results"] if row["type"] == "task"]
+        assert task_hits
+        assert task_hits[0]["identifier"].startswith("SRCH")
+
+        filtered = await mcp_client.call_tool(
+            "search", {"query": "gallery", "types": "note", "org_id": second["id"]}
+        )
+        assert filtered.data["total"] == 0
+
+        elsewhere = await mcp_client.call_tool("search", {"query": "gallery"})
+        assert elsewhere.data["total"] == 0
+
+        with pytest.raises(ToolError):
+            await mcp_client.call_tool(
+                "search", {"query": "gallery", "types": "widgets", "org_id": second["id"]}
+            )
+
+
+async def test_task_planning_fields_round_trip(app: FastAPI, client: AsyncClient) -> None:
+    """Start date, estimate, acceptance criteria and component reach the API."""
+    auth = await register_and_login(client)
+    org = await create_org(client, auth["headers"], name="Planning Org")
+    project = await create_project(client, auth["headers"], org["id"], key="PLAN")
+    token = await _pat(client, auth["headers"])
+
+    async with _mcp_client(app, token) as mcp_client:
+        created = await mcp_client.call_tool(
+            "create_task",
+            {
+                "project_id": project["id"],
+                "title": "Ship the thing",
+                "start_date": "2026-09-01",
+                "due_date": "2026-09-30",
+                "component": "gateway",
+                "release_blocker": True,
+                "org_id": org["id"],
+            },
+        )
+        assert created.data["start_date"] == "2026-09-01"
+        assert created.data["component"] == "gateway"
+        assert created.data["release_blocker"] is True
+
+        updated = await mcp_client.call_tool(
+            "update_task",
+            {
+                "task_id": created.data["id"],
+                "estimate": "3d",
+                "acceptance_criteria": "Deploys clean and the smoke test passes.",
+                "clear_component": True,
+                "org_id": org["id"],
+            },
+        )
+        assert updated.data["estimate"] == "3d"
+        assert updated.data["acceptance_criteria"].startswith("Deploys clean")
+        assert updated.data["component"] is None
+        assert updated.data["start_date"] == "2026-09-01"

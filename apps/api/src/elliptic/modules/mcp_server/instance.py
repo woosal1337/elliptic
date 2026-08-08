@@ -11,7 +11,9 @@ INSTRUCTIONS = (
     "organization you joined first — which is rarely the one you mean. Call "
     "list_my_orgs once, then pass org_id on every call that targets a specific "
     "workspace. A tool that reports a record as missing is usually pointed at the "
-    "wrong organization rather than looking at a deleted record."
+    "wrong organization rather than looking at a deleted record.\n\n"
+    "Use search to find a record you only know by description, instead of listing "
+    "and filtering an entity type by hand."
 )
 
 mcp: FastMCP = FastMCP(name="Elliptic", instructions=INSTRUCTIONS)

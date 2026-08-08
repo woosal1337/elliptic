@@ -81,6 +81,7 @@ async def create_task(
     priority: str = "none",
     assignee_id: str | None = None,
     unassigned: bool = False,
+    start_date: str | None = None,
     due_date: str | None = None,
     label_ids: list[str] | None = None,
     parent_task_id: str | None = None,
@@ -88,6 +89,8 @@ async def create_task(
     source_note_id: str | None = None,
     kind: str = "task",
     severity: str | None = None,
+    component: str | None = None,
+    release_blocker: bool = False,
     is_triage: bool = False,
     mention_user_ids: list[str] | None = None,
     related_task_ids: list[str] | None = None,
@@ -110,6 +113,7 @@ async def create_task(
                 priority=TaskPriority(priority),
                 assignee_id=_opt_uuid(assignee_id),
                 unassigned=unassigned,
+                start_date=_opt_date(start_date),
                 due_date=_opt_date(due_date),
                 label_ids=[uuid.UUID(value) for value in (label_ids or [])],
                 parent_task_id=_opt_uuid(parent_task_id),
@@ -117,6 +121,8 @@ async def create_task(
                 source_note_id=_opt_uuid(source_note_id),
                 kind=TaskKind(kind),
                 severity=BugSeverity(severity) if severity else None,
+                component=component,
+                release_blocker=release_blocker,
                 is_triage=is_triage,
                 mention_user_ids=[uuid.UUID(value) for value in (mention_user_ids or [])],
                 related_task_ids=[uuid.UUID(value) for value in (related_task_ids or [])],
@@ -144,16 +150,28 @@ async def update_task(
     priority: str | None = None,
     assignee_id: str | None = None,
     clear_assignee: bool = False,
+    start_date: str | None = None,
     due_date: str | None = None,
+    estimate: str | None = None,
+    acceptance_criteria: str | None = None,
     label_ids: list[str] | None = None,
     kind: str | None = None,
     severity: str | None = None,
     clear_severity: bool = False,
+    component: str | None = None,
+    clear_component: bool = False,
+    release_blocker: bool | None = None,
     mention_user_ids: list[str] | None = None,
     related_task_ids: list[str] | None = None,
     org_id: str | None = None,
 ) -> dict[str, Any]:
-    """Update a task's fields (title, description, priority, assignee, due date, labels).
+    """Update a task's fields. Every argument you omit is left untouched.
+
+    Covers the planning fields as well as the basics: start and due dates, an
+    estimate, acceptance criteria, the affected component, and whether the task
+    blocks a release. Clearing a value needs its explicit flag — clear_assignee,
+    clear_severity, clear_component — because an omitted argument and an explicit
+    null arrive identically over the tool boundary.
 
     Pass org_id to target a specific organization when using a multi-organization token."""
     async with mcp_call("tasks:write", org_id=org_id) as call:
@@ -163,11 +181,17 @@ async def update_task(
             priority=TaskPriority(priority) if priority else None,
             assignee_id=_opt_uuid(assignee_id),
             clear_assignee=clear_assignee,
+            start_date=_opt_date(start_date),
             due_date=_opt_date(due_date),
+            estimate=estimate,
+            acceptance_criteria=acceptance_criteria,
             label_ids=[uuid.UUID(value) for value in label_ids] if label_ids is not None else None,
             kind=TaskKind(kind) if kind else None,
             severity=BugSeverity(severity) if severity else None,
             clear_severity=clear_severity,
+            component=component,
+            clear_component=clear_component,
+            release_blocker=release_blocker,
             mention_user_ids=[uuid.UUID(value) for value in (mention_user_ids or [])],
             related_task_ids=[uuid.UUID(value) for value in (related_task_ids or [])],
         )

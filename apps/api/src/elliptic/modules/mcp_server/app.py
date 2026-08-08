@@ -17,6 +17,7 @@ from elliptic.modules.mcp_server import (
     tools_orgs,  # noqa: F401
     tools_profile,  # noqa: F401
     tools_projects,  # noqa: F401
+    tools_search,  # noqa: F401
     tools_tasks,  # noqa: F401
     tools_teams,  # noqa: F401
     tools_triage,  # noqa: F401
