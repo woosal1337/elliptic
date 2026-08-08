@@ -48,7 +48,7 @@ const ACTION_W = 76
  * without being an impossible one, and still comfortably clear of the 76pt
  * resting position that an ordinary open lands on.
  */
-const FULL_SWIPE_RATIO = 0.22
+const FULL_SWIPE_RATIO = 0.3
 
 /**
  * A row with configurable swipe actions (left and/or right), built on
@@ -103,7 +103,11 @@ export const SwipeableRow: FC<{
     <ReanimatedSwipeable
       ref={ref}
       friction={2}
-      overshootFriction={8}
+      // Overshoot is what a full swipe travels through. At 8, movement past the
+      // open position was divided by eight, so arming needed ~244pt of extra
+      // thumb travel and never happened however low the threshold went — the
+      // panel just parked. 1 lets the row keep following the thumb once open.
+      overshootFriction={1}
       rightThreshold={40}
       leftThreshold={40}
       onSwipeableWillOpen={onWillOpen}

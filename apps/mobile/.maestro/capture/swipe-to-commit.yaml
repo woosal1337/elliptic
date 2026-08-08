@@ -1,0 +1,48 @@
+# Does a full swipe on a task row commit its action, or just park the panel?
+#
+# This flow exists because the answer cannot be read off a screenshot. The
+# failure mode is a panel that looks entirely correct while sitting there
+# waiting for a tap, so two fixes were shipped on reasoning alone and neither
+# worked. A gesture is the only thing that settles it.
+#
+# Run:  scripts/maestro.sh ios .maestro/capture/swipe-to-commit.yaml
+appId: sh.elliptic
+---
+- launchApp
+- waitForAnimationToEnd
+# First-launch overlays, same as the tour flow.
+- runFlow:
+    when:
+      visible: "Continue"
+    commands:
+      - tapOn: "Continue"
+- runFlow:
+    when:
+      visible: "Not Now"
+    commands:
+      - tapOn: "Not Now"
+
+- tapOn: "Tasks"
+- waitForAnimationToEnd
+- assertVisible: "Todo"
+- takeScreenshot: swipe-01-before
+
+# Drag the full width of the row, far past any plausible threshold. If this does
+# not commit, the problem is not the threshold value — which is the hypothesis
+# under test: gesture-handler clamps the translation it reports to the width of
+# the actions panel, so a threshold measured in screen fractions may be
+# unreachable no matter how low it is set.
+- swipe:
+    start: "8%, 42%"
+    end: "92%, 42%"
+    duration: 500
+- waitForAnimationToEnd
+- takeScreenshot: swipe-02-after-release
+
+# The tell is the undo toast, which only appears once a transition has actually
+# been committed. Asserting on "Done" alone is useless here: the word is in the
+# success toast and in the "Done N" section header, so it is visible either way.
+- assertVisible:
+    text: ".*Done.*"
+    optional: false
+- assertVisible: "Undo"
