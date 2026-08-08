@@ -499,10 +499,15 @@ export class Api {
   }
 
   // ---- Notifications ----
+  /**
+   * The server reads `status`, not `unread`, and defaults it to "unread" — so
+   * sending nothing asked for the unread list, and the All tab quietly showed
+   * the same rows as Unread. Anything opened then disappeared from both.
+   */
   async listNotifications(orgId: string, unreadOnly = false): Promise<NotificationItem[]> {
     const res = await this.apisauce.get<
       Envelope<{ items: NotificationItem[]; unread_count: number }>
-    >(`/orgs/${orgId}/notifications`, unreadOnly ? { unread: true } : undefined)
+    >(`/orgs/${orgId}/notifications`, { status: unreadOnly ? "unread" : "all" })
     return res.ok && res.data ? res.data.data.items : []
   }
 
