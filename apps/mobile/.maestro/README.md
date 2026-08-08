@@ -110,3 +110,19 @@ Three defects, in the order they matter:
 Also: Maestro's `inputText` does not deliver text to a focused field on this
 emulator. Fields are found and focused and the keyboard opens, but nothing
 arrives — sign in by hand until that is understood.
+
+## API smoke tests
+
+`smoke/` holds checks that run against the live API rather than a device — for
+behaviour a screenshot cannot show. They read `MAESTRO_EMAIL` /
+`MAESTRO_PASSWORD` from the environment (see `~/.zsh_private`), run as the QA
+account in the Maestro QA workspace, and restore whatever they change.
+
+```bash
+node .maestro/smoke/notification-prefs.mjs
+```
+
+**notification-prefs** — silences a category, creates a task, and asserts the
+push is suppressed while the inbox row is still written. Both halves matter: a
+silenced category means "stop buzzing me", not "hide this from me", and a
+regression in either direction would otherwise be invisible.
