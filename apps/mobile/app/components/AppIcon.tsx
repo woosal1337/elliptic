@@ -1,6 +1,7 @@
 import { FC } from "react"
 import {
   Archive,
+  Bell,
   ArrowUp,
   AtSign,
   Box,
@@ -21,6 +22,7 @@ import {
   EyeOff,
   FileText,
   Folder,
+  House,
   FolderOpen,
   GitBranch,
   GitCommitHorizontal,
@@ -59,6 +61,7 @@ const ICONS = {
   "archive": Archive,
   "arrow-up": ArrowUp,
   "at-sign": AtSign,
+  "bell": Bell,
   "box": Box,
   "calendar": Calendar,
   "check": Check,
@@ -80,6 +83,7 @@ const ICONS = {
   "folder-open": FolderOpen,
   "git-branch": GitBranch,
   "git-commit-horizontal": GitCommitHorizontal,
+  "house": House,
   "image": ImageIcon,
   "inbox": Inbox,
   "layers": Layers,
