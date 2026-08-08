@@ -11,12 +11,21 @@ appId: sh.elliptic
       visible: "Continue"
     commands:
       - tapOn: "Continue"
+- runFlow:
+    when:
+      visible: "Toggle performance monitor"
+    commands:
+      - tapOn:
+          point: "90%, 45%"
 - assertVisible: "Sign in to your workspace"
 - tapOn:
-    text: "Email, you@company.com"
+    text: "you@company.com"
 - inputText: ${MAESTRO_EMAIL}
+# The password field has no placeholder text of its own on Android, so it is
+# addressed by position: the field directly below the email one.
 - tapOn:
-    text: "Password, .*"
+    below:
+      text: "Password"
 - inputText: ${MAESTRO_PASSWORD}
 # hideKeyboard is flaky on iOS; the button is reachable with the keyboard up.
 - tapOn: "Sign in"
