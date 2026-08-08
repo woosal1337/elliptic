@@ -1,0 +1,62 @@
+# A read-only tour of every tab, to find what Android renders differently.
+#
+# Read-only on purpose. The swipe flow completes a task and needs the QA
+# workspace; this one only looks, so it is safe against any account and can be
+# run to survey a fresh platform without touching data.
+#
+# Screenshots land in .maestro/output and are the actual deliverable — the
+# assertions only prove a screen mounted, not that it looks right. Compare them
+# against the iOS tour.
+#
+# Run:  scripts/maestro.sh android .maestro/capture/android-smoke.yaml
+appId: sh.elliptic
+---
+- launchApp
+- waitForAnimationToEnd
+- runFlow:
+    when:
+      visible: "Continue"
+    commands:
+      - tapOn: "Continue"
+- runFlow:
+    when:
+      visible: "Not Now"
+    commands:
+      - tapOn: "Not Now"
+- takeScreenshot: and-00-launch
+
+# Home
+- assertVisible: "Home"
+- takeScreenshot: and-01-home
+
+# Tasks — sections, status glyphs, the row layout that the identifier column
+# and the priority bars live in.
+- tapOn: "Tasks"
+- waitForAnimationToEnd
+- takeScreenshot: and-02-tasks
+
+# Notes — the folder browser. Android has no native back chevron, so this is
+# where the pushed-screen change needs its own look.
+- tapOn: "Notes"
+- waitForAnimationToEnd
+- takeScreenshot: and-03-notes
+- runFlow:
+    when:
+      visible: "Meetings"
+    commands:
+      - tapOn: "Meetings"
+      - waitForAnimationToEnd
+      - takeScreenshot: and-04-notes-folder
+      - back
+      - waitForAnimationToEnd
+
+# Inbox — the All/Unread segmented control and the badge.
+- tapOn: "Inbox"
+- waitForAnimationToEnd
+- takeScreenshot: and-05-inbox
+
+# Profile — the toggles whose track colour was wrong on iOS, and the SwiftUI
+# Form that has no Android equivalent at all. Most likely to differ.
+- tapOn: "Profile"
+- waitForAnimationToEnd
+- takeScreenshot: and-06-profile
