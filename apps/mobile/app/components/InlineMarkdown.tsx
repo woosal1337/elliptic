@@ -59,13 +59,7 @@ export const InlineMarkdown: FC<
       case "strike":
         return <Text key={key} style={$strike} text={span.text} />
       case "code":
-        return (
-          <Text
-            key={key}
-            text={span.text}
-            style={[CODE_STYLE, { backgroundColor: colors.subtle, color: colors.text }]}
-          />
-        )
+        return <Text key={key} text={span.text} style={[CODE_STYLE, { color: colors.text }]} />
       case "link":
         return (
           <Text

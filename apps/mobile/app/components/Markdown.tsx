@@ -33,13 +33,7 @@ export const Markdown: FC<{ source: string }> = ({ source }) => {
         case "strike":
           return <Text key={key} style={$strike} text={span.text} />
         case "code":
-          return (
-            <Text
-              key={key}
-              text={span.text}
-              style={[$code, { backgroundColor: colors.subtle, color: colors.text }]}
-            />
-          )
+          return <Text key={key} text={span.text} style={[$code, { color: colors.text }]} />
         case "link":
           return (
             <Text
