@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react"
+import { FC, useEffect, useMemo, useState } from "react"
 import { Alert, View, ViewStyle } from "react-native"
 import {
   Button,
@@ -16,6 +16,7 @@ import {
   pickerStyle,
   scrollContentBackground,
   tag,
+  tint,
 } from "@expo/ui/swift-ui/modifiers"
 import { useMMKVBoolean } from "react-native-mmkv"
 
@@ -98,6 +99,12 @@ export const ProfileScreen: FC<ProfileStackScreenProps<"ProfileMain">> = () => {
     if (value.trim()) void api.updateProfile(value.trim())
   }
 
+  // A UIKit switch always draws a white thumb, and the theme's tint is
+  // near-white, so an "on" switch was white on white — a blank capsule with no
+  // readable state. The track takes the dim step instead: still clearly lit
+  // against the off state, but dark enough for the thumb to show against it.
+  const switchTint = useMemo(() => [tint(theme.colors.textDim)], [theme.colors.textDim])
+
   const togglePref = (key: keyof EmailPrefs, value: boolean) => {
     if (!activeOrg || !prefs) return
     const next = { ...prefs, [key]: value }
@@ -148,6 +155,7 @@ export const ProfileScreen: FC<ProfileStackScreenProps<"ProfileMain">> = () => {
               label="Push notifications"
               isOn={pushEnabled ?? true}
               onIsOnChange={setPushEnabled}
+              modifiers={switchTint}
             />
           </Section>
 
@@ -159,6 +167,7 @@ export const ProfileScreen: FC<ProfileStackScreenProps<"ProfileMain">> = () => {
                   label={r.label}
                   isOn={prefs[r.key]}
                   onIsOnChange={(value) => togglePref(r.key, value)}
+                  modifiers={switchTint}
                 />
               ))}
             </Section>
