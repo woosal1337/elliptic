@@ -83,3 +83,30 @@ screenshot runs and flows see it, not the app. Turn it off per install:
 xcrun simctl spawn booted defaults write sh.elliptic EXDevMenuShowFloatingActionButton -bool false
 # then relaunch the app (dev menu → Tools button toggle does the same thing)
 ```
+
+## Android findings (2026-08-08, first Android build)
+
+The app builds, installs and launches. Login, Home and the launcher icon are
+correct — the adaptive icon masks properly in a real launcher, which had only
+ever been verified by measuring pixels.
+
+Three defects, in the order they matter:
+
+1. **`@expo/ui/swift-ui` crashes the app.** `ProfileScreen` and
+   `CreateTaskSheet` use `Section`/`Form` from that package with no
+   `Platform.OS` guard. Android has no such view manager, so Fabric throws
+   `Can't find ViewManager 'ViewManagerAdapter_ExpoUI_SectionView'` and the whole
+   app red-boxes — it does not degrade, it dies. This fires when the tab
+   navigator pre-renders those screens, so it can take down Tasks too.
+   Both need an Android branch built from plain components.
+
+2. **The tab bar does not render.** On Home it is a black slab with the first
+   label clipped and the rest absent, so only the first tab is reachable —
+   `tapOn: "Notes"` cannot find its target.
+
+3. **Status bar icons are invisible in light mode.** Dark-on-light at the top;
+   the status bar content style is never set for Android.
+
+Also: Maestro's `inputText` does not deliver text to a focused field on this
+emulator. Fields are found and focused and the keyboard opens, but nothing
+arrives — sign in by hand until that is understood.
