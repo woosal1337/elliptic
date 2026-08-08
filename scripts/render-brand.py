@@ -57,10 +57,12 @@ DOT_Y = CY + _x0 * _s + _y0 * _c
 _REACH = math.hypot(DOT_X - CX, DOT_Y - CY) + GAP_R
 ADAPTIVE_SCALE = (0.66 / 2 * CANVAS) / _REACH
 
-# Optical size for browser tabs — see the note on TARGETS. Bounded so the mark
-# cannot grow past the plate it sits on.
-TAB_SCALE = 1.24
-assert _REACH * TAB_SCALE < CANVAS / 2, "mark would overrun the plate"
+# Optical sizes — see the note on TARGETS. Both are bounded so the mark cannot
+# grow past the frame it is drawn in.
+TAB_SCALE = 1.24  # browser tabs, which sit on a plate
+UI_SCALE = 1.30  # bare mark in app chrome, which has no plate to overrun
+assert _REACH * TAB_SCALE < CANVAS / 2, "tab mark would overrun the plate"
+assert _REACH * UI_SCALE < CANVAS / 2, "ui mark would overrun the canvas"
 
 
 # ---- Signed distance fields -------------------------------------------------
@@ -275,7 +277,10 @@ TARGETS: list[tuple[str, int, bool, float, float, bool]] = [
     (f"{MOBILE}/splash-icon.png", 1024, False, 0.0, 1.0, False),
     (f"{WEB}/src/app/icon.png", 512, True, PLATE_R, TAB_SCALE, False),
     (f"{WEB}/src/app/apple-icon.png", 180, True, 0.0, 1.0, True),
-    (f"{WEB}/public/logo.png", 512, False, 0.0, 1.0, False),
+    # LogoMark renders this at 24px in the app chrome, so it gets the same
+    # optical treatment as the tab icons — at 1.0 the stroke never reaches full
+    # white and the mark reads as grey smudge beside a crisp wordmark.
+    (f"{WEB}/public/logo.png", 512, False, 0.0, UI_SCALE, False),
 ]
 
 
