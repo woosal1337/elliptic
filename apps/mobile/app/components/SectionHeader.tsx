@@ -35,7 +35,15 @@ export const SectionHeader: FC<SectionHeaderProps> = ({
 
   const body = (
     <>
-      {status ? <StatusIcon status={status} size={14} /> : null}
+      {/* The glyph is a step smaller than the row's, so the header stays
+          subordinate — but it is centred in a column the width of the row's
+          glyph. Laid out at its own width the header title landed at x=46
+          against the rows' x=52, and the whole section read as ragged. */}
+      {status ? (
+        <View style={$glyph}>
+          <StatusIcon status={status} size={14} />
+        </View>
+      ) : null}
       <Text text={title} size="xs" weight="semiBold" style={[$title, { color: colors.textDim }]} />
       {count != null ? (
         <Text text={String(count)} size="xs" style={{ color: colors.textDim }} />
@@ -90,6 +98,11 @@ const $header: ViewStyle = {
   paddingVertical: 8,
   marginTop: 10,
 }
+// TaskRow's StatusIcon is 16 wide with a 12 gap after it. Matching the column
+// width puts both glyphs on the same centre line; the extra 4 makes up the gap
+// difference so both titles start at x=52. It is added here rather than on
+// `gap` so the space between the title and its count stays at 8.
+const $glyph: ViewStyle = { width: 16, alignItems: "center", marginRight: 4 }
 const $spacer: ViewStyle = { flex: 1 }
 // Set in the label's own case. Uppercasing shouts, and at this size it also
 // costs legibility — "In Progress" reads faster than "IN PROGRESS".

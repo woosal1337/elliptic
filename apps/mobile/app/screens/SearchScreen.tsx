@@ -51,15 +51,20 @@ export const SearchScreen: FC<HomeStackScreenProps<"Search">> = ({ navigation })
   }
 
   return (
-    <Screen preset="fixed" contentContainerStyle={[$flex, { padding: spacing.lg }]}>
-      <SearchBar
-        value={q}
-        onChangeText={setQ}
-        placeholder="Search tasks, notes, projects…"
-        autoFocus
-        loading={searching}
-        onCancel={() => navigation.goBack()}
-      />
+    // Horizontal padding sits on the bar and the rows rather than the screen, so
+    // the row separators reach both edges the way every other list's do. Inset
+    // here, they were the only ones in the app that stopped short.
+    <Screen preset="fixed" contentContainerStyle={[$flex, { paddingVertical: spacing.lg }]}>
+      <View style={{ paddingHorizontal: spacing.lg }}>
+        <SearchBar
+          value={q}
+          onChangeText={setQ}
+          placeholder="Search tasks, notes, projects…"
+          autoFocus
+          loading={searching}
+          onCancel={() => navigation.goBack()}
+        />
+      </View>
       <FlatList
         data={results}
         keyExtractor={(r) => `${r.type}:${r.id}`}
@@ -124,6 +129,8 @@ const $row: ViewStyle = {
   alignItems: "center",
   gap: 12,
   paddingVertical: 12,
+  // lg, the inset every other row in the app uses.
+  paddingHorizontal: 24,
   borderBottomWidth: 1,
 }
 const $grow: ViewStyle = { flex: 1, gap: 2 }

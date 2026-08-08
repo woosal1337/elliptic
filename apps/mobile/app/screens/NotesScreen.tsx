@@ -192,15 +192,20 @@ export const NotesScreen: FC<NotesStackScreenProps<"NotesList">> = ({ navigation
                 },
               ]}
             >
-              {item.icon ? (
-                <Text text={item.icon} style={$emoji} />
-              ) : (
-                <AppIcon
-                  name={item.is_folder ? "folder" : "file-text"}
-                  size={18}
-                  color={colors.textDim}
-                />
-              )}
+              {/* Fixed-width column: an emoji at 18pt is wider than an 18pt
+                  icon, so laid out at its natural width it pushed the title of
+                  every emoji row a few points right of the plain ones. */}
+              <View style={$lead}>
+                {item.icon ? (
+                  <Text text={item.icon} style={$emoji} />
+                ) : (
+                  <AppIcon
+                    name={item.is_folder ? "folder" : "file-text"}
+                    size={18}
+                    color={colors.textDim}
+                  />
+                )}
+              </View>
               <InlineMarkdown
                 text={item.title}
                 size="sm"
@@ -259,7 +264,8 @@ export const NotesScreen: FC<NotesStackScreenProps<"NotesList">> = ({ navigation
 }
 
 const $flex: ViewStyle = { flex: 1 }
-const $emoji: TextStyle = { fontSize: 18 }
+const $lead: ViewStyle = { width: 18, alignItems: "center" }
+const $emoji: TextStyle = { fontSize: 18, textAlign: "center" }
 const $grow: ViewStyle = { flexGrow: 1 }
 // flexShrink is 0 by default in RN, so flexGrow alone lets a long title overrun
 // the row's padding and ellipsize at the screen edge instead of the margin.

@@ -24,8 +24,13 @@ export const ListRow: FC<ListRowProps> = ({ title, subtitle, left, right, onPres
     alignItems: "center",
     gap: spacing.sm,
     paddingVertical: spacing.sm,
-    paddingHorizontal: spacing.md,
-    backgroundColor: pressed ? colors.palette.neutral200 : colors.background,
+    // lg, like every other row in the app (TaskRow, ProjectRow, the inbox and
+    // notes rows). At md the leading avatar sat 8pt left of the screen heading
+    // above it, which is the one place this row is used.
+    paddingHorizontal: spacing.lg,
+    // muted is the palette's pressed fill. neutral200 is darker than the
+    // background in dark mode, so a press dimmed the row instead of lifting it.
+    backgroundColor: pressed ? colors.muted : colors.background,
     borderBottomWidth: 1,
     borderBottomColor: colors.separator,
   })

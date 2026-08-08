@@ -76,7 +76,16 @@ export const Section: FC<SectionProps> = ({ title, children }) => {
           text={title}
           size="xs"
           weight="medium"
-          style={[$sectionTitle, { color: colors.textDim, paddingHorizontal: spacing.lg }]}
+          style={[
+            $sectionTitle,
+            {
+              color: colors.textDim,
+              // The card's own inset plus a row's padding, so the title starts
+              // exactly where the labels inside the card do. At `lg` alone it
+              // sat 16pt to their left and the page read as two ragged rails.
+              paddingHorizontal: spacing.md + spacing.lg,
+            },
+          ]}
         />
       ) : null}
       <View
@@ -174,30 +183,55 @@ export const Picker: FC<PickerProps> = ({ label, selection, onSelectionChange, c
   const options = Children.toArray(children).filter(isValidElement) as ReactElement<{
     children?: ReactNode
   }>[]
+  // Past four, equal-width segments are narrower than their own labels and the
+  // text wraps mid-word — the seven task statuses came out as "Backlo/g" and
+  // "In prog/ress". Beyond that count the segments size to their labels and the
+  // track scrolls instead, which is what a status picker needs anyway.
+  const scrolls = options.length > 4
+
+  const segments = options.map((option) => {
+    const value = String(option.key ?? "").replace(/^\.\$/, "")
+    const active = value === selection
+    return (
+      <Pressable
+        key={value}
+        onPress={hapticPress(() => onSelectionChange?.(value))}
+        style={[
+          $segment,
+          scrolls ? $segmentIntrinsic : $segmentEven,
+          active && { backgroundColor: colors.surface },
+        ]}
+      >
+        <Text
+          size="xs"
+          weight={active ? "medium" : undefined}
+          numberOfLines={1}
+          style={{ color: active ? colors.text : colors.textDim }}
+        >
+          {option.props.children}
+        </Text>
+      </Pressable>
+    )
+  })
+
   return (
     <View style={[$pickerBlock, { paddingHorizontal: spacing.lg, paddingVertical: spacing.sm }]}>
       {label ? <Text text={label} size="sm" /> : null}
-      <View style={[$segments, { backgroundColor: colors.subtle }]}>
-        {options.map((option) => {
-          const value = String(option.key ?? "").replace(/^\.\$/, "")
-          const active = value === selection
-          return (
-            <Pressable
-              key={value}
-              onPress={hapticPress(() => onSelectionChange?.(value))}
-              style={[$segment, active && { backgroundColor: colors.surface }]}
-            >
-              <Text
-                size="xs"
-                weight={active ? "medium" : undefined}
-                style={{ color: active ? colors.text : colors.textDim }}
-              >
-                {option.props.children}
-              </Text>
-            </Pressable>
-          )
-        })}
-      </View>
+      {scrolls ? (
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          // flexGrow on the content container floors it at the viewport width,
+          // so a set that happens to fit (the five priorities) still stretches
+          // across the row instead of stopping short of the right edge. One that
+          // does not (the seven statuses) overflows this and scrolls.
+          contentContainerStyle={[$segments, $fillTrack, { backgroundColor: colors.subtle }]}
+        >
+          {segments}
+        </ScrollView>
+      ) : (
+        <View style={[$segments, { backgroundColor: colors.subtle }]}>{segments}</View>
+      )}
     </View>
   )
 }
@@ -216,7 +250,14 @@ export const NativeText: FC<FormTextProps> = ({ children }) => {
   )
 }
 
-/** A form field that reports edits as they happen, like the SwiftUI one. */
+/**
+ * A form field that reports edits as they happen, like the SwiftUI one.
+ *
+ * Drawn borderless and flush with the row inset. Boxed, its text started 13pt
+ * (border plus the input's own margin) right of every other value in the same
+ * card, so an editable name did not line up with the read-only rows beneath it.
+ * SwiftUI's Form field is borderless for the same reason.
+ */
 export const TextField: FC<FormTextFieldProps> = ({
   defaultValue,
   placeholder,
@@ -227,13 +268,16 @@ export const TextField: FC<FormTextFieldProps> = ({
     theme: { colors, spacing },
   } = useAppTheme()
   return (
-    <View style={[$fieldBlock, { paddingHorizontal: spacing.lg }]}>
+    <View
+      style={[$fieldBlock, { paddingHorizontal: spacing.lg, borderBottomColor: colors.separator }]}
+    >
       <AppTextField
         defaultValue={defaultValue}
         placeholder={placeholder}
         onChangeText={onValueChange}
         multiline={axis === "vertical"}
-        style={{ borderColor: colors.inputBorder }}
+        inputWrapperStyle={$flushWrapper}
+        style={$flushInput}
       />
     </View>
   )
@@ -258,14 +302,36 @@ const SWITCH_THUMB = "#FFFFFF"
 
 const $grow: ViewStyle = { flex: 1 }
 const $pickerBlock: ViewStyle = { gap: 8 }
-const $fieldBlock: ViewStyle = { paddingVertical: 6 }
+// Matches $row's height and separator so a field reads as one of the rows.
+const $fieldBlock: ViewStyle = {
+  justifyContent: "center",
+  minHeight: 48,
+  // 8, not $row's 10: the input carries its own 4pt vertical margin, so the
+  // two together land the field on the same 48pt height as a plain row.
+  paddingVertical: 8,
+  borderBottomWidth: 1,
+}
+const $flushWrapper: ViewStyle = {
+  borderWidth: 0,
+  borderRadius: 0,
+  backgroundColor: "transparent",
+}
+// The input's own 12pt side margin is what pushed the text off the row inset.
+const $flushInput: TextStyle = { marginHorizontal: 0 }
 const $segments: ViewStyle = { flexDirection: "row", borderRadius: 10, padding: 3 }
 const $segment: ViewStyle = {
-  flex: 1,
   alignItems: "center",
+  justifyContent: "center",
   paddingVertical: 7,
   borderRadius: 8,
 }
+// Few enough options to share the width evenly, the way a segmented control does.
+const $segmentEven: ViewStyle = { flex: 1 }
+// Too many: each takes at least the width its label needs, sharing any slack.
+// flexGrow without flexBasis grows from the intrinsic width, so a label is
+// never squeezed below its own text.
+const $segmentIntrinsic: ViewStyle = { flexGrow: 1, paddingHorizontal: 12 }
+const $fillTrack: ViewStyle = { flexGrow: 1 }
 
 /**
  * A modal sheet.
