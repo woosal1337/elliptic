@@ -44,8 +44,9 @@ const $overlay: ViewStyle = {
   alignItems: "center",
   justifyContent: "center",
 }
-// The source already carries the rounded-square plate, so the radius here only
-// clips the bitmap's own corners rather than drawing a second one.
+// The source is a full square — iOS and Android round the icon themselves, and a
+// pre-rounded source shows dark wedges outside their mask — so the radius here
+// is what gives the overlay the same silhouette the user taps on the home screen.
 const $icon: ImageStyle = {
   width: ICON_SIZE,
   height: ICON_SIZE,

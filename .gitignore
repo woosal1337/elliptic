@@ -15,3 +15,7 @@ Thumbs.db
 
 # (Per-app .gitignore files under apps/api and apps/web cover their own build
 #  artifacts, node_modules, .venv, .next, .turbo, caches, etc.)
+
+# Python bytecode from scripts/
+__pycache__/
+*.pyc

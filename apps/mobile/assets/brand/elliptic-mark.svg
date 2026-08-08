@@ -1,8 +1,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024" role="img" aria-label="Elliptic">
+  <!--
+    Design record for the mark. Rasters are built by scripts/render-brand.py,
+    which holds the same six numbers; keep the two in step by hand.
+
+    The rounded plate here is presentation only — it is how the mark looks on a
+    home screen. Shipped iOS and Android icons are drawn as full squares,
+    because both platforms apply their own mask and a pre-rounded source leaves
+    dark wedges outside it.
+  -->
   <rect width="1024" height="1024" rx="227.9" fill="#101010"/>
   <g transform="rotate(-28.0 512.0 512.0)">
     <ellipse cx="512.0" cy="512.0" rx="336.0" ry="186.0" fill="none" stroke="#F5F5F5" stroke-width="26.0"/>
   </g>
+  <!-- Paper-filled gap separating the dot from the stroke it sits on. -->
   <circle cx="821.1" cy="412.7" r="59.0" fill="#101010"/>
   <circle cx="821.1" cy="412.7" r="46.0" fill="#F5F5F5"/>
 </svg>

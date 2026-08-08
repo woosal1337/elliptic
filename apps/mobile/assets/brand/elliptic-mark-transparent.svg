@@ -1,7 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024" role="img" aria-label="Elliptic">
-  <g transform="rotate(-28.0 512.0 512.0)">
-    <ellipse cx="512.0" cy="512.0" rx="336.0" ry="186.0" fill="none" stroke="#F5F5F5" stroke-width="26.0"/>
+  <!--
+    The gap around the dot is a hole in the stroke, so on a transparent ground it
+    has to erase rather than paint: a circle filled with the paper colour only
+    works over the plate (see elliptic-mark.svg), and one filled with "none"
+    draws nothing at all. A mask is the form that survives both grounds.
+
+    Rasters are built by scripts/render-brand.py, which reproduces this exactly.
+  -->
+  <mask id="gap">
+    <rect width="1024" height="1024" fill="#FFFFFF"/>
+    <circle cx="821.1" cy="412.7" r="59.0" fill="#000000"/>
+  </mask>
+  <g mask="url(#gap)">
+    <g transform="rotate(-28.0 512.0 512.0)">
+      <ellipse cx="512.0" cy="512.0" rx="336.0" ry="186.0" fill="none" stroke="#F5F5F5" stroke-width="26.0"/>
+    </g>
   </g>
-  <circle cx="821.1" cy="412.7" r="59.0" fill="none"/>
   <circle cx="821.1" cy="412.7" r="46.0" fill="#F5F5F5"/>
 </svg>

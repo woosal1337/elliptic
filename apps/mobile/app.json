@@ -18,17 +18,17 @@
     "**/*"
   ],
   "android": {
-    "icon": "./assets/images/app-icon.png",
+    "icon": "./assets/images/app-icon-android-legacy.png",
     "package": "sh.elliptic",
     "adaptiveIcon": {
-      "foregroundImage": "./assets/images/app-icon.png",
+      "foregroundImage": "./assets/images/app-icon-android-adaptive-foreground.png",
       "backgroundColor": "#101010"
     },
     "allowBackup": false,
     "edgeToEdgeEnabled": true
   },
   "ios": {
-    "icon": "./assets/images/app-icon.png",
+    "icon": "./assets/images/app-icon-ios.png",
     "supportsTablet": true,
     "bundleIdentifier": "sh.elliptic",
     "config": {
