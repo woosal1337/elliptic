@@ -98,13 +98,16 @@ export const CommentComposer: FC<CommentComposerProps> = memo(function CommentCo
       ) : null}
 
       {/* flex-end so the controls and send button stay pinned to the last line
-          as the field grows upward, instead of drifting to its vertical centre. */}
+          as the field grows upward, instead of drifting to its vertical centre.
+          Everything on this row is CONTROL_H tall so a single-line composer
+          lines up exactly — the icons defaulted to 36 against a 38 field and sat
+          two pixels low, which reads as carelessness even when it is unnamed. */}
       <View style={$row}>
         <GlassContainer spacing={8} style={$controls}>
-          <GlassIconButton onPress={onOpenMentionPicker} label="Mention someone">
+          <GlassIconButton onPress={onOpenMentionPicker} label="Mention someone" size={CONTROL_H}>
             <AppIcon name="at-sign" size={18} color={colors.textDim} />
           </GlassIconButton>
-          <GlassIconButton onPress={onPickAttachment} label="Attach an image">
+          <GlassIconButton onPress={onPickAttachment} label="Attach an image" size={CONTROL_H}>
             <AppIcon name="image" size={18} color={attaching ? colors.tint : colors.textDim} />
           </GlassIconButton>
         </GlassContainer>
@@ -114,6 +117,7 @@ export const CommentComposer: FC<CommentComposerProps> = memo(function CommentCo
           onChangeText={setText}
           placeholder="Add a comment…"
           multiline
+          minHeight={CONTROL_H}
           containerStyle={$grow}
         />
 
@@ -122,7 +126,7 @@ export const CommentComposer: FC<CommentComposerProps> = memo(function CommentCo
           disabled={empty || posting}
           label="Send comment"
           tint={colors.tint}
-          size={38}
+          size={CONTROL_H}
         >
           <AppIcon name="arrow-up" size={18} color={colors.onTint} />
         </GlassIconButton>
@@ -130,6 +134,11 @@ export const CommentComposer: FC<CommentComposerProps> = memo(function CommentCo
     </GlassSurface>
   )
 })
+
+// One height for every control on the row: the field's resting height, the two
+// leading icons and the send button. Deriving them from a single number is what
+// keeps a single-line composer aligned.
+const CONTROL_H = 38
 
 const $bar: ViewStyle = { gap: 8, paddingHorizontal: 12, paddingTop: 8 }
 const $row: ViewStyle = { flexDirection: "row", alignItems: "flex-end", gap: 8 }

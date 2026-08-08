@@ -155,7 +155,12 @@ export const GlassField: FC<
 const $disabled: ViewStyle = { opacity: 0.4 }
 const $field: ViewStyle = { justifyContent: "center" }
 // Multiline fields fill from the top rather than centring a growing block.
-const $fieldMultiline: ViewStyle = { justifyContent: "flex-start", paddingVertical: 4 }
+//
+// No vertical padding here: the input already pads itself 9 above and below, so
+// adding 4 more made a one-line field 46pt tall next to 38pt buttons — the
+// field towered over the controls beside it. 9 + a 20pt line + 9 is 38, which
+// is what the rest of the row is.
+const $fieldMultiline: ViewStyle = { justifyContent: "flex-start" }
 const $bordered: ViewStyle = { borderWidth: 1 }
 const $input: TextStyle = {
   fontFamily: typography.primary.normal,
