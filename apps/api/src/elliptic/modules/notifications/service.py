@@ -142,6 +142,11 @@ async def notify(
             "entity_id": str(entity_id) if entity_id else None,
             "type": type.value,
             "identifier": identifier,
+            # A push is not org-scoped the way the inbox is, so the payload has
+            # to say which workspace it came from — otherwise a tap opens the
+            # entity under whichever org the app happens to be in and reports it
+            # missing.
+            "org_id": str(org_id),
         },
     )
     return notification
