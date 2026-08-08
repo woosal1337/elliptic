@@ -22,22 +22,30 @@ import { prettyLabel, STATUS_OPTIONS } from "@/utils/taskOptions"
 import { useCollapsedSections } from "@/utils/useCollapsedSections"
 import { useListQuery } from "@/utils/useListQuery"
 
-// Every status the API can return must appear in one of these two lists:
-// sections are built by filtering them, so a status in neither has no section
-// and its tasks are silently invisible rather than merely tucked away.
-const ACTIVE_STATUSES = ["in_progress", "in_review", "todo", "backlog"]
+/**
+ * Lifecycle order — backlog, todo, in progress, in review, done, cancelled,
+ * duplicate — read straight off STATUS_OPTIONS rather than written out again.
+ *
+ * The board used to keep its own list in a different order from the pickers
+ * beside it and from web, which is how the same board came to look differently
+ * sorted depending on where you opened it. Deriving it means the three cannot
+ * drift again: web declares this order in lib/task-meta.ts and the API's
+ * TaskStatus enum declares it too, so STATUS_OPTIONS is the one place to change.
+ *
+ * Every status the API can return must appear here, or its tasks have no
+ * section and go silently invisible rather than merely tucked away.
+ */
+const STATUS_ORDER = STATUS_OPTIONS.map((o) => o.value)
 
 /**
- * Closed work, kept below the active statuses. These sit shut and show only a
- * header and a count — enough to see that eleven things got finished without
- * scrolling past them to reach the work that has not.
+ * Closed work. These sit shut and show only a header and a count — enough to
+ * see that eleven things got finished without scrolling past them to reach the
+ * work that has not.
  *
  * A section appears only when something is in it, so a board with nothing
  * cancelled never grows a Cancelled header.
  */
 const CLOSED_STATUSES = ["done", "cancelled", "duplicate"]
-
-const STATUS_ORDER = [...ACTIVE_STATUSES, ...CLOSED_STATUSES]
 
 /**
  * Folded shut on every visit. Backlog and in-progress carry the long tail, and
