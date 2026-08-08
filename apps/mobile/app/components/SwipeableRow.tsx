@@ -38,10 +38,17 @@ const ACTION_W = 76
  * A fraction of the screen rather than a multiple of the panel width: the panel
  * is 76pt, and a threshold derived from it would land close enough to the
  * resting open position that an ordinary "open the actions" swipe would trip it
- * by accident. 45% is far enough that arming is unambiguously deliberate, and
- * still reachable in one thumb travel on a small phone.
+ * by accident.
+ *
+ * This is measured against the row's translation, not the finger's. friction=2
+ * moves the row half as far as the thumb, so 0.45 of the screen needed roughly
+ * a full screen width of travel to reach — past the reach of one gesture, which
+ * is why the panel parked open and waited for a tap instead of firing. At 0.22
+ * the thumb travels a little under half the screen, which is a decisive swipe
+ * without being an impossible one, and still comfortably clear of the 76pt
+ * resting position that an ordinary open lands on.
  */
-const FULL_SWIPE_RATIO = 0.45
+const FULL_SWIPE_RATIO = 0.22
 
 /**
  * A row with configurable swipe actions (left and/or right), built on
@@ -50,7 +57,7 @@ const FULL_SWIPE_RATIO = 0.45
  * Two ways to invoke an action:
  *  - swipe partway, then tap the revealed button;
  *  - swipe past {@link FULL_SWIPE_RATIO} of the screen and let go — the first
- *    action for that side fires on release, no tap needed.
+ *    action for that side fires on release, no tap needed. Works on both sides.
  *
  * Arming is computed in a worklet from the swipeable's own translation, so the
  * width animation and the threshold test both run on the UI thread and stay in
