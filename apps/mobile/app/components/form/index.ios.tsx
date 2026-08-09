@@ -17,5 +17,9 @@ export {
   TextField,
   Toggle,
 } from "@expo/ui/swift-ui"
-export { Text as NativeText } from "@expo/ui/swift-ui"
+// Both names, because the Android sibling exports both and the screens import
+// `Text`. Exporting only `NativeText` here is what made the iOS Profile tab
+// render `undefined` — see `parity.type-test.ts` for the check that now catches
+// this class of drift at compile time.
+export { Text, Text as NativeText } from "@expo/ui/swift-ui"
 export type * from "./types"

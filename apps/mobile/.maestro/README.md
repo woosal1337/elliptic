@@ -39,6 +39,8 @@ dev-client onboarding sheet and the iOS save-password dialog.
     linear-onboarding.yaml
   capture/       # flows that tour Elliptic itself (before/after redesign diffs)
     elliptic-tour.yaml
+    ios-smoke.yaml       # every tab on iOS, asserting each one mounted
+    android-smoke.yaml   # the same tour on Android
   flows/         # functional test flows
     Login.yaml       # sign in with MAESTRO_EMAIL / MAESTRO_PASSWORD
     TaskUndo.yaml    # swipe → Done, toast undo, toast queueing (undoes its writes)
@@ -48,6 +50,19 @@ dev-client onboarding sheet and the iOS save-password dialog.
 
 Functional flows assert on `testID`s (`swipe-action-<key>`, `toast`,
 `toast-action`) rather than on visible copy, so wording changes don't break them.
+
+The two smoke tours are deliberately separate files rather than one flow with a
+platform switch: UIKit labels a tab "Home, tab, 1 of 5" while Android labels it
+"Home", so the selectors cannot be shared.
+
+**Run both after touching anything under `components/form/`.** Those modules are
+platform-split, and TypeScript only ever sees the Android side — `index.tsx`
+re-exports it so editors can resolve `@/components/form`. An export that exists
+on one platform and not the other therefore typechecks, lints, passes the unit
+tests, and then renders `undefined` on a device. That is how the iOS Profile tab
+shipped broken while the Android emulator looked perfect.
+`components/form/parity.type-test.ts` now fails the build on that specific
+mismatch, but only a run catches the rest.
 
 ## Maestro MCP (agent-driven)
 

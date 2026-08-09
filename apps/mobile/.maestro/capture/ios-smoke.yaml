@@ -1,0 +1,55 @@
+# A read-only tour of every tab on iOS, mirroring the Android one.
+#
+# It exists because the form primitives are split by platform: iOS renders
+# SwiftUI, Android renders plain components, and TypeScript only ever sees the
+# Android side (`index.tsx` re-exports it). A name that exists on one and not
+# the other typechecks, lints, and then renders `undefined` on a device — which
+# is precisely how the Profile tab crashed with "Element type is invalid".
+# Only a run catches that, so this flow visits every tab and asserts each one
+# actually mounted.
+#
+# Read-only: it looks, it does not touch data, so it is safe against any account.
+#
+# UIKit gives a tab the accessibility label "Home, tab, 1 of 5" rather than
+# "Home", so the selectors here are regexes. Android's are the bare word — that
+# is why the two tours cannot share one file.
+#
+# Run:  scripts/maestro.sh ios .maestro/capture/ios-smoke.yaml
+appId: sh.elliptic
+---
+- launchApp
+- waitForAnimationToEnd
+- runFlow:
+    when:
+      visible: "Continue"
+    commands:
+      - tapOn: "Continue"
+- runFlow:
+    when:
+      visible: "Not Now"
+    commands:
+      - tapOn: "Not Now"
+- takeScreenshot: ios-00-launch
+
+- assertVisible: "Your tasks"
+- takeScreenshot: ios-01-home
+
+- tapOn: "Tasks, tab.*"
+- waitForAnimationToEnd
+- takeScreenshot: ios-02-tasks
+
+- tapOn: "Notes, tab.*"
+- waitForAnimationToEnd
+- takeScreenshot: ios-03-notes
+
+- tapOn: "Inbox, tab.*"
+- waitForAnimationToEnd
+- takeScreenshot: ios-04-inbox
+
+# Profile last and asserted hardest: it is the SwiftUI Form, the one screen with
+# no Android equivalent at all, and the one that broke.
+- tapOn: "Profile, tab.*"
+- waitForAnimationToEnd
+- assertVisible: "Appearance"
+- assertVisible: "Sign out"
+- takeScreenshot: ios-05-profile
