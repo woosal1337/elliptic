@@ -2,6 +2,12 @@
 #intent: toast behaviour on task writes — undo restores the previous status, and a
 #        second write queues behind the first instead of replacing it.
 #        Every write it makes is undone, so the QA fixture ends where it started.
+#
+#NOTE: rewritten for the swipe rewrite (SwipeableRow now commits on release and
+#      has no resting open position, so there is no revealed button to tap).
+#      Each write is a single decisive swipe. NOT YET RUN against the QA fixture
+#      — this session is signed in as a different account, so the selectors below
+#      are updated but unverified. Run it before trusting it.
 appId: sh.elliptic
 ---
 - launchApp
@@ -15,13 +21,13 @@ appId: sh.elliptic
 - waitForAnimationToEnd
 
 # --- undo restores the previous status -------------------------------------
+# One swipe, no tap: past the arm point the action fires on release. If this
+# assertion fails on distance rather than on behaviour, swap the element swipe
+# for explicit start/end percentages — the arm point is 24% of the screen width.
 - swipe:
     from:
       text: ".*Day-group the inbox feed.*"
     direction: RIGHT
-- takeScreenshot: .maestro/output/elliptic/05-swipe-reveal
-- tapOn:
-    id: "swipe-action-done"
 - waitForAnimationToEnd
 - assertVisible:
     id: "toast"
@@ -39,14 +45,12 @@ appId: sh.elliptic
     from:
       text: ".*Streaming assistant responses.*"
     direction: RIGHT
-- tapOn:
-    id: "swipe-action-done"
+- waitForAnimationToEnd
 - swipe:
     from:
       text: ".*Secure token storage via Keychain.*"
     direction: RIGHT
-- tapOn:
-    id: "swipe-action-done"
+- waitForAnimationToEnd
 - assertVisible: "MOB-7 .* Done"
 - takeScreenshot: .maestro/output/elliptic/09-toast-queue
 - tapOn:

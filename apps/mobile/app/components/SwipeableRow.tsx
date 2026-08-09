@@ -1,15 +1,15 @@
-import { FC, ReactNode, useCallback, useRef } from "react"
-import { Dimensions, Pressable, View, ViewStyle } from "react-native"
-import ReanimatedSwipeable, {
-  SwipeableMethods,
-  SwipeDirection,
-} from "react-native-gesture-handler/ReanimatedSwipeable"
+import { FC, ReactNode } from "react"
+import { useWindowDimensions, View, ViewStyle } from "react-native"
+import { Gesture, GestureDetector } from "react-native-gesture-handler"
 import Animated, {
+  Extrapolation,
+  interpolate,
   runOnJS,
-  SharedValue,
   useAnimatedReaction,
   useAnimatedStyle,
   useSharedValue,
+  withSpring,
+  type SharedValue,
 } from "react-native-reanimated"
 
 import { AppIcon, type IconName } from "@/components/AppIcon"
@@ -21,7 +21,7 @@ export interface SwipeAction {
   key: string
   label: string
   icon: IconName
-  /** Background color of the action panel. */
+  /** Background color of the action panel while this action is the armed one. */
   background: string
   /** Icon/label color. Defaults to the palette's on-error step, which inverts
    *  with the theme — dark in dark mode, light in light mode — so it stays
@@ -30,205 +30,273 @@ export interface SwipeAction {
   onPress: () => void
 }
 
-const ACTION_W = 76
-
 /**
- * Drag distance at which the first action arms and will fire on release.
+ * Fractions of the screen at which each action arms.
  *
- * A fraction of the screen rather than a multiple of the panel width: the panel
- * is 76pt, and a threshold derived from it would land close enough to the
- * resting open position that an ordinary "open the actions" swipe would trip it
- * by accident.
- *
- * This is measured against the row's translation, not the finger's. friction=2
- * moves the row half as far as the thumb, so 0.45 of the screen needed roughly
- * a full screen width of travel to reach — past the reach of one gesture, which
- * is why the panel parked open and waited for a tap instead of firing. At 0.22
- * the thumb travels a little under half the screen, which is a decisive swipe
- * without being an impossible one, and still comfortably clear of the 76pt
- * resting position that an ordinary open lands on.
+ * A side with two actions gets two tiers: keep dragging past the first and the
+ * panel swaps to the second, with a haptic and a colour change to say so. This
+ * is what replaces the old "park the panel open and tap a button" affordance —
+ * the second action stays reachable without the gesture ever stopping.
  */
-const FULL_SWIPE_RATIO = 0.3
+const ARM_PRIMARY = 0.24
+const ARM_SECONDARY = 0.58
+
+/** Lively but settled — no wobble, and home in about 300ms. */
+const SPRING = { damping: 20, stiffness: 260, mass: 0.6 } as const
 
 /**
- * A row with configurable swipe actions (left and/or right), built on
- * gesture-handler's ReanimatedSwipeable.
+ * How far the glyph and its label grow as the row is dragged.
  *
- * Two ways to invoke an action:
- *  - swipe partway, then tap the revealed button;
- *  - swipe past {@link FULL_SWIPE_RATIO} of the screen and let go — the first
- *    action for that side fires on release, no tap needed. Works on both sides.
+ * Scale is a pure function of drag distance, not an animation: it tracks the
+ * thumb the whole way and holds wherever the thumb stops. An earlier version
+ * kicked a spring on each arming instead, which grew the icon and then shrank
+ * it back while the finger was still moving — the growth read as a twitch
+ * rather than as a response.
  *
- * Arming is computed in a worklet from the swipeable's own translation, so the
- * width animation and the threshold test both run on the UI thread and stay in
- * step with the finger. The only hop to JS is the haptic when the threshold is
- * crossed, which is fired once per crossing rather than per frame.
+ * The container is scaled, so the icon and the label grow together.
+ *
+ * MAX is bounded by the row, not by taste: content is roughly 37pt tall at 1,
+ * and the shortest row this sits behind is about 60pt, so 1.45 leaves a margin
+ * and nothing can overflow the row's edges.
+ */
+const SCALE_MIN = 0.8
+const SCALE_MAX = 1.45
+
+/** Movement toward a side with no actions. Enough to acknowledge, not to mislead. */
+const DEAD_SIDE_RESISTANCE = 0.06
+
+/**
+ * A row with configurable swipe actions (left and/or right).
+ *
+ * The row follows the thumb one-to-one and has **no resting open position**. Let
+ * go under the threshold and it springs back; let go past it and the armed
+ * action fires. There is nothing to park on and nothing to tap afterwards.
+ *
+ * This replaced gesture-handler's `ReanimatedSwipeable`, whose whole model is
+ * the detent this is trying not to have. Its `friction` also moves the row at a
+ * fraction of the thumb's speed, which reads as lag however the numbers are
+ * tuned, and its overshoot handling made a long swipe feel like a second,
+ * separate gesture rather than a continuation of the first.
+ *
+ * Everything except the haptics and the action itself runs on the UI thread, so
+ * the panel, the row and the finger cannot drift apart.
  */
 export const SwipeableRow: FC<{
   children: ReactNode
   leftActions?: SwipeAction[]
   rightActions?: SwipeAction[]
 }> = ({ children, leftActions, rightActions }) => {
-  const ref = useRef<SwipeableMethods>(null)
-  const armedLeft = useSharedValue(false)
-  const armedRight = useSharedValue(false)
+  const { width } = useWindowDimensions()
+  const x = useSharedValue(0)
+  // -1 none, 0 primary, 1 secondary. Drives the haptics only; every style
+  // derives the same thing from `x` directly so nothing can lag the finger.
+  const armed = useSharedValue(-1)
 
-  const close = useCallback(() => ref.current?.close(), [])
+  const primaryPx = width * ARM_PRIMARY
+  const secondaryPx = width * ARM_SECONDARY
+  const leftCount = leftActions?.length ?? 0
+  const rightCount = rightActions?.length ?? 0
 
-  // Fires when the panel starts animating open — i.e. on release past the open
-  // threshold. If the drag also passed the (larger) arm threshold, take the
-  // action instead of leaving a panel sitting there waiting for a tap.
-  //
-  // `direction` is the direction the row MOVED, not the panel that opened: the
-  // library reports `toValue > 0 ? RIGHT : LEFT`, and a positive translation
-  // means the row slid right, which is what uncovers the LEFT actions. Reading
-  // it the other way fires the opposite action.
-  const onWillOpen = useCallback(
-    (direction: SwipeDirection) => {
-      const leftPanel = direction === SwipeDirection.RIGHT
-      const armed = leftPanel ? armedLeft : armedRight
-      const primary = (leftPanel ? leftActions : rightActions)?.[0]
-      if (armed.value && primary) {
-        armed.value = false
-        primary.onPress()
-        close()
-        return
-      }
-      hapticImpact()
-    },
-    [armedLeft, armedRight, leftActions, rightActions, close],
-  )
+  // A positive translation slides the row right, which uncovers the LEFT
+  // actions. Getting this backwards fires the opposite action, which is a bug
+  // the previous implementation shipped once.
+  const indexFor = (offset: number) => {
+    "worklet"
+    const distance = Math.abs(offset)
+    const count = offset > 0 ? leftCount : rightCount
+    if (count > 1 && distance >= secondaryPx) return 1
+    if (count > 0 && distance >= primaryPx) return 0
+    return -1
+  }
 
-  return (
-    <ReanimatedSwipeable
-      ref={ref}
-      friction={2}
-      // Overshoot is what a full swipe travels through. At 8, movement past the
-      // open position was divided by eight, so arming needed ~244pt of extra
-      // thumb travel and never happened however low the threshold went — the
-      // panel just parked. 1 lets the row keep following the thumb once open.
-      overshootFriction={1}
-      rightThreshold={40}
-      leftThreshold={40}
-      onSwipeableWillOpen={onWillOpen}
-      renderLeftActions={
-        leftActions?.length
-          ? (_progress, translation) => (
-              <ActionsPanel
-                actions={leftActions}
-                side="left"
-                translation={translation}
-                armed={armedLeft}
-                onDone={close}
-              />
-            )
-          : undefined
-      }
-      renderRightActions={
-        rightActions?.length
-          ? (_progress, translation) => (
-              <ActionsPanel
-                actions={rightActions}
-                side="right"
-                translation={translation}
-                armed={armedRight}
-                onDone={close}
-              />
-            )
-          : undefined
-      }
-    >
-      {children}
-    </ReanimatedSwipeable>
-  )
-}
+  const tick = (index: number) => (index >= 0 ? hapticImpact() : hapticSelection())
 
-/**
- * The revealed action strip for one side.
- *
- * When the drag arms, the first action grows to fill the whole exposed width and
- * the rest collapse away, so the row reads as "let go and this happens" rather
- * than "pick one of these".
- */
-const ActionsPanel: FC<{
-  actions: SwipeAction[]
-  side: "left" | "right"
-  translation: SharedValue<number>
-  armed: SharedValue<boolean>
-  onDone: () => void
-}> = ({ actions, side, translation, armed, onDone }) => {
-  const threshold = Dimensions.get("window").width * FULL_SWIPE_RATIO
+  const fire = (offset: number, index: number) => {
+    const action = (offset > 0 ? leftActions : rightActions)?.[index]
+    action?.onPress()
+  }
 
-  // One worklet watching translation. Writes `armed` for the release handler and
-  // ticks a haptic on each crossing — both directions, so backing out below the
-  // threshold is as legible as arming was.
   useAnimatedReaction(
-    () => (side === "left" ? translation.value : -translation.value),
-    (distance, previous) => {
-      const isArmed = distance >= threshold
-      if (previous !== null && isArmed !== armed.value) {
-        armed.value = isArmed
-        runOnJS(isArmed ? hapticImpact : hapticSelection)()
-      }
+    () => indexFor(x.value),
+    (index, previous) => {
+      if (previous === null || index === previous) return
+      armed.value = index
+      runOnJS(tick)(index)
     },
-    [threshold, side],
   )
 
-  const primaryStyle = useAnimatedStyle(() => {
-    const distance = side === "left" ? translation.value : -translation.value
-    // Grow only past the threshold; below it the strip keeps its resting layout
-    // so a normal open still looks like a row of buttons.
-    return { width: distance >= threshold ? Math.max(distance, ACTION_W) : ACTION_W }
-  })
+  const pan = Gesture.Pan()
+    // Horizontal intent only: without these the row steals the list's vertical
+    // scroll and every flick down drags a task sideways.
+    .activeOffsetX([-14, 14])
+    .failOffsetY([-12, 12])
+    .onUpdate((e) => {
+      const dead =
+        (e.translationX > 0 && leftCount === 0) || (e.translationX < 0 && rightCount === 0)
+      x.value = dead ? e.translationX * DEAD_SIDE_RESISTANCE : e.translationX
+    })
+    .onEnd(() => {
+      const index = indexFor(x.value)
+      if (index >= 0) runOnJS(fire)(x.value, index)
+    })
+    // Always returns home, including when the gesture is cancelled rather than
+    // ended — a row left off-centre by an interrupted swipe cannot be recovered
+    // by the user, since there is no open state to close.
+    .onFinalize(() => {
+      x.value = withSpring(0, SPRING)
+      armed.value = -1
+    })
 
-  const secondaryStyle = useAnimatedStyle(() => {
-    const distance = side === "left" ? translation.value : -translation.value
-    return distance >= threshold ? { width: 0, opacity: 0 } : { width: ACTION_W, opacity: 1 }
-  })
+  const rowStyle = useAnimatedStyle(() => ({ transform: [{ translateX: x.value }] }))
 
-  const [primary, ...rest] = actions
   return (
-    <View style={$actions}>
-      <ActionButton action={primary} onDone={onDone} style={primaryStyle} />
-      {rest.map((a) => (
-        <ActionButton key={a.key} action={a} onDone={onDone} style={secondaryStyle} />
-      ))}
+    <View style={$wrap}>
+      {leftCount > 0 ? (
+        <ActionPanel
+          side="left"
+          actions={leftActions!}
+          x={x}
+          indexFor={indexFor}
+          armPx={primaryPx}
+          fullPx={secondaryPx}
+        />
+      ) : null}
+      {rightCount > 0 ? (
+        <ActionPanel
+          side="right"
+          actions={rightActions!}
+          x={x}
+          indexFor={indexFor}
+          armPx={primaryPx}
+          fullPx={secondaryPx}
+        />
+      ) : null}
+      <GestureDetector gesture={pan}>
+        <Animated.View style={rowStyle}>{children}</Animated.View>
+      </GestureDetector>
     </View>
   )
 }
 
-const ActionButton: FC<{
-  action: SwipeAction
-  onDone: () => void
-  style?: ReturnType<typeof useAnimatedStyle>
-}> = ({ action, onDone, style }) => {
+/**
+ * The colour behind the row on one side.
+ *
+ * It is exactly as wide as the row has moved, so it reads as the row uncovering
+ * it rather than as a separate panel sliding in. Every action's icon is rendered
+ * and cross-faded, because which glyph to draw cannot be decided inside a
+ * worklet — only its opacity can.
+ */
+const ActionPanel: FC<{
+  side: "left" | "right"
+  actions: SwipeAction[]
+  x: SharedValue<number>
+  indexFor: (offset: number) => number
+  /** Drag distance at which the glyph reaches full size. */
+  armPx: number
+  /** Drag distance at which it reaches {@link SCALE_MAX} and stops growing. */
+  fullPx: number
+}> = ({ side, actions, x, indexFor, armPx, fullPx }) => {
   const {
     theme: { colors },
   } = useAppTheme()
-  const fg = action.foreground ?? colors.onError
+  const backgrounds = actions.map((a) => a.background)
+  const resting = backgrounds[0]
+
+  const panelStyle = useAnimatedStyle(() => {
+    const offset = x.value
+    const mine = side === "left" ? offset > 0 : offset < 0
+    if (!mine) return { width: 0, backgroundColor: resting }
+    const index = indexFor(offset)
+    return {
+      width: Math.abs(offset),
+      backgroundColor: index > 0 ? backgrounds[index] : resting,
+    }
+  })
+
   return (
-    <Animated.View style={[$action, { backgroundColor: action.background }, style]}>
-      <Pressable
-        testID={`swipe-action-${action.key}`}
-        onPress={() => {
-          action.onPress()
-          onDone()
-        }}
-        style={$hit}
-      >
-        <AppIcon name={action.icon} size={20} color={fg} />
-        <Text text={action.label} size="xxs" weight="medium" style={{ color: fg }} />
-      </Pressable>
+    <Animated.View
+      style={[$panel, side === "left" ? $panelLeft : $panelRight, panelStyle]}
+      pointerEvents="none"
+    >
+      {actions.map((action, i) => (
+        <PanelContent
+          key={action.key}
+          action={action}
+          index={i}
+          side={side}
+          x={x}
+          indexFor={indexFor}
+          armPx={armPx}
+          fullPx={fullPx}
+          fallback={colors.onError}
+        />
+      ))}
     </Animated.View>
   )
 }
 
-const $actions: ViewStyle = { flexDirection: "row" }
-const $action: ViewStyle = { overflow: "hidden" }
-const $hit: ViewStyle = {
-  width: ACTION_W,
-  flex: 1,
+const PanelContent: FC<{
+  action: SwipeAction
+  index: number
+  side: "left" | "right"
+  x: SharedValue<number>
+  indexFor: (offset: number) => number
+  armPx: number
+  fullPx: number
+  fallback: string
+}> = ({ action, index, side, x, indexFor, armPx, fullPx, fallback }) => {
+  const style = useAnimatedStyle(() => {
+    const distance = Math.abs(x.value)
+    // Below the first threshold nothing is armed, but the first action still
+    // shows: the swipe has to say what it will do before it will do it.
+    const shown = Math.max(indexFor(x.value), 0)
+    return {
+      // Fade in over the first few points so the glyph does not pop into
+      // existence the instant the row moves.
+      opacity: shown === index ? interpolate(distance, [0, 18], [0, 1], Extrapolation.CLAMP) : 0,
+      // Read straight off the drag distance and clamped at both ends, so it
+      // grows under the thumb and holds wherever the thumb holds — it only
+      // shrinks again when the row itself springs home.
+      transform: [
+        {
+          scale: interpolate(
+            distance,
+            [0, armPx, fullPx],
+            [SCALE_MIN, 1, SCALE_MAX],
+            Extrapolation.CLAMP,
+          ),
+        },
+      ],
+    }
+  })
+  const fg = action.foreground ?? fallback
+  return (
+    <Animated.View
+      testID={`swipe-action-${action.key}`}
+      style={[$content, side === "left" ? $contentLeft : $contentRight, style]}
+    >
+      <AppIcon name={action.icon} size={20} color={fg} />
+      <Text text={action.label} size="xxs" weight="medium" style={{ color: fg }} />
+    </Animated.View>
+  )
+}
+
+// Clips the panels to the row, so a panel as wide as the screen cannot paint
+// over its neighbours while the row is mid-swipe.
+const $wrap: ViewStyle = { overflow: "hidden" }
+const $panel: ViewStyle = { position: "absolute", top: 0, bottom: 0 }
+const $panelLeft: ViewStyle = { left: 0 }
+const $panelRight: ViewStyle = { right: 0 }
+// Pinned near the screen edge rather than centred: centred, the glyph slides
+// outward as the panel grows and the eye tracks it instead of the row.
+const $content: ViewStyle = {
+  position: "absolute",
+  top: 0,
+  bottom: 0,
+  width: 76,
   alignItems: "center",
   justifyContent: "center",
   gap: 3,
 }
+const $contentLeft: ViewStyle = { left: 0 }
+const $contentRight: ViewStyle = { right: 0 }
