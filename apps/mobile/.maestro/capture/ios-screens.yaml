@@ -1,0 +1,85 @@
+# The screens the tab tour cannot reach: the create sheet, search, the workspace
+# picker, a project and triage.
+#
+# The create sheet is the reason this file exists. It imports the same form
+# primitives the Profile tab does, so when the iOS text export was named wrong
+# it was broken in exactly the same way — and the tab tour never opens it, so
+# the tour went green while half the SwiftUI surface was dead. Anything built on
+# `@/components/form` needs a flow that actually opens it.
+#
+# Each section relaunches rather than navigating back. A form sheet is dismissed
+# by dragging it, and once its content has been scrolled a downward swipe
+# scrolls the content instead of moving the sheet — so "go back" is the least
+# reliable step in the flow and relaunching removes it entirely.
+#
+# Read-only: it opens the create sheet without submitting, so it is safe against
+# any account.
+#
+# Run:  scripts/maestro.sh ios .maestro/capture/ios-screens.yaml
+appId: sh.elliptic
+---
+# The create sheet — a SwiftUI Form, same primitives as Profile.
+- launchApp
+- waitForAnimationToEnd
+- tapOn: "Tasks, tab.*"
+- waitForAnimationToEnd
+- tapOn: "New task"
+- waitForAnimationToEnd
+- assertVisible: "Task title"
+- takeScreenshot: ios-10-createtask
+# The submit button is below the fold on this device, so scroll to it rather
+# than asserting on the first screenful.
+- scrollUntilVisible:
+    element: "Create task"
+    direction: DOWN
+- takeScreenshot: ios-10b-createtask-bottom
+
+# Search — its own list rows and separators.
+- launchApp
+- waitForAnimationToEnd
+- tapOn: "Search tasks, notes, projects"
+- waitForAnimationToEnd
+- inputText: "atlas"
+- waitForAnimationToEnd
+- takeScreenshot: ios-11-search
+
+# The workspace picker — the one place ListRow is used.
+- launchApp
+- waitForAnimationToEnd
+- tapOn: "Switch workspace"
+- waitForAnimationToEnd
+# The sheet's own heading, not a workspace name: the active workspace also
+# appears in the switcher chip behind the sheet, and the assertion resolved to
+# that obscured copy.
+- assertVisible: "Switch workspace"
+- takeScreenshot: ios-12-switchworkspace
+
+# A project — the collapsible section headers that were realigned.
+- launchApp
+- waitForAnimationToEnd
+- tapOn: "Todo"
+- waitForAnimationToEnd
+- takeScreenshot: ios-13-projectdetail
+
+# Triage — TaskRow inside a swipeable row.
+- launchApp
+- waitForAnimationToEnd
+- tapOn: "Inbox, tab.*"
+- waitForAnimationToEnd
+- tapOn: "Triage"
+- waitForAnimationToEnd
+- takeScreenshot: ios-14-triage
+
+# A project. Reached by scrolling Home to the Projects section rather than by
+# name alone: "Todo" is also a task status and a project key here, and the bare
+# selector resolved to a match sitting under the dev-client Tools button.
+- launchApp
+- waitForAnimationToEnd
+- scrollUntilVisible:
+    element: "Projects"
+    direction: DOWN
+- tapOn:
+    text: "Todo"
+    index: 0
+- waitForAnimationToEnd
+- takeScreenshot: ios-15-projectdetail
