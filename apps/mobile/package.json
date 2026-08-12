@@ -31,6 +31,7 @@
     "build:android:prod": "eas build --profile production --platform android --local"
   },
   "dependencies": {
+    "@bacons/apple-targets": "5.0.0",
     "@bottom-tabs/react-navigation": "^1.4.0",
     "@expo-google-fonts/inter": "^0.4.2",
     "@expo-google-fonts/inter-tight": "^0.4.2",

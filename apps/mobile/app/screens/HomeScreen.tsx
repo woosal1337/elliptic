@@ -17,6 +17,7 @@ import { TAB_BAR_CLEARANCE } from "@/navigators/tabBarClearance"
 import { api } from "@/services/api"
 import type { Project, Task } from "@/services/api/types"
 import { queryKeys } from "@/services/query"
+import { useWidgetSnapshot } from "@/services/widget/useWidgetSnapshot"
 import { useAppTheme } from "@/theme/context"
 import { openEntity } from "@/utils/openEntity"
 import { useListQuery } from "@/utils/useListQuery"
@@ -48,6 +49,11 @@ export const HomeScreen: FC<HomeStackScreenProps<"HomeMain">> = ({ navigation })
     activeOrg ? queryKeys.projects(activeOrg.id) : null,
     projectFetcher,
   )
+  // Home already holds everything the widget needs for the active workspace —
+  // the org, its projects and its tasks — so it publishes rather than adding a
+  // second set of fetches somewhere else.
+  useWidgetSnapshot(activeOrg, projects, tasks)
+
   const pending = useOfflineQueue()
   const parent = () => navigation.getParent<BottomTabNavigationProp<MainTabParamList>>()
   const openTask = (t: Task) => openEntity(parent(), "task", t.id, t.identifier)

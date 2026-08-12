@@ -43,6 +43,12 @@
           ]
         }
       ]
+    },
+    "appleTeamId": "7TXTQ6TTGQ",
+    "entitlements": {
+      "com.apple.security.application-groups": [
+        "group.sh.elliptic"
+      ]
     }
   },
   "web": {
@@ -80,7 +86,8 @@
         "cameraPermission": false,
         "microphonePermission": false
       }
-    ]
+    ],
+    "@bacons/apple-targets"
   ],
   "experiments": {
     "tsconfigPaths": true
