@@ -20,8 +20,9 @@ igris serves the **API + Postgres**; the **web app is deployed via Vercel**
 **Auto-deploy is a GitHub webhook, not a workflow.** The repo has a push
 webhook (admins: Settings → Webhooks) pointed at the Coolify instance;
 deliveries are HMAC-signed with a shared secret, and Coolify deploys `main`
-on every push. The old `deploy.yml` workflow and the ct104 self-hosted runner
-are gone — there is nothing deploy-related left in `.github/workflows/`.
+on every push. There is nothing deploy-related left in `.github/workflows/`,
+and CI runs only on GitHub-hosted runners — the repo registers no self-hosted
+runner.
 
 ## The Coolify application
 
@@ -79,13 +80,10 @@ igris, so rolling back does not rebuild.
 
 ## Legacy (pre-Coolify)
 
-- **ct104 is decommissioned** — no runner, no `/opt/elliptic` checkout, no
-  cloudflared pointing at it.
-- The interim manual compose stack on igris (the ct104 → igris migration
-  stopgap, an untracked checkout driven by a `docker-compose.igris.yml`
-  overlay) may still be running but serves no
-  public traffic; its Postgres volume holds the pre-migration data. Tear it
-  down once a final backup is confirmed.
+- The interim manual compose stack on igris (a migration stopgap: an untracked
+  checkout driven by a `docker-compose.igris.yml` overlay) may still be running
+  but serves no public traffic; its Postgres volume holds the pre-migration
+  data. Tear it down once a final backup is confirmed.
 - The legacy manual blue-green files (`docker-compose.prod.yml`,
-  `deploy/caddy/`, `scripts/deploy-ct104.sh`) have been removed; if a
-  compose-based reference is ever needed, they live in git history at v1.2.0.
+  `deploy/caddy/` and the deploy script) have been removed; if a compose-based
+  reference is ever needed, they live in git history at v1.2.0.
