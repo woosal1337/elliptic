@@ -750,6 +750,27 @@ export interface Note {
   updated_at: string;
 }
 
+/** A document in the organization's Drive. */
+export interface DriveFile {
+  id: string;
+  name: string;
+  folder_path: string;
+  description: string | null;
+  filename: string;
+  content_type: string;
+  kind: "image" | "file";
+  size_bytes: number | null;
+  uploaded_by: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface DriveFolder {
+  path: string;
+  name: string;
+  file_count: number;
+}
+
 export interface NoteShare {
   id: string;
   note_id: string;

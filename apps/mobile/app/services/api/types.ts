@@ -93,6 +93,25 @@ export interface StoredObject {
   content_type?: string
 }
 
+/** A document in the organisation's Drive. */
+export interface DriveFile {
+  id: string
+  name: string
+  folder_path: string
+  description: string | null
+  filename: string
+  content_type: string
+  kind: "image" | "file"
+  size_bytes: number | null
+  created_at: string
+}
+
+export interface DriveFolder {
+  path: string
+  name: string
+  file_count: number
+}
+
 export interface Comment {
   id: string
   content: string

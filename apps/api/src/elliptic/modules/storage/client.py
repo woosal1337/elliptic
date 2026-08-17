@@ -90,6 +90,18 @@ async def delete_object(key: str) -> None:
     await asyncio.to_thread(_delete)
 
 
+async def put_bytes(key: str, data: bytes, content_type: str) -> None:
+    """Upload bytes straight to R2 (the small-file path for MCP agents)."""
+    settings = get_settings()
+
+    def _put() -> None:
+        _client().put_object(
+            Bucket=settings.r2_bucket, Key=key, Body=data, ContentType=content_type
+        )
+
+    await asyncio.to_thread(_put)
+
+
 async def get_bytes(key: str) -> bytes | None:
     """Download an object's raw bytes (used to hand image content to MCP agents)."""
     settings = get_settings()

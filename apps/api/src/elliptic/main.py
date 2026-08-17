@@ -40,6 +40,7 @@ from elliptic.modules.cycles.router import org_router as cycles_org_router
 from elliptic.modules.cycles.router import router as cycles_router
 from elliptic.modules.dashboards.router import router as dashboards_router
 from elliptic.modules.domains.router import router as domains_router
+from elliptic.modules.drive.router import router as drive_router
 from elliptic.modules.embeds.router import router as embeds_router
 from elliptic.modules.events.router import router as events_router
 from elliptic.modules.favorites.router import router as favorites_router
@@ -238,6 +239,7 @@ def create_app() -> FastAPI:  # noqa: PLR0915 — flat router registration list
     api.include_router(project_states_router)
     api.include_router(search_router)
     api.include_router(storage_router)
+    api.include_router(drive_router)
     api.include_router(tasks_router)
     api.include_router(type_levels_router)
     api.include_router(approvals_router)

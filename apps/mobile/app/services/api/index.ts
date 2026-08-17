@@ -12,6 +12,8 @@ import type {
   AuthTokens,
   ChatMessage,
   Comment,
+  DriveFile,
+  DriveFolder,
   Member,
   Note,
   NotificationItem,
@@ -283,6 +285,41 @@ export class Api {
 
   async getNote(orgId: string, noteId: string): Promise<Note | null> {
     const res = await this.apisauce.get<Envelope<Note>>(`/orgs/${orgId}/notes/${noteId}`)
+    return res.ok && res.data ? res.data.data : null
+  }
+
+  /** Every document in the org's Drive. Folders are a path on each row, not a tree. */
+  async listDriveFiles(orgId: string): Promise<DriveFile[]> {
+    return this.fetchAllPages<DriveFile>(`/orgs/${orgId}/drive/files`)
+  }
+
+  async listDriveFolders(orgId: string): Promise<DriveFolder[]> {
+    const res = await this.apisauce.get<Envelope<DriveFolder[]>>(`/orgs/${orgId}/drive/folders`)
+    return res.ok && res.data ? res.data.data : []
+  }
+
+  async getDriveFile(orgId: string, fileId: string): Promise<DriveFile | null> {
+    const res = await this.apisauce.get<Envelope<DriveFile>>(`/orgs/${orgId}/drive/files/${fileId}`)
+    return res.ok && res.data ? res.data.data : null
+  }
+
+  /** A presigned URL for one document. It expires in 300 s, so fetch it at open time. */
+  async driveDownloadUrl(orgId: string, fileId: string): Promise<string | null> {
+    const res = await this.apisauce.get<Envelope<{ download_url: string; filename: string }>>(
+      `/orgs/${orgId}/drive/files/${fileId}/download`,
+    )
+    return res.ok && res.data ? res.data.data.download_url : null
+  }
+
+  /** A text document's content, decoded by the API (a WebView cannot render markdown). */
+  async driveFileText(
+    orgId: string,
+    fileId: string,
+    limit = 20000,
+  ): Promise<{ readable: boolean; text: string | null; truncated?: boolean } | null> {
+    const res = await this.apisauce.get<
+      Envelope<{ readable: boolean; text: string | null; truncated?: boolean }>
+    >(`/orgs/${orgId}/drive/files/${fileId}/text`, { limit: String(limit) })
     return res.ok && res.data ? res.data.data : null
   }
 

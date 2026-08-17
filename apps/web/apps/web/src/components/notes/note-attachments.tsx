@@ -13,7 +13,7 @@ import {
   useNoteEmbeds,
 } from "@/hooks/use-embed-queries";
 
-const FILE_LIMIT = 25 * 1024 * 1024;
+const FILE_LIMIT = 100 * 1024 * 1024;
 
 function EmbedCard({
   orgId,

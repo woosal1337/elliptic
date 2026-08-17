@@ -4858,7 +4858,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Uploads are size- and type-limited. The default maximum file size is **25 MB**. The size limit is enforced in three places: the web client checks it before starting an upload and shows a clear error, the server checks the claimed size at reserve time, and the server re-checks the real size at confirm time."
+        "text": "Uploads are size- and type-limited. The default maximum file size is **100 MB**. The size limit is enforced in three places: the web client checks it before starting an upload and shows a clear error, the server checks the claimed size at reserve time, and the server re-checks the real size at confirm time."
       },
       {
         "type": "p",
@@ -4881,7 +4881,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "info",
         "title": "Self-hosting note",
-        "text": "The 25 MB ceiling and the allowed content type list are server settings (`file_size_limit_bytes` and `allowed_upload_content_types`). On the hosted instance at elliptic.sh they are the defaults above. If you self-host, you can adjust both in your API configuration. File storage must also be configured: if your instance has no object storage set up, uploads fail with \"Object storage is not configured\" and attachment features stay off."
+        "text": "The 100 MB ceiling and the allowed content type list are server settings (`file_size_limit_bytes` and `allowed_upload_content_types`). On the hosted instance at elliptic.sh they are the defaults above. If you self-host, you can adjust both in your API configuration. File storage must also be configured: if your instance has no object storage set up, uploads fail with \"Object storage is not configured\" and attachment features stay off."
       },
       {
         "type": "h2",
@@ -4912,7 +4912,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Notes have a dedicated side panel for attachments and embeds. Use **Add** in the Attachments section to pick a file from your machine. It uploads with the three-step flow above, bound directly to the note, and appears in the attachment list when it finishes. The note panel enforces the same 25 MB limit on the client and shows a toast if you pick something larger."
+        "text": "Notes have a dedicated side panel for attachments and embeds. Use **Add** in the Attachments section to pick a file from your machine. It uploads with the three-step flow above, bound directly to the note, and appears in the attachment list when it finishes. The note panel enforces the same 100 MB limit on the client and shows a toast if you pick something larger."
       },
       {
         "type": "h3",
@@ -5061,6 +5061,168 @@ export const DOC_PAGES: DocPage[] = [
           "**Attachments** are size- and type-limited, uploaded directly to storage, confirmed server-side, and downloadable only via 5-minute signed links.",
           "**Embeds** are iframes (YouTube, Loom, Vimeo, Figma) or Open Graph cards (Google Docs, Notion, Airtable, GitHub, and any link), previewable before saving and persistable on notes.",
           "Both are scoped to your organization, and both are surfaces your agents can use the same way your team does."
+        ]
+      }
+    ]
+  },
+  {
+    "title": "The Drive",
+    "slug": "drive",
+    "description": "The organization's Drive: upload documents once, file them in folders, and reference them from any task description, on the web, on the phone, and over the MCP.",
+    "blocks": [
+      {
+        "type": "h2",
+        "text": "One place for the documents"
+      },
+      {
+        "type": "p",
+        "text": "A **note** is a page you write inside Elliptic. A **Drive document** is a file you bring in whole: a countersigned contract, a floor plan, a supplier quote, a scanned form. The Drive is where those live, and it sits beside Notes for the same reason both exist — they are the reference material the work points at."
+      },
+      {
+        "type": "p",
+        "text": "The Drive is **scoped to the organization**, not to a project. A signed agreement is read by the legal task, the finance task and the renewal task, so binding it to one project would turn every other reference into a copy. Folders keep it navigable instead, and every member of the workspace reads the same document."
+      },
+      {
+        "type": "h2",
+        "text": "Uploading and filing"
+      },
+      {
+        "type": "p",
+        "text": "Open **Drive** in the sidebar. Use **Upload**, or drag files onto the list. Bytes go straight from your browser to object storage over a signed URL — the same reserve, upload, confirm path attachments use — and the document then appears in whichever folder you are standing in."
+      },
+      {
+        "type": "steps",
+        "steps": [
+          {
+            "title": "Make a folder",
+            "text": "**New folder** opens it immediately. A folder is a path carried by the documents inside it rather than a record of its own, so it exists once the first document lands there and disappears when the last one leaves. Nothing can be orphaned in it."
+          },
+          {
+            "title": "Upload into it",
+            "text": "Whatever folder you are standing in is where the upload lands. Folders nest: open one and make another inside it."
+          },
+          {
+            "title": "Rename, move, delete",
+            "text": "Each row's menu opens the document, copies its reference link, renames it, moves it to another folder, or deletes it. Renaming the open folder moves every document beneath it in one step."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "text": "**Search reaches across the whole Drive**, not the open folder — the point of searching is that you do not know where the document sits. A hit shows the folder it came from."
+      },
+      {
+        "type": "callout",
+        "variant": "info",
+        "title": "Size and type limits",
+        "text": "A document may be up to **100 MB**, and its content type must be on the upload allowlist (PDF, images, plain text, CSV, Markdown, JSON, Word, Excel, PowerPoint, ZIP). Both are server settings — see **Files, attachments & embeds** for the full list and the self-hosting knobs."
+      },
+      {
+        "type": "h2",
+        "text": "Referencing a document from a task"
+      },
+      {
+        "type": "p",
+        "text": "This is what the Drive is for. In a task description, a project description, a note or a comment, type `@` and start typing the document's name. Drive documents appear in the picker beside tasks and pages, tagged **Drive** and showing the folder they sit in. Pick one and it becomes a chip: a paperclip, the document's name, and a click that opens it."
+      },
+      {
+        "type": "p",
+        "text": "The chip is stored as ordinary Markdown, so it survives copy, paste, export and an agent reading the description back:"
+      },
+      {
+        "type": "code",
+        "lang": "markdown",
+        "code": "Countersign and file the renewal.\n\nSigned agreement: [Acme MSA 2026](/__mention/file/019eda44-8c2d-7e3f-9a01-223344556677)\nSite layout: [Floor plan](/__mention/file/019eda44-9f01-7a2b-8c3d-445566778899)"
+      },
+      {
+        "type": "p",
+        "text": "Clicking the chip opens the Drive with that document selected, whether or not the reader has ever opened the folder it lives in. The document opens **inside Elliptic**: a panel that previews the file itself — an image, a PDF, or the first few thousand characters of a text file — above the folder, file name, size and the date it was added. Nothing navigates away to storage. **Download** takes the file when you want the file, and **Copy link** puts the Markdown above on your clipboard for pasting into another description. Word, Excel and PowerPoint have no in-browser preview, so those offer Download alone. Full detail on the format is in **References & mentions**."
+      },
+      {
+        "type": "h2",
+        "text": "On the phone"
+      },
+      {
+        "type": "p",
+        "text": "The **Notes** tab carries a paperclip that opens the Drive. Folders walk in and out with the platform's own back gesture, and search reaches across the workspace. Tapping a document opens it in a sheet that reaches the top of the screen: a PDF or an image renders in place, and a text, Markdown, CSV or JSON document is served as text by the API. Drag the sheet down, or tap the close button, and the screen you came from is right there. Tapping a document chip inside a task description opens the same sheet **over the task**, so a link written on a laptop opens on a phone without losing your place. Word, Excel and PowerPoint have no phone preview — open those from the web app."
+      },
+      {
+        "type": "callout",
+        "variant": "info",
+        "title": "Reading, not uploading",
+        "text": "The phone browses and reads documents; uploading is a web action. The documents that belong in a Drive arrive on a computer, and what the phone needs is the other half — reading the document a task points at, wherever you happen to be, without being thrown out to a browser to do it."
+      },
+      {
+        "type": "h2",
+        "text": "For agents (over the MCP)"
+      },
+      {
+        "type": "p",
+        "text": "Agents get the same Drive through the **Company-Brain MCP**, under two scopes: `drive:read` to browse and read, `drive:write` to upload, rename, move and delete. Read is part of the baseline grant; write is not."
+      },
+      {
+        "type": "table",
+        "headers": [
+          "Tool",
+          "What it does"
+        ],
+        "rows": [
+          [
+            "`list_drive_files`",
+            "Browse a folder or search the whole Drive. Every item carries a ready-made `mention` string to paste into a description."
+          ],
+          [
+            "`list_drive_folders`",
+            "The folders, with how many documents each holds."
+          ],
+          [
+            "`get_drive_file`",
+            "One document's metadata plus a signed URL that lives for 300 seconds."
+          ],
+          [
+            "`read_drive_file`",
+            "The text of a text, JSON or XML document, a window at a time. A PDF or Office file reports `readable: false` and hands back a URL instead."
+          ],
+          [
+            "`view_drive_image`",
+            "An image document's actual pixels, so the agent can see it inline."
+          ],
+          [
+            "`create_drive_upload` → `register_drive_file`",
+            "The upload path: reserve a slot, PUT the bytes to the signed URL, then file the result under a name and folder."
+          ],
+          [
+            "`upload_drive_file_inline`",
+            "A small document (256 KB hard cap) straight from base64."
+          ],
+          [
+            "`update_drive_file`",
+            "Rename, move, or re-describe a document."
+          ],
+          [
+            "`delete_drive_file`",
+            "Delete it. Previews first unless `confirm: true`."
+          ]
+        ]
+      },
+      {
+        "type": "callout",
+        "variant": "warning",
+        "title": "Why upload is two steps for an agent",
+        "text": "MCP tool arguments are written by the model, so base64 content costs about 1.4 tokens per byte of file — a real document does not fit. `create_drive_upload` returns a signed `upload_url` and the exact headers to send; the agent PUTs the bytes with its own HTTP or shell, then calls `register_drive_file`. Keep `upload_drive_file_inline` for something genuinely small."
+      },
+      {
+        "type": "h2",
+        "text": "In short"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "The Drive is org-wide, so one document serves every project that references it.",
+          "Folders are paths on the documents, so they need no upkeep and cannot strand anything.",
+          "A document is referenced with `@` and stored as `[label](/__mention/file/<id>)`, which renders as a clickable chip on web and phone.",
+          "Documents are up to 100 MB, private, and served only through short-lived signed links.",
+          "Agents read the Drive under `drive:read` and write it under `drive:write`, with the same folders and the same links your team sees."
         ]
       }
     ]
@@ -11651,7 +11813,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "There are three kinds of reference. A `user` reference is a mention of a person. A `task` reference points at a work item. A `note` reference points at a page. People are mentioned so they can be notified, tasks and notes are referenced so the chip becomes a link you can follow."
+        "text": "There are four kinds of reference. A `user` reference is a mention of a person. A `task` reference points at a work item. A `note` reference points at a page. A `file` reference points at a document in the organization's **Drive**. People are mentioned so they can be notified; tasks, pages and documents are referenced so the chip becomes a link you can follow."
       },
       {
         "type": "table",
@@ -11679,6 +11841,12 @@ export const DOC_PAGES: DocPage[] = [
             "@ then a page title",
             "a chip with a page icon",
             "the note, opened in the notes view"
+          ],
+          [
+            "file",
+            "@ then a document name",
+            "a chip with a paperclip icon and a Drive tag",
+            "the Drive, with that document selected"
           ]
         ]
       },
@@ -11698,7 +11866,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "What the picker offers depends on the surface. On a note page and in a project description it lists people, tasks (each shown with its `#` identifier), and notes (each shown with a Note tag and a page icon). In a task description and a task comment the picker offers tasks and notes, so you reference work items and pages there rather than people. The placeholder text tells you which: a task comment composer reads `@` to mention a task or note."
+        "text": "What the picker offers depends on the surface. On a note page and in a project description it lists people, tasks (each shown with its `#` identifier), and notes (each shown with a Note tag and a page icon). In a task description and a task comment the picker offers tasks, notes and Drive documents (each shown with a Drive tag and its folder), so you reference work items, pages and documents there rather than people. Drive documents are workspace-wide, so the same signed contract can be linked from tasks in any project."
       },
       {
         "type": "steps",
@@ -11728,7 +11896,7 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "ul",
         "items": [
-          "**Task and note chips are interactive.** Clicking a chip (or focusing it and pressing Enter or Space) opens the referenced item. A note chip routes to the page, a task chip resolves to the task in the browse view.",
+          "**Task, note and document chips are interactive.** Clicking a chip (or focusing it and pressing Enter or Space) opens the referenced item. A note chip routes to the page, a task chip resolves to the task in the browse view, and a document chip opens the Drive with that document selected.",
           "**Person chips are labels, not links.** An `@` person chip shows who is mentioned. It does not navigate anywhere, its job is to identify the person.",
           "**Chips are atomic.** A chip is a single unit in the editor, not editable character by character. The label is what you see, the kind and id underneath are what make it resolve."
         ]
@@ -11748,12 +11916,12 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "The `<kind>` is one of `user`, `task`, or `note`. The `<id>` is the target's identifier, URL-encoded. The visible label is the link text. For example, a note reference, a task reference, and a person reference look like this:"
+        "text": "The `<kind>` is one of `user`, `task`, `note`, or `file`. The `<id>` is the target's identifier, URL-encoded. The visible label is the link text. For example, a note reference, a task reference, a document reference, and a person reference look like this:"
       },
       {
         "type": "code",
         "lang": "markdown",
-        "code": "Mirror the steps in [Runbook — Deploy a backend change](/__mention/note/019ed7a1-2b3c-7d4e-9f01-aabbccddeeff).\nThis work is blocked by [HML-42](/__mention/task/019ed802-4f5a-7b6c-8d9e-001122334455).\nHanding this to [Ada](/__mention/user/019ed9c3-7a1b-4c2d-8e3f-556677889900)."
+        "code": "Mirror the steps in [Runbook — Deploy a backend change](/__mention/note/019ed7a1-2b3c-7d4e-9f01-aabbccddeeff).\nThis work is blocked by [HML-42](/__mention/task/019ed802-4f5a-7b6c-8d9e-001122334455).\nCountersign [Acme MSA 2026](/__mention/file/019eda44-8c2d-7e3f-9a01-223344556677).\nHanding this to [Ada](/__mention/user/019ed9c3-7a1b-4c2d-8e3f-556677889900)."
       },
       {
         "type": "p",
@@ -11767,7 +11935,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Each kind has a glyph the renderer prepends so the chip reads naturally even as plain text: `#` for a task, `@` for a person, and `※` for a note. When the same Markdown is flattened to plain text (for a search index or a snippet), the link collapses to that glyph plus the label, so `[Ada](/__mention/user/...)` becomes simply `@Ada`."
+        "text": "Each kind has a glyph the renderer prepends so the chip reads naturally even as plain text: `#` for a task, `@` for a person, `※` for a note, and `▤` for a Drive document. When the same Markdown is flattened to plain text (for a search index or a snippet), the link collapses to that glyph plus the label, so `[Ada](/__mention/user/...)` becomes simply `@Ada`."
       },
       {
         "type": "h2",
@@ -11854,7 +12022,7 @@ export const DOC_PAGES: DocPage[] = [
         "steps": [
           {
             "title": "Resolve the id",
-            "text": "Look up the target id. Use `list_project_tasks` or `get_task` for a task, `list_notes` or `get_note` for a note, and `list_org_members` for a person. Take the returned id."
+            "text": "Look up the target id. Use `list_project_tasks` or `get_task` for a task, `list_notes` or `get_note` for a note, `list_drive_files` for a document, and `list_org_members` for a person. Take the returned id. A Drive document is easier still: every item `list_drive_files` returns carries a ready-made `mention` string you can paste straight into the body."
           },
           {
             "title": "Embed the link",

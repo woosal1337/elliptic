@@ -86,7 +86,7 @@ class Settings(BaseSettings):
     push_enabled: bool = False
     expo_push_url: str = "https://exp.host/--/api/v2/push/send"
 
-    file_size_limit_bytes: int = 25 * 1024 * 1024
+    file_size_limit_bytes: int = 100 * 1024 * 1024
     allowed_upload_content_types: str = (
         "image/png,image/jpeg,image/gif,image/webp,image/svg+xml,"
         "application/pdf,text/plain,text/csv,text/markdown,"

@@ -4,28 +4,15 @@ import Link from "next/link";
 const INLINE_PATTERN = /(\*\*[^*]+\*\*|\*[^*]+\*|`[^`]+`|\[(?:\\.|[^\]\\])+\]\([^)]+\))/g;
 const LINK_PATTERN = /^\[((?:\\.|[^\]\\])+)\]\(([^)]+)\)$/;
 
-const MENTION_HREF_PREFIX = "/__mention/";
-type MentionKind = "task" | "note" | "user";
-const MENTION_GLYPH: Record<MentionKind, string> = { task: "#", note: "※", user: "@" };
+import {
+  MENTION_GLYPH,
+  mentionTarget,
+  parseMentionHref as parseMention,
+  type MentionKind,
+} from "@/lib/mentions";
 
 function unescapeLabel(label: string): string {
   return label.replace(/\\([[\]])/g, "$1");
-}
-
-function parseMention(href: string): { kind: MentionKind; id: string } | null {
-  if (!href.startsWith(MENTION_HREF_PREFIX)) return null;
-  const rest = href.slice(MENTION_HREF_PREFIX.length);
-  const slash = rest.indexOf("/");
-  if (slash < 0) return null;
-  const rawKind = rest.slice(0, slash);
-  const kind: MentionKind = rawKind === "task" ? "task" : rawKind === "note" ? "note" : "user";
-  let id = rest.slice(slash + 1);
-  try {
-    id = decodeURIComponent(id);
-  } catch {
-  }
-  if (!id) return null;
-  return { kind, id };
 }
 
 function linkKind(href: string): "internal" | "external" | "unsafe" {
@@ -50,11 +37,7 @@ function MentionLink({
   const className =
     "rounded bg-accent-muted px-1 font-medium text-accent no-underline hover:underline";
   const text = `${MENTION_GLYPH[kind]}${label}`;
-  let href: string | null = null;
-  if (orgId) {
-    if (kind === "note") href = `/app/${orgId}/notes/${id}`;
-    else if (kind === "task") href = `/app/${orgId}/browse/${encodeURIComponent(label)}`;
-  }
+  const href = mentionTarget(kind, id, label, orgId);
   if (href) {
     return (
       <Link href={href} className={className}>

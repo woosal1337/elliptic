@@ -42,7 +42,7 @@ export function TaskDescriptionEditor({
   value,
   onChange,
   mention,
-  placeholder = "Add a description… “/” for blocks, “@” to link another task",
+  placeholder = "Add a description… “/” for blocks, “@” to link a task, page or document",
   className,
 }: {
   value: string;

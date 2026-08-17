@@ -19,6 +19,10 @@ SCOPE_CATALOG: tuple[ScopeDef, ...] = (
     ScopeDef("tasks:write", "Tasks", "Create, update, move, label and delete tasks", False, False),
     ScopeDef("notes:read", "Notes", "Read notes across your projects", False, True),
     ScopeDef("notes:write", "Notes", "Create and edit notes", False, False),
+    ScopeDef(
+        "drive:read", "Drive", "Browse and read the workspace's uploaded documents", False, True
+    ),
+    ScopeDef("drive:write", "Drive", "Upload, rename, move and delete documents", False, False),
     ScopeDef("meetings:read", "Meetings", "Read meetings, transcripts and summaries", False, True),
     ScopeDef("meetings:write", "Meetings", "Create, edit and summarize meetings", False, False),
     ScopeDef("events:read", "Calendar", "Read your calendar events", False, True),

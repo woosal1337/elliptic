@@ -1,0 +1,128 @@
+#flow: Drive
+#intent: the organisation Drive on the phone — the Notes tab opens it, folders walk
+#        in and out, search reaches across folders, a document opens in a sheet
+#        inside the app (never handed to the browser), and a document mention in a
+#        task description opens the same sheet. Read-only: the flow writes nothing.
+# Run: MAESTRO_EMAIL=... MAESTRO_PASSWORD=... scripts/maestro.sh ios .maestro/flows/Drive.yaml
+appId: sh.elliptic
+---
+# Start from the tab roots rather than wherever the last run stopped.
+- launchApp
+- waitForAnimationToEnd
+# A dev client asks before loading the bundle it was last pointed at.
+- runFlow:
+    when:
+      visible: "Open"
+    commands:
+      - tapOn: "Open"
+      - waitForAnimationToEnd
+- runFlow:
+    when:
+      visible: "Sign in to your workspace"
+    commands:
+      - tapOn: "Email, .*"
+      - eraseText
+      - inputText: ${MAESTRO_EMAIL}
+      - tapOn: "Password, .*"
+      - eraseText
+      - inputText: ${MAESTRO_PASSWORD}
+      - tapOn: "Sign in"
+      - extendedWaitUntil:
+          visible:
+            text: "Home"
+          timeout: 20000
+      - runFlow:
+          when:
+            visible: "Not Now"
+          commands:
+            - tapOn: "Not Now"
+
+# --- the Drive opens from the Notes tab -----------------------------------
+- tapOn: "Notes"
+- waitForAnimationToEnd
+- tapOn:
+    id: "header-action-drive"
+# Settle on the pushed screen before touching anything on it. Without this the
+# next tap can arrive mid-transition and land on the first row instead, opening a
+# document the flow did not ask for.
+- extendedWaitUntil:
+    visible: "Search documents"
+    timeout: 15000
+- waitForAnimationToEnd
+- extendedWaitUntil:
+    visible: "Open Onboarding checklist"
+    timeout: 15000
+# Folders come from the paths documents carry, so both are listed together.
+- assertVisible: "Folder contracts"
+- assertVisible: "Folder facilities"
+- takeScreenshot: .maestro/output/elliptic/drive-01-root
+
+# --- a document opens in a sheet, inside the app --------------------------
+- tapOn: "Open Onboarding checklist"
+- extendedWaitUntil:
+    visible: "Document Onboarding checklist"
+    timeout: 15000
+- assertVisible: "Done"
+- takeScreenshot: .maestro/output/elliptic/drive-02-document-sheet
+- tapOn: "Done"
+- waitForAnimationToEnd
+- assertVisible: "Open Onboarding checklist"
+
+# --- folders walk in, and nest -------------------------------------------
+- tapOn: "Folder contracts"
+- waitForAnimationToEnd
+- assertVisible: "Open Beta NDA"
+- assertVisible: "Folder 2026"
+- tapOn: "Folder 2026"
+- waitForAnimationToEnd
+- assertVisible: "Open Acme MSA 2026"
+- takeScreenshot: .maestro/output/elliptic/drive-03-folder
+# The native header's back button carries the parent folder's name, so walking
+# out is a tap on that name. (An edge-swipe `back` does not reach it here.)
+- tapOn: "contracts"
+- waitForAnimationToEnd
+- tapOn: "Drive"
+- waitForAnimationToEnd
+- assertVisible: "Open Onboarding checklist"
+
+# --- search reaches across every folder ----------------------------------
+- tapOn: "Search documents"
+- inputText: "floor"
+- waitForAnimationToEnd
+- assertVisible: "Open Floor plan"
+- assertNotVisible: "Open Onboarding checklist"
+- takeScreenshot: .maestro/output/elliptic/drive-04-search
+- eraseText
+- waitForAnimationToEnd
+- assertVisible: "Open Onboarding checklist"
+# The keyboard covers the tab bar, so it has to go before switching tabs.
+- pressKey: Enter
+- waitForAnimationToEnd
+
+# --- a document mention inside a task description ------------------------
+# Home lists the assigned tasks flat, where the board groups them by status.
+- tapOn: "Home"
+- waitForAnimationToEnd
+- tapOn:
+    text: ".*Renew the Acme agreement.*"
+- extendedWaitUntil:
+    visible: "DRV-1"
+    timeout: 15000
+# The description block is one accessibility element ("Edit description"), so the
+# mentions inside it cannot be selected by their text — the screenshot is the
+# record that both documents render as links.
+- assertVisible: "Edit description"
+- takeScreenshot: .maestro/output/elliptic/drive-05-mention-in-description
+# Tap the first mention where it sits in that block. A tap on the link opens the
+# document; a tap anywhere else would start editing instead, which is why the
+# assertion below is the sheet itself rather than only a screenshot.
+- tapOn:
+    point: "54%,45%"
+- extendedWaitUntil:
+    visible: "Document Acme MSA 2026"
+    timeout: 20000
+- takeScreenshot: .maestro/output/elliptic/drive-06-mention-opens-in-app
+- tapOn: "Done"
+- waitForAnimationToEnd
+# Back on the task, not in a browser.
+- assertVisible: "DRV-1"

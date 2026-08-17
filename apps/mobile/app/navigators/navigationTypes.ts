@@ -25,6 +25,10 @@ export type NotesStackParamList = {
   // stack gives them the platform's own back button and its edge-swipe gesture.
   NotesList: { folderId?: string; title?: string } | undefined
   NoteDetail: { noteId: string; title: string }
+  // The Drive shares the Notes tab: both are the reference material a task
+  // description points at. A folder is pushed like a note folder. Opening a
+  // document is not a screen — see DocumentViewerProvider.
+  Drive: { folderPath?: string; title?: string } | undefined
 }
 
 export type InboxStackParamList = {

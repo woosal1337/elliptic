@@ -1,10 +1,11 @@
 import { FC, Fragment, ReactNode } from "react"
-import { Linking, TextStyle } from "react-native"
+import { TextStyle } from "react-native"
 
 import { CODE_STYLE, ITALIC_STYLE } from "@/components/markdownStyles"
 import { Text, TextProps } from "@/components/Text"
 import { useAppTheme } from "@/theme/context"
 import { parseInline, type Span } from "@/utils/markdown"
+import { openMarkdownLink } from "@/utils/mentionLink"
 
 /**
  * Inline markdown for one-line strings — titles, mostly.
@@ -66,7 +67,7 @@ export const InlineMarkdown: FC<
             key={key}
             text={span.text}
             style={{ color: colors.tint }}
-            onPress={() => void Linking.openURL(span.href)}
+            onPress={() => openMarkdownLink(span.href, span.text)}
           />
         )
       default:

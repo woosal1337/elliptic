@@ -80,7 +80,7 @@ function findMention(node: JsonNode): JsonNode | null {
   return null;
 }
 
-async function roundTrip(kind: "note" | "task" | "user", id: string, label: string) {
+async function roundTrip(kind: "note" | "task" | "user" | "file", id: string, label: string) {
   const a = await buildEditor();
   a.commands.setContent({
     type: "doc",
@@ -134,6 +134,23 @@ describe("mention markdown round-trip", () => {
     expect(mention?.type).toBe("mention");
     expect(mention?.attrs?.id).toBe("user-42");
     expect(mention?.attrs?.kind).toBe("user");
+  });
+
+  it("re-hydrates a Drive document mention chip from stored markdown", async () => {
+    const { markdown, mention } = await roundTrip("file", "file-7", "Acme MSA.pdf");
+    expect(markdown).toContain("/__mention/file/file-7");
+    expect(mention?.type).toBe("mention");
+    expect(mention?.attrs?.id).toBe("file-7");
+    expect(mention?.attrs?.kind).toBe("file");
+    expect(mention?.attrs?.label).toBe("Acme MSA.pdf");
+  });
+
+  it("keeps a document mention distinct from a note mention", async () => {
+    const file = await roundTrip("file", "same-id", "Same name");
+    const note = await roundTrip("note", "same-id", "Same name");
+    expect(file.mention?.attrs?.kind).toBe("file");
+    expect(note.mention?.attrs?.kind).toBe("note");
+    expect(file.markdown).not.toBe(note.markdown);
   });
 
   it("leaves an ordinary markdown link as a Link mark, not a mention", async () => {

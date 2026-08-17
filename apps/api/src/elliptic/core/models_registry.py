@@ -17,6 +17,7 @@ from elliptic.modules.customers.models import Customer, CustomerRequest
 from elliptic.modules.cycles.models import Cycle
 from elliptic.modules.dashboards.models import Dashboard, DashboardWidget
 from elliptic.modules.domains.models import OrgDomain
+from elliptic.modules.drive.models import DriveFile
 from elliptic.modules.embeds.models import NoteEmbed
 from elliptic.modules.events.models import Event
 from elliptic.modules.favorites.models import Favorite
@@ -139,6 +140,7 @@ __all__ = [
     "DashboardWidget",
     "DeletedEntity",
     "DeviceToken",
+    "DriveFile",
     "EmailIntake",
     "Event",
     "EventOutbox",

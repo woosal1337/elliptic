@@ -8,6 +8,7 @@ from elliptic.modules.mcp_server import (
     tools_automation,  # noqa: F401
     tools_brain,  # noqa: F401
     tools_comments,  # noqa: F401
+    tools_drive,  # noqa: F401
     tools_events,  # noqa: F401
     tools_integrations,  # noqa: F401
     tools_meeting_templates,  # noqa: F401

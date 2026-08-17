@@ -1,5 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
+import { DriveScreen } from "@/screens/DriveScreen"
 import { NoteDetailScreen } from "@/screens/NoteDetailScreen"
 import { NotesScreen } from "@/screens/NotesScreen"
 
@@ -26,6 +27,11 @@ export function NotesNavigator() {
         name="NoteDetail"
         component={NoteDetailScreen}
         options={({ route }) => ({ title: route.params.title })}
+      />
+      <Stack.Screen
+        name="Drive"
+        component={DriveScreen}
+        options={({ route }) => ({ headerShown: true, title: route.params?.title ?? "Drive" })}
       />
     </Stack.Navigator>
   )

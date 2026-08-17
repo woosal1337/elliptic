@@ -1,11 +1,12 @@
 import { FC, Fragment, ReactNode } from "react"
-import { Linking, ScrollView, StyleSheet, TextStyle, View, ViewStyle } from "react-native"
+import { ScrollView, StyleSheet, TextStyle, View, ViewStyle } from "react-native"
 
 import { CODE_STYLE, headingStyle, ITALIC_STYLE } from "@/components/markdownStyles"
 import { Text } from "@/components/Text"
 import { useAppTheme } from "@/theme/context"
 import { typography } from "@/theme/typography"
 import { parseBlocks, parseInline, type Block, type Span } from "@/utils/markdown"
+import { openMarkdownLink } from "@/utils/mentionLink"
 
 /**
  * Read-only markdown for task descriptions, comments and notes.
@@ -40,7 +41,7 @@ export const Markdown: FC<{ source: string }> = ({ source }) => {
               key={key}
               text={span.text}
               style={{ color: colors.tint }}
-              onPress={() => void Linking.openURL(span.href)}
+              onPress={() => openMarkdownLink(span.href, span.text)}
             />
           )
         default:

@@ -142,6 +142,12 @@ export const NotesScreen: FC<NotesStackScreenProps<"NotesList">> = ({ navigation
             activeOrg
               ? [
                   {
+                    key: "drive",
+                    icon: "paperclip",
+                    label: "Drive",
+                    onPress: () => navigation.push("Drive", {}),
+                  },
+                  {
                     key: "create",
                     icon: "plus",
                     label: "New",

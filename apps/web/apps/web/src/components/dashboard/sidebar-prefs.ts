@@ -17,6 +17,7 @@ export const SIDEBAR_ITEMS: readonly SidebarItemDef[] = [
   { key: "assistant", label: "Assistant", segment: "assistant", section: "personal" },
   { key: "triage", label: "Triage", segment: "triage", section: "personal" },
   { key: "notes", label: "Notes", segment: "notes", section: "personal" },
+  { key: "drive", label: "Drive", segment: "drive", section: "team" },
   { key: "projects", label: "Projects", segment: "projects", section: "team" },
   { key: "initiatives", label: "Initiatives", segment: "initiatives", section: "team" },
   { key: "releases", label: "Releases", segment: "releases", section: "team" },

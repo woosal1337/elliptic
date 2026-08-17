@@ -17,6 +17,7 @@ class StoredObjectEntity(enum.StrEnum):
     TASK = "task"
     AI_CHAT = "ai_chat"
     PROJECT = "project"
+    DRIVE = "drive"
     GENERAL = "general"
 
 

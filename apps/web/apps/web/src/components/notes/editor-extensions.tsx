@@ -20,6 +20,7 @@ import {
   ListChecks,
   ListOrdered,
   Minus,
+  Paperclip,
   Quote,
   Text,
   type LucideIcon,
@@ -255,7 +256,7 @@ export type MentionItem = {
   id: string;
   label: string;
   hint?: string;
-  kind: "user" | "task" | "note";
+  kind: "user" | "task" | "note" | "file";
 };
 
 const MentionList = forwardRef<
@@ -329,11 +330,18 @@ const MentionList = forwardRef<
                 aria-hidden="true"
               />
             ) : null}
+            {item.kind === "file" ? (
+              <Paperclip className="size-3.5 shrink-0 text-accent" aria-hidden="true" />
+            ) : null}
             <span className="truncate text-small text-foreground">{item.label}</span>
           </span>
           {item.kind === "note" ? (
             <span className="shrink-0 rounded-sm bg-accent-subtle/40 px-1 text-caption text-accent">
               Note
+            </span>
+          ) : item.kind === "file" ? (
+            <span className="shrink-0 rounded-sm bg-accent-subtle/40 px-1 text-caption text-accent">
+              Drive
             </span>
           ) : item.hint ? (
             <span className="shrink-0 font-mono text-caption text-muted-foreground">
@@ -575,6 +583,7 @@ export type MentionConfig = {
 function mentionKind(value: string | undefined): MentionItem["kind"] {
   if (value === "task") return "task";
   if (value === "note") return "note";
+  if (value === "file") return "file";
   return "user";
 }
 
@@ -582,6 +591,7 @@ function mentionText(kind: string | undefined, label: string | undefined): strin
   const text = label ?? "";
   if (kind === "task") return `#${text}`;
   if (kind === "note") return `※${text}`;
+  if (kind === "file") return `▤${text}`;
   return `@${text}`;
 }
 
@@ -627,7 +637,8 @@ function MentionChip({
 }) {
   const kind = mentionKind(node.attrs.kind);
   const interactive =
-    (kind === "task" || kind === "note") && typeof onActivate === "function";
+    (kind === "task" || kind === "note" || kind === "file") &&
+    typeof onActivate === "function";
   const activate = () =>
     onActivate?.({
       id: node.attrs.id ?? "",
@@ -657,6 +668,7 @@ function MentionChip({
         "mx-0.5 inline-flex items-center gap-0.5 rounded-sm px-1 align-baseline font-medium",
         kind === "task" && "bg-subtle font-mono text-caption text-foreground",
         kind === "note" && "bg-accent-subtle/40 text-small text-accent",
+        kind === "file" && "bg-accent-subtle/40 text-small text-accent",
         kind === "user" && "bg-accent-subtle/50 text-small text-accent",
         interactive &&
           "cursor-pointer transition-colors hover:bg-accent-subtle hover:text-accent"
@@ -664,6 +676,8 @@ function MentionChip({
     >
       {kind === "note" ? (
         <FileText className="size-3 shrink-0" aria-hidden="true" />
+      ) : kind === "file" ? (
+        <Paperclip className="size-3 shrink-0" aria-hidden="true" />
       ) : (
         <span aria-hidden="true">{kind === "task" ? "#" : "@"}</span>
       )}

@@ -74,6 +74,10 @@ export const DOCS_NAV: DocsNavGroup[] = [
         "label": "Files, attachments & embeds"
       },
       {
+        "slug": "drive",
+        "label": "The Drive"
+      },
+      {
         "slug": "dashboards-analytics",
         "label": "Dashboards & analytics"
       },

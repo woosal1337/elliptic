@@ -71,6 +71,7 @@ import { useOrgMembers } from "@/hooks/use-org-queries";
 import { useAIUsers } from "@/hooks/use-ai-queries";
 import { useMe } from "@/hooks/use-auth-queries";
 import { useNotes } from "@/hooks/use-note-queries";
+import { driveFileHref, useDriveFiles } from "@/hooks/use-drive-queries";
 import { useProjectMembers } from "@/hooks/use-project-queries";
 import { ErrorState } from "@/components/error-state";
 import { useTaskDetailCommands } from "@/components/command/use-host-commands";
@@ -662,6 +663,7 @@ function TaskDetailBody({
   const projectMembers = useProjectMembers(orgId, projectId);
   const projectTasks = useTasks(orgId, projectId);
   const projectNotes = useNotes(orgId, projectId);
+  const driveFiles = useDriveFiles(orgId, null, "");
   const [title, setTitle] = useState(task.title);
   const [description, setDescription] = useState(task.description ?? "");
   const commitTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -736,17 +738,33 @@ function TaskDetailBody({
             label: shortTitle(note.title),
             kind: "note" as const,
           }));
-        return [...taskMatches, ...noteMatches].slice(0, 8);
+        // Drive documents are org-scoped, so the same contract can be linked from
+        // any project's tasks without being copied per project.
+        const fileMatches: MentionItem[] = (driveFiles.data ?? [])
+          .filter((file) => q.length === 0 || file.name.toLowerCase().includes(q))
+          .map((file) => ({
+            id: file.id,
+            label: shortTitle(file.name),
+            hint: file.folder_path || undefined,
+            kind: "file" as const,
+          }));
+        return [...taskMatches, ...noteMatches, ...fileMatches].slice(0, 8);
       },
       onActivate: (item: MentionItem) => {
         if (item.kind === "note") {
           router.push(`/app/${orgId}/notes/${item.id}`);
           return;
         }
+        if (item.kind === "file") {
+          // The Drive previews it in place; a signed storage URL in a new tab
+          // would take the reader out of Elliptic to read Elliptic's own file.
+          router.push(driveFileHref(orgId, item.id));
+          return;
+        }
         onNavigate?.(item.id);
       },
     }),
-    [projectTasks.data, projectNotes.data, task.id, onNavigate, router, orgId],
+    [projectTasks.data, projectNotes.data, driveFiles.data, task.id, onNavigate, router, orgId],
   );
 
   const projectMemberIds = new Set((projectMembers.data ?? []).map((member) => member.user_id));
