@@ -39,12 +39,22 @@ enum StatusFilter: String, AppEnum, CaseIterable {
 
   static var typeDisplayRepresentation: TypeDisplayRepresentation { "Status" }
 
+  /// The Edit Widget sheet is drawn by the system, not by us — we hand it an
+  /// enum and iOS renders the picker. A title-only case gets a bare row, which
+  /// is why the symbols are here: they are the only part of that list we
+  /// control.
+  ///
+  /// Each one mirrors the glyph `app/components/StatusIcon.tsx` draws for the
+  /// same status — a dashed ring for backlog, an empty ring for todo, then an
+  /// increasingly filled centre. Change them together.
   static var caseDisplayRepresentations: [StatusFilter: DisplayRepresentation] {
     [
-      .backlog: "Backlog",
-      .todo: "Todo",
-      .inProgress: "In progress",
-      .inReview: "In review",
+      .backlog: DisplayRepresentation(title: "Backlog", image: .init(systemName: "circle.dashed")),
+      .todo: DisplayRepresentation(title: "Todo", image: .init(systemName: "circle")),
+      .inProgress: DisplayRepresentation(
+        title: "In progress", image: .init(systemName: "smallcircle.filled.circle")),
+      .inReview: DisplayRepresentation(
+        title: "In review", image: .init(systemName: "largecircle.fill.circle")),
     ]
   }
 }
@@ -56,7 +66,9 @@ struct OrgEntity: AppEntity, Identifiable {
   let name: String
 
   static var typeDisplayRepresentation: TypeDisplayRepresentation { "Organization" }
-  var displayRepresentation: DisplayRepresentation { DisplayRepresentation(title: "\(name)") }
+  var displayRepresentation: DisplayRepresentation {
+    DisplayRepresentation(title: "\(name)", image: .init(systemName: "building.2"))
+  }
   static var defaultQuery = OrgQuery()
 }
 
@@ -93,7 +105,7 @@ struct ProjectEntity: AppEntity, Identifiable {
   /// organisation — see `ProjectQuery`. Two workspaces can both have a
   /// "Platform" project, and only the key tells them apart.
   var displayRepresentation: DisplayRepresentation {
-    DisplayRepresentation(title: "\(name)", subtitle: "\(key)")
+    DisplayRepresentation(title: "\(name)", subtitle: "\(key)", image: .init(systemName: "folder"))
   }
 
   static var defaultQuery = ProjectQuery()

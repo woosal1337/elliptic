@@ -1,5 +1,23 @@
+import OSLog
 import SwiftUI
 import WidgetKit
+
+/// What the provider was actually handed, for COS-405.
+///
+/// A widget extension has no debugger you can rely on and no console of its
+/// own, so the only way to see the configuration WidgetKit delivers is to log
+/// it and read it back:
+///
+///     xcrun simctl spawn booted log stream \
+///       --predicate 'subsystem == "sh.elliptic.Tasks"' --style compact
+///
+/// On a device, use Console.app with the same subsystem. Debug builds only —
+/// this must never ship. Delete it with COS-405.
+enum DiagnosticLog {
+  #if DEBUG
+    static let shared = Logger(subsystem: "sh.elliptic.Tasks", category: "widget")
+  #endif
+}
 
 /// One rendered widget: the tasks that matched, and what was asked for.
 struct TasksEntry: TimelineEntry {
@@ -36,6 +54,17 @@ struct TasksProvider: AppIntentTimelineProvider {
   private func entry(for configuration: TaskFilterIntent) -> TasksEntry {
     let snapshot = SnapshotStore.read()
     let matches = TaskSelection.matching(configuration, in: snapshot)
+    #if DEBUG
+      // COS-405: on the simulator this always prints the declared default,
+      // whatever the Edit Widget sheet was set to. Delete with that task.
+      DiagnosticLog.shared.log(
+        """
+        entry statuses=\(configuration.statuses.map(\.rawValue).joined(separator: ","), privacy: .public) \
+        org=\(configuration.organization?.name ?? "nil", privacy: .public) \
+        project=\(configuration.project?.key ?? "nil", privacy: .public) \
+        pool=\(snapshot.tasks.count, privacy: .public) matched=\(matches.count, privacy: .public)
+        """)
+    #endif
     return TasksEntry(
       date: Date(),
       configuration: configuration,
