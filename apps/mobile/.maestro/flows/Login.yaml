@@ -18,14 +18,17 @@ appId: sh.elliptic
       - tapOn:
           point: "90%, 45%"
 - assertVisible: "Sign in to your workspace"
-- tapOn:
-    text: "you@company.com"
+# Each field is one accessibility element carrying a combined label — the
+# hierarchy reads "Email, you@company.com" and "Password, ••••••••". Maestro
+# full-matches its text regex, so the bare placeholder never matches and there
+# is no element labelled exactly "Password" to sit `below:`.
+- tapOn: "Email, .*"
+# The simulator keeps an autofilled password in the field. Without erasing,
+# the typed one is appended to it and the sign-in fails.
+- eraseText
 - inputText: ${MAESTRO_EMAIL}
-# The password field has no placeholder text of its own on Android, so it is
-# addressed by position: the field directly below the email one.
-- tapOn:
-    below:
-      text: "Password"
+- tapOn: "Password, .*"
+- eraseText
 - inputText: ${MAESTRO_PASSWORD}
 # hideKeyboard is flaky on iOS; the button is reachable with the keyboard up.
 - tapOn: "Sign in"

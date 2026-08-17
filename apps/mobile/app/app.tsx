@@ -26,11 +26,13 @@ import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { KeyboardProvider } from "react-native-keyboard-controller"
 import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context"
 
+import { DeepLinkRouter } from "./components/DeepLinkRouter"
 import { OfflineSync } from "./components/OfflineSync"
 import { PrivacyOverlay } from "./components/PrivacyOverlay"
 import { PushRegistrar } from "./components/PushRegistrar"
 import { ToastProvider } from "./components/Toast"
 import { AuthProvider } from "./context/AuthContext"
+import { DocumentViewerProvider } from "./context/DocumentViewer"
 import { OrgProvider } from "./context/OrgContext"
 import { initI18n } from "./i18n"
 import { AppNavigator } from "./navigators/AppNavigator"
@@ -106,13 +108,16 @@ export function App() {
               <ToastProvider>
                 <PersistQueryClientProvider client={queryClient} persistOptions={persistOptions}>
                   <OrgProvider>
-                    <AppNavigator
-                      linking={linking}
-                      initialState={initialNavigationState}
-                      onStateChange={onNavigationStateChange}
-                    />
-                    <PushRegistrar />
-                    <OfflineSync />
+                    <DocumentViewerProvider>
+                      <AppNavigator
+                        linking={linking}
+                        initialState={initialNavigationState}
+                        onStateChange={onNavigationStateChange}
+                      />
+                      <PushRegistrar />
+                      <DeepLinkRouter />
+                      <OfflineSync />
+                    </DocumentViewerProvider>
                   </OrgProvider>
                 </PersistQueryClientProvider>
                 <PrivacyOverlay />
