@@ -54,7 +54,6 @@ import { NoteOutline } from "@/components/notes/note-outline";
 import { NoteAttachments } from "@/components/notes/note-attachments";
 import { NoteComments } from "@/components/notes/note-comments";
 import { NoteWorkItems } from "@/components/notes/note-work-items";
-import { NoteAiSidecar } from "@/components/notes/note-ai-sidecar";
 import { NoteHistoryButton } from "@/components/notes/note-history";
 import { NoteExportMenu } from "@/components/notes/note-export-menu";
 import { SaveNoteTemplateButton } from "@/components/notes/save-note-template";
@@ -362,13 +361,6 @@ export default function NoteEditorPage() {
           <div className="sticky top-8 hidden h-fit lg:block">
             {showAttachments ? (
               <NoteAttachments orgId={orgId} noteId={noteId} />
-            ) : showAi ? (
-              <NoteAiSidecar
-                orgId={orgId}
-                noteId={noteId}
-                content={body}
-                onInsert={(text) => setBody((current) => (current ? `${current}\n\n${text}` : text))}
-              />
             ) : showWorkItems ? (
               <NoteWorkItems
                 orgId={orgId}

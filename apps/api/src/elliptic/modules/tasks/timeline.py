@@ -93,7 +93,6 @@ async def project_timeline(
                 Task.org_id == ctx.org.id,
                 Task.project_id == project_id,
                 Task.archived_at.is_(None),
-                Task.is_triage.is_(False),
             )
             .order_by(Task.sort_order, Task.number)
         )

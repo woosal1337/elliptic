@@ -58,7 +58,6 @@ export function useUpdateOrg(orgId: string) {
     mutationFn: (input: {
       name?: string;
       description?: string | null;
-      ai_enabled?: boolean;
       block_backward_transitions?: boolean;
       residency_region?: string | null;
       compliance_frameworks?: string[];

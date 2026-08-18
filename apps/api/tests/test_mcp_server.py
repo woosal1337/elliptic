@@ -15,10 +15,8 @@ from httpx import AsyncClient
 
 from elliptic.core.config import get_settings
 from elliptic.core.database import session_factory
-from elliptic.modules.ai import service as ai_service
-from elliptic.modules.ai.providers import CompletionResult
 from elliptic.modules.mcp_auth import service
-from tests.helpers import create_org, create_project, import_meeting, register_and_login
+from tests.helpers import create_org, create_project, register_and_login
 
 _REDIRECT = "http://127.0.0.1:7777/cb"
 
@@ -148,12 +146,10 @@ async def test_task_tool_rejects_cross_org_project(app: FastAPI, client: AsyncCl
             await mcp_client.call_tool("list_project_tasks", {"project_id": project_b["id"]})
 
 
-async def test_meeting_and_event_tools(app: FastAPI, client: AsyncClient) -> None:
+async def test_meeting_tools(app: FastAPI, client: AsyncClient) -> None:
     auth = await register_and_login(client)
     org = await create_org(client, auth["headers"])
-    token = await _mint_token(
-        auth, org, ["meetings:read", "meetings:write", "events:read", "events:write"]
-    )
+    token = await _mint_token(auth, org, ["meetings:read", "meetings:write"])
     async with _mcp_client(app, token) as mcp_client:
         imported = await mcp_client.call_tool(
             "import_folio_meeting",
@@ -180,23 +176,6 @@ async def test_meeting_and_event_tools(app: FastAPI, client: AsyncClient) -> Non
             "list_meeting_segments", {"meeting_id": meeting["id"]}
         )
         assert segments.data["total"] == 1
-
-        created = await mcp_client.call_tool(
-            "create_calendar_event",
-            {
-                "title": "Standup",
-                "starts_at": "2026-06-16T09:00:00+00:00",
-                "ends_at": "2026-06-16T09:15:00+00:00",
-            },
-        )
-        event = created.data
-        assert event["title"] == "Standup"
-
-        events = await mcp_client.call_tool(
-            "list_calendar_events",
-            {"from_date": "2026-06-01T00:00:00+00:00", "to_date": "2026-06-30T00:00:00+00:00"},
-        )
-        assert any(item["id"] == event["id"] for item in events.data["items"])
 
 
 async def test_destructive_delete_requires_confirmation(app: FastAPI, client: AsyncClient) -> None:
@@ -239,35 +218,6 @@ async def test_create_task_idempotency(app: FastAPI, client: AsyncClient) -> Non
         assert len(matching) == 1
 
 
-async def test_agent_management_tools(app: FastAPI, client: AsyncClient) -> None:
-    auth = await register_and_login(client)
-    org = await create_org(client, auth["headers"])
-    token = await _mint_token(auth, org, ["agents:read", "agents:write"])
-    async with _mcp_client(app, token) as mcp_client:
-        created = await mcp_client.call_tool(
-            "create_ai_user",
-            {
-                "name": "Scout",
-                "provider": "anthropic",
-                "model": "claude-opus-4-8",
-                "system_prompt": "You triage inbound tasks.",
-            },
-        )
-        agent_id = created.data["id"]
-        assert created.data["is_active"] is True
-
-        budgeted = await mcp_client.call_tool(
-            "set_ai_user_budget", {"ai_user_id": agent_id, "budget_monthly_cents": 5000}
-        )
-        assert budgeted.data["budget_monthly_cents"] == 5000
-
-        paused = await mcp_client.call_tool("pause_ai_user", {"ai_user_id": agent_id})
-        assert paused.data["is_active"] is False
-
-        listed = await mcp_client.call_tool("list_ai_users", {})
-        assert any(item["id"] == agent_id for item in listed.data["items"])
-
-
 async def test_brain_tools(app: FastAPI, client: AsyncClient) -> None:
     auth = await register_and_login(client)
     org = await create_org(client, auth["headers"])
@@ -298,46 +248,6 @@ async def test_brain_tools(app: FastAPI, client: AsyncClient) -> None:
             "brain_changes_since", {"since": "2020-01-01T00:00:00+00:00"}
         )
         assert changes.data["count"] >= 1
-
-
-async def test_ai_meeting_tools(
-    app: FastAPI, client: AsyncClient, monkeypatch: pytest.MonkeyPatch
-) -> None:
-    class _FakeProvider:
-        async def complete(self, messages: Any, *, model: str, max_tokens: int) -> CompletionResult:
-            return CompletionResult(
-                content="## Summary\n- did things", model=model, input_tokens=10, output_tokens=3
-            )
-
-    monkeypatch.setattr(
-        ai_service,
-        "get_provider",
-        lambda provider, api_key, transport=None, base_url=None: _FakeProvider(),
-    )
-
-    auth = await register_and_login(client)
-    org = await create_org(client, auth["headers"])
-    key = await client.post(
-        f"/api/v1/orgs/{org['id']}/ai/keys",
-        json={
-            "provider": "openai",
-            "name": "primary",
-            "api_key": "sk-test-aaaabbbbccccdddd",
-            "is_default": True,
-        },
-        headers=auth["headers"],
-    )
-    assert key.status_code == 201, key.text
-    meeting = await import_meeting(client, auth["headers"], org["id"])
-    token = await _mint_token(auth, org, ["meetings:read", "meetings:write"])
-    async with _mcp_client(app, token) as mcp_client:
-        summary = await mcp_client.call_tool("summarize_meeting", {"meeting_id": meeting["id"]})
-        assert "content" in summary.data
-
-        answer = await mcp_client.call_tool(
-            "ask_meeting", {"meeting_id": meeting["id"], "question": "What happened?"}
-        )
-        assert answer.data["reply"]
 
 
 async def test_comment_attachments_visible_and_viewable_via_mcp(

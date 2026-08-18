@@ -36,15 +36,7 @@ export type ProjectStatus = "active" | "archived";
 
 export type MeetingSource = "folio" | "manual";
 
-export type EventScope = "team" | "personal";
-
 export type CommentEntityType = "task" | "meeting" | "note";
-
-export type AIProvider = "openai" | "anthropic" | "ollama" | "custom" | "bedrock";
-
-export type AIRunPurpose = "summarize" | "chat";
-
-export type AIRunStatus = "running" | "succeeded" | "failed";
 
 export interface Page<T> {
   items: T[];
@@ -81,7 +73,6 @@ export interface Org {
   name: string;
   slug: string;
   description: string | null;
-  ai_enabled: boolean;
   block_backward_transitions: boolean;
   residency_region: string | null;
   compliance_frameworks: string[];
@@ -148,12 +139,8 @@ export interface Project {
   status: ProjectStatus;
   network: ProjectNetwork;
   default_assignee_id: string | null;
-  intake_owner_id: string | null;
   state_id: string | null;
-  intake_enabled: boolean;
-  intake_inapp_enabled: boolean;
   worklog_approval_required: boolean;
-  intake_token: string | null;
   features: Record<string, boolean>;
   estimate_scale: string[];
   labels: string[];
@@ -273,42 +260,6 @@ export interface ThroughputPoint {
   resolved: number;
 }
 
-export type InitiativeStatus = "active" | "completed" | "archived";
-
-export interface Initiative {
-  id: string;
-  org_id: string;
-  name: string;
-  description: string | null;
-  target_date: string | null;
-  status: InitiativeStatus;
-  project_count: number;
-  task_total: number;
-  task_done: number;
-  task_started: number;
-  task_todo: number;
-  weighted_total: number;
-  weighted_done: number;
-  created_at: string;
-}
-
-export interface InitiativeUpdate {
-  id: string;
-  initiative_id: string;
-  health: ProjectHealth;
-  summary: string;
-  created_by: string | null;
-  created_at: string;
-}
-
-export interface InitiativeProject {
-  id: string;
-  name: string;
-  key: string;
-  task_total: number;
-  task_done: number;
-}
-
 export type ModuleStatus =
   | "planned"
   | "in_progress"
@@ -365,22 +316,6 @@ export interface RbacAuditEntry {
   role_before: string | null;
   role_after: string | null;
   detail: Record<string, unknown> | null;
-}
-
-export type ReleaseStatus = "planned" | "released" | "archived";
-
-export interface Release {
-  id: string;
-  org_id: string;
-  name: string;
-  version: string | null;
-  description: string | null;
-  changelog: string | null;
-  status: ReleaseStatus;
-  released_at: string | null;
-  task_total: number;
-  task_done: number;
-  created_at: string;
 }
 
 export type WorklogApprovalStatus = "approved" | "pending" | "rejected";
@@ -458,7 +393,6 @@ export interface Task {
   status: TaskStatus;
   priority: TaskPriority;
   assignee_id: string | null;
-  bot_assignee_id: string | null;
   start_date: string | null;
   due_date: string | null;
   sort_order: number;
@@ -469,7 +403,6 @@ export interface Task {
   cycle_id: string | null;
   milestone_id: string | null;
   module_id: string | null;
-  release_id: string | null;
   custom_fields: Record<string, string>;
   dod_items: DodItem[];
   acceptance_criteria: string | null;
@@ -477,8 +410,6 @@ export interface Task {
   kind: TaskKind;
   severity: BugSeverity | null;
   component: string | null;
-  release_blocker: boolean;
-  intake_channel: string | null;
   archived_at: string | null;
   subtask_total: number;
   subtask_done: number;
@@ -600,93 +531,10 @@ export interface TranscriptSegment {
   position: number;
 }
 
-export interface MeetingSummary {
-  id: string;
-  meeting_id: string;
-  content: string;
-  model: string;
-  provider: string;
-  created_by: string;
-  ai_run_id: string | null;
-  created_at: string;
-}
-
-export interface MeetingChatMessage {
-  id: string;
-  role: "user" | "assistant";
-  content: string;
-}
-
-export interface MeetingChatResult {
-  reply: string;
-  model: string;
-  ai_run_id: string;
-}
-
-export interface MeetingChatCitation {
-  meeting_id: string;
-  meeting_title?: string;
-  segment_id?: string | null;
-  start_seconds?: number | null;
-  quote: string;
-}
-
-export interface OrgMeetingChatResult extends MeetingChatResult {
-  citations: MeetingChatCitation[];
-  coverage?: { consulted: number; total: number };
-}
-
-export interface RouteSuggestion {
-  project_id: string | null;
-  route: string | null;
-  confidence: number;
-}
-
-export interface ContextSignal {
-  kind: "related_task" | "related_meeting" | "related_note";
-  id: string;
-  title: string;
-  detail?: string | null;
-}
-
-export interface ContextAggregation {
-  signals: ContextSignal[];
-  confidence: number;
-  coverage?: { consulted: number; total: number };
-}
-
-export interface MeetingBriefBullet {
-  text: string;
-  source_kind: "meeting" | "task" | "note" | "project";
-  source_id: string;
-  source_label: string;
-}
-
-export interface MeetingBrief {
-  bullets: MeetingBriefBullet[];
-  confidence: number;
-  generated_at: string;
-}
-
 export interface TranscriptChapter {
   label: string;
   start_seconds: number;
   segment_id: string;
-}
-
-export interface MeetingTemplate {
-  id: string;
-  name: string;
-  sections: string[];
-  prompt_scaffold: string | null;
-  built_in: boolean;
-}
-
-export interface MeetingRecipe {
-  id: string;
-  name: string;
-  prompt: string;
-  built_in: boolean;
 }
 
 export interface MeetingShare {
@@ -699,33 +547,8 @@ export interface MeetingShare {
 
 export interface PublicMeetingShare {
   meeting_title: string;
-  summary: string | null;
-  action_items: string[];
-  decisions: string[];
   include_transcript: boolean;
   transcript: TranscriptSegment[];
-}
-
-export interface PublicMeetingChatResult {
-  reply: string;
-  grounded: boolean;
-}
-
-export interface Event {
-  id: string;
-  org_id: string;
-  owner_id: string | null;
-  scope: EventScope;
-  title: string;
-  description: string | null;
-  location: string | null;
-  starts_at: string;
-  ends_at: string;
-  all_day: boolean;
-  meeting_id: string | null;
-  created_by: string;
-  created_at: string;
-  updated_at: string;
 }
 
 export type NoteVisibility = "public" | "private" | "shared";
@@ -776,39 +599,6 @@ export interface NoteShare {
   note_id: string;
   user_id: string;
   access: NoteShareAccess;
-}
-
-export interface AIProviderKey {
-  id: string;
-  provider: AIProvider;
-  name: string;
-  last4: string;
-  is_default: boolean;
-  created_at: string;
-}
-
-export interface AIRun {
-  id: string;
-  org_id: string;
-  provider: AIProvider;
-  model: string;
-  purpose: AIRunPurpose;
-  input_tokens: number | null;
-  output_tokens: number | null;
-  status: AIRunStatus;
-  error: string | null;
-  created_at: string;
-}
-
-export interface AIUser {
-  id: string;
-  org_id: string;
-  name: string;
-  provider: AIProvider;
-  model: string;
-  system_prompt: string;
-  is_active: boolean;
-  created_at: string;
 }
 
 export type WebhookProvider = "slack" | "discord";

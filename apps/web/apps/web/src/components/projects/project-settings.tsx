@@ -15,8 +15,6 @@ import { ProjectSaveTemplate } from "@/components/projects/project-save-template
 import { ProjectStatePicker } from "@/components/projects/project-state-picker";
 import { ProjectWorklogApprovals } from "@/components/projects/project-worklog-approvals";
 import { ProjectDefaultAssignee } from "@/components/projects/project-default-assignee";
-import { ProjectIntakeOwner } from "@/components/projects/project-intake-owner";
-import { ProjectIntakeForms } from "@/components/projects/project-intake-forms";
 import { ProjectRecurringTasks } from "@/components/projects/project-recurring-tasks";
 import { ProjectRetrospectives } from "@/components/projects/project-retrospectives";
 import { ProjectSentryIntake } from "@/components/projects/project-sentry-intake";
@@ -24,7 +22,6 @@ import { ProjectEmailIntake } from "@/components/projects/project-email-intake";
 import { ProjectGitConnection } from "@/components/projects/project-git-connection";
 import { ProjectImport } from "@/components/projects/project-import";
 import { ProjectBoardPublish } from "@/components/projects/project-board-publish";
-import { ProjectIntakeForm } from "@/components/projects/project-intake-form";
 import { ProjectVisibility } from "@/components/projects/project-visibility";
 import { ProjectIdentitySettings } from "@/components/projects/project-identity-settings";
 
@@ -107,9 +104,6 @@ export function ProjectSettings({ orgId, projectId }: { orgId: string; projectId
       <ProjectIdentitySettings orgId={orgId} project={project.data} canManage={canManage} />
       <ProjectVisibility orgId={orgId} project={project.data} canManage={canManage} />
       <ProjectDefaultAssignee orgId={orgId} project={project.data} canManage={canManage} />
-      <ProjectIntakeOwner orgId={orgId} project={project.data} canManage={canManage} />
-      <ProjectIntakeForm orgId={orgId} project={project.data} canManage={canManage} />
-      <ProjectIntakeForms orgId={orgId} projectId={project.data.id} canManage={canManage} />
       <ProjectRecurringTasks orgId={orgId} projectId={project.data.id} canManage={canManage} />
       <ProjectRetrospectives orgId={orgId} projectId={project.data.id} canManage={canManage} />
       <ProjectSentryIntake orgId={orgId} projectId={project.data.id} canManage={canManage} />

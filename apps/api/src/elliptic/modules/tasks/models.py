@@ -5,7 +5,6 @@ import uuid
 from datetime import date, datetime
 
 from sqlalchemy import (
-    Boolean,
     Column,
     Date,
     DateTime,
@@ -18,7 +17,6 @@ from sqlalchemy import (
     Table,
     Text,
     UniqueConstraint,
-    false,
     text,
 )
 from sqlalchemy.dialects.postgresql import JSONB
@@ -179,9 +177,6 @@ class Task(BaseModel):
     assignee_id: Mapped[uuid.UUID | None] = mapped_column(
         ForeignKey("users.id", ondelete="SET NULL"), nullable=True, index=True
     )
-    bot_assignee_id: Mapped[uuid.UUID | None] = mapped_column(
-        ForeignKey("ai_users.id", ondelete="SET NULL"), nullable=True, index=True
-    )
     start_date: Mapped[date | None] = mapped_column(Date, nullable=True)
     due_date: Mapped[date | None] = mapped_column(Date, nullable=True)
     sort_order: Mapped[float] = mapped_column(Float, default=0.0)
@@ -206,9 +201,6 @@ class Task(BaseModel):
     module_id: Mapped[uuid.UUID | None] = mapped_column(
         ForeignKey("modules.id", ondelete="SET NULL"), nullable=True, index=True
     )
-    release_id: Mapped[uuid.UUID | None] = mapped_column(
-        ForeignKey("releases.id", ondelete="SET NULL"), nullable=True, index=True
-    )
     workflow_status_id: Mapped[uuid.UUID | None] = mapped_column(
         ForeignKey("workflow_statuses.id", ondelete="SET NULL"), nullable=True, index=True
     )
@@ -227,14 +219,6 @@ class Task(BaseModel):
         Enum(BugSeverity, native_enum=False, length=20), nullable=True
     )
     component: Mapped[str | None] = mapped_column(String(100), nullable=True)
-    release_blocker: Mapped[bool] = mapped_column(Boolean, default=False, server_default=false())
-    is_triage: Mapped[bool] = mapped_column(
-        Boolean, default=False, server_default=false(), index=True
-    )
-    triage_resolved_at: Mapped[datetime | None] = mapped_column(
-        DateTime(timezone=True), nullable=True
-    )
-    intake_channel: Mapped[str | None] = mapped_column(String(20), nullable=True)
     external_source: Mapped[str | None] = mapped_column(String(50), nullable=True)
     external_id: Mapped[str | None] = mapped_column(String(255), nullable=True)
     snoozed_till: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)

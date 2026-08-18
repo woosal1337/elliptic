@@ -1,4 +1,4 @@
-import { BrowserFrame, IsoStack, IsoCubes, IsoFan } from "@elliptic/ui";
+import { BrowserFrame, IsoStack, IsoCubes } from "@elliptic/ui";
 import { pageMetadata } from "@/lib/seo";
 import {
   FeaturePageShell,
@@ -58,10 +58,10 @@ const ROWS: FeatureRowData[] = [
         caption="task.json"
         code={`{
   "identifier": "DEMO-42",
-  "title":      "Cut the 1.0 release",
+  "title":      "Ship the 1.0 rewrite",
   "status":     "in_progress",
   "priority":   "high",
-  "assignee":   "agent:release-bot",
+  "assignee":   "ada@acme.com",
   "labels":     ["launch", "p0"],
   "cycle":      "Cycle 7"
 }
@@ -73,35 +73,6 @@ const ROWS: FeatureRowData[] = [
     ),
     figure: <IsoCubes className="size-full" />,
     figureLabel: "FIG 2.2",
-  },
-  {
-    index: "2.2.3",
-    label: "Query the work",
-    titleLead: "Ask the board a question.",
-    titleRest: "PQL turns a filter into a saved, shared view.",
-    description:
-      "PQL is a small query language for work. Compose filters across status, assignee, priority, label, and cycle, then save the result as a view your team and your agents share. The same query powers the board, the table, and the API.",
-    points: [
-      "Filter on any field, combined with and / or",
-      "Save a query as a named, shared view",
-      "The same PQL drives the UI and the API",
-    ],
-    visual: (
-      <CodeShowcase
-        caption="PQL"
-        code={`status:in_progress
-  and assignee:@me
-  and priority:>=high
-  and label:launch
-order by updated desc
-
-# saved as the view "My launch work".
-# every member and every agent resolves
-# the exact same set of tasks.`}
-      />
-    ),
-    figure: <IsoFan className="size-full" />,
-    figureLabel: "FIG 2.3",
   },
 ];
 
@@ -157,7 +128,6 @@ export default function ProjectsPage() {
         specs={[
           { value: "DEMO-42", label: "Stable task identifiers" },
           { value: "3", label: "List, Board, and Table views" },
-          { value: "PQL", label: "A query language for work" },
           { value: "0", label: "Global endpoints, every row org-scoped" },
         ]}
       />
@@ -191,7 +161,7 @@ export default function ProjectsPage() {
         <CodeShowcase
           caption="company-brain MCP"
           code={`# an agent creates and moves real work
-create_task(project="DEMO", title="Cut the 1.0 release",
+create_task(project="DEMO", title="Ship the 1.0 rewrite",
             priority="high", labels=["launch"])
 # -> { "identifier": "DEMO-42", "status": "backlog" }
 

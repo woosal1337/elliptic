@@ -13,8 +13,6 @@ from elliptic.modules.activity.service import record_activity
 from elliptic.modules.integrations import slack_client
 from elliptic.modules.integrations.models import SlackConnection
 from elliptic.modules.integrations.schemas import SlackChannelOut, SlackConnectionOut
-from elliptic.modules.meetings import service as meetings_service
-from elliptic.modules.meetings.models import MeetingShare, MeetingSummary
 
 
 def _aad(org_id: uuid.UUID) -> bytes:
@@ -57,56 +55,6 @@ async def list_slack_channels(session: AsyncSession, ctx: OrgContext) -> list[Sl
     connection = await _require_connection(session, ctx)
     channels = await slack_client.list_channels(_bot_token(connection))
     return [SlackChannelOut(id=channel["id"], name=channel["name"]) for channel in channels]
-
-
-def build_slack_message(
-    title: str, summary: str | None, action_items: list[str], ask_url: str | None
-) -> str:
-    """Assemble the Slack message: title, summary, action items, and an Ask link."""
-    lines = [f"*{title}*"]
-    if summary:
-        lines.append(summary[:1500])
-    if action_items:
-        lines.append("*Action items*")
-        lines.extend(f"• {item}" for item in action_items[:10])
-    if ask_url:
-        lines.append(f"<{ask_url}|Ask about this meeting>")
-    return "\n".join(lines)
-
-
-async def send_meeting_to_slack(
-    session: AsyncSession, ctx: OrgContext, meeting_id: uuid.UUID, channel_id: str
-) -> bool:
-    """Post a meeting's summary + action items to a Slack channel."""
-    connection = await _require_connection(session, ctx)
-    meeting = await meetings_service.get_meeting(session, ctx, meeting_id)
-    summary = await session.scalar(
-        select(MeetingSummary)
-        .where(MeetingSummary.meeting_id == meeting.id)
-        .order_by(MeetingSummary.created_at.desc())
-        .limit(1)
-    )
-    action_items, _ = meetings_service.extract_action_items_decisions(summary)
-    share = await session.scalar(select(MeetingShare).where(MeetingShare.meeting_id == meeting.id))
-    ask_url = (
-        f"{get_settings().app_base_url}/share/meetings/{share.token}"
-        if share is not None and not share.revoked
-        else None
-    )
-    text = build_slack_message(
-        meeting.title, summary.content if summary is not None else None, action_items, ask_url
-    )
-    await slack_client.post_message(_bot_token(connection), channel_id, text)
-    await record_activity(
-        session,
-        org_id=ctx.org.id,
-        entity_type="meeting",
-        entity_id=meeting.id,
-        event_type="slack_posted",
-        actor_id=ctx.user.id,
-        payload={"channel_id": channel_id},
-    )
-    return True
 
 
 async def connect_slack(session: AsyncSession, ctx: OrgContext, code: str) -> SlackConnection:

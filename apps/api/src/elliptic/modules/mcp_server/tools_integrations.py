@@ -1,6 +1,5 @@
 """Slack integration tools mirroring the integrations router."""
 
-import uuid
 from typing import Any
 
 from elliptic.modules.integrations import service as integrations_service
@@ -27,17 +26,3 @@ async def list_slack_channels(org_id: str | None = None) -> dict[str, Any]:
         channels = await integrations_service.list_slack_channels(call.session, call.ctx)
         items = [channel.model_dump(mode="json") for channel in channels]
         return {"total": len(items), "items": items}
-
-
-@mcp.tool
-async def post_meeting_to_slack(
-    meeting_id: str, channel_id: str, org_id: str | None = None
-) -> dict[str, Any]:
-    """Post a meeting's summary and action items to a Slack channel.
-
-    Pass org_id to target a specific organization when using a multi-organization token."""
-    async with mcp_call("integrations:manage", org_id=org_id) as call:
-        ok_result = await integrations_service.send_meeting_to_slack(
-            call.session, call.ctx, uuid.UUID(meeting_id), channel_id
-        )
-        return {"ok": ok_result, "meeting_id": meeting_id, "channel_id": channel_id}

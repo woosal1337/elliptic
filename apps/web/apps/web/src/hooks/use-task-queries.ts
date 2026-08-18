@@ -73,7 +73,6 @@ export interface UpdateTaskInput {
   severity?: BugSeverity | null;
   component?: string | null;
   clear_component?: boolean;
-  release_blocker?: boolean;
   custom_fields?: Record<string, string>;
   dod_items?: DodItem[];
   acceptance_criteria?: string | null;
@@ -140,7 +139,6 @@ function draftTask(orgId: string, projectId: string, input: CreateTaskInput, lis
     kind: input.kind ?? "task",
     severity: input.severity ?? null,
     component: null,
-    release_blocker: false,
     intake_channel: null,
     archived_at: null,
     subtask_total: 0,

@@ -31,7 +31,6 @@ from elliptic.modules.projects.service import (
     next_task_number,
     require_project_role,
 )
-from elliptic.modules.releases.models import Release
 from elliptic.modules.sync import service as sync_service
 from elliptic.modules.tasks import type_levels
 from elliptic.modules.tasks.models import (
@@ -118,7 +117,6 @@ def task_to_out(
             "category": STATUS_TO_CATEGORY[task.status],
             "priority": task.priority,
             "assignee_id": task.assignee_id,
-            "bot_assignee_id": task.bot_assignee_id,
             "start_date": task.start_date,
             "due_date": task.due_date,
             "sort_order": task.sort_order,
@@ -130,7 +128,6 @@ def task_to_out(
             "cycle_id": task.cycle_id,
             "milestone_id": task.milestone_id,
             "module_id": task.module_id,
-            "release_id": task.release_id,
             "workflow_status_id": task.workflow_status_id,
             "custom_fields": task.custom_fields,
             "dod_items": task.dod_items,
@@ -139,12 +136,8 @@ def task_to_out(
             "kind": task.kind,
             "severity": task.severity,
             "component": task.component,
-            "release_blocker": task.release_blocker,
-            "is_triage": task.is_triage,
             "external_source": task.external_source,
             "external_id": task.external_id,
-            "triage_resolved_at": task.triage_resolved_at,
-            "intake_channel": task.intake_channel,
             "archived_at": task.archived_at,
             "subtask_total": subtask_total,
             "subtask_done": subtask_done,
@@ -362,17 +355,6 @@ async def _validate_assignee(
         raise BadRequestError("Guests cannot be assigned to work items")
 
 
-async def _validate_bot_assignee(session: AsyncSession, ctx: OrgContext, bot_id: uuid.UUID) -> None:
-    """The bot must be an active AI agent in this org (COS-272)."""
-    from elliptic.modules.ai.models import AIUser  # noqa: PLC0415
-
-    bot = await session.scalar(
-        select(AIUser).where(AIUser.id == bot_id, AIUser.org_id == ctx.org.id)
-    )
-    if bot is None:
-        raise BadRequestError("Bot must be an AI agent in this organization")
-
-
 async def _require_project_access(
     session: AsyncSession, ctx: OrgContext, project_id: uuid.UUID
 ) -> None:
@@ -573,20 +555,13 @@ async def _resolve_create_assignee(
     *,
     assign_to_creator: bool,
 ) -> uuid.UUID | None:
-    """Pick the effective assignee: explicit, else intake-owner (triage), else the
-    project default, else the creator. `unassigned` opts out of every fallback."""
+    """Pick the effective assignee: explicit, else the project default, else the
+    creator. `unassigned` opts out of every fallback."""
     if payload.unassigned:
         return None
     if payload.assignee_id is not None:
         await _validate_assignee(session, ctx, project.id, payload.assignee_id)
         return payload.assignee_id
-    if (
-        payload.is_triage
-        and project.intake_owner_id is not None
-        and await is_project_member(session, ctx, project.id, project.intake_owner_id)
-        and not await _is_guest(session, ctx, project.intake_owner_id)
-    ):
-        return project.intake_owner_id
     if (
         project.default_assignee_id is not None
         and await is_project_member(session, ctx, project.id, project.default_assignee_id)
@@ -657,8 +632,6 @@ async def create_task(
         kind=payload.kind,
         severity=payload.severity,
         component=payload.component,
-        release_blocker=payload.release_blocker,
-        is_triage=payload.is_triage,
         external_source=payload.external_source,
         external_id=payload.external_id,
         labels=labels,
@@ -666,7 +639,7 @@ async def create_task(
     workflow_status_id = await resolve_workflow_status_id(
         session, org_id=ctx.org.id, team_id=project.team_id, status=task.status
     )
-    if not payload.is_triage and not await status_allows_new_items(session, workflow_status_id):
+    if not await status_allows_new_items(session, workflow_status_id):
         raise BadRequestError("New work items can't be created in this status")
     session.add(task)
     await session.flush()
@@ -687,20 +660,6 @@ async def create_task(
     await _process_mentions(
         session, ctx, task, project, payload.mention_user_ids, payload.related_task_ids
     )
-    if task.is_triage:
-        if project.intake_owner_id is not None and project.intake_owner_id != ctx.user.id:
-            await notify(
-                session,
-                org_id=ctx.org.id,
-                recipient_id=project.intake_owner_id,
-                type=NotificationType.ASSIGNED,
-                entity_type="task",
-                entity_id=task.id,
-                actor_id=ctx.user.id,
-                title=f"New intake item in {project.name}",
-                snippet=task.title,
-            )
-        await run_trigger(session, ctx, task, AutomationTrigger.ON_TRIAGE_ENTRY)
     await _emit_task_created(session, ctx, task, project)
     return task, project
 
@@ -737,7 +696,6 @@ async def list_tasks(
     assignee_id: uuid.UUID | None = None,
     label_id: uuid.UUID | None = None,
     severity: BugSeverity | None = None,
-    release_blocker: bool | None = None,
     module_id: uuid.UUID | None = None,
     cycle_id: uuid.UUID | None = None,
     search: str | None = None,
@@ -751,7 +709,7 @@ async def list_tasks(
         raise NotFoundError("Project not found")
     await _require_project_access(session, ctx, project.id)
     query: Select[tuple[Task]] = select(Task).where(
-        Task.org_id == ctx.org.id, Task.project_id == project.id, Task.is_triage.is_(False)
+        Task.org_id == ctx.org.id, Task.project_id == project.id
     )
     if not include_archived:
         query = query.where(Task.archived_at.is_(None))
@@ -761,8 +719,6 @@ async def list_tasks(
         query = query.where(Task.assignee_id == assignee_id)
     if severity is not None:
         query = query.where(Task.severity == severity)
-    if release_blocker is not None:
-        query = query.where(Task.release_blocker.is_(release_blocker))
     if module_id is not None:
         query = query.where(Task.module_id == module_id)
     if cycle_id is not None:
@@ -800,7 +756,6 @@ async def board(
         .where(
             Task.org_id == ctx.org.id,
             Task.project_id == project.id,
-            Task.is_triage.is_(False),
         )
         .order_by(Task.sort_order, Task.number)
     )
@@ -845,7 +800,6 @@ async def list_user_tasks(
         .join(Project, Project.id == Task.project_id)
         .where(
             Task.org_id == ctx.org.id,
-            Task.is_triage.is_(False),
             Task.archived_at.is_(None),
         )
     )
@@ -907,8 +861,6 @@ def _apply_kind_and_severity(task: Task, payload: TaskUpdateIn) -> None:
         task.component = None
     elif payload.component is not None:
         task.component = payload.component
-    if payload.release_blocker is not None:
-        task.release_blocker = payload.release_blocker
 
 
 async def convert_task_kind(
@@ -1000,7 +952,7 @@ async def duplicate_task(
     return copy, target
 
 
-async def update_task(  # noqa: PLR0912, PLR0915
+async def update_task(  # noqa: PLR0912
     session: AsyncSession, ctx: OrgContext, task_id: uuid.UUID, payload: TaskUpdateIn
 ) -> tuple[Task, Project]:
     """Apply updates to a task."""
@@ -1025,11 +977,6 @@ async def update_task(  # noqa: PLR0912, PLR0915
         await _validate_assignee(session, ctx, task.project_id, payload.assignee_id)
         task.assignee_id = payload.assignee_id
         changes["assignee"] = str(payload.assignee_id)
-    if payload.clear_bot_assignee:
-        task.bot_assignee_id = None
-    elif payload.bot_assignee_id is not None:
-        await _validate_bot_assignee(session, ctx, payload.bot_assignee_id)
-        task.bot_assignee_id = payload.bot_assignee_id
     if payload.start_date is not None:
         task.start_date = payload.start_date
     if payload.due_date is not None:
@@ -1039,15 +986,6 @@ async def update_task(  # noqa: PLR0912, PLR0915
     if payload.label_ids is not None:
         task.labels = await _resolve_labels(session, ctx, payload.label_ids)
     _apply_kind_and_severity(task, payload)
-    if payload.clear_release:
-        task.release_id = None
-    elif payload.release_id is not None:
-        release = await session.scalar(
-            select(Release.id).where(Release.id == payload.release_id, Release.org_id == ctx.org.id)
-        )
-        if release is None:
-            raise BadRequestError("Release not found")
-        task.release_id = payload.release_id
     if not _within_creation_grace(task):
         event_type = "assigned" if "assignee" in changes else "updated"
         await record_activity(
@@ -1476,151 +1414,6 @@ async def list_subtasks(
     return list(result), project
 
 
-async def list_triage_tasks(
-    session: AsyncSession, ctx: OrgContext, *, resolved: bool = False
-) -> list[tuple[Task, str]]:
-    """List triage-queue tasks. Default = open (unresolved); resolved = closed/declined."""
-    resolved_clause = (
-        Task.triage_resolved_at.is_not(None) if resolved else Task.triage_resolved_at.is_(None)
-    )
-    where = [
-        Task.org_id == ctx.org.id,
-        Task.is_triage.is_(True),
-        resolved_clause,
-    ]
-    if not resolved:
-        where.append(or_(Task.snoozed_till.is_(None), Task.snoozed_till <= utcnow()))
-    rows = await session.execute(
-        select(Task, Project.key)
-        .join(Project, Project.id == Task.project_id)
-        .options(selectinload(Task.labels))
-        .where(*where)
-        .order_by(Task.created_at.desc(), Task.number.desc())
-    )
-    return [(task, key) for task, key in rows]
-
-
-async def triage_counts(session: AsyncSession, ctx: OrgContext) -> tuple[int, dict[uuid.UUID, int]]:
-    """Open (unresolved, un-snoozed) triage counts: org total + per-project."""
-    rows = await session.execute(
-        select(Task.project_id, func.count())
-        .where(
-            Task.org_id == ctx.org.id,
-            Task.is_triage.is_(True),
-            Task.triage_resolved_at.is_(None),
-            or_(Task.snoozed_till.is_(None), Task.snoozed_till <= utcnow()),
-        )
-        .group_by(Task.project_id)
-    )
-    by_project: dict[uuid.UUID, int] = {row[0]: row[1] for row in rows}
-    return sum(by_project.values()), by_project
-
-
-async def _resolve_triage_task(
-    session: AsyncSession, ctx: OrgContext, task_id: uuid.UUID
-) -> tuple[Task, Project]:
-    task, project = await get_task_with_project(session, ctx, task_id)
-    if not task.is_triage:
-        raise BadRequestError("Task is not in the triage queue")
-    return task, project
-
-
-async def accept_triage_task(
-    session: AsyncSession,
-    ctx: OrgContext,
-    task_id: uuid.UUID,
-    *,
-    status: TaskStatus = TaskStatus.TODO,
-) -> tuple[Task, Project]:
-    """Accept a triage task into the active board at the chosen (default unstarted) status."""
-    task, project = await _resolve_triage_task(session, ctx, task_id)
-    task.is_triage = False
-    task.snoozed_till = None
-    task.status = status
-    await record_activity(
-        session,
-        org_id=ctx.org.id,
-        entity_type="task",
-        entity_id=task.id,
-        event_type="triage_accepted",
-        actor_id=ctx.user.id,
-        project_id=task.project_id,
-        payload={"identifier": f"{project.key}-{task.number}", "status": status},
-    )
-    await session.flush()
-    return task, project
-
-
-async def snooze_triage_task(
-    session: AsyncSession, ctx: OrgContext, task_id: uuid.UUID, until: datetime
-) -> tuple[Task, Project]:
-    """Snooze a triage task: it leaves the queue until ``until``, then resurfaces."""
-    task, project = await _resolve_triage_task(session, ctx, task_id)
-    task.snoozed_till = until
-    await record_activity(
-        session,
-        org_id=ctx.org.id,
-        entity_type="task",
-        entity_id=task.id,
-        event_type="triage_snoozed",
-        actor_id=ctx.user.id,
-        project_id=task.project_id,
-        payload={"identifier": f"{project.key}-{task.number}", "until": until.isoformat()},
-    )
-    await session.flush()
-    return task, project
-
-
-async def mark_triage_duplicate(
-    session: AsyncSession,
-    ctx: OrgContext,
-    task_id: uuid.UUID,
-    duplicate_of: uuid.UUID | None = None,
-) -> tuple[Task, Project]:
-    """Resolve a triage task as a duplicate, optionally linking the original."""
-    task, project = await _resolve_triage_task(session, ctx, task_id)
-    task.is_triage = False
-    task.snoozed_till = None
-    task.status = TaskStatus.DUPLICATE
-    if duplicate_of is not None and duplicate_of != task.id:
-        await create_relation(session, ctx, task.id, duplicate_of, "duplicate")
-    await record_activity(
-        session,
-        org_id=ctx.org.id,
-        entity_type="task",
-        entity_id=task.id,
-        event_type="triage_marked_duplicate",
-        actor_id=ctx.user.id,
-        project_id=task.project_id,
-        payload={"identifier": f"{project.key}-{task.number}"},
-    )
-    await session.flush()
-    return task, project
-
-
-async def decline_triage_task(
-    session: AsyncSession, ctx: OrgContext, task_id: uuid.UUID, *, reason: str | None = None
-) -> tuple[Task, Project]:
-    """Decline a triage task: cancel it but keep it in the (closed) triage group."""
-    task, project = await _resolve_triage_task(session, ctx, task_id)
-    task.status = TaskStatus.CANCELLED
-    task.triage_resolved_at = utcnow()
-    await record_activity(
-        session,
-        org_id=ctx.org.id,
-        entity_type="task",
-        entity_id=task.id,
-        event_type="triage_declined",
-        actor_id=ctx.user.id,
-        project_id=task.project_id,
-        payload={"identifier": f"{project.key}-{task.number}", "reason": reason}
-        if reason
-        else {"identifier": f"{project.key}-{task.number}"},
-    )
-    await session.flush()
-    return task, project
-
-
 async def _auto_subscribe(
     session: AsyncSession, ctx: OrgContext, task_id: uuid.UUID, user_id: uuid.UUID
 ) -> None:
@@ -1890,7 +1683,6 @@ async def find_duplicate_candidates(
             select(Task).where(
                 Task.org_id == ctx.org.id,
                 Task.project_id == project_id,
-                Task.is_triage.is_(False),
                 Task.archived_at.is_(None),
                 Task.status.in_(_OPEN_TASK_STATUSES),
             )

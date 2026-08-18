@@ -6,8 +6,6 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from elliptic.modules.ai.models import AIProviderType
-from elliptic.modules.ai.schemas import CoverageOut
 from elliptic.modules.meetings.models import MeetingSource
 
 
@@ -96,16 +94,6 @@ class TranscriptChapterOut(BaseModel):
     segment_id: uuid.UUID
 
 
-class SummarizeIn(BaseModel):
-    """Options for meeting summarization."""
-
-    provider: AIProviderType | None = None
-    model: str | None = None
-    key_id: uuid.UUID | None = None
-    template_id: str | None = None
-    preserve_human: bool = False
-
-
 class SummaryLineOut(BaseModel):
     """One AI summary line with its section, provenance, and source segments."""
 
@@ -140,15 +128,6 @@ class ChatMessageIn(BaseModel):
 
     role: Literal["user", "assistant"]
     content: str = Field(min_length=1)
-
-
-class MeetingChatIn(BaseModel):
-    """Chat-about-a-meeting request."""
-
-    messages: list[ChatMessageIn] = Field(min_length=1)
-    provider: AIProviderType | None = None
-    model: str | None = None
-    key_id: uuid.UUID | None = None
 
 
 class MeetingChatOut(BaseModel):
@@ -194,16 +173,6 @@ class MeetingCitationOut(BaseModel):
     quote: str
 
 
-class OrgMeetingChatOut(BaseModel):
-    """Cross-meeting chat response with citations and coverage."""
-
-    reply: str
-    model: str
-    ai_run_id: uuid.UUID
-    citations: list[MeetingCitationOut]
-    coverage: CoverageOut
-
-
 class ShareCreateIn(BaseModel):
     """Payload to mint a public share link."""
 
@@ -233,9 +202,6 @@ class PublicMeetingShareOut(BaseModel):
     """Guest view of a shared meeting; transcript present only when included."""
 
     meeting_title: str
-    summary: str | None
-    action_items: list[str]
-    decisions: list[str]
     include_transcript: bool
     transcript: list[SegmentOut]
 

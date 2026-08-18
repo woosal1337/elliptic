@@ -13,7 +13,6 @@ import { ChartBuilder } from "@/components/projects/chart-builder";
 import { PivotTable } from "@/components/projects/pivot-table";
 import { WorkloadTable } from "@/components/projects/workload-table";
 import { ForecastCard } from "@/components/projects/forecast-card";
-import { AIChartPanel } from "@/components/ai/ai-chart-panel";
 import { ScatterChart } from "@/components/projects/scatter-chart";
 
 const CATEGORY_LABELS_FLOW: Record<string, string> = {
@@ -221,7 +220,6 @@ export function ProjectAnalytics({
         />
       </div>
       <FlowCard orgId={orgId} projectId={projectId} onDrill={onDrill} />
-      <AIChartPanel orgId={orgId} />
       <ChartBuilder orgId={orgId} projectId={projectId} />
       <PivotTable orgId={orgId} projectId={projectId} />
       <WorkloadTable orgId={orgId} projectId={projectId} />

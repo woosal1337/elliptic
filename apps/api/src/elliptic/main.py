@@ -24,7 +24,6 @@ from elliptic.core.scheduler import start_scheduler, stop_scheduler
 from elliptic.core.schemas import SuccessResponse, ok
 from elliptic.modules.activity.router import router as activity_router
 from elliptic.modules.activity.stream import router as stream_router
-from elliptic.modules.ai.router import router as ai_router
 from elliptic.modules.analytics.router import router as analytics_router
 from elliptic.modules.approvals.router import router as approvals_router
 from elliptic.modules.audit.router import router as audit_router
@@ -35,22 +34,14 @@ from elliptic.modules.automation.router import router as automation_router
 from elliptic.modules.comments.router import router as comments_router
 from elliptic.modules.compliance.router import router as compliance_router
 from elliptic.modules.config.router import router as config_router
-from elliptic.modules.customers.router import router as customers_router
 from elliptic.modules.cycles.router import org_router as cycles_org_router
 from elliptic.modules.cycles.router import router as cycles_router
-from elliptic.modules.dashboards.router import router as dashboards_router
 from elliptic.modules.domains.router import router as domains_router
 from elliptic.modules.drive.router import router as drive_router
 from elliptic.modules.embeds.router import router as embeds_router
-from elliptic.modules.events.router import router as events_router
 from elliptic.modules.favorites.router import router as favorites_router
 from elliptic.modules.idp_sync.router import router as idp_sync_router
-from elliptic.modules.initiatives.router import router as initiatives_router
 from elliptic.modules.instance.router import router as instance_router
-from elliptic.modules.intake.forms_router import public_router as public_intake_forms_router
-from elliptic.modules.intake.forms_router import router as intake_forms_router
-from elliptic.modules.intake.public_router import router as public_intake_router
-from elliptic.modules.intake.router import router as intake_router
 from elliptic.modules.integrations.email_router import public_router as public_email_router
 from elliptic.modules.integrations.email_router import router as email_router
 from elliptic.modules.integrations.git_router import public_router as public_git_router
@@ -69,7 +60,6 @@ from elliptic.modules.mcp_auth.router import router as mcp_auth_router
 from elliptic.modules.mcp_auth.well_known import router as well_known_router
 from elliptic.modules.mcp_connectors.router import router as mcp_connectors_router
 from elliptic.modules.mcp_server.app import build_mcp_app
-from elliptic.modules.meeting_templates.router import router as meeting_templates_router
 from elliptic.modules.meetings.public_router import router as public_share_router
 from elliptic.modules.meetings.router import router as meetings_router
 from elliptic.modules.milestones.router import router as milestones_router
@@ -83,7 +73,6 @@ from elliptic.modules.ops.router import router as ops_router
 from elliptic.modules.orgs.roles_router import router as roles_router
 from elliptic.modules.orgs.router import router as orgs_router
 from elliptic.modules.outbox.router import router as outbox_router
-from elliptic.modules.pql.router import router as pql_router
 from elliptic.modules.projects.public_board_router import public_router as public_boards_router
 from elliptic.modules.projects.public_board_router import publish_router as board_publish_router
 from elliptic.modules.projects.router import router as projects_router
@@ -94,7 +83,6 @@ from elliptic.modules.properties.router import templates_router as property_temp
 from elliptic.modules.rbac_audit.router import router as rbac_audit_router
 from elliptic.modules.recurring.router import router as recurring_router
 from elliptic.modules.register.router import router as register_router
-from elliptic.modules.releases.router import router as releases_router
 from elliptic.modules.resolve.router import router as resolve_router
 from elliptic.modules.retrospectives.router import router as retrospectives_router
 from elliptic.modules.runner.router import router as runner_router
@@ -234,7 +222,6 @@ def create_app() -> FastAPI:  # noqa: PLR0915 — flat router registration list
     api.include_router(projects_router)
     api.include_router(board_publish_router)
     api.include_router(public_boards_router)
-    api.include_router(pql_router)
     api.include_router(project_templates_router)
     api.include_router(project_states_router)
     api.include_router(search_router)
@@ -251,20 +238,12 @@ def create_app() -> FastAPI:  # noqa: PLR0915 — flat router registration list
     api.include_router(sync_router)
     api.include_router(idp_sync_router)
     api.include_router(instance_router)
-    api.include_router(initiatives_router)
     api.include_router(milestones_router)
     api.include_router(modules_router)
     api.include_router(worklogs_router)
-    api.include_router(releases_router)
     api.include_router(runner_router)
-    api.include_router(intake_router)
-    api.include_router(public_intake_router)
-    api.include_router(intake_forms_router)
     api.include_router(recurring_router)
     api.include_router(retrospectives_router)
-    api.include_router(customers_router)
-    api.include_router(dashboards_router)
-    api.include_router(public_intake_forms_router)
     api.include_router(properties_router)
     api.include_router(property_templates_lib_router)
     api.include_router(ldap_admin_router)
@@ -279,7 +258,6 @@ def create_app() -> FastAPI:  # noqa: PLR0915 — flat router registration list
     api.include_router(notes_publish_router)
     api.include_router(public_pages_router)
     api.include_router(note_templates_router)
-    api.include_router(events_router)
     api.include_router(comments_router)
     api.include_router(config_router)
     api.include_router(compliance_router)
@@ -292,7 +270,6 @@ def create_app() -> FastAPI:  # noqa: PLR0915 — flat router registration list
     api.include_router(stream_router)
     api.include_router(mcp_connectors_router)
     api.include_router(mcp_auth_router)
-    api.include_router(ai_router)
     api.include_router(vocabulary_router)
     api.include_router(domains_router)
     api.include_router(integrations_router)
@@ -306,7 +283,6 @@ def create_app() -> FastAPI:  # noqa: PLR0915 — flat router registration list
     api.include_router(slack_admin_router)
     api.include_router(workflow_router)
     api.include_router(marketplace_router)
-    api.include_router(meeting_templates_router)
     api.include_router(public_share_router)
     api.include_router(automation_router)
     api.include_router(views_router)

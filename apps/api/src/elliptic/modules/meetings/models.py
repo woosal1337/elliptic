@@ -84,29 +84,6 @@ class TranscriptSegment(BaseModel):
     position: Mapped[int] = mapped_column(Integer)
 
 
-class MeetingSummary(BaseModel):
-    """An AI-generated summary of a meeting transcript."""
-
-    __tablename__ = "meeting_summaries"
-
-    meeting_id: Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("meetings.id", ondelete="CASCADE"), index=True
-    )
-    org_id: Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("organizations.id", ondelete="CASCADE"), index=True
-    )
-    content: Mapped[str] = mapped_column(Text)
-    summary_lines: Mapped[list[dict[str, object]] | None] = mapped_column(
-        JSONB, nullable=True, default=None
-    )
-    model: Mapped[str] = mapped_column(String(100))
-    provider: Mapped[str] = mapped_column(String(20))
-    created_by: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
-    ai_run_id: Mapped[uuid.UUID | None] = mapped_column(
-        ForeignKey("ai_runs.id", ondelete="SET NULL"), nullable=True
-    )
-
-
 class MeetingShare(BaseModel):
     """A public, tokenized share of a meeting with tiered guest access.
 

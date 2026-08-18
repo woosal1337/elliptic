@@ -38,7 +38,7 @@ async def test_rule_crud(client: AsyncClient) -> None:
         _rules(org["id"]),
         json={
             "name": "Triage labeler",
-            "trigger": "on_triage_entry",
+            "trigger": "on_status_change",
             "actions": [{"type": "set_priority", "value": "high"}],
             "is_skill": False,
         },
@@ -69,7 +69,7 @@ async def test_invalid_action_is_rejected(client: AsyncClient) -> None:
         _rules(org["id"]),
         json={
             "name": "Bad",
-            "trigger": "on_triage_entry",
+            "trigger": "on_status_change",
             "actions": [{"type": "label", "value": "does-not-exist"}],
             "is_skill": False,
         },
@@ -89,29 +89,6 @@ async def test_non_admin_cannot_create(client: AsyncClient) -> None:
         headers=member["headers"],
     )
     assert response.status_code == 403, response.text
-
-
-async def test_on_triage_entry_applies_label(client: AsyncClient) -> None:
-    auth = await register_and_login(client)
-    org = await create_org(client, auth["headers"])
-    project = await create_project(client, auth["headers"], org["id"], key="ATR")
-    label_id = await _label(client, auth["headers"], org["id"], "needs-review")
-    await client.post(
-        _rules(org["id"]),
-        json={
-            "name": "Tag incoming",
-            "trigger": "on_triage_entry",
-            "actions": [{"type": "label", "value": label_id}],
-            "is_skill": False,
-        },
-        headers=auth["headers"],
-    )
-    triaged = await create_task(
-        client, auth["headers"], org["id"], project["id"], title="From AI", is_triage=True
-    )
-    detail = await client.get(f"{API}/orgs/{org['id']}/triage", headers=auth["headers"])
-    item = next(t for t in detail.json()["data"] if t["id"] == triaged["id"])
-    assert label_id in [label["id"] for label in item["labels"]]
 
 
 async def test_on_status_change_sets_priority(client: AsyncClient) -> None:
@@ -145,7 +122,7 @@ async def test_skill_run_applies_actions(client: AsyncClient) -> None:
         _rules(org["id"]),
         json={
             "name": "Make high",
-            "trigger": "on_triage_entry",
+            "trigger": "on_status_change",
             "actions": [{"type": "set_priority", "value": "high"}],
             "is_skill": True,
         },

@@ -114,8 +114,6 @@ async def update_org(session: AsyncSession, ctx: OrgContext, payload: OrgUpdateI
         org.name = payload.name
     if payload.description is not None:
         org.description = payload.description
-    if payload.ai_enabled is not None:
-        org.ai_enabled = payload.ai_enabled
     if payload.block_backward_transitions is not None:
         org.block_backward_transitions = payload.block_backward_transitions
     if payload.residency_region is not None:
@@ -541,19 +539,10 @@ async def seat_usage(session: AsyncSession, ctx: OrgContext) -> dict[str, object
     free = sum(
         count for role, count in by_role.items() if role not in {r.value for r in _BILLABLE_ROLES}
     )
-    from elliptic.modules.ai.models import AIUser  # noqa: PLC0415
-
-    bot_users = int(
-        await session.scalar(
-            select(func.count()).where(AIUser.org_id == ctx.org.id, AIUser.is_active.is_(True))
-        )
-        or 0
-    )
     return {
         "billable_seats": billable,
         "free_seats": free,
         "total_members": billable + free,
-        "bot_users": bot_users,
         "by_role": by_role,
         "billable_roles": [r.value for r in _BILLABLE_ROLES],
     }
@@ -561,7 +550,6 @@ async def seat_usage(session: AsyncSession, ctx: OrgContext) -> dict[str, object
 
 async def onboarding_checklist(session: AsyncSession, ctx: OrgContext) -> dict[str, object]:
     """Compute get-started progress from real workspace data (COS-136)."""
-    from elliptic.modules.ai.models import AIProviderKey  # noqa: PLC0415
     from elliptic.modules.cycles.models import Cycle  # noqa: PLC0415
     from elliptic.modules.notes.models import Note  # noqa: PLC0415
     from elliptic.modules.projects.models import Project  # noqa: PLC0415
@@ -591,11 +579,6 @@ async def onboarding_checklist(session: AsyncSession, ctx: OrgContext) -> dict[s
             "label": "Write a note or doc",
             "done": await _count(Note.org_id) > 0,
         },
-        {
-            "key": "connect_ai",
-            "label": "Connect an AI provider",
-            "done": await _count(AIProviderKey.org_id) > 0,
-        },
     ]
     done = sum(1 for step in steps if step["done"])
     return {
@@ -610,25 +593,21 @@ _PLANS: dict[str, dict[str, object]] = {
     "free": {
         "label": "Free",
         "seat_limit": 5,
-        "ai_credits_per_seat": 500,
         "features": ["projects", "tasks", "notes", "search"],
     },
     "pro": {
         "label": "Pro",
         "seat_limit": 50,
-        "ai_credits_per_seat": 1000,
-        "features": ["projects", "tasks", "notes", "search", "dashboards", "automations", "cycles"],
+        "features": ["projects", "tasks", "notes", "search", "automations", "cycles"],
     },
     "business": {
         "label": "Business",
         "seat_limit": 200,
-        "ai_credits_per_seat": 2000,
         "features": [
             "projects",
             "tasks",
             "notes",
             "search",
-            "dashboards",
             "automations",
             "cycles",
             "sso",
@@ -639,7 +618,6 @@ _PLANS: dict[str, dict[str, object]] = {
     "enterprise": {
         "label": "Enterprise",
         "seat_limit": 100000,
-        "ai_credits_per_seat": 5000,
         "features": ["*"],
     },
 }
@@ -654,8 +632,6 @@ async def edition(session: AsyncSession, ctx: OrgContext) -> dict[str, object]:
     seats = await seat_usage(session, ctx)
     billable_value = seats["billable_seats"]
     billable = billable_value if isinstance(billable_value, int) else 0
-    bots_value = seats["bot_users"]
-    bot_users = bots_value if isinstance(bots_value, int) else 0
     seat_limit_value = catalog["seat_limit"]
     seat_limit = seat_limit_value if isinstance(seat_limit_value, int) else 0
     return {
@@ -663,17 +639,14 @@ async def edition(session: AsyncSession, ctx: OrgContext) -> dict[str, object]:
         "label": catalog["label"],
         "seat_limit": seat_limit,
         "billable_seats": billable,
-        "bot_users": bot_users,
         "over_seat_limit": billable > seat_limit,
         "seats_remaining": max(seat_limit - billable, 0),
-        "ai_credits_per_seat": catalog["ai_credits_per_seat"],
         "features": catalog["features"],
         "available_plans": [
             {
                 "plan": name,
                 "label": _PLANS[name]["label"],
                 "seat_limit": _PLANS[name]["seat_limit"],
-                "ai_credits_per_seat": _PLANS[name]["ai_credits_per_seat"],
             }
             for name in PLAN_ORDER
         ],

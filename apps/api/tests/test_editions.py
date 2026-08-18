@@ -29,7 +29,6 @@ async def test_edition_and_plan_change(client: AsyncClient) -> None:
     assert up["plan"] == "business"
     assert up["seat_limit"] == 200
     assert "sso" in up["features"]
-    assert up["ai_credits_per_seat"] == 2000
 
     bad = await client.put(
         f"{API}/orgs/{org['id']}/billing/plan", json={"plan": "ultra"}, headers=h

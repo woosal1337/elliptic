@@ -75,8 +75,6 @@ async def handle_command(session: AsyncSession, *, team_id: str, user_text: str)
         number=number,
         title=text[:500],
         status=TaskStatus.BACKLOG,
-        is_triage=True,
-        intake_channel="slack",
         created_by=None,
         labels=[],
     )

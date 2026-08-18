@@ -98,8 +98,6 @@ async def ingest(session: AsyncSession, token: str, payload: dict[str, Any]) -> 
         description=body,
         status=TaskStatus.BACKLOG,
         kind=TaskKind.TASK,
-        is_triage=True,
-        intake_channel="email",
         created_by=None,
         labels=[],
     )

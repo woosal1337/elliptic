@@ -7,7 +7,6 @@ import { formatTimestamp } from "@/lib/format";
 import { useMeetingChapters, useTranscript } from "@/hooks/use-meeting-queries";
 import { activeChapterIndex, shouldShowChapters } from "@/lib/chapters";
 import { ErrorState } from "@/components/error-state";
-import { useAnchor } from "./anchor-context";
 
 const PAGE_SIZE = 80;
 
@@ -25,7 +24,6 @@ export function TranscriptViewer({
   const transcript = useTranscript(orgId, meetingId);
   const chaptersQuery = useMeetingChapters(orgId, meetingId);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
-  const { activeSegmentId, acknowledge } = useAnchor();
   const segmentRefs = useRef<Map<string, HTMLLIElement>>(new Map());
   const [chapterTargetId, setChapterTargetId] = useState<string | null>(null);
   const [positionSeconds, setPositionSeconds] = useState(0);
@@ -53,27 +51,7 @@ export function TranscriptViewer({
 
   const interactive = Boolean(onSegmentClick);
 
-  useEffect(() => {
-    if (!activeSegmentId) return;
-    const targetIndex = segments.findIndex((segment) => segment.id === activeSegmentId);
-    if (targetIndex >= 0 && targetIndex >= visibleCount) {
-      setVisibleCount(Math.max(visibleCount, targetIndex + 1));
-    }
-  }, [activeSegmentId, segments, visibleCount]);
 
-  useEffect(() => {
-    if (!activeSegmentId) return;
-    const node = segmentRefs.current.get(activeSegmentId);
-    if (!node) return;
-    const frame = requestAnimationFrame(() => {
-      node.scrollIntoView({ behavior: "smooth", block: "center" });
-    });
-    const timeout = setTimeout(() => acknowledge(), 2200);
-    return () => {
-      cancelAnimationFrame(frame);
-      clearTimeout(timeout);
-    };
-  }, [activeSegmentId, visibleCount, acknowledge]);
 
   useEffect(() => {
     if (!scrollTargetId) return;
@@ -188,7 +166,7 @@ export function TranscriptViewer({
       <div className="flex min-w-0 flex-1 flex-col gap-4">
       <ol className="flex max-h-[60dvh] flex-col overflow-y-auto rounded-lg border border-border bg-surface p-2 shadow-xs">
         {visible.map((segment) => {
-          const isActive = segment.id === activeSegmentId;
+          const isActive = segment.id === null;
           const isHighlighted = highlightedSet.has(segment.id);
           return (
             <li

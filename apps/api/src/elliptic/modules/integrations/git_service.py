@@ -151,8 +151,6 @@ async def _handle_issue(
         description=body,
         status=TaskStatus.BACKLOG,
         kind=TaskKind.TASK,
-        is_triage=True,
-        intake_channel="github",
         external_source="github",
         external_id=external_id,
         created_by=None,

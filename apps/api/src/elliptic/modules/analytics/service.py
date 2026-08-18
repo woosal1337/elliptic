@@ -54,7 +54,7 @@ async def work_item_analytics(
     session: AsyncSession, ctx: OrgContext, project_id: uuid.UUID | None
 ) -> dict[str, object]:
     """Aggregate work-item analytics for the org, optionally scoped to one project."""
-    base = [Task.org_id == ctx.org.id, Task.is_triage.is_(False), Task.archived_at.is_(None)]
+    base = [Task.org_id == ctx.org.id, Task.archived_at.is_(None)]
     if project_id is not None:
         await _assert_project(session, ctx, project_id)
         base.append(Task.project_id == project_id)
@@ -134,7 +134,7 @@ async def custom_chart(
     column = _CHART_DIMENSIONS.get(dimension)
     if column is None:
         raise NotFoundError("Unknown dimension")
-    base = [Task.org_id == ctx.org.id, Task.is_triage.is_(False), Task.archived_at.is_(None)]
+    base = [Task.org_id == ctx.org.id, Task.archived_at.is_(None)]
     if project_id is not None:
         await _assert_project(session, ctx, project_id)
         base.append(Task.project_id == project_id)
@@ -228,7 +228,6 @@ async def progress_scatter(
     completed = [s for s, c in STATUS_TO_CATEGORY.items() if c is StatusCategory.COMPLETED]
     base = [
         Task.org_id == ctx.org.id,
-        Task.is_triage.is_(False),
         Task.archived_at.is_(None),
         group_col.is_not(None),
     ]
@@ -265,7 +264,7 @@ async def member_workload(
     session: AsyncSession, ctx: OrgContext, project_id: uuid.UUID | None
 ) -> dict[str, object]:
     """Per-assignee capacity view: open WIP, started, and recent throughput (COS-75)."""
-    base = [Task.org_id == ctx.org.id, Task.is_triage.is_(False), Task.archived_at.is_(None)]
+    base = [Task.org_id == ctx.org.id, Task.archived_at.is_(None)]
     if project_id is not None:
         await _assert_project(session, ctx, project_id)
         base.append(Task.project_id == project_id)
@@ -314,7 +313,7 @@ async def pivot_table(
     col_col = _CHART_DIMENSIONS.get(col)
     if row_col is None or col_col is None:
         raise NotFoundError("Unknown dimension")
-    base = [Task.org_id == ctx.org.id, Task.is_triage.is_(False), Task.archived_at.is_(None)]
+    base = [Task.org_id == ctx.org.id, Task.archived_at.is_(None)]
     if project_id is not None:
         await _assert_project(session, ctx, project_id)
         base.append(Task.project_id == project_id)
@@ -348,7 +347,7 @@ async def flow_analytics(
     Age-in-status is the time since each open item last entered its current status
     (most recent status_changed event, falling back to its creation time).
     """
-    base = [Task.org_id == ctx.org.id, Task.is_triage.is_(False), Task.archived_at.is_(None)]
+    base = [Task.org_id == ctx.org.id, Task.archived_at.is_(None)]
     if project_id is not None:
         await _assert_project(session, ctx, project_id)
         base.append(Task.project_id == project_id)

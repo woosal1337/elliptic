@@ -163,13 +163,6 @@ export const NotificationsScreen: FC<InboxStackScreenProps<"Notifications">> = (
             label: "Mark all read",
             onPress: markAll,
           },
-          {
-            key: "triage",
-            icon: "inbox",
-            label: "Triage",
-            emphasis: true,
-            onPress: () => navigation.navigate("Triage"),
-          },
         ]}
       >
         <SegmentedControl segments={FILTERS} value={filter} onChange={setFilter} />

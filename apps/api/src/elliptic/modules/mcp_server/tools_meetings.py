@@ -7,29 +7,19 @@ from typing import Any
 from mcp.types import ToolAnnotations
 
 from elliptic.core.pagination import PageParams
-from elliptic.modules.ai import insight
-from elliptic.modules.ai.schemas import RouteSuggestionOut
 from elliptic.modules.mcp_server.idempotency import run_idempotent
 from elliptic.modules.mcp_server.instance import mcp
 from elliptic.modules.mcp_server.principal import mcp_call
 from elliptic.modules.meetings import service as meetings_service
 from elliptic.modules.meetings.schemas import (
-    ChatMessageIn,
     FolioImportIn,
-    MeetingChatIn,
     MeetingCreateIn,
     MeetingOut,
     MeetingShareOut,
     MeetingUpdateIn,
-    OrgChatScopeIn,
-    OrgMeetingChatIn,
-    OrgMeetingChatOut,
-    RecipeRunIn,
     SegmentOut,
     ShareCreateIn,
     ShareUpdateIn,
-    SummarizeIn,
-    SummaryOut,
     TranscriptChapterOut,
 )
 
@@ -190,56 +180,6 @@ async def list_meeting_segments(
 
 
 @mcp.tool
-async def list_meeting_summaries(meeting_id: str, org_id: str | None = None) -> dict[str, Any]:
-    """List a meeting's generated summaries, newest first.
-
-    Pass org_id to target a specific organization when using a multi-organization token.
-    """
-    async with mcp_call("meetings:read", org_id=org_id) as call:
-        summaries = await meetings_service.list_summaries(
-            call.session, call.ctx, uuid.UUID(meeting_id)
-        )
-        return {
-            "items": [
-                SummaryOut.model_validate(summary).model_dump(mode="json") for summary in summaries
-            ]
-        }
-
-
-@mcp.tool
-async def summarize_meeting(
-    meeting_id: str,
-    template_id: str | None = None,
-    preserve_human: bool = False,
-    org_id: str | None = None,
-) -> dict[str, Any]:
-    """Generate a segment-cited summary of a meeting on the org's BYOK key.
-
-    Pass org_id to target a specific organization when using a multi-organization token.
-    """
-    async with mcp_call("meetings:write", org_id=org_id) as call:
-        payload = SummarizeIn(template_id=template_id, preserve_human=preserve_human)
-        summary = await meetings_service.summarize_meeting(
-            call.session, call.ctx, uuid.UUID(meeting_id), payload
-        )
-        return SummaryOut.model_validate(summary).model_dump(mode="json")
-
-
-@mcp.tool
-async def ask_meeting(meeting_id: str, question: str, org_id: str | None = None) -> dict[str, Any]:
-    """Ask a question grounded in one meeting's transcript (on the org's BYOK key).
-
-    Pass org_id to target a specific organization when using a multi-organization token.
-    """
-    async with mcp_call("meetings:read", org_id=org_id) as call:
-        payload = MeetingChatIn(messages=[ChatMessageIn(role="user", content=question)])
-        reply, model, ai_run_id = await meetings_service.chat_about_meeting(
-            call.session, call.ctx, uuid.UUID(meeting_id), payload
-        )
-        return {"reply": reply, "model": model, "ai_run_id": str(ai_run_id)}
-
-
-@mcp.tool
 async def list_meeting_chapters(meeting_id: str, org_id: str | None = None) -> dict[str, Any]:
     """List a meeting's transcript chapters (labelled topic jump points).
 
@@ -255,36 +195,6 @@ async def list_meeting_chapters(meeting_id: str, org_id: str | None = None) -> d
                 for chapter in chapters
             ]
         }
-
-
-@mcp.tool
-async def suggest_meeting_project(meeting_id: str, org_id: str | None = None) -> dict[str, Any]:
-    """Suggest the project a meeting most likely belongs to, with a 0..1 confidence.
-
-    Pass org_id to target a specific organization when using a multi-organization token.
-    """
-    async with mcp_call("meetings:read", org_id=org_id) as call:
-        await meetings_service.get_meeting(call.session, call.ctx, uuid.UUID(meeting_id))
-        suggestion = await insight.suggest_route(
-            call.session, call.ctx, "meeting", uuid.UUID(meeting_id)
-        )
-        return RouteSuggestionOut.model_validate(suggestion).model_dump(mode="json")
-
-
-@mcp.tool
-async def run_meeting_recipe(
-    meeting_id: str, prompt: str, recipe_id: str | None = None, org_id: str | None = None
-) -> dict[str, Any]:
-    """Run a saved or ad-hoc recipe prompt over a meeting's transcript (on the org's BYOK key).
-
-    Pass org_id to target a specific organization when using a multi-organization token.
-    """
-    async with mcp_call("meetings:write", org_id=org_id) as call:
-        payload = RecipeRunIn(prompt=prompt, recipe_id=uuid.UUID(recipe_id) if recipe_id else None)
-        reply, model, ai_run_id = await meetings_service.run_recipe(
-            call.session, call.ctx, uuid.UUID(meeting_id), payload
-        )
-        return {"reply": reply, "model": model, "ai_run_id": str(ai_run_id)}
 
 
 @mcp.tool
@@ -335,40 +245,3 @@ async def update_meeting_share(
             call.session, call.ctx, uuid.UUID(meeting_id), payload
         )
         return MeetingShareOut.model_validate(share).model_dump(mode="json")
-
-
-@mcp.tool
-async def meetings_chat(
-    question: str,
-    project_id: str | None = None,
-    date_from: str | None = None,
-    date_to: str | None = None,
-    pinned_meeting_ids: list[str] | None = None,
-    org_id: str | None = None,
-) -> dict[str, Any]:
-    """Ask a question across the org's meetings, returning a cited, coverage-aware answer.
-
-    Pass org_id to target a specific organization when using a multi-organization token.
-    """
-    async with mcp_call("meetings:read", org_id=org_id) as call:
-        scope = None
-        if project_id or date_from or date_to or pinned_meeting_ids:
-            scope = OrgChatScopeIn(
-                project_id=uuid.UUID(project_id) if project_id else None,
-                date_from=datetime.fromisoformat(date_from) if date_from else None,
-                date_to=datetime.fromisoformat(date_to) if date_to else None,
-                pinned=[uuid.UUID(value) for value in (pinned_meeting_ids or [])],
-            )
-        payload = OrgMeetingChatIn(
-            messages=[ChatMessageIn(role="user", content=question)], scope=scope
-        )
-        reply, model, run_id, citations, coverage = await meetings_service.chat_across_org_meetings(
-            call.session, call.ctx, payload
-        )
-        return OrgMeetingChatOut(
-            reply=reply,
-            model=model,
-            ai_run_id=run_id,
-            citations=citations,
-            coverage=coverage,
-        ).model_dump(mode="json")

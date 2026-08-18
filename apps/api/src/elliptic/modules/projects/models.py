@@ -89,18 +89,8 @@ class Project(BaseModel):
     default_assignee_id: Mapped[uuid.UUID | None] = mapped_column(
         ForeignKey("users.id", ondelete="SET NULL"), nullable=True
     )
-    intake_owner_id: Mapped[uuid.UUID | None] = mapped_column(
-        ForeignKey("users.id", ondelete="SET NULL"), nullable=True
-    )
-    intake_enabled: Mapped[bool] = mapped_column(Boolean, default=False, server_default=false())
     worklog_approval_required: Mapped[bool] = mapped_column(
         Boolean, default=False, server_default=false()
-    )
-    intake_inapp_enabled: Mapped[bool] = mapped_column(
-        Boolean, default=False, server_default=false()
-    )
-    intake_token: Mapped[str | None] = mapped_column(
-        String(64), unique=True, nullable=True, index=True
     )
     target_date: Mapped[date | None] = mapped_column(Date, nullable=True)
     state_id: Mapped[uuid.UUID | None] = mapped_column(

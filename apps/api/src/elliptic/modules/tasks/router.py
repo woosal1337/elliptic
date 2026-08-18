@@ -54,11 +54,6 @@ from elliptic.modules.tasks.schemas import (
     TaskUpdateIn,
     ThroughputPoint,
     TimelineOut,
-    TriageAcceptIn,
-    TriageCountOut,
-    TriageDeclineIn,
-    TriageDuplicateIn,
-    TriageSnoozeIn,
     WorkItemSchemaOut,
     WorkItemTemplateCreateIn,
     WorkItemTemplateOut,
@@ -115,7 +110,6 @@ async def list_tasks(
     assignee_id: Annotated[uuid.UUID | None, Query()] = None,
     label_id: Annotated[uuid.UUID | None, Query()] = None,
     severity: Annotated[BugSeverity | None, Query()] = None,
-    release_blocker: Annotated[bool | None, Query()] = None,
     module_id: Annotated[uuid.UUID | None, Query()] = None,
     cycle_id: Annotated[uuid.UUID | None, Query()] = None,
     search: Annotated[str | None, Query(max_length=200)] = None,
@@ -130,7 +124,6 @@ async def list_tasks(
         assignee_id=assignee_id,
         label_id=label_id,
         severity=severity,
-        release_blocker=release_blocker,
         module_id=module_id,
         cycle_id=cycle_id,
         search=search,
@@ -211,22 +204,6 @@ async def board(
     return ok(payload)
 
 
-@router.get("/triage/count")
-async def triage_count(ctx: OrgCtx, session: SessionDep) -> SuccessResponse[TriageCountOut]:
-    total, by_project = await service.triage_counts(session, ctx)
-    return ok(TriageCountOut(total=total, by_project={str(k): v for k, v in by_project.items()}))
-
-
-@router.get("/triage")
-async def list_triage(
-    ctx: OrgCtx,
-    session: SessionDep,
-    resolved: Annotated[bool, Query()] = False,
-) -> SuccessResponse[list[TaskOut]]:
-    tasks_with_keys = await service.list_triage_tasks(session, ctx, resolved=resolved)
-    return ok(await service.serialize_mixed_tasks(session, tasks_with_keys))
-
-
 async def _my_tasks_page(
     scope: service.UserTaskScope, ctx: OrgContext, session: SessionDep, page: PageParams
 ) -> SuccessResponse[Page[TaskOut]]:
@@ -269,39 +246,6 @@ async def list_recent_tasks(
     ctx: OrgCtx, session: SessionDep, page: PageParamsDep
 ) -> SuccessResponse[Page[TaskOut]]:
     return await _my_tasks_page("recent", ctx, session, page)
-
-
-@router.post("/tasks/{task_id}/triage/accept")
-async def accept_triage(
-    task_id: uuid.UUID, ctx: OrgCtx, session: SessionDep, payload: TriageAcceptIn | None = None
-) -> SuccessResponse[TaskOut]:
-    status_choice = payload.status if payload is not None else TaskStatus.TODO
-    task, project = await service.accept_triage_task(session, ctx, task_id, status=status_choice)
-    return ok(await service.serialize_task(session, task, project.key), message="Accepted")
-
-
-@router.post("/tasks/{task_id}/triage/snooze")
-async def snooze_triage(
-    task_id: uuid.UUID, payload: TriageSnoozeIn, ctx: OrgCtx, session: SessionDep
-) -> SuccessResponse[TaskOut]:
-    task, project = await service.snooze_triage_task(session, ctx, task_id, payload.snoozed_till)
-    return ok(await service.serialize_task(session, task, project.key), message="Snoozed")
-
-
-@router.post("/tasks/{task_id}/triage/duplicate")
-async def mark_triage_duplicate(
-    task_id: uuid.UUID, payload: TriageDuplicateIn, ctx: OrgCtx, session: SessionDep
-) -> SuccessResponse[TaskOut]:
-    task, project = await service.mark_triage_duplicate(session, ctx, task_id, payload.duplicate_of)
-    return ok(await service.serialize_task(session, task, project.key), message="Marked duplicate")
-
-
-@router.post("/tasks/{task_id}/triage/decline")
-async def decline_triage(
-    task_id: uuid.UUID, payload: TriageDeclineIn, ctx: OrgCtx, session: SessionDep
-) -> SuccessResponse[TaskOut]:
-    task, project = await service.decline_triage_task(session, ctx, task_id, reason=payload.reason)
-    return ok(await service.serialize_task(session, task, project.key), message="Declined")
 
 
 @router.get("/tasks/by-identifier/{identifier}")

@@ -188,19 +188,14 @@ async def update_project(
 ) -> Project:
     """Apply updates to a project."""
     project = await get_project(session, ctx, project_id)
-    for assignee_field in ("intake_owner_id", "default_assignee_id"):
-        candidate = getattr(payload, assignee_field, None)
-        if candidate is not None and await _is_org_guest(session, ctx, candidate):
-            raise BadRequestError("Guests cannot be an intake owner or default assignee")
+    candidate = payload.default_assignee_id
+    if candidate is not None and await _is_org_guest(session, ctx, candidate):
+        raise BadRequestError("Guests cannot be a default assignee")
     if payload.team_id is not None:
         await _validate_team(session, ctx, payload.team_id)
         project.team_id = payload.team_id
     if payload.icon is not None:
         project.icon = payload.icon or None
-    if payload.clear_intake_owner:
-        project.intake_owner_id = None
-    elif payload.intake_owner_id is not None:
-        project.intake_owner_id = payload.intake_owner_id
     for field in (
         "name",
         "description",

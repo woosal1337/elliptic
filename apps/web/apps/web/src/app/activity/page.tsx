@@ -59,7 +59,7 @@ const ROWS: FeatureRowData[] = [
         code={`{
   "entity":  "task:DEMO-42",
   "verb":    "status.transitioned",
-  "actor":   "agent:release-bot",
+  "actor":   "ada@acme.com",
   "from":    "in_progress",
   "to":      "done",
   "at":      "2026-06-28T09:14:22Z"
@@ -134,7 +134,7 @@ export default function ActivityPage() {
         titleRest="as the agents and the team do it."
         lede="Every change to every entity lands in an append-only activity log, and the whole workspace stays live over server-sent events. The board moves, the inbox fills, and the audit trail writes itself."
         primary={{ label: "Start free", href: "/signup" }}
-        secondary={{ label: "Read the docs", href: "https://docs.elliptic.sh/activity-calendar-inbox" }}
+        secondary={{ label: "Read the docs", href: "https://docs.elliptic.sh/activity-inbox" }}
         visual={
           <BrowserFrame
             url="app.elliptic.com/activity"

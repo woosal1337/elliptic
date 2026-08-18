@@ -61,8 +61,6 @@ class TaskCreateIn(BaseModel):
     kind: TaskKind = TaskKind.TASK
     severity: BugSeverity | None = None
     component: str | None = Field(default=None, max_length=100)
-    release_blocker: bool = False
-    is_triage: bool = False
     external_source: str | None = Field(default=None, max_length=50)
     external_id: str | None = Field(default=None, max_length=255)
     mention_user_ids: list[uuid.UUID] = Field(default_factory=list)
@@ -77,8 +75,6 @@ class TaskUpdateIn(BaseModel):
     priority: TaskPriority | None = None
     assignee_id: uuid.UUID | None = None
     clear_assignee: bool = False
-    bot_assignee_id: uuid.UUID | None = None
-    clear_bot_assignee: bool = False
     start_date: date | None = None
     due_date: date | None = None
     sort_order: float | None = None
@@ -88,9 +84,6 @@ class TaskUpdateIn(BaseModel):
     clear_severity: bool = False
     component: str | None = Field(default=None, max_length=100)
     clear_component: bool = False
-    release_blocker: bool | None = None
-    release_id: uuid.UUID | None = None
-    clear_release: bool = False
     custom_fields: dict[str, str] | None = None
     dod_items: list[DodItem] | None = None
     acceptance_criteria: str | None = None
@@ -129,30 +122,6 @@ class TaskArchiveIn(BaseModel):
     """Payload to archive or restore a task."""
 
     archived: bool
-
-
-class TriageDeclineIn(BaseModel):
-    """Optional reason recorded when a triage task is declined."""
-
-    reason: str | None = Field(default=None, max_length=500)
-
-
-class TriageAcceptIn(BaseModel):
-    """Accept a triage task into a chosen board status."""
-
-    status: TaskStatus = TaskStatus.TODO
-
-
-class TriageSnoozeIn(BaseModel):
-    """Snooze a triage task until a future time, when it resurfaces."""
-
-    snoozed_till: datetime
-
-
-class TriageDuplicateIn(BaseModel):
-    """Resolve a triage task as a duplicate, optionally of a specific task."""
-
-    duplicate_of: uuid.UUID | None = None
 
 
 class TaskRelationIn(BaseModel):
@@ -222,7 +191,6 @@ class TaskOut(BaseModel):
     category: StatusCategory
     priority: TaskPriority
     assignee_id: uuid.UUID | None
-    bot_assignee_id: uuid.UUID | None = None
     start_date: date | None = None
     due_date: date | None
     sort_order: float
@@ -234,7 +202,6 @@ class TaskOut(BaseModel):
     cycle_id: uuid.UUID | None = None
     milestone_id: uuid.UUID | None = None
     module_id: uuid.UUID | None = None
-    release_id: uuid.UUID | None = None
     workflow_status_id: uuid.UUID | None = None
     custom_fields: dict[str, str] = Field(default_factory=dict)
     dod_items: list[DodItem] = Field(default_factory=list)
@@ -243,12 +210,8 @@ class TaskOut(BaseModel):
     kind: TaskKind
     severity: BugSeverity | None
     component: str | None = None
-    release_blocker: bool = False
-    is_triage: bool = False
     external_source: str | None = None
     external_id: str | None = None
-    triage_resolved_at: datetime | None = None
-    intake_channel: str | None = None
     archived_at: datetime | None
     subtask_total: int = 0
     subtask_done: int = 0
@@ -362,13 +325,6 @@ class WorkItemSchemaOut(BaseModel):
     statuses: list[StatusInfo]
     labels: list[LabelOut]
     custom_properties: list[CustomPropertyOut]
-
-
-class TriageCountOut(BaseModel):
-    """Open triage counts: org total + per-project."""
-
-    total: int
-    by_project: dict[str, int]
 
 
 class TaskDescriptionVersionOut(BaseModel):

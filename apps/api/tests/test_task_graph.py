@@ -226,7 +226,7 @@ async def test_bug_gets_sla_due_date(client: AsyncClient) -> None:
     assert bug["due_date"] == expected.isoformat()
 
 
-async def test_component_release_blocker_and_severity_filter(client: AsyncClient) -> None:
+async def test_component_and_severity_filter(client: AsyncClient) -> None:
     auth = await register_and_login(client)
     org = await create_org(client, auth["headers"])
     project = await create_project(client, auth["headers"], org["id"])
@@ -241,10 +241,8 @@ async def test_component_release_blocker_and_severity_filter(client: AsyncClient
         kind="bug",
         severity="critical",
         component="auth",
-        release_blocker=True,
     )
     assert bug["component"] == "auth"
-    assert bug["release_blocker"] is True
 
     await create_task(
         client,
@@ -258,16 +256,13 @@ async def test_component_release_blocker_and_severity_filter(client: AsyncClient
 
     crit = await client.get(f"{base}?severity=critical", headers=auth["headers"])
     assert {t["title"] for t in crit.json()["data"]["items"]} == {"Auth crash"}
-    blockers = await client.get(f"{base}?release_blocker=true", headers=auth["headers"])
-    assert {t["title"] for t in blockers.json()["data"]["items"]} == {"Auth crash"}
 
     updated = await client.patch(
         f"{API}/orgs/{org['id']}/tasks/{bug['id']}",
-        json={"clear_component": True, "release_blocker": False},
+        json={"clear_component": True},
         headers=auth["headers"],
     )
     assert updated.json()["data"]["component"] is None
-    assert updated.json()["data"]["release_blocker"] is False
 
 
 async def test_bug_requires_severity(client: AsyncClient) -> None:

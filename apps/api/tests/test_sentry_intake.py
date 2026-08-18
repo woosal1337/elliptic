@@ -5,7 +5,7 @@ from httpx import AsyncClient
 from tests.helpers import API, create_org, create_project, register_and_login
 
 
-async def test_sentry_alert_creates_triage_bug(client: AsyncClient) -> None:
+async def test_sentry_alert_creates_a_bug(client: AsyncClient) -> None:
     auth = await register_and_login(client)
     h = auth["headers"]
     org = await create_org(client, h)
@@ -32,8 +32,7 @@ async def test_sentry_alert_creates_triage_bug(client: AsyncClient) -> None:
     assert res.status_code == 201, res.text
     assert res.json()["data"]["reference"].startswith(project["key"])
 
-    triage = await client.get(f"{API}/orgs/{org['id']}/triage", headers=h)
-    bug = next(t for t in triage.json()["data"] if t["title"].startswith("TypeError"))
+    tasks = await client.get(f"{API}/orgs/{org['id']}/tasks/all", headers=h)
+    bug = next(t for t in tasks.json()["data"]["items"] if t["title"].startswith("TypeError"))
     assert bug["kind"] == "bug"
     assert bug["severity"] == "critical"
-    assert bug["intake_channel"] == "sentry"

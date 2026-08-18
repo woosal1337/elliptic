@@ -5,7 +5,7 @@ from datetime import UTC, datetime, timedelta
 from httpx import AsyncClient
 
 from elliptic.modules.meetings.service import compute_chapters
-from tests.helpers import API, create_org, create_project, create_task, register_and_login
+from tests.helpers import API, create_org, register_and_login
 
 
 async def _import(
@@ -78,40 +78,3 @@ async def _create_event(
     )
     assert response.status_code == 201, response.text
     return response.json()["data"]["id"]
-
-
-async def test_brief_surfaces_open_assigned_tasks(client: AsyncClient) -> None:
-    auth = await register_and_login(client)
-    org = await create_org(client, auth["headers"])
-    project = await create_project(client, auth["headers"], org["id"], key="BRF")
-    task = await create_task(
-        client,
-        auth["headers"],
-        org["id"],
-        project["id"],
-        title="Finish the deck",
-        assignee_id=auth["user_id"],
-    )
-    event_id = await _create_event(client, auth["headers"], org["id"], "Prep meeting")
-
-    response = await client.get(
-        f"{API}/orgs/{org['id']}/events/{event_id}/brief", headers=auth["headers"]
-    )
-    assert response.status_code == 200, response.text
-    data = response.json()["data"]
-    task_bullets = [b for b in data["bullets"] if b["source_kind"] == "task"]
-    assert any(b["source_id"] == task["id"] for b in task_bullets)
-    assert data["confidence"] > 0
-    assert data["generated_at"]
-
-
-async def test_brief_is_empty_with_no_context(client: AsyncClient) -> None:
-    auth = await register_and_login(client)
-    org = await create_org(client, auth["headers"])
-    event_id = await _create_event(client, auth["headers"], org["id"], "Zxqv wibble")
-    response = await client.get(
-        f"{API}/orgs/{org['id']}/events/{event_id}/brief", headers=auth["headers"]
-    )
-    data = response.json()["data"]
-    assert data["bullets"] == []
-    assert data["confidence"] == 0.0

@@ -14,7 +14,6 @@ from sqlalchemy import (
     UniqueConstraint,
     false,
     text,
-    true,
 )
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
@@ -56,7 +55,6 @@ class Organization(BaseModel):
     name: Mapped[str] = mapped_column(String(255))
     slug: Mapped[str] = mapped_column(String(100), unique=True, index=True)
     description: Mapped[str | None] = mapped_column(Text, nullable=True)
-    ai_enabled: Mapped[bool] = mapped_column(Boolean, default=True, server_default=true())
     block_backward_transitions: Mapped[bool] = mapped_column(
         Boolean, default=False, server_default=false()
     )

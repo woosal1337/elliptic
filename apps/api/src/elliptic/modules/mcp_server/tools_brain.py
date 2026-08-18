@@ -33,7 +33,7 @@ def _event_dict(event: ActivityEvent) -> dict[str, Any]:
 
 @mcp.tool
 async def brain_open_threads(limit: int = 25, org_id: str | None = None) -> dict[str, Any]:
-    """What's on my plate: my open assigned and created tasks, plus the triage queue.
+    """What's on my plate: my open assigned and created tasks.
 
     Pass org_id to target a specific organization when using a multi-organization token."""
     async with mcp_call("brain:read", org_id=org_id) as call:
@@ -44,7 +44,6 @@ async def brain_open_threads(limit: int = 25, org_id: str | None = None) -> dict
         created, _created_total = await tasks_service.list_user_tasks(
             call.session, call.ctx, "created", page
         )
-        triage = await tasks_service.list_triage_tasks(call.session, call.ctx)
 
         async def _open(rows: list[tuple[Any, str]]) -> list[dict[str, Any]]:
             items = await tasks_service.serialize_mixed_tasks(call.session, rows)
@@ -53,10 +52,6 @@ async def brain_open_threads(limit: int = 25, org_id: str | None = None) -> dict
         return {
             "assigned_to_me": await _open(assigned),
             "created_by_me": await _open(created),
-            "triage": [
-                item.model_dump(mode="json")
-                for item in await tasks_service.serialize_mixed_tasks(call.session, triage)
-            ],
         }
 
 

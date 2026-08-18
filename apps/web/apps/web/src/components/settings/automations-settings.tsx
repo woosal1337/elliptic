@@ -135,7 +135,7 @@ function RuleBuilder({ orgId, onDone }: { orgId: string; onDone: () => void }) {
         <div className="flex flex-col">
           <Label htmlFor="rule-skill">Save as an invocable skill</Label>
           <span className="text-caption text-muted-foreground">
-            Skills can be run on demand from the triage queue, not just on the trigger.
+            Skills can be run on demand from a work item, not just on the trigger.
           </span>
         </div>
         <Switch id="rule-skill" checked={isSkill} onCheckedChange={setIsSkill} />
@@ -197,7 +197,7 @@ export function AutomationsSettings({ orgId }: { orgId: string }) {
       <CardHeader>
         <CardTitle>Automations & skills</CardTitle>
         <CardDescription>
-          Run actions automatically when work hits triage or changes status — auto-label, route,
+          Run actions automatically when work changes status — auto-label, route,
           assign, set priority. Save a rule as a skill to invoke it on demand. Executions are logged
           in the task&rsquo;s activity.
         </CardDescription>

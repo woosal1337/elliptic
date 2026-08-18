@@ -2,29 +2,17 @@
 
 from elliptic.core.models_base import Base
 from elliptic.modules.activity.models import ActivityEvent
-from elliptic.modules.ai.models import (
-    AIChatMessage,
-    AIConversation,
-    AIProviderKey,
-    AIRun,
-    AIUser,
-)
 from elliptic.modules.approvals.models import TaskApproval
 from elliptic.modules.auth_providers.models import AuthProviderConfig
 from elliptic.modules.automation.models import AutomationRule
 from elliptic.modules.comments.models import Comment, CommentReaction, CommentVersion
-from elliptic.modules.customers.models import Customer, CustomerRequest
 from elliptic.modules.cycles.models import Cycle
-from elliptic.modules.dashboards.models import Dashboard, DashboardWidget
 from elliptic.modules.domains.models import OrgDomain
 from elliptic.modules.drive.models import DriveFile
 from elliptic.modules.embeds.models import NoteEmbed
-from elliptic.modules.events.models import Event
 from elliptic.modules.favorites.models import Favorite
 from elliptic.modules.idp_sync.models import GroupRoleMapping
-from elliptic.modules.initiatives.models import Initiative, InitiativeUpdate
 from elliptic.modules.instance.models import InstanceLicense, InstanceSettings
-from elliptic.modules.intake.models import IntakeForm
 from elliptic.modules.integrations.git_models import GitRepoConnection
 from elliptic.modules.integrations.models import (
     EmailIntake,
@@ -42,13 +30,7 @@ from elliptic.modules.mcp_auth.models import (
 )
 from elliptic.modules.mcp_connectors.models import McpConnector
 from elliptic.modules.mcp_server.models import McpIdempotencyKey
-from elliptic.modules.meeting_templates.models import MeetingRecipe, MeetingTemplate
-from elliptic.modules.meetings.models import (
-    Meeting,
-    MeetingShare,
-    MeetingSummary,
-    TranscriptSegment,
-)
+from elliptic.modules.meetings.models import Meeting, MeetingShare, TranscriptSegment
 from elliptic.modules.milestones.models import Milestone
 from elliptic.modules.modules.models import Module
 from elliptic.modules.notes.models import (
@@ -83,7 +65,6 @@ from elliptic.modules.properties.models import CustomProperty, PropertyTemplate
 from elliptic.modules.rbac_audit.models import RbacAuditEvent
 from elliptic.modules.recurring.models import RecurringTaskRule
 from elliptic.modules.register.models import RegisterEntry
-from elliptic.modules.releases.models import ChangelogEntry, Release
 from elliptic.modules.retrospectives.models import Retrospective
 from elliptic.modules.runner.models import RunnerExecution, RunnerScript
 from elliptic.modules.scim.models import ScimToken
@@ -118,50 +99,33 @@ from elliptic.modules.workflow.models import (
 from elliptic.modules.worklogs.models import Worklog
 
 __all__ = [
-    "AIChatMessage",
-    "AIConversation",
-    "AIProviderKey",
-    "AIRun",
-    "AIUser",
     "ActivityEvent",
     "AuthProviderConfig",
     "AutomationRule",
     "Base",
-    "ChangelogEntry",
     "Comment",
     "CommentReaction",
     "CommentVersion",
     "CustomProperty",
     "CustomRole",
-    "Customer",
-    "CustomerRequest",
     "Cycle",
-    "Dashboard",
-    "DashboardWidget",
     "DeletedEntity",
     "DeviceToken",
     "DriveFile",
     "EmailIntake",
-    "Event",
     "EventOutbox",
     "Favorite",
     "GitRepoConnection",
     "GroupRoleMapping",
-    "Initiative",
-    "InitiativeUpdate",
     "InstanceLicense",
     "InstanceSettings",
-    "IntakeForm",
     "Invitation",
     "LDAPConnection",
     "Label",
     "McpConnector",
     "McpIdempotencyKey",
     "Meeting",
-    "MeetingRecipe",
     "MeetingShare",
-    "MeetingSummary",
-    "MeetingTemplate",
     "Milestone",
     "Module",
     "NotDuplicatePair",
@@ -196,7 +160,6 @@ __all__ = [
     "RecurringTaskRule",
     "RegisterEntry",
     "RelationTypeDef",
-    "Release",
     "Retrospective",
     "RunnerExecution",
     "RunnerScript",

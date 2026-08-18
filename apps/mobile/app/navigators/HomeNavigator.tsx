@@ -1,6 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
-import { ChatScreen } from "@/screens/ChatScreen"
 import { HomeScreen } from "@/screens/HomeScreen"
 import { ProjectDetailScreen } from "@/screens/ProjectDetailScreen"
 import { ProjectsScreen } from "@/screens/ProjectsScreen"
@@ -20,7 +19,6 @@ export function HomeNavigator() {
         component={HomeScreen}
         options={{ headerShown: false, title: "Home" }}
       />
-      <Stack.Screen name="Chat" component={ChatScreen} options={{ title: "Assistant" }} />
       <Stack.Screen name="Search" component={SearchScreen} options={{ title: "Search" }} />
       <Stack.Screen name="Projects" component={ProjectsScreen} options={{ title: "Projects" }} />
       <Stack.Screen

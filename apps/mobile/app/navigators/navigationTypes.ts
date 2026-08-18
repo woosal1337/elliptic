@@ -9,7 +9,6 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack"
 
 export type HomeStackParamList = {
   HomeMain: undefined
-  Chat: undefined
   Search: undefined
   Projects: undefined
   ProjectDetail: { projectId: string; title: string }
@@ -33,7 +32,6 @@ export type NotesStackParamList = {
 
 export type InboxStackParamList = {
   Notifications: undefined
-  Triage: undefined
 }
 
 export type ProfileStackParamList = {

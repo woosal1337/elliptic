@@ -1,7 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
 import { NotificationsScreen } from "@/screens/NotificationsScreen"
-import { TriageScreen } from "@/screens/TriageScreen"
 
 import type { InboxStackParamList } from "./navigationTypes"
 import { useStackScreenOptions } from "./stackScreenOptions"
@@ -17,7 +16,6 @@ export function InboxNavigator() {
         component={NotificationsScreen}
         options={{ headerShown: false, title: "Inbox" }}
       />
-      <Stack.Screen name="Triage" component={TriageScreen} options={{ title: "Triage" }} />
     </Stack.Navigator>
   )
 }

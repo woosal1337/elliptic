@@ -1,7 +1,5 @@
 """Guest tier + commenter tier + guest-ceiling enforcement (COS-166)."""
 
-from datetime import UTC, datetime, timedelta
-
 from httpx import AsyncClient
 
 from tests.helpers import (
@@ -186,53 +184,12 @@ async def test_automation_assign_rejects_and_skips_guest(client: AsyncClient) ->
         f"{API}/orgs/{org['id']}/automations",
         json={
             "name": "Assign to guest",
-            "trigger": "on_triage_entry",
+            "trigger": "on_status_change",
             "actions": [{"type": "assign", "value": guest["id"]}],
         },
         headers=owner["headers"],
     )
     assert rejected.status_code == 400, rejected.text
-
-
-async def test_guest_intake_owner_rejected_and_skipped(client: AsyncClient) -> None:
-    owner = await register_and_login(client)
-    org = await create_org(client, owner["headers"])
-    project = await create_project(client, owner["headers"], org["id"], key="ITK")
-    member = await register_and_login(client)
-    await add_org_member(client, owner["headers"], org["id"], member, role="member")
-    member_id = (await client.get(f"{API}/users/me", headers=member["headers"])).json()["data"][
-        "id"
-    ]
-
-    guest = await _guest_in_org(client, owner, org["id"])
-    rejected = await client.patch(
-        f"{API}/orgs/{org['id']}/projects/{project['id']}",
-        json={"intake_owner_id": guest["id"]},
-        headers=owner["headers"],
-    )
-    assert rejected.status_code == 400, rejected.text
-
-    await client.patch(
-        f"{API}/orgs/{org['id']}/projects/{project['id']}",
-        json={"intake_owner_id": member_id},
-        headers=owner["headers"],
-    )
-    await client.patch(
-        f"{API}/orgs/{org['id']}/members/{member_id}",
-        json={"role": "guest"},
-        headers=owner["headers"],
-    )
-    token = (
-        await client.post(
-            f"{API}/orgs/{org['id']}/projects/{project['id']}/intake/enable",
-            headers=owner["headers"],
-        )
-    ).json()["data"]["intake_token"]
-    submit = await client.post(f"{API}/intake/{token}", json={"title": "From the public"})
-    assert submit.status_code == 200, submit.text
-    triage = await client.get(f"{API}/orgs/{org['id']}/triage", headers=owner["headers"])
-    item = next(t for t in triage.json()["data"] if t["title"] == "From the public")
-    assert item["assignee_id"] is None
 
 
 async def test_demotion_to_guest_reconciles_roles_and_assignments(client: AsyncClient) -> None:
@@ -302,28 +259,3 @@ async def test_guest_is_not_admin_for_comments(client: AsyncClient) -> None:
         f"{API}/orgs/{org['id']}/comments/{comment_id}", headers=guest["headers"]
     )
     assert deleted.status_code == 403, deleted.text
-
-
-async def test_guest_is_not_admin_for_team_events(client: AsyncClient) -> None:
-    owner = await register_and_login(client)
-    org = await create_org(client, owner["headers"])
-    guest = await _guest_in_org(client, owner, org["id"])
-    start = datetime.now(UTC) + timedelta(days=1)
-    event = await client.post(
-        f"{API}/orgs/{org['id']}/events",
-        json={
-            "title": "Team sync",
-            "visibility": "team",
-            "starts_at": start.isoformat(),
-            "ends_at": (start + timedelta(hours=1)).isoformat(),
-        },
-        headers=owner["headers"],
-    )
-    event_id = event.json()["data"]["id"]
-
-    blocked = await client.patch(
-        f"{API}/orgs/{org['id']}/events/{event_id}",
-        json={"title": "Hijacked"},
-        headers=guest["headers"],
-    )
-    assert blocked.status_code == 403, blocked.text

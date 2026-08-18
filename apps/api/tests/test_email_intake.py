@@ -5,7 +5,7 @@ from httpx import AsyncClient
 from tests.helpers import API, create_org, create_project, register_and_login
 
 
-async def test_email_intake_to_triage_task(client: AsyncClient) -> None:
+async def test_email_intake_creates_a_task(client: AsyncClient) -> None:
     auth = await register_and_login(client)
     h = auth["headers"]
     org = await create_org(client, h)
@@ -25,16 +25,14 @@ async def test_email_intake_to_triage_task(client: AsyncClient) -> None:
     ref = ingest.json()["data"]["reference"]
     assert ref.startswith("MAIL-")
 
-    triage = await client.get(f"{API}/orgs/{org['id']}/triage", headers=h)
+    tasks = await client.get(f"{API}/orgs/{org['id']}/tasks/all", headers=h)
     items = (
-        triage.json()["data"]["items"]
-        if isinstance(triage.json()["data"], dict)
-        else triage.json()["data"]
+        tasks.json()["data"]["items"]
+        if isinstance(tasks.json()["data"], dict)
+        else tasks.json()["data"]
     )
     match = next((t for t in items if t["title"] == "Bug: login fails"), None)
     assert match is not None
-    assert match["intake_channel"] == "email"
-    assert match["is_triage"] is True
 
     assert len((await client.get(base, headers=h)).json()["data"]) == 1
     iid = created.json()["data"]["id"]

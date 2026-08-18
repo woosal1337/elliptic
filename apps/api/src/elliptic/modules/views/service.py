@@ -212,7 +212,6 @@ async def resolve_team_view_dataset(
         .where(
             Task.org_id == ctx.org.id,
             Task.project_id.in_(project_ids),
-            Task.is_triage.is_(False),
             Task.archived_at.is_(None),
         )
     )
@@ -325,7 +324,6 @@ async def public_view_dataset(session: AsyncSession, view: TaskView) -> list[tup
         .join(Project, Project.id == Task.project_id)
         .where(
             Task.org_id == view.org_id,
-            Task.is_triage.is_(False),
             Task.archived_at.is_(None),
         )
     )

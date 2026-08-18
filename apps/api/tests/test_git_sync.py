@@ -24,14 +24,13 @@ async def test_git_issue_pr_sync(client: AsyncClient) -> None:
     )
     assert issue.status_code == 202, issue.text
     assert issue.json()["data"]["action"] == "created"
-    triage = await client.get(f"{API}/orgs/{org['id']}/triage", headers=h)
+    tasks = await client.get(f"{API}/orgs/{org['id']}/tasks/all", headers=h)
     items = (
-        triage.json()["data"]["items"]
-        if isinstance(triage.json()["data"], dict)
-        else triage.json()["data"]
+        tasks.json()["data"]["items"]
+        if isinstance(tasks.json()["data"], dict)
+        else tasks.json()["data"]
     )
-    gh_task = next(t for t in items if t["title"] == "Crash on login")
-    assert gh_task["intake_channel"] == "github"
+    assert any(t["title"] == "Crash on login" for t in items)
 
     task = await create_task(client, h, org["id"], project["id"], title="Build feature")
     ident = task["identifier"]

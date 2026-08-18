@@ -10,7 +10,6 @@ import { enqueue, NETWORK_PROBLEMS, type QueuedMethod } from "@/services/offline
 import type {
   ApiConfig,
   AuthTokens,
-  ChatMessage,
   Comment,
   DriveFile,
   DriveFolder,
@@ -249,31 +248,6 @@ export class Api {
     return res.ok
   }
 
-  async listTriage(orgId: string): Promise<Task[]> {
-    const res = await this.apisauce.get<Envelope<Task[] | { items: Task[] }>>(
-      `/orgs/${orgId}/triage`,
-    )
-    if (!res.ok || !res.data) return []
-    const data = res.data.data
-    return Array.isArray(data) ? data : (data?.items ?? [])
-  }
-
-  async acceptTriage(orgId: string, taskId: string): Promise<boolean> {
-    const res = await this.apisauce.post(`/orgs/${orgId}/tasks/${taskId}/triage/accept`, {})
-    return res.ok
-  }
-
-  async declineTriage(
-    orgId: string,
-    taskId: string,
-    reason = "Declined on mobile",
-  ): Promise<boolean> {
-    const res = await this.apisauce.post(`/orgs/${orgId}/tasks/${taskId}/triage/decline`, {
-      reason,
-    })
-    return res.ok
-  }
-
   async listNotes(orgId: string): Promise<Note[]> {
     return this.fetchAllPages<Note>(`/orgs/${orgId}/notes`)
   }
@@ -349,34 +323,6 @@ export class Api {
 
   async confirmUpload(orgId: string, objectId: string): Promise<boolean> {
     const res = await this.apisauce.post(`/orgs/${orgId}/storage/objects/${objectId}/confirm`, {})
-    return res.ok
-  }
-
-  async createConversation(orgId: string, mode: "ask" | "build" = "ask"): Promise<string | null> {
-    const res = await this.apisauce.post<Envelope<{ id: string }>>(
-      `/orgs/${orgId}/ai/conversations`,
-      { mode },
-    )
-    return res.ok && res.data ? res.data.data.id : null
-  }
-
-  async listChatMessages(orgId: string, conversationId: string): Promise<ChatMessage[]> {
-    const res = await this.apisauce.get<Envelope<ChatMessage[]>>(
-      `/orgs/${orgId}/ai/conversations/${conversationId}/messages`,
-    )
-    return res.ok && res.data ? res.data.data : []
-  }
-
-  async sendChatMessage(
-    orgId: string,
-    conversationId: string,
-    content: string,
-    objectIds: string[] = [],
-  ): Promise<boolean> {
-    const res = await this.apisauce.post(
-      `/orgs/${orgId}/ai/conversations/${conversationId}/messages`,
-      { content, object_ids: objectIds },
-    )
     return res.ok
   }
 
@@ -584,18 +530,6 @@ export class Api {
   }
 
   // ---- Triage ----
-  async triageCount(orgId: string): Promise<number> {
-    const res = await this.apisauce.get<Envelope<{ total: number }>>(`/orgs/${orgId}/triage/count`)
-    return res.ok && res.data ? res.data.data.total : 0
-  }
-
-  async snoozeTriage(orgId: string, taskId: string, snoozedTill: string): Promise<boolean> {
-    const res = await this.apisauce.post(`/orgs/${orgId}/tasks/${taskId}/triage/snooze`, {
-      snoozed_till: snoozedTill,
-    })
-    return res.ok
-  }
-
   // ---- Notes (create/delete/title) ----
   async createNote(
     orgId: string,
@@ -626,16 +560,6 @@ export class Api {
   async deleteNote(orgId: string, noteId: string): Promise<boolean> {
     const res = await this.apisauce.delete(`/orgs/${orgId}/notes/${noteId}`)
     return res.ok
-  }
-
-  // ---- AI conversations (list, for history) ----
-  async listConversations(orgId: string): Promise<{ id: string; title?: string }[]> {
-    const res = await this.apisauce.get<
-      Envelope<{ id: string; title?: string }[] | { items: { id: string; title?: string }[] }>
-    >(`/orgs/${orgId}/ai/conversations`)
-    if (!res.ok || !res.data) return []
-    const d = res.data.data
-    return Array.isArray(d) ? d : (d?.items ?? [])
   }
 
   async listOrgs(): Promise<Org[]> {

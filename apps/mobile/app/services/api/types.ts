@@ -121,12 +121,6 @@ export interface Comment {
   attachments?: StoredObject[]
 }
 
-export interface ChatMessage {
-  id: string
-  role: string
-  content: string
-}
-
 export interface NotificationPrefs {
   notify_property_change: boolean
   notify_state_change: boolean

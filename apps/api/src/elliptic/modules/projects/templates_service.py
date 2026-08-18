@@ -41,7 +41,6 @@ async def save_as_template(
             select(Task)
             .where(
                 Task.project_id == project.id,
-                Task.is_triage.is_(False),
                 Task.archived_at.is_(None),
                 Task.parent_task_id.is_(None),
             )

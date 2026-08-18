@@ -215,13 +215,11 @@ async def test_task_planning_fields_round_trip(app: FastAPI, client: AsyncClient
                 "start_date": "2026-09-01",
                 "due_date": "2026-09-30",
                 "component": "gateway",
-                "release_blocker": True,
                 "org_id": org["id"],
             },
         )
         assert created.data["start_date"] == "2026-09-01"
         assert created.data["component"] == "gateway"
-        assert created.data["release_blocker"] is True
 
         updated = await mcp_client.call_tool(
             "update_task",

@@ -20,7 +20,6 @@ class OrgUpdateIn(BaseModel):
 
     name: str | None = Field(default=None, min_length=1, max_length=255)
     description: str | None = None
-    ai_enabled: bool | None = None
     block_backward_transitions: bool | None = None
     residency_region: str | None = Field(default=None, max_length=20)
     compliance_frameworks: list[str] | None = None
@@ -37,7 +36,6 @@ class OrgOut(BaseModel):
     name: str
     slug: str
     description: str | None
-    ai_enabled: bool = True
     block_backward_transitions: bool = False
     residency_region: str | None = None
     compliance_frameworks: list[str] = []
@@ -115,7 +113,6 @@ class SeatUsageOut(BaseModel):
     billable_seats: int
     free_seats: int
     total_members: int
-    bot_users: int = 0
     by_role: dict[str, int]
     billable_roles: list[str]
 
@@ -141,7 +138,6 @@ class PlanOption(BaseModel):
     plan: str
     label: str
     seat_limit: int
-    ai_credits_per_seat: int
 
 
 class EditionOut(BaseModel):
@@ -151,10 +147,8 @@ class EditionOut(BaseModel):
     label: str
     seat_limit: int
     billable_seats: int
-    bot_users: int = 0
     over_seat_limit: bool
     seats_remaining: int
-    ai_credits_per_seat: int
     features: list[str]
     available_plans: list[PlanOption]
 

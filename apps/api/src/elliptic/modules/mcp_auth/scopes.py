@@ -15,7 +15,7 @@ class ScopeDef:
 
 
 SCOPE_CATALOG: tuple[ScopeDef, ...] = (
-    ScopeDef("tasks:read", "Tasks", "Read tasks, boards, labels and triage", False, True),
+    ScopeDef("tasks:read", "Tasks", "Read tasks, boards and labels", False, True),
     ScopeDef("tasks:write", "Tasks", "Create, update, move, label and delete tasks", False, False),
     ScopeDef("notes:read", "Notes", "Read notes across your projects", False, True),
     ScopeDef("notes:write", "Notes", "Create and edit notes", False, False),
@@ -23,14 +23,10 @@ SCOPE_CATALOG: tuple[ScopeDef, ...] = (
         "drive:read", "Drive", "Browse and read the workspace's uploaded documents", False, True
     ),
     ScopeDef("drive:write", "Drive", "Upload, rename, move and delete documents", False, False),
-    ScopeDef("meetings:read", "Meetings", "Read meetings, transcripts and summaries", False, True),
-    ScopeDef("meetings:write", "Meetings", "Create, edit and summarize meetings", False, False),
-    ScopeDef("events:read", "Calendar", "Read your calendar events", False, True),
-    ScopeDef("events:write", "Calendar", "Create and edit calendar events", False, False),
+    ScopeDef("meetings:read", "Meetings", "Read meetings and transcripts", False, True),
+    ScopeDef("meetings:write", "Meetings", "Create, edit and delete meetings", False, False),
     ScopeDef("activity:read", "Activity", "See what changed and where you left off", False, True),
     ScopeDef("brain:read", "Brain", "Catch-me-up, search and open threads", False, True),
-    ScopeDef("agents:read", "Agents", "See the org's AI agents and their runs", False, True),
-    ScopeDef("agents:write", "Agents", "Create, update, pause and budget AI agents", True, False),
     ScopeDef(
         "sources:read", "Connected sources", "Read GitHub commits and pull requests", False, True
     ),
@@ -38,7 +34,6 @@ SCOPE_CATALOG: tuple[ScopeDef, ...] = (
     ScopeDef(
         "sources:manage", "Connected sources", "Connect and disconnect repositories", True, False
     ),
-    ScopeDef("agents:keys", "Agents", "Create and revoke AI agent API keys", True, False),
     ScopeDef(
         "comments:read", "Comments", "Read comments across tasks, notes and meetings", False, True
     ),

@@ -13,7 +13,6 @@ from elliptic.core.models_base import BaseModel
 class AutomationTrigger(enum.StrEnum):
     """What fires an automation rule."""
 
-    ON_TRIAGE_ENTRY = "on_triage_entry"
     ON_STATUS_CHANGE = "on_status_change"
 
 

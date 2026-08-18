@@ -4,14 +4,11 @@ from typing import Any
 
 from elliptic.modules.mcp_server import (
     tools_activity,  # noqa: F401
-    tools_agents,  # noqa: F401
     tools_automation,  # noqa: F401
     tools_brain,  # noqa: F401
     tools_comments,  # noqa: F401
     tools_drive,  # noqa: F401
-    tools_events,  # noqa: F401
     tools_integrations,  # noqa: F401
-    tools_meeting_templates,  # noqa: F401
     tools_meetings,  # noqa: F401
     tools_notes,  # noqa: F401
     tools_notifications,  # noqa: F401
@@ -21,7 +18,6 @@ from elliptic.modules.mcp_server import (
     tools_search,  # noqa: F401
     tools_tasks,  # noqa: F401
     tools_teams,  # noqa: F401
-    tools_triage,  # noqa: F401
     tools_views,  # noqa: F401
     tools_vocabulary,  # noqa: F401
     tools_workflow,  # noqa: F401

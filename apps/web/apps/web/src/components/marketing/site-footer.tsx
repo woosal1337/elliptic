@@ -28,10 +28,9 @@ const COLUMNS: FooterColumn[] = [
     index: "02",
     heading: "Features",
     links: [
-      { label: "BYOK", href: "https://docs.elliptic.sh/ai-byok-assistant" },
       { label: "Board", href: "https://docs.elliptic.sh/workflows-statuses-transitions" },
       { label: "Transcripts", href: "https://docs.elliptic.sh/meetings" },
-      { label: "Activity log", href: "https://docs.elliptic.sh/activity-calendar-inbox" },
+      { label: "Activity log", href: "https://docs.elliptic.sh/activity-inbox" },
     ],
   },
   {

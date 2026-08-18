@@ -10,7 +10,6 @@ from elliptic.core.schemas import SuccessResponse, ok
 from elliptic.modules.notifications import service
 from elliptic.modules.notifications.schemas import (
     CatchUpOut,
-    CatchUpSummaryOut,
     DeviceTokenIn,
     DeviceTokenOut,
     MarkSeenIn,
@@ -66,15 +65,6 @@ async def catch_up_mark_seen(
         session, ctx, ctx.user.id, payload.entity_type, payload.entity_id
     )
     return ok(MarkSeenOut(marked=marked))
-
-
-@router.get("/catch-up/summary")
-async def catch_up_summary(
-    project_id: uuid.UUID, ctx: OrgCtx, session: SessionDep
-) -> SuccessResponse[CatchUpSummaryOut]:
-    """An AI summary of what changed in a project recently (COS-239)."""
-    data = await service.catch_up_project_summary(session, ctx, project_id)
-    return ok(CatchUpSummaryOut.model_validate(data))
 
 
 @router.get("/preferences")

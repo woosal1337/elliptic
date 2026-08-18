@@ -90,8 +90,6 @@ async def create_task(
     kind: str = "task",
     severity: str | None = None,
     component: str | None = None,
-    release_blocker: bool = False,
-    is_triage: bool = False,
     mention_user_ids: list[str] | None = None,
     related_task_ids: list[str] | None = None,
     idempotency_key: str | None = None,
@@ -122,8 +120,6 @@ async def create_task(
                 kind=TaskKind(kind),
                 severity=BugSeverity(severity) if severity else None,
                 component=component,
-                release_blocker=release_blocker,
-                is_triage=is_triage,
                 mention_user_ids=[uuid.UUID(value) for value in (mention_user_ids or [])],
                 related_task_ids=[uuid.UUID(value) for value in (related_task_ids or [])],
             )
@@ -160,7 +156,6 @@ async def update_task(
     clear_severity: bool = False,
     component: str | None = None,
     clear_component: bool = False,
-    release_blocker: bool | None = None,
     mention_user_ids: list[str] | None = None,
     related_task_ids: list[str] | None = None,
     org_id: str | None = None,
@@ -191,7 +186,6 @@ async def update_task(
             clear_severity=clear_severity,
             component=component,
             clear_component=clear_component,
-            release_blocker=release_blocker,
             mention_user_ids=[uuid.UUID(value) for value in (mention_user_ids or [])],
             related_task_ids=[uuid.UUID(value) for value in (related_task_ids or [])],
         )

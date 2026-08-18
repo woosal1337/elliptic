@@ -6,16 +6,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Activity,
-  Building2,
-  CalendarDays,
   ChevronRight,
   CircleUser,
   Eye,
   EyeOff,
   FileText,
   FolderKanban,
-  Rocket,
-  Target,
   GripVertical,
   PanelLeftClose,
   PanelLeftOpen,
@@ -24,9 +20,6 @@ import {
   Paperclip,
   Pin,
   Settings,
-  Database,
-  LayoutDashboard,
-  Sparkles,
   Video,
 } from "lucide-react";
 import {
@@ -47,23 +40,14 @@ import {
   type ResolvedSidebarItem,
   type SidebarSection,
 } from "./sidebar-prefs";
-import { useTriageCount } from "@/hooks/use-triage-count";
 
 const ICONS: Record<string, ComponentType<{ className?: string }>> = {
   "my-tasks": CircleUser,
   inbox: Inbox,
-  assistant: Sparkles,
-  query: Database,
-  dashboards: LayoutDashboard,
-  triage: Inbox,
   notes: FileText,
   drive: Paperclip,
   projects: FolderKanban,
-  initiatives: Target,
-  releases: Rocket,
-  customers: Building2,
   meetings: Video,
-  calendar: CalendarDays,
   activity: Activity,
   settings: Settings,
 };
@@ -88,7 +72,6 @@ export function Sidebar({
 }) {
   const pathname = usePathname();
   const prefs = useSidebarPrefs();
-  const triageCount = useTriageCount(orgId).data?.total ?? 0;
   const [dragKey, setDragKey] = useState<string | null>(null);
   const [overKey, setOverKey] = useState<string | null>(null);
   const [menuKey, setMenuKey] = useState<string | null>(null);
@@ -211,11 +194,6 @@ export function Sidebar({
               )}
             />
             {item.label}
-            {item.key === "triage" && triageCount > 0 ? (
-              <span className="ml-auto inline-flex min-w-5 items-center justify-center rounded-full bg-accent-muted px-1.5 text-caption font-medium tabular text-accent">
-                {triageCount}
-              </span>
-            ) : null}
           </Link>
           <span
             aria-hidden="true"

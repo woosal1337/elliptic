@@ -109,8 +109,6 @@ async def ingest(session: AsyncSession, token: str, payload: dict[str, Any]) -> 
         status=TaskStatus.BACKLOG,
         kind=TaskKind.BUG,
         severity=_LEVEL_SEVERITY.get(level, BugSeverity.MEDIUM),
-        is_triage=True,
-        intake_channel="sentry",
         created_by=None,
         labels=[],
     )

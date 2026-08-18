@@ -29,10 +29,7 @@ import { McpConnectorsSettings } from "@/components/settings/mcp-connectors-sett
 import { MarketplaceSettings } from "@/components/settings/marketplace-settings";
 import { WebhooksSettings } from "@/components/settings/webhooks-settings";
 import { ComplianceSettings } from "@/components/settings/compliance-settings";
-import { AISettings } from "@/components/settings/ai-settings";
-import { AIAccessSettings } from "@/components/settings/ai-access-settings";
 import { VocabularySettings } from "@/components/settings/vocabulary-settings";
-import { MeetingTemplatesSettings } from "@/components/settings/meeting-templates-settings";
 import { WorkflowSettings } from "@/components/settings/workflow-settings";
 import { WorkTypesSettings } from "@/components/settings/work-types-settings";
 import { RelationTypesSettings } from "@/components/settings/relation-types-settings";
@@ -253,17 +250,8 @@ export default function SettingsPage() {
             <TabsContent value="compliance" className="mt-0">
               <ComplianceSettings orgId={orgId} />
             </TabsContent>
-            <TabsContent value="ai" className="mt-0">
-              <AISettings orgId={orgId} />
-            </TabsContent>
-            <TabsContent value="ai-access" className="mt-0">
-              <AIAccessSettings />
-            </TabsContent>
             <TabsContent value="vocabulary" className="mt-0">
               <VocabularySettings orgId={orgId} />
-            </TabsContent>
-            <TabsContent value="templates" className="mt-0">
-              <MeetingTemplatesSettings orgId={orgId} />
             </TabsContent>
             <TabsContent value="workflow" className="mt-0">
               <WorkflowSettings orgId={orgId} />

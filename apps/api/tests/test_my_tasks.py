@@ -84,18 +84,14 @@ async def test_subscribed_reflects_watching(client: AsyncClient) -> None:
     assert other["id"] not in ids
 
 
-async def test_recent_unions_relationships_and_excludes_triage(client: AsyncClient) -> None:
+async def test_recent_unions_relationships(client: AsyncClient) -> None:
     auth = await register_and_login(client)
     org = await create_org(client, auth["headers"])
     project = await create_project(client, auth["headers"], org["id"], key="REC")
     normal = await create_task(client, auth["headers"], org["id"], project["id"], title="Normal")
-    triaged = await create_task(
-        client, auth["headers"], org["id"], project["id"], title="Triaged", is_triage=True
-    )
     response = await client.get(f"{API}/orgs/{org['id']}/tasks/recent", headers=auth["headers"])
     ids = {item["id"] for item in response.json()["data"]["items"]}
     assert normal["id"] in ids
-    assert triaged["id"] not in ids
 
 
 async def test_my_tasks_routes_do_not_shadow_task_detail(client: AsyncClient) -> None:

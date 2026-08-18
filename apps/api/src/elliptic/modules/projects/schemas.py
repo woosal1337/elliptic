@@ -38,8 +38,6 @@ class ProjectUpdateIn(BaseModel):
     team_id: uuid.UUID | None = None
     lead_id: uuid.UUID | None = None
     default_assignee_id: uuid.UUID | None = None
-    intake_owner_id: uuid.UUID | None = None
-    clear_intake_owner: bool = False
     target_date: date | None = None
     features: dict[str, bool] | None = None
     estimate_scale: list[str] | None = None
@@ -70,11 +68,7 @@ class ProjectOut(BaseModel):
     network: ProjectNetwork = ProjectNetwork.PRIVATE
     lead_id: uuid.UUID | None = None
     default_assignee_id: uuid.UUID | None = None
-    intake_owner_id: uuid.UUID | None = None
-    intake_enabled: bool = False
-    intake_inapp_enabled: bool = False
     worklog_approval_required: bool = False
-    intake_token: str | None = None
     target_date: date | None = None
     state_id: uuid.UUID | None = None
     features: dict[str, bool] = {}

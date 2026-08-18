@@ -62,7 +62,7 @@ const PILLARS = [
   },
   {
     title: "Enterprise-ready",
-    description: "SSO, SCIM, LDAP, RBAC with audit logs, webhooks, and dashboards out of the box.",
+    description: "SSO, SCIM, LDAP, RBAC with audit logs, and webhooks out of the box.",
   },
 ];
 

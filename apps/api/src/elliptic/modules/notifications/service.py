@@ -410,54 +410,6 @@ async def catch_up_mark_entity_read(
     return marked
 
 
-async def catch_up_project_summary(
-    session: AsyncSession, ctx: OrgContext, project_id: uuid.UUID
-) -> dict[str, object]:
-    """An AI 'what changed' digest of a project's recent activity (COS-239)."""
-    from elliptic.modules.activity.models import ActivityEvent  # noqa: PLC0415
-    from elliptic.modules.ai.models import AIRunPurpose  # noqa: PLC0415
-    from elliptic.modules.ai.providers import ChatMessage  # noqa: PLC0415
-    from elliptic.modules.ai.service import run_completion  # noqa: PLC0415
-    from elliptic.modules.projects.models import Project  # noqa: PLC0415
-
-    project = await session.scalar(
-        select(Project).where(Project.id == project_id, Project.org_id == ctx.org.id)
-    )
-    if project is None:
-        raise NotFoundError("Project not found")
-
-    events = list(
-        await session.scalars(
-            select(ActivityEvent)
-            .where(ActivityEvent.org_id == ctx.org.id, ActivityEvent.project_id == project_id)
-            .order_by(ActivityEvent.created_at.desc())
-            .limit(60)
-        )
-    )
-    if not events:
-        return {"summary": "Nothing has changed in this project recently.", "event_count": 0}
-
-    lines = [
-        f"- {e.entity_type} {e.event_type}"
-        + (f": {e.payload.get('title') or e.payload.get('snippet')}" if e.payload else "")
-        for e in events
-    ]
-    context = "\n".join(lines)
-    messages: list[ChatMessage] = [
-        {
-            "role": "system",
-            "content": (
-                "You write a brief 'what changed since your last visit' digest for a "
-                "project. Summarize the activity into 3-6 concise markdown bullets, "
-                "grouping related changes. No preamble."
-            ),
-        },
-        {"role": "user", "content": f"Project: {project.name}\n\nRecent activity:\n{context}"},
-    ]
-    result, _run = await run_completion(session, ctx, purpose=AIRunPurpose.CHAT, messages=messages)
-    return {"summary": result.content.strip(), "event_count": len(events)}
-
-
 async def register_device_token(
     session: AsyncSession, ctx: OrgContext, platform: str, token: str
 ) -> "DeviceToken":

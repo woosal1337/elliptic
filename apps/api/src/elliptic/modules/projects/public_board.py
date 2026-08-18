@@ -65,7 +65,6 @@ async def read_public(session: AsyncSession, token: str) -> dict[str, object]:
             .where(
                 Task.project_id == project.id,
                 Task.archived_at.is_(None),
-                Task.is_triage.is_(False),
             )
             .order_by(Task.sort_order, Task.number)
         )

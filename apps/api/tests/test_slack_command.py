@@ -29,7 +29,7 @@ def test_signature_verification_roundtrip() -> None:
     assert verify_slack_signature(SIGNING_SECRET, ts, body, sig, now=1700001000) is False
 
 
-async def test_slash_command_creates_triage_task(client: AsyncClient, monkeypatch) -> None:
+async def test_slash_command_creates_a_task(client: AsyncClient, monkeypatch) -> None:
     from elliptic.core.config import get_settings  # noqa: PLC0415
 
     get_settings.cache_clear()  # type: ignore[attr-defined]
@@ -68,7 +68,7 @@ async def test_slash_command_creates_triage_task(client: AsyncClient, monkeypatc
     assert res.status_code == 200, res.text
     assert "Created" in res.json()["text"]
 
-    triage = await client.get(f"{API}/orgs/{org['id']}/triage", headers=h)
-    assert any(t["title"] == "Fix the login page" for t in triage.json()["data"])
+    tasks = await client.get(f"{API}/orgs/{org['id']}/tasks/all", headers=h)
+    assert any(t["title"] == "Fix the login page" for t in tasks.json()["data"]["items"])
 
     get_settings.cache_clear()  # type: ignore[attr-defined]

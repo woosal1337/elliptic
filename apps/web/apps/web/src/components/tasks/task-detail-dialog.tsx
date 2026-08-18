@@ -37,7 +37,6 @@ import {
   SelectTrigger,
   SelectValue,
   Skeleton,
-  Switch,
   Textarea,
   toast,
   Tooltip,
@@ -68,7 +67,6 @@ import { TaskDescriptionEditor } from "./task-description-editor";
 import { TaskDescriptionHistory } from "./task-description-history";
 import type { MentionConfig, MentionItem } from "@/components/notes/editor-extensions";
 import { useOrgMembers } from "@/hooks/use-org-queries";
-import { useAIUsers } from "@/hooks/use-ai-queries";
 import { useMe } from "@/hooks/use-auth-queries";
 import { useNotes } from "@/hooks/use-note-queries";
 import { driveFileHref, useDriveFiles } from "@/hooks/use-drive-queries";
@@ -90,9 +88,7 @@ import { TaskSubscribers } from "./task-subscribers";
 import { TaskCycleField } from "./task-cycle-field";
 import { TaskMilestoneField } from "./task-milestone-field";
 import { TaskModuleField } from "./task-module-field";
-import { TaskReleaseField } from "./task-release-field";
 import { TaskCustomFields } from "./task-custom-fields";
-import { TaskEstimateField } from "./task-estimate-field";
 import { Markdown } from "@/components/notes/markdown";
 
 const REACTION_EMOJIS = ["👍", "❤️", "🎉", "🚀", "👀", "✅"] as const;
@@ -659,7 +655,6 @@ function TaskDetailBody({
   const duplicateTask = useDuplicateTask(orgId, projectId);
   const archiveTask = useArchiveTask(orgId, projectId, task.id);
   const orgMembers = useOrgMembers(orgId);
-  const botUsers = useAIUsers(orgId);
   const projectMembers = useProjectMembers(orgId, projectId);
   const projectTasks = useTasks(orgId, projectId);
   const projectNotes = useNotes(orgId, projectId);
@@ -915,32 +910,6 @@ function TaskDetailBody({
                 }
               />
             </Field>
-            {botUsers.data && botUsers.data.length > 0 ? (
-              <Field label="Agent">
-                <Select
-                  value={task.bot_assignee_id ?? "none"}
-                  onValueChange={(value) =>
-                    updateTask.mutate(
-                      value === "none"
-                        ? { taskId: task.id, clear_bot_assignee: true }
-                        : { taskId: task.id, bot_assignee_id: value }
-                    )
-                  }
-                >
-                  <SelectTrigger aria-label="Agent" className="w-full">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="none">No agent</SelectItem>
-                    {botUsers.data.map((bot) => (
-                      <SelectItem key={bot.id} value={bot.id}>
-                        {bot.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </Field>
-            ) : null}
             <Field label="Type">
               <TypeSelect
                 value={task.kind}
@@ -971,15 +940,6 @@ function TaskDetailBody({
                     }}
                   />
                 </Field>
-                <Field label="Release blocker">
-                  <Switch
-                    checked={task.release_blocker}
-                    onCheckedChange={(checked) =>
-                      updateTask.mutate({ taskId: task.id, release_blocker: checked })
-                    }
-                    aria-label="Release blocker"
-                  />
-                </Field>
               </>
             ) : null}
             <Field label="Cycle">
@@ -991,10 +951,6 @@ function TaskDetailBody({
             <Field label="Module">
               <TaskModuleField orgId={orgId} projectId={projectId} task={task} />
             </Field>
-            <Field label="Release">
-              <TaskReleaseField orgId={orgId} task={task} />
-            </Field>
-            <TaskEstimateField orgId={orgId} projectId={projectId} task={task} />
           </div>
         </SidebarSection>
 

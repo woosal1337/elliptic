@@ -14,37 +14,19 @@ export interface SidebarItemDef {
 export const SIDEBAR_ITEMS: readonly SidebarItemDef[] = [
   { key: "my-tasks", label: "My Tasks", segment: "my-tasks", section: "personal" },
   { key: "inbox", label: "Inbox", segment: "inbox", section: "personal" },
-  { key: "assistant", label: "Assistant", segment: "assistant", section: "personal" },
-  { key: "triage", label: "Triage", segment: "triage", section: "personal" },
   { key: "notes", label: "Notes", segment: "notes", section: "personal" },
   { key: "drive", label: "Drive", segment: "drive", section: "team" },
   { key: "projects", label: "Projects", segment: "projects", section: "team" },
-  { key: "initiatives", label: "Initiatives", segment: "initiatives", section: "team" },
-  { key: "releases", label: "Releases", segment: "releases", section: "team" },
-  { key: "customers", label: "Customers", segment: "customers", section: "team" },
   { key: "meetings", label: "Meetings", segment: "meetings", section: "team" },
-  { key: "calendar", label: "Calendar", segment: "calendar", section: "team" },
   { key: "activity", label: "Activity", segment: "activity", section: "team" },
-  { key: "query", label: "Query", segment: "query", section: "team" },
-  { key: "dashboards", label: "Dashboards", segment: "dashboards", section: "team" },
   { key: "settings", label: "Settings", segment: "settings", section: "team" },
 ] as const;
 
 const ITEM_KEYS = SIDEBAR_ITEMS.map((item) => item.key);
 
-// Only the most-used items live in the sidebar by default; everything else starts
-// in the collapsible "More" section. Users can still pin/hide/reorder from there.
-const DEFAULT_HIDDEN: readonly string[] = [
-  "assistant",
-  "triage",
-  "initiatives",
-  "releases",
-  "customers",
-  "meetings",
-  "calendar",
-  "query",
-  "dashboards",
-];
+// Every remaining item is a first-class surface, so nothing starts hidden. Users
+// can still pin/hide/reorder from the row menu.
+const DEFAULT_HIDDEN: readonly string[] = [];
 
 export interface SidebarPrefs {
   order: string[];
@@ -60,7 +42,7 @@ function defaults(): SidebarPrefs {
 
 const STORAGE_KEY = "elliptic:sidebar";
 // Bump when the curated default changes so existing installs migrate once.
-const PREFS_VERSION = 2;
+const PREFS_VERSION = 3;
 
 function isKnownKey(value: unknown): value is string {
   return typeof value === "string" && ITEM_KEYS.includes(value);

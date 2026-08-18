@@ -5,12 +5,8 @@ import { toast } from "@elliptic/ui";
 import { api, errorMessage, orgPath } from "@/lib/api";
 import type {
   Meeting,
-  MeetingChatResult,
   MeetingShare,
-  MeetingSummary,
-  OrgMeetingChatResult,
   Page,
-  RouteSuggestion,
   TranscriptChapter,
   TranscriptSegment,
 } from "@/lib/types";
@@ -59,32 +55,9 @@ export function useTranscript(orgId: string, meetingId: string) {
   });
 }
 
-export function useSummaries(orgId: string, meetingId: string) {
-  return useQuery({
-    queryKey: meetingKeys.summaries(orgId, meetingId),
-    queryFn: ({ signal }) =>
-      api.get<MeetingSummary[]>(orgPath(orgId, `/meetings/${meetingId}/summaries`), signal),
-  });
-}
-
 export interface SummarizeInput {
   template_id?: string;
   preserve_human?: boolean;
-}
-
-export function useSummarizeMeeting(orgId: string, meetingId: string) {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (input?: SummarizeInput) =>
-      api.post<MeetingSummary>(orgPath(orgId, `/meetings/${meetingId}/summarize`), input ?? {}),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: meetingKeys.summaries(orgId, meetingId) });
-      toast.success("Summary generated");
-    },
-    onError: (error) => {
-      toast.error(errorMessage(error));
-    },
-  });
 }
 
 export interface MeetingUpdateInput {
@@ -122,16 +95,6 @@ export function useImportMeeting(orgId: string) {
   });
 }
 
-export function useSendMeetingChat(orgId: string, meetingId: string) {
-  return useMutation({
-    mutationFn: (messages: { role: "user" | "assistant"; content: string }[]) =>
-      api.post<MeetingChatResult>(orgPath(orgId, `/meetings/${meetingId}/chat`), { messages }),
-    onError: (error) => {
-      toast.error(errorMessage(error));
-    },
-  });
-}
-
 export function useMeetingChapters(orgId: string, meetingId: string) {
   return useQuery({
     queryKey: [...meetingKeys.detail(orgId, meetingId), "chapters"] as const,
@@ -148,18 +111,6 @@ export interface OrgChatScope {
   from?: string;
   to?: string;
   pinned?: string[];
-}
-
-export function useSendOrgMeetingChat(orgId: string) {
-  return useMutation({
-    mutationFn: (input: {
-      messages: { role: "user" | "assistant"; content: string }[];
-      scope?: OrgChatScope;
-    }) => api.post<OrgMeetingChatResult>(orgPath(orgId, "/meetings/chat"), input),
-    onError: (error) => {
-      toast.error(errorMessage(error));
-    },
-  });
 }
 
 export function useMeetingShare(orgId: string, meetingId: string) {
@@ -216,29 +167,3 @@ export function useCreateMeeting(orgId: string) {
   });
 }
 
-export function useSuggestMeetingProject(orgId: string, meetingId: string) {
-  return useQuery({
-    queryKey: [...meetingKeys.detail(orgId, meetingId), "suggest-project"] as const,
-    queryFn: ({ signal }) =>
-      api.get<RouteSuggestion>(orgPath(orgId, `/meetings/${meetingId}/suggest-project`), signal),
-    enabled: meetingId.length > 0,
-    retry: false,
-    staleTime: 5 * 60_000,
-  });
-}
-
-export function useSetMeetingProject(orgId: string, meetingId: string) {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (projectId: string) =>
-      api.patch<Meeting>(orgPath(orgId, `/meetings/${meetingId}`), { project_id: projectId }),
-    onSuccess: (meeting) => {
-      queryClient.setQueryData(meetingKeys.detail(orgId, meetingId), meeting);
-      void queryClient.invalidateQueries({ queryKey: meetingKeys.all(orgId) });
-      toast.success("Meeting filed");
-    },
-    onError: (error) => {
-      toast.error(errorMessage(error));
-    },
-  });
-}

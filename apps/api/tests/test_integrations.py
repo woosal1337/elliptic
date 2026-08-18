@@ -6,8 +6,7 @@ import pytest
 from httpx import AsyncClient
 
 from elliptic.modules.integrations import slack_client
-from elliptic.modules.integrations.service import build_slack_message
-from tests.helpers import API, create_org, import_meeting, register_and_login
+from tests.helpers import API, create_org, register_and_login
 
 
 async def test_slack_connection_defaults_to_disconnected(client: AsyncClient) -> None:
@@ -37,16 +36,6 @@ async def test_slack_connection_unknown_org_is_404(client: AsyncClient) -> None:
         f"{API}/orgs/{uuid.uuid4()}/integrations/slack", headers=auth["headers"]
     )
     assert response.status_code == 404, response.text
-
-
-def test_build_slack_message() -> None:
-    text = build_slack_message(
-        "Weekly sync", "We shipped the redesign.", ["Alice writes docs"], "https://x/share/m/tok"
-    )
-    assert "*Weekly sync*" in text
-    assert "We shipped the redesign." in text
-    assert "• Alice writes docs" in text
-    assert "<https://x/share/m/tok|Ask about this meeting>" in text
 
 
 async def _oauth_connect(
@@ -97,40 +86,3 @@ async def test_channels_require_connection_then_list(
     listed = await client.get(f"{API}/orgs/{org_id}/integrations/slack/channels", headers=headers)
     assert listed.status_code == 200, listed.text
     assert [c["name"] for c in listed.json()["data"]] == ["general", "eng"]
-
-
-async def test_send_meeting_to_slack(client: AsyncClient, monkeypatch: pytest.MonkeyPatch) -> None:
-    headers, org_id = await _oauth_connect(client, monkeypatch)
-    posted: dict[str, str] = {}
-
-    async def fake_post(
-        token: str, channel_id: str, text: str, *, transport: object = None
-    ) -> None:
-        posted["token"] = token
-        posted["channel_id"] = channel_id
-        posted["text"] = text
-
-    monkeypatch.setattr(slack_client, "post_message", fake_post)
-    meeting = await import_meeting(client, headers, org_id)
-    response = await client.post(
-        f"{API}/orgs/{org_id}/meetings/{meeting['id']}/slack",
-        json={"channel_id": "C1"},
-        headers=headers,
-    )
-    assert response.status_code == 200, response.text
-    assert response.json()["data"] == {"ok": True}
-    assert posted["token"] == "xoxb-fake"
-    assert posted["channel_id"] == "C1"
-    assert "Weekly sync" in posted["text"]
-
-
-async def test_send_without_connection_fails(client: AsyncClient) -> None:
-    auth = await register_and_login(client)
-    org = await create_org(client, auth["headers"])
-    meeting = await import_meeting(client, auth["headers"], org["id"])
-    response = await client.post(
-        f"{API}/orgs/{org['id']}/meetings/{meeting['id']}/slack",
-        json={"channel_id": "C1"},
-        headers=auth["headers"],
-    )
-    assert response.status_code == 400, response.text
