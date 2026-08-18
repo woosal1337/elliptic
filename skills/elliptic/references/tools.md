@@ -1,4 +1,4 @@
-# Elliptic MCP — complete tool catalog (155 tools)
+# Elliptic MCP — complete tool catalog (121 tools)
 
 Conventions used below:
 
@@ -26,22 +26,22 @@ Conventions used below:
 ### `list_project_tasks(project_id*, status=None, assignee_id=None, search=None, limit=50, offset=0)`
 Scope `tasks:read`. Board-mirroring filters. `status` must be a valid
 TaskStatus string or it raises. `search` is case-insensitive substring over
-title **and** description. Excludes triage and archived tasks. Ordered by
+title **and** description. Excludes archived tasks. Ordered by
 board order (`sort_order, number`). `total` is the pre-pagination count.
 No server-side limit cap — pass a sane one.
 
 ### `get_task(task_id*)`
 Scope `tasks:read`. Full task: `identifier` (`ENG-42`), status + immutable
 `category`, priority, kind/severity/component, assignee + `bot_assignee_id`
-(an AI user), dates, labels, `estimate`, `acceptance_criteria`, `dod_items`,
+dates, labels, `estimate`, `acceptance_criteria`, `dod_items`,
 `custom_fields`, provenance (`source_meeting_id`, `source_note_id`), planning
-links (`cycle_id`, `milestone_id`, `module_id`, `release_id` — read-only over
+links (`cycle_id`, `milestone_id`, `module_id` — read-only over
 MCP), `subtask_total`/`subtask_done`, `blocked` (true when an open task
 `blocks` it), `comment_count`, `latest_comment {content, author_name}`.
 
-### `create_task(project_id*, title*, description=None, status="backlog", priority="none", assignee_id=None, unassigned=False, start_date=None, due_date=None, label_ids=None, parent_task_id=None, source_meeting_id=None, source_note_id=None, kind="task", severity=None, component=None, release_blocker=False, is_triage=False, mention_user_ids=None, related_task_ids=None)` 🔑
+### `create_task(project_id*, title*, description=None, status="backlog", priority="none", assignee_id=None, unassigned=False, start_date=None, due_date=None, label_ids=None, parent_task_id=None, source_meeting_id=None, source_note_id=None, kind="task", severity=None, component=None, mention_user_ids=None, related_task_ids=None)` 🔑
 Scope `tasks:write`. Assignee resolution when `assignee_id` omitted:
-`unassigned=true` → nobody; triage → project's intake owner; else project's
+`unassigned=true` → nobody; else project's
 default assignee; else **you (the caller)**. Assignees must be project
 members and never guests. `kind="bug"` **requires** `severity` and gets an
 SLA due date when none given (critical +1d, high +3d, medium +7d, low +30d).
@@ -49,7 +49,6 @@ Subtasks: one level only, same project, kind-nesting rules apply (an epic
 can't sit under a story). Dates are `YYYY-MM-DD`. Title 1–500 chars.
 Side effects: activity, auto-subscribe creator+assignee, MENTIONED
 notifications for mentions, `related` relations for `related_task_ids`,
-triage entry fires intake notifications + `on_triage_entry` automations.
 
 ### `update_task(task_id*, title=None, description=None, priority=None, assignee_id=None, clear_assignee=False, start_date=None, due_date=None, estimate=None, acceptance_criteria=None, label_ids=None, kind=None, severity=None, clear_severity=False, component=None, clear_component=False, release_blocker=None, mention_user_ids=None, related_task_ids=None)`
 Scope `tasks:write`. Omitted = untouched; clearing needs the `clear_*` flag.
@@ -97,14 +96,14 @@ the user or reassign after. All-blank input → "No task titles provided".
 ### `get_task_board(project_id*)`
 Scope `tasks:read`. `{columns: [{status, tasks[]}]}` — every status except
 `duplicate`, empty columns included, board order within columns. Excludes
-triage but **includes archived tasks**, and is unpaginated: on huge projects
+**includes archived tasks**, and is unpaginated: on huge projects
 prefer `list_project_tasks` with filters.
 
 ### `list_my_tasks(filter="assigned", limit=50, offset=0)`
 Scope `tasks:read`. `filter` ∈ `assigned | created | subscribed | recent`
 (anything else raises). `recent` = union of the other three ordered by
 `updated_at` desc; the rest order open-before-closed then priority. Spans all
-projects in the org; excludes triage/archived.
+projects in the org; excludes archived.
 
 ### `list_subtasks(task_id*)`
 Scope `tasks:read`. Children of one parent, board order, unpaginated.
@@ -140,8 +139,7 @@ Scope `tasks:read`. All non-deleted projects — **including archived ones**
 ### `get_project(project_id*)`
 Scope `tasks:read`. Fields worth knowing: `key`, `status`
 (`active|archived`), `network` (`private|public`), `lead_id`,
-`default_assignee_id`, `intake_owner_id`, `intake_enabled` + `intake_token`
-(the public intake form), `worklog_approval_required`, `target_date`,
+`default_assignee_id`, `worklog_approval_required`, `target_date`,
 `state_id` (portfolio lifecycle state), `features` (per-project feature
 flags), `estimate_scale`, `auto_archive_days`/`auto_close_days`.
 
@@ -174,12 +172,12 @@ keeps ≥1 member. Remove has **no confirm gate**.
 
 ### `list_project_artifacts(project_id*)` / `add_project_artifact(project_id*, label*, url*)` / `remove_project_artifact(project_id*, artifact_id*)`
 Scope `tasks:read`/`write`. Artifacts are labelled external **links** (repo,
-design doc, dashboard) on the project brief — not uploaded files. URL is not
+design doc, spec) on the project brief — not uploaded files. URL is not
 format-validated. Remove has **no confirm gate**.
 
 ---
 
-## Meetings (`meetings:read` / `meetings:write`) — 17 tools
+## Meetings (`meetings:read` / `meetings:write`) — 11 tools
 
 Visibility: a meeting attached to a project is only visible to that project's
 members (admins see all); it surfaces as *not found*, never 403. Editing,
@@ -218,37 +216,9 @@ and share link.
 Scope `meetings:read`. Ordered transcript slices:
 `{speaker, start_seconds, end_seconds, text, position}`.
 
-### `list_meeting_summaries(meeting_id*)`
-Scope `meetings:read`. All summaries, newest first, unpaginated. Each:
-`content` (plain text), `summary_lines` (structured
-`{text, section, provenance: "ai"|"human", segment_ids}` — segment ids are
-validated against the real transcript, hallucinated ids are dropped),
-`model`, `provider`, `ai_run_id`.
-
-### `summarize_meeting(meeting_id*, template_id=None, preserve_human=False)` — uses org AI key
-Scope `meetings:write`. Generates a **segment-cited** summary; appends (never
-overwrites) to the summary list. `template_id`: a custom template UUID or a
-built-in slug — `one-on-one`, `standup`, `customer-call`, `decision`, `retro`,
-`freeform`. `preserve_human=true` carries forward the human-written lines of
-the latest summary. The org glossary (vocabulary) is injected automatically.
-
-### `ask_meeting(meeting_id*, question*)` — uses org AI key
-Scope `meetings:read` (a read scope that spends AI budget). Single-turn Q&A
-grounded strictly in one transcript; no conversation memory — restate context
-each call. Returns `{reply, model, ai_run_id}`.
-
 ### `list_meeting_chapters(meeting_id*)` — free
 Scope `meetings:read`. Derived topic jump points (`{label, start_seconds,
 segment_id}`); empty when the transcript has < 6 segments. No AI call.
-
-### `suggest_meeting_project(meeting_id*)` — free
-Scope `meetings:read`. Deterministic keyword scoring → `{project_id, route,
-confidence 0..1}`; `confidence: 0.0` with null project when nothing matches.
-
-### `run_meeting_recipe(meeting_id*, prompt*, recipe_id=None)` — uses org AI key
-Scope `meetings:write`. **`prompt` is what actually runs** — `recipe_id` is
-recorded for attribution only. To run a saved recipe, fetch its prompt via
-`list_meeting_recipes` and pass it here.
 
 ### `get_meeting_share(meeting_id*)` / `create_meeting_share(meeting_id*, include_transcript=False)` / `update_meeting_share(meeting_id*, include_transcript=None, revoked=None)`
 Scope `meetings:read`/`write`; create/update are creator-or-admin. One share
@@ -256,32 +226,6 @@ per meeting; public URL `{app-origin}/share/meetings/{token}`. Guests always
 see summary + action items + decisions; the transcript only with
 `include_transcript`. Re-creating reuses the token and un-revokes.
 `get` returns `{share: null}` when none exists.
-
-### `meetings_chat(question*, project_id=None, date_from=None, date_to=None, pinned_meeting_ids=None)` — uses org AI key
-Scope `meetings:read`. Cross-meeting Q&A. Retrieval is deterministic keyword
-overlap: scans the 50 most recent in-scope meetings, shortlists 6, top 3
-segments each. Returns `{reply, model, ai_run_id, citations: [{meeting_id,
-meeting_title, segment_id, start_seconds, quote}], coverage: {consulted,
-total}}`. Report coverage honestly — `consulted: 6, total: 50` means 44
-meetings went unread. Pin meetings you know matter via `pinned_meeting_ids`.
-Single-turn.
-
----
-
-## Meeting templates & recipes (`meetings:read` / `meetings:write`) — 6 tools
-
-### `list_meeting_templates()` / `create_meeting_template(name*, sections=None, prompt_scaffold=None)` / `update_meeting_template(template_id*, name=None, sections=None, prompt_scaffold=None)` / `delete_meeting_template(template_id*, confirm=False)` 🗑️
-Custom summary structures (ordered `sections` + optional scaffold). Built-ins
-(`one-on-one`, `standup`, `customer-call`, `decision`, `retro`) live in code
-and are **not** listed here — reference them by slug in `summarize_meeting`.
-Names unique per org. Update quirk: `prompt_scaffold=None` **clears** it.
-Treat writes as admin actions.
-
-### `list_meeting_recipes()` / `create_meeting_recipe(name*, prompt*)`
-Saved, named transcript prompts. Create/list only over MCP — no update or
-delete tools. Built-in recipes are not listed.
-
----
 
 ## Notes (`notes:read` / `notes:write`) — 5 tools
 
@@ -416,29 +360,6 @@ Hits: `{type, id, title, snippet, project_id, identifier, score}`.
 
 ---
 
-## Triage (`tasks:read` / `tasks:write`) — 3 tools
-
-Intake lands as tasks with `is_triage=true` (public intake form, in-app
-intake, custom intake forms, or `create_task(is_triage=true)`); they are
-hidden from boards and task lists until routed.
-
-### `list_triage()`
-Scope `tasks:read`. Org-wide open queue (unresolved, not snoozed), newest
-first, unpaginated, `{items}` only. Items carry `intake_channel`
-(`form`/`in_app`).
-
-### `accept_triage_task(task_id*)`
-Scope `tasks:write`. Routes the item onto its project's board: clears
-`is_triage`, sets status **`todo`** (not configurable over MCP). Note: this
-bypasses workflow guardrails and status-change notifications/automations.
-
-### `decline_triage_task(task_id*, reason=None)`
-Scope `tasks:write`. Cancels and archives it into the closed triage group;
-give a `reason` — it lands in the activity trail. **No confirm gate.**
-Snoozing and mark-as-duplicate exist only in the web app.
-
----
-
 ## Views (`views:read` / `views:write`) — 4 tools
 
 A view is a saved slice of work: `{name, config, scope, is_default}` with
@@ -496,7 +417,7 @@ what the org_id fallback resolves to**. Does not include your role; use
 `list_org_members` for that.
 
 ### `get_org()` / `update_org(name=None, description=None)`
-Scope `org:read` / `org:manage` (elevated). Org fields include `ai_enabled`
+Scope `org:read` / `org:manage` (elevated). Org fields include
 and `block_backward_transitions` (read-only over MCP).
 
 ### `delete_org(confirm=False)` 🗑️ — scope `org:manage`, **owner only**
@@ -522,28 +443,6 @@ Scope `org:read` / `org:manage`. Role defaults to `member`; inviting an owner
 is owner-only. The one-time token appears **only** in the create response
 (accept URL: `{app-origin}/invite/{token}`); 7-day expiry. Revoke has no
 confirm gate.
-
----
-
-## Calendar events (`events:read` / `events:write`) — 6 tools
-
-An event is `team`-visible (everyone in the org) or `personal` (owner only —
-others get *not found*). No recurrence, attendees, or RSVP. Naive datetimes
-are treated as UTC here.
-
-### `list_calendar_events(from_date*, to_date*, scope="all")`
-Window overlap query (`scope` ∈ `all|team|personal`), no pagination,
-`{items}` only. Events may link a meeting (`meeting_id`).
-
-### `get_calendar_event(event_id*)`
-### `get_event_brief(event_id*)` — free, no AI
-2–5 bullets assembled from open tasks of the event owner, action items from
-the linked meeting's latest summary, and the most related note; each bullet
-carries its source. `confidence` = 0.3 × bullets, capped at 1.
-
-### `create_calendar_event(title*, starts_at*, ends_at*, description=None, location=None, all_day=False, visibility="team")` 🔑
-### `update_calendar_event(event_id*, title=None, description=None, location=None, starts_at=None, ends_at=None)` — cannot flip team/personal or set all_day after creation.
-### `delete_calendar_event(event_id*)` — ⚠️ **deletes immediately, no confirm parameter**. Personal events: owner only; team events: creator or admin.
 
 ---
 
@@ -576,8 +475,7 @@ Payload details are withheld over MCP — fetch the entity for current state.
 Cross-project catch-up primitives; deterministic, no AI spend.
 
 ### `brain_open_threads(limit=25)`
-`{assigned_to_me, created_by_me, triage}` — your open work plus the intake
-queue. Open-filtering happens **after** the limit: raise `limit` if the top
+`{assigned_to_me, created_by_me}` — your open work. Open-filtering happens **after** the limit: raise `limit` if the top
 of the list is all closed items.
 
 ### `brain_changes_since(since*, limit=100)`
@@ -606,8 +504,7 @@ Terms unique per org (case-sensitive); term ≤ 120 chars, definition ≤ 2000.
 
 ## Automations (`automation:read` / `automation:write`; writes require org admin) — 5 tools
 
-A rule = trigger + ordered actions. Triggers: `on_triage_entry`,
-`on_status_change`. Actions (`{type, value}`): `label` (label id **or
+A rule = trigger + ordered actions. The trigger is `on_status_change`. Actions (`{type, value}`): `label` (label id **or
 name**), `assign` (member user id, no guests), `route` (project id — the task
 is renumbered in the destination), `set_priority` (a valid priority).
 `is_skill=true` removes a rule from automatic firing; skills run on demand.
@@ -620,30 +517,6 @@ is renumbered in the destination), `set_priority` (a valid priority).
 
 ---
 
-## AI users, keys & runs (`agents:read`; writes `agents:write` / keys `agents:keys` — both elevated) — 12 tools
-
-**AI users** are the org's agent roster — named personas (`name`, `provider`,
-`model`, `system_prompt`, `is_active`, monthly budget) that can be a task's
-`bot_assignee`. They are definitions, not principals: an AI user never
-authenticates; MCP callers always act as the consenting human. **AI keys**
-are the org's BYOK provider credentials that every AI-powered tool spends;
-secrets are write-only (only `last4` ever comes back). **AI runs** are the
-per-call audit/cost trail.
-
-### `list_ai_users()` / `get_ai_user(ai_user_id*)`
-### `create_ai_user(name*, provider*, model*, system_prompt*, is_active=True)` — provider ∈ `openai | anthropic` over MCP.
-### `update_ai_user(ai_user_id*, name=None, model=None, system_prompt=None)` — provider immutable.
-### `pause_ai_user(ai_user_id*, active=False)` — ⚠️ calling with no `active` argument **pauses**.
-### `set_ai_user_budget(ai_user_id*, budget_monthly_cents*)` — ≥0; pass 0 to clear (a null budget can't be restored over MCP). Currently a declared cap, not enforced at spend time.
-### `delete_ai_user(ai_user_id*, confirm=False)` 🗑️
-### `list_agent_runs(limit=50, offset=0)` — `{provider, model, purpose (summarize|chat), input_tokens, output_tokens, status, error}`; newest first.
-### `list_ai_keys()` — masked metadata (`last4`, `is_default`, per-provider default).
-### `create_ai_key(provider*, name*, api_key*, is_default=False, validate_key=False)` — `validate_key=true` checks the key upstream before saving. Never echo the key value back to the user.
-### `update_ai_key(key_id*, name=None, is_default=None)` — the secret is immutable; rotate by create-new + revoke-old.
-### `revoke_ai_key(key_id*, confirm=False)` 🗑️ — hard delete. Revoking the last key breaks every AI tool in the org.
-
----
-
 ## Integrations — Slack (`integrations:read` / `integrations:manage` elevated) — 3 tools
 
 One Slack workspace per org; connecting/disconnecting happens in the web app.
@@ -651,10 +524,6 @@ There is no generic send-message tool.
 
 ### `get_slack_integration()` → `{connected, team_name}` — never raises.
 ### `list_slack_channels()` — public + private channels the bot can see (single page of 1000).
-### `post_meeting_to_slack(meeting_id*, channel_id*)` — scope `integrations:manage`. Posts the newest summary (truncated to 1500 chars) + up to 10 action items. The "Ask about this meeting" link appears only if a non-revoked share exists — `create_meeting_share` first if you want it.
-
----
-
 ## Profile — 2 tools (user-level, no org_id)
 
 ### `get_my_profile()` — scope `profile:read`. Who am I acting as.

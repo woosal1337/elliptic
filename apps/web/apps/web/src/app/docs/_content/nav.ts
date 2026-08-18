@@ -37,16 +37,16 @@ export const DOCS_NAV: DocsNavGroup[] = [
         "label": "Workflows & transitions"
       },
       {
-        "slug": "cycles-milestones-initiatives-releases",
-        "label": "Cycles, milestones, initiatives & releases"
+        "slug": "cycles-milestones-modules",
+        "label": "Cycles, milestones & modules"
       },
       {
-        "slug": "views-filters-pql",
-        "label": "Views, filters & query language"
+        "slug": "views-and-filters",
+        "label": "Views & filters"
       },
       {
-        "slug": "triage-intake-recurring",
-        "label": "Triage, intake & recurring work"
+        "slug": "recurring-work",
+        "label": "Recurring work"
       },
       {
         "slug": "time-tracking-approvals",
@@ -66,8 +66,8 @@ export const DOCS_NAV: DocsNavGroup[] = [
         "label": "Meetings"
       },
       {
-        "slug": "activity-calendar-inbox",
-        "label": "Activity, calendar & inbox"
+        "slug": "activity-inbox",
+        "label": "Activity & Inbox"
       },
       {
         "slug": "files-attachments-embeds",
@@ -78,25 +78,17 @@ export const DOCS_NAV: DocsNavGroup[] = [
         "label": "The Drive"
       },
       {
-        "slug": "dashboards-analytics",
-        "label": "Dashboards & analytics"
-      },
-      {
-        "slug": "customers-crm",
-        "label": "Customers (CRM-lite)"
+        "slug": "analytics",
+        "label": "Analytics"
       }
     ]
   },
   {
-    "heading": "AI & agents",
+    "heading": "Agents & automation",
     "items": [
       {
-        "slug": "ai-byok-assistant",
-        "label": "AI & the assistant"
-      },
-      {
-        "slug": "ai-agents-automations",
-        "label": "AI agents & automations"
+        "slug": "automations",
+        "label": "Automations"
       },
       {
         "slug": "company-brain-mcp",

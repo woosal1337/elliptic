@@ -12,9 +12,7 @@ can do what, where data lives, and how the MCP session itself behaves.
   carry **all scopes across all the user's orgs**; OAuth tokens carry exactly
   the scopes the user ticked on the consent screen, for one org or all orgs.
 - **You always act as a human.** The principal behind every call is the user
-  who consented. Elliptic's "AI users" are managed objects (personas,
-  assignees), never callers. Whatever you do lands in the activity log under
-  that user's name — behave accordingly.
+  who consented.
 - OAuth mechanics (rarely needed, good to recognize): dynamic client
   registration, PKCE S256 required, access tokens live ~10 minutes with
   30-day rotating refresh tokens, discovery at
@@ -43,12 +41,12 @@ Read scopes are baseline (granted by default, locked on the consent screen);
 
 | Domain | Read | Write / manage |
 |---|---|---|
-| Tasks + projects + triage | `tasks:read` | `tasks:write` |
+| Tasks + projects | `tasks:read` | `tasks:write` |
 | Notes | `notes:read` | `notes:write` |
 | Drive | `drive:read` | `drive:write` |
-| Meetings + templates + recipes | `meetings:read` | `meetings:write` |
+| Meetings | `meetings:read` | `meetings:write` |
 | Comments + attachments | `comments:read` | `comments:write` |
-| Calendar | `events:read` | `events:write` |
+
 | Activity | `activity:read` | — |
 | Brain + search | `brain:read` | — |
 | Notifications | `notifications:read` | `notifications:write` |
@@ -99,8 +97,6 @@ creation (`{app-origin}/invite/{token}`).
 - Soft delete with a 30-day restore window (`list_deleted_projects` /
   `restore_project`); org deletion is instant and total.
 - Useful fields: `lead_id`, `default_assignee_id` (fallback assignee for new
-  tasks), `intake_owner_id` (gets triage items), `intake_enabled` +
-  `intake_token` (public intake form at `{app-origin}/intake/{token}`),
   `features` (per-project tab/feature toggles: timeline, cycles, meetings,
   notes, milestones, modules…), `estimate_scale` (the allowed estimate
   strings), `target_date`, portfolio `state_id`
@@ -146,7 +142,7 @@ it. Inverse names are accepted on input and stored in canonical direction.
 
 **Rich fields:** `estimate` (string from the project's scale), `dod_items`
 (checklist gating "done" when the workflow requires it),
-`acceptance_criteria`, `component`, `release_blocker`, `custom_fields`,
+`acceptance_criteria`, `component`, `custom_fields`,
 `start_date`/`due_date`, description **version history** on every edit.
 
 **Provenance:** `source_meeting_id` / `source_note_id` record where work came
@@ -160,22 +156,9 @@ provenance whenever you create tasks from a meeting or note.
 transition edges per status (open until any edge is defined), per-edge
 required project role, and conditions — require assignee / estimate / due
 date / all-DoD-checked. `transition_task_status` enforces all of them;
-triage-accept bypasses them.
+Nothing bypasses them.
 
-## 5. Triage / intake
-
-Inbound requests become tasks with `is_triage=true`, invisible to boards and
-lists until routed. Sources: the public intake form (tokenized, no account
-needed — submitter info is appended to the description), in-app intake,
-custom intake forms, or any `create_task(is_triage=true)`. The project's
-intake owner is auto-assigned and notified; `on_triage_entry` automations
-fire.
-
-- **Accept** → onto the board (`todo`), triage flags cleared.
-- **Decline** (+ reason) → cancelled, kept in the closed triage group.
-- Snooze / mark-duplicate / resolved-history: web app only.
-
-## 6. Notes
+## 5. Notes
 
 One tree of markdown pages. A **folder is a note with `is_folder=true`**;
 folders nest and keep their own `content` — a blurb about what belongs
@@ -192,7 +175,7 @@ whole subtree**.
 Treat concurrent editing carefully: writes are last-write-wins full-content
 replaces. Read, modify, write back — and keep edits tight.
 
-## 7. Meetings
+## 6. Meetings
 
 Lifecycle: created manually (`create_meeting`) or imported from a recorder
 export (`import_folio_meeting` — title, start, attendee names, and
@@ -200,29 +183,15 @@ speaker-attributed segments in one atomic call).
 
 - **Transcript** = ordered segments `{speaker, start/end seconds, text}`.
 - **Chapters** are derived on the fly (topic jump points; need ≥6 segments).
-- **Summaries** are AI-generated on the org's BYOK key, append-only, and
-  **segment-cited**: each line carries the segment ids it came from
-  (hallucinated ids are stripped server-side) plus `provenance: ai|human`.
-  Templates shape sections — built-ins `one-on-one`, `standup`,
-  `customer-call`, `decision`, `retro`, `freeform`, or custom.
-- **Recipes** are saved prompts run over the transcript (e.g. "create
-  tasks"); the vocabulary glossary is injected into all meeting AI calls.
 - **Shares** mint a public link (`{app-origin}/share/meetings/{token}`)
-  showing summary/action-items/decisions, transcript optional, revocable.
+  showing the meeting title, transcript optional, revocable.
 - **Visibility:** meetings attached to a project follow project membership;
   unattached meetings are org-visible. Editing/deleting/sharing is
   creator-or-admin.
 - The done-loop: tasks created with `source_meeting_id` notify attendees when
   completed.
 
-## 8. Calendar
-
-Minimal by design: title, start/end, description, location, `all_day`, and
-visibility `team` (org-visible) or `personal` (owner-only; others get *not
-found*). No recurrence/attendees/RSVP. Events can link a meeting (set via
-web). `get_event_brief` builds a deterministic pre-meeting brief.
-
-## 9. Search, brain & activity
+## 7. Search, brain & activity
 
 - `search` covers exactly: **task** (title+description), **note** (title
   only), **project** (name/key), **meeting** (title only), **cycle** (name),
@@ -230,16 +199,16 @@ web). `get_event_brief` builds a deterministic pre-meeting brief.
   index. Note bodies → `list_notes(search=…)`; transcript content →
   `meetings_chat`.
 - Brain tools are deterministic composites: `brain_open_threads` (my open
-  work + triage), `brain_changes_since` (org activity after a timestamp),
+  work), `brain_changes_since` (org activity after a timestamp),
   `brain_resume` (a project's in-flight tasks + recent notes + activity).
 - The **activity feed** is the append-only audit spine (`created`, `updated`,
-  `status_changed`, `commented`, `triage_accepted`, `summarized`,
+  `status_changed`, `commented`,
   `automation_applied`, …). Every MCP write lands there attributed to the
   acting user. Notifications are the per-person inbox slice: `assigned`,
   `mentioned`, `commented`, `member_added`, `meeting_action_done`, `urgent`,
   `task_created`, `status_changed`.
 
-## 10. Storage & attachments
+## 8. Storage & attachments
 
 - Backend: S3-compatible object storage (Cloudflare R2 by default), bucket
   `elliptic-media`, keys `orgs/{org_id}/{entity_type}/{object_id}/{filename}`.
@@ -282,23 +251,7 @@ web). `get_event_brief` builds a deterministic pre-meeting brief.
   a presigned URL lives on the storage origin, so *reading* it in a client would
   need bucket CORS while *rendering* it does not.
 
-
-## 11. AI & BYOK
-
-Per-org, no platform keys: admins store provider keys (OpenAI/Anthropic over
-MCP; the platform also supports Ollama-compatible, custom, and Bedrock via
-the web app), encrypted at rest, only `last4` readable. Every AI-powered tool
-resolves the org's default key for a provider and records an **AI run**
-(model, purpose, token counts, status) — the audit and cost trail behind each
-`ai_run_id` you get back. `ai_enabled` can be switched off org-wide, which
-disables all AI tools. AI users (personas) can be paused and given monthly
-budgets.
-
-Spends the org's key: `summarize_meeting`, `ask_meeting`, `meetings_chat`,
-`run_meeting_recipe`. Free/deterministic: `search`, `get_event_brief`,
-`suggest_meeting_project`, `list_meeting_chapters`, all brain tools.
-
-## 12. What exists in the product but NOT over MCP
+## 9. What exists in the product but NOT over MCP
 
 Be direct with users when they ask for these — offer the web link instead of
 improvising:
@@ -306,14 +259,11 @@ improvising:
 | Capability | Where it lives |
 |---|---|
 | Cycles (sprints), velocity, roll-forward | project → Cycles tab |
-| Initiatives (strategy layer over projects) | `/app/{orgId}/initiatives` |
 | Milestones, modules | project tabs |
-| Releases & changelogs | `/app/{orgId}/releases` |
 | Retrospectives | project tab |
 | Worklogs (time tracking + approval) | task panel |
-| Dashboards & PQL queries | `/app/{orgId}/dashboards`, `/query` |
 | Favorites, approvals, project templates | web app |
-| Task status *rename/reorder* transfers, triage snooze/duplicate | web app |
+| Task status *rename/reorder* transfers | web app |
 | File upload | web/mobile apps |
 | Slack connect/disconnect; GitHub/Sentry/email integrations | settings |
 | Custom relation types, bot-assignee setting | web/REST |
@@ -321,27 +271,23 @@ improvising:
 Tasks still expose `cycle_id`/`milestone_id`/`module_id`/`release_id`
 read-only, so you can report on them even though you can't set them.
 
-## 13. Web-app URL map (for handing humans links)
+## 10. Web-app URL map (for handing humans links)
 
 Base: `{app-origin}/app/{orgId}` (hosted app-origin: `https://elliptic.sh`).
 
 | Surface | Path |
 |---|---|
-| My tasks / Inbox / Assistant / Triage | `/my-tasks`, `/inbox`, `/assistant`, `/triage` |
+| My tasks / Inbox | `/my-tasks`, `/inbox` |
 | Notes / Wiki | `/notes`, `/notes/{noteId}`, `/wiki` |
-| Projects | `/projects`, `/projects/{projectId}` (opens the Board; `?tab=` overview, updates, board, tasks, epics, timeline, calendar, cycles, milestones, modules, register, insights, meetings, notes, members, settings) |
-| Initiatives / Releases / Customers | `/initiatives`, `/releases`, `/customers` |
-| Meetings / Calendar | `/meetings`, `/meetings/{meetingId}`, `/calendar` |
-| Activity / Query / Dashboards / Search | `/activity`, `/query`, `/dashboards`, `/search` |
+| Projects | `/projects`, `/projects/{projectId}` (opens the Board; `?tab=` overview, updates, board, tasks, epics, timeline, cycles, milestones, modules, register, insights, meetings, notes, members, settings) |
+| Meetings | `/meetings`, `/meetings/{meetingId}` |
+| Activity / Search | `/activity`, `/search` |
 | Teamspace | `/teams/{teamId}` |
 | **Universal resolver** | `/browse/{identifier}` — accepts `ENG-42`, a bare project key, or a comment id |
 | Settings | `/settings` |
 
 Public (no login): `/share/meetings/{token}`, `/public/boards/{token}`,
-`/public/pages/{token}`, `/public/views/{token}`, `/intake/{token}`,
-`/intake-forms/{token}`.
-
-## 14. Deployment shape (for self-hosters)
+`/public/pages/{token}`, `/public/views/{token}`, ## 11. Deployment shape (for self-hosters)
 
 Three containers: Postgres 17, the FastAPI API (which embeds the MCP server,
 scheduler, realtime relay — no Redis, no workers), and the Next.js web app.

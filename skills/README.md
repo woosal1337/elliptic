@@ -6,7 +6,7 @@ Agent skills that ship with Elliptic. A skill is a folder holding a
 
 | Skill | What it teaches |
 |---|---|
-| [`elliptic/`](elliptic/SKILL.md) | Operating an Elliptic workspace through its built-in MCP server: the domain model, org discipline, all 155 tools, storage layout, and step-by-step playbooks. |
+| [`elliptic/`](elliptic/SKILL.md) | Operating an Elliptic workspace through its built-in MCP server: the domain model, org discipline, all 121 tools, storage layout, and step-by-step playbooks. |
 
 ## Installing
 
