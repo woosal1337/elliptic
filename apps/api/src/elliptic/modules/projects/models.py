@@ -198,24 +198,6 @@ class ProjectHealth(enum.StrEnum):
     OFF_TRACK = "off_track"
 
 
-class ProjectUpdate(BaseModel):
-    """A posted status update ('State of Project') with a RAG health and summary."""
-
-    __tablename__ = "project_updates"
-
-    org_id: Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("organizations.id", ondelete="CASCADE"), index=True
-    )
-    project_id: Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("projects.id", ondelete="CASCADE"), index=True
-    )
-    health: Mapped[ProjectHealth] = mapped_column(Enum(ProjectHealth, native_enum=False, length=20))
-    summary: Mapped[str] = mapped_column(Text)
-    created_by: Mapped[uuid.UUID | None] = mapped_column(
-        ForeignKey("users.id", ondelete="SET NULL"), nullable=True
-    )
-
-
 class ProjectTemplate(BaseModel):
     """A reusable snapshot of a project's config that instantiates a ready-to-run project.
 

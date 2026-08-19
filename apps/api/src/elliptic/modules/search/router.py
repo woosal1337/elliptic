@@ -20,7 +20,7 @@ async def search(
     types: Annotated[str | None, Query()] = None,
     limit: Annotated[int, Query(ge=1, le=50)] = 20,
 ) -> SuccessResponse[SearchOut]:
-    """Fuzzy search across tasks, notes, projects, meetings, cycles, and modules."""
+    """Fuzzy search across tasks, notes, projects, and meetings."""
     type_list = [t.strip() for t in types.split(",")] if types else None
     rows = await service.search(session, ctx, q, types=type_list, limit=limit)
     results = [SearchResultOut.model_validate(r) for r in rows]

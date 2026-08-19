@@ -192,15 +192,6 @@ class Task(BaseModel):
     source_note_id: Mapped[uuid.UUID | None] = mapped_column(
         ForeignKey("notes.id", ondelete="SET NULL"), nullable=True, index=True
     )
-    cycle_id: Mapped[uuid.UUID | None] = mapped_column(
-        ForeignKey("cycles.id", ondelete="SET NULL"), nullable=True, index=True
-    )
-    milestone_id: Mapped[uuid.UUID | None] = mapped_column(
-        ForeignKey("milestones.id", ondelete="SET NULL"), nullable=True, index=True
-    )
-    module_id: Mapped[uuid.UUID | None] = mapped_column(
-        ForeignKey("modules.id", ondelete="SET NULL"), nullable=True, index=True
-    )
     workflow_status_id: Mapped[uuid.UUID | None] = mapped_column(
         ForeignKey("workflow_statuses.id", ondelete="SET NULL"), nullable=True, index=True
     )
@@ -426,40 +417,3 @@ class WorkItemTypeLevel(BaseModel):
     )
     kind: Mapped[TaskKind] = mapped_column(Enum(TaskKind, native_enum=False, length=20))
     level: Mapped[int] = mapped_column(Integer)
-
-
-class ScheduleDependencyType(enum.StrEnum):
-    """Scheduling constraint types that drive the timeline (COS-68)."""
-
-    FINISH_TO_START = "finish_to_start"
-    START_TO_START = "start_to_start"
-    FINISH_TO_FINISH = "finish_to_finish"
-    START_TO_FINISH = "start_to_finish"
-
-
-class TaskScheduleLink(BaseModel):
-    """A date-constraining scheduling dependency between two tasks (COS-68).
-
-    Distinct from logical TaskRelation: this drives the Timeline/Gantt by
-    constraining the successor's dates relative to the predecessor's.
-    """
-
-    __tablename__ = "task_schedule_links"
-    __table_args__ = (UniqueConstraint("predecessor_id", "successor_id", "dependency_type"),)
-
-    org_id: Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("organizations.id", ondelete="CASCADE"), index=True
-    )
-    predecessor_id: Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("tasks.id", ondelete="CASCADE"), index=True
-    )
-    successor_id: Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("tasks.id", ondelete="CASCADE"), index=True
-    )
-    dependency_type: Mapped[ScheduleDependencyType] = mapped_column(
-        Enum(ScheduleDependencyType, native_enum=False, length=20),
-        default=ScheduleDependencyType.FINISH_TO_START,
-    )
-    created_by: Mapped[uuid.UUID | None] = mapped_column(
-        ForeignKey("users.id", ondelete="SET NULL"), nullable=True
-    )

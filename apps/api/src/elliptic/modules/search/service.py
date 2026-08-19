@@ -12,9 +12,7 @@ from sqlalchemy import or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from elliptic.core.deps import OrgContext
-from elliptic.modules.cycles.models import Cycle
 from elliptic.modules.meetings.models import Meeting
-from elliptic.modules.modules.models import Module
 from elliptic.modules.notes.models import Note
 from elliptic.modules.projects.models import Project
 from elliptic.modules.tasks.models import Task
@@ -145,48 +143,6 @@ async def search(
                 "score": _score(query, meeting.title),
             }
             for meeting in meetings
-        )
-
-    if included("cycle"):
-        cycles = await session.scalars(
-            select(Cycle)
-            .where(Cycle.org_id == org_id, Cycle.name.ilike(like))
-            .limit(_PER_ENTITY_CANDIDATES)
-        )
-        hits.extend(
-            {
-                "type": "cycle",
-                "id": cycle.id,
-                "title": cycle.name,
-                "snippet": None,
-                "project_id": cycle.project_id,
-                "identifier": None,
-                "score": _score(query, cycle.name),
-            }
-            for cycle in cycles
-        )
-
-    if included("module"):
-        mods = await session.scalars(
-            select(Module)
-            .where(
-                Module.org_id == org_id,
-                Module.archived_at.is_(None),
-                or_(Module.name.ilike(like), Module.description.ilike(like)),
-            )
-            .limit(_PER_ENTITY_CANDIDATES)
-        )
-        hits.extend(
-            {
-                "type": "module",
-                "id": mod.id,
-                "title": mod.name,
-                "snippet": _snippet(mod.description),
-                "project_id": mod.project_id,
-                "identifier": None,
-                "score": _score(query, mod.name, mod.description),
-            }
-            for mod in mods
         )
 
     def sort_key(hit: dict[str, object]) -> float:

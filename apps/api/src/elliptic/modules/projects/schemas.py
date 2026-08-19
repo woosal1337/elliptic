@@ -6,7 +6,6 @@ from datetime import date, datetime
 from pydantic import BaseModel, ConfigDict, Field
 
 from elliptic.modules.projects.models import (
-    ProjectHealth,
     ProjectNetwork,
     ProjectRole,
     ProjectStateGroup,
@@ -144,26 +143,6 @@ class ProjectMemberOut(BaseModel):
     project_id: uuid.UUID
     user_id: uuid.UUID
     role: ProjectRole = ProjectRole.MEMBER
-    created_at: datetime
-
-
-class ProjectUpdateCreateIn(BaseModel):
-    """Payload to post a project status update."""
-
-    health: ProjectHealth
-    summary: str = Field(min_length=1, max_length=5000)
-
-
-class ProjectUpdateOut(BaseModel):
-    """Serialized project status update."""
-
-    model_config = ConfigDict(from_attributes=True)
-
-    id: uuid.UUID
-    project_id: uuid.UUID
-    health: ProjectHealth
-    summary: str
-    created_by: uuid.UUID | None
     created_at: datetime
 
 

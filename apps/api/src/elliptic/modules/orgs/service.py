@@ -550,7 +550,6 @@ async def seat_usage(session: AsyncSession, ctx: OrgContext) -> dict[str, object
 
 async def onboarding_checklist(session: AsyncSession, ctx: OrgContext) -> dict[str, object]:
     """Compute get-started progress from real workspace data (COS-136)."""
-    from elliptic.modules.cycles.models import Cycle  # noqa: PLC0415
     from elliptic.modules.notes.models import Note  # noqa: PLC0415
     from elliptic.modules.projects.models import Project  # noqa: PLC0415
     from elliptic.modules.tasks.models import Task  # noqa: PLC0415
@@ -573,7 +572,6 @@ async def onboarding_checklist(session: AsyncSession, ctx: OrgContext) -> dict[s
             "label": "Invite a teammate",
             "done": await _count(OrganizationMember.org_id) > 1,
         },
-        {"key": "create_cycle", "label": "Plan a cycle", "done": await _count(Cycle.org_id) > 0},
         {
             "key": "write_note",
             "label": "Write a note or doc",
@@ -598,7 +596,7 @@ _PLANS: dict[str, dict[str, object]] = {
     "pro": {
         "label": "Pro",
         "seat_limit": 50,
-        "features": ["projects", "tasks", "notes", "search", "automations", "cycles"],
+        "features": ["projects", "tasks", "notes", "search", "automations"],
     },
     "business": {
         "label": "Business",
@@ -609,7 +607,6 @@ _PLANS: dict[str, dict[str, object]] = {
             "notes",
             "search",
             "automations",
-            "cycles",
             "sso",
             "audit_log",
             "custom_roles",

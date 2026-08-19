@@ -42,7 +42,6 @@ from elliptic.modules.tasks.models import (
     Label,
     NotDuplicatePair,
     RelationTypeDef,
-    ScheduleDependencyType,
     StatusCategory,
     Task,
     TaskDescriptionVersion,
@@ -52,7 +51,6 @@ from elliptic.modules.tasks.models import (
     TaskPriority,
     TaskRelation,
     TaskRelationType,
-    TaskScheduleLink,
     TaskStatus,
     TaskSubscription,
     WorkItemTemplate,
@@ -125,9 +123,6 @@ def task_to_out(
             "parent_task_id": task.parent_task_id,
             "source_meeting_id": task.source_meeting_id,
             "source_note_id": task.source_note_id,
-            "cycle_id": task.cycle_id,
-            "milestone_id": task.milestone_id,
-            "module_id": task.module_id,
             "workflow_status_id": task.workflow_status_id,
             "custom_fields": task.custom_fields,
             "dod_items": task.dod_items,
@@ -696,8 +691,6 @@ async def list_tasks(
     assignee_id: uuid.UUID | None = None,
     label_id: uuid.UUID | None = None,
     severity: BugSeverity | None = None,
-    module_id: uuid.UUID | None = None,
-    cycle_id: uuid.UUID | None = None,
     search: str | None = None,
     include_archived: bool = False,
 ) -> tuple[list[Task], Project, int]:
@@ -719,10 +712,6 @@ async def list_tasks(
         query = query.where(Task.assignee_id == assignee_id)
     if severity is not None:
         query = query.where(Task.severity == severity)
-    if module_id is not None:
-        query = query.where(Task.module_id == module_id)
-    if cycle_id is not None:
-        query = query.where(Task.cycle_id == cycle_id)
     if label_id is not None:
         query = query.join(task_labels, task_labels.c.task_id == Task.id).where(
             task_labels.c.label_id == label_id
@@ -904,8 +893,8 @@ async def duplicate_task(
 ) -> tuple[Task, Project]:
     """Clone a work item (content + labels) into the same or another project.
 
-    Relations, sub-tasks, comments, and cycle/milestone links are NOT copied — a
-    duplicate is an independent top-level item titled '… (copy)'. Across projects
+    Relations, sub-tasks, and comments are NOT copied — a duplicate is an
+    independent top-level item titled '… (copy)'. Across projects
     the assignee is dropped (membership differs); within a project it is kept.
     """
     source, source_project = await get_task_with_project(session, ctx, task_id)
@@ -2071,97 +2060,3 @@ async def throughput_trend(
         }
         for offset in range(days)
     ]
-
-
-async def list_schedule_links(
-    session: AsyncSession, ctx: OrgContext, task_id: uuid.UUID
-) -> list[dict[str, object]]:
-    """Scheduling dependencies touching a task, from its perspective (COS-68)."""
-    task, _ = await get_task_with_project(session, ctx, task_id)
-    rows = list(
-        await session.scalars(
-            select(TaskScheduleLink).where(
-                or_(
-                    TaskScheduleLink.predecessor_id == task.id,
-                    TaskScheduleLink.successor_id == task.id,
-                )
-            )
-        )
-    )
-    other_ids = {r.predecessor_id for r in rows} | {r.successor_id for r in rows}
-    other_ids.discard(task.id)
-    others = await _load_task_identifiers(session, ctx, other_ids)
-    result: list[dict[str, object]] = []
-    for link in rows:
-        is_predecessor = link.predecessor_id == task.id
-        other_id = link.successor_id if is_predecessor else link.predecessor_id
-        meta = others.get(other_id)
-        if meta is None:
-            continue
-        result.append(
-            {
-                "link_id": link.id,
-                "task_id": other_id,
-                "identifier": meta[0],
-                "title": meta[1],
-                "status": meta[2],
-                "due_date": meta[3],
-                "dependency_type": link.dependency_type.value,
-                "direction": "successor" if is_predecessor else "predecessor",
-            }
-        )
-    return result
-
-
-async def create_schedule_link(
-    session: AsyncSession,
-    ctx: OrgContext,
-    task_id: uuid.UUID,
-    *,
-    other_task_id: uuid.UUID,
-    dependency_type: "ScheduleDependencyType",
-    other_is_predecessor: bool,
-) -> TaskScheduleLink:
-    """Create a scheduling dependency; the path task is the successor by default."""
-    task, _ = await get_task_with_project(session, ctx, task_id)
-    if other_task_id == task.id:
-        raise BadRequestError("A task cannot depend on itself")
-    other = await session.scalar(
-        select(Task).where(Task.id == other_task_id, Task.org_id == ctx.org.id)
-    )
-    if other is None:
-        raise BadRequestError("Linked task not found")
-    predecessor_id, successor_id = (
-        (other.id, task.id) if other_is_predecessor else (task.id, other.id)
-    )
-    existing = await session.scalar(
-        select(TaskScheduleLink.id).where(
-            TaskScheduleLink.predecessor_id == predecessor_id,
-            TaskScheduleLink.successor_id == successor_id,
-            TaskScheduleLink.dependency_type == dependency_type,
-        )
-    )
-    if existing is not None:
-        raise ConflictError("This scheduling dependency already exists")
-    link = TaskScheduleLink(
-        org_id=ctx.org.id,
-        predecessor_id=predecessor_id,
-        successor_id=successor_id,
-        dependency_type=dependency_type,
-        created_by=ctx.user.id,
-    )
-    session.add(link)
-    await session.flush()
-    return link
-
-
-async def delete_schedule_link(session: AsyncSession, ctx: OrgContext, link_id: uuid.UUID) -> None:
-    link = await session.scalar(
-        select(TaskScheduleLink).where(
-            TaskScheduleLink.id == link_id, TaskScheduleLink.org_id == ctx.org.id
-        )
-    )
-    if link is None:
-        raise NotFoundError("Scheduling dependency not found")
-    await session.delete(link)
-    await session.flush()

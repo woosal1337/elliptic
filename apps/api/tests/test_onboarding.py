@@ -13,7 +13,7 @@ async def test_onboarding_progress_reflects_data(client: AsyncClient) -> None:
     before = await client.get(f"{API}/orgs/{org['id']}/onboarding", headers=h)
     assert before.status_code == 200, before.text
     data = before.json()["data"]
-    assert data["total"] == 5
+    assert data["total"] == 4
     steps = {s["key"]: s["done"] for s in data["steps"]}
     assert steps["create_project"] is False
 

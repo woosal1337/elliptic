@@ -91,8 +91,8 @@ async def apply_project_lifecycle(session: AsyncSession) -> int:
     """Apply each project's lifecycle housekeeping presets (COS-218).
 
     Per project with timers configured: auto-archive completed/cancelled items
-    idle past ``auto_archive_days`` (skipping items in an active cycle/module),
-    and auto-close items idle past ``auto_close_days`` into the target status.
+    idle past ``auto_archive_days``, and auto-close items idle past
+    ``auto_close_days`` into the target status.
     Returns the number of work items affected.
     """
     now = utcnow()
@@ -113,8 +113,6 @@ async def apply_project_lifecycle(session: AsyncSession) -> int:
                     Task.archived_at.is_(None),
                     Task.status.in_(_CLOSED_STATUSES),
                     Task.updated_at < cutoff,
-                    Task.cycle_id.is_(None),
-                    Task.module_id.is_(None),
                 )
                 .values(archived_at=now)
             )

@@ -7,8 +7,6 @@ from fastapi import APIRouter, Depends, status
 
 from elliptic.core.deps import OrgContext, OrgCtx, SessionDep, require_role
 from elliptic.core.schemas import SuccessResponse, ok
-from elliptic.modules.cycles import service as cycles_service
-from elliptic.modules.cycles.schemas import ActiveCycleOut
 from elliptic.modules.orgs.models import OrgRole
 from elliptic.modules.projects.schemas import ProjectOut
 from elliptic.modules.teams import service
@@ -47,29 +45,6 @@ async def team_stats(
 ) -> SuccessResponse[TeamStatsOut]:
     stats = await service.team_stats(session, ctx, team_id)
     return ok(TeamStatsOut.model_validate(stats))
-
-
-@router.get("/{team_id}/cycles")
-async def team_cycles(
-    team_id: uuid.UUID, ctx: OrgCtx, session: SessionDep
-) -> SuccessResponse[list[ActiveCycleOut]]:
-    """Active + upcoming cycles across the team's linked projects (COS-95)."""
-    await service.get_team(session, ctx, team_id)
-    rows = await cycles_service.list_team_cycles(session, ctx, team_id)
-    counts = await cycles_service.cycle_counts(session, [cycle.id for cycle, _, _ in rows])
-    result: list[ActiveCycleOut] = []
-    for cycle, project_name, project_key in rows:
-        out = ActiveCycleOut.model_validate(cycle)
-        breakdown = counts.get(cycle.id)
-        if breakdown is not None:
-            out.task_total = breakdown["total"]
-            out.task_done = breakdown["completed"]
-            out.started = breakdown["started"]
-            out.todo = breakdown["todo"]
-        out.project_name = project_name
-        out.project_key = project_key
-        result.append(out)
-    return ok(result)
 
 
 @router.get("/{team_id}")

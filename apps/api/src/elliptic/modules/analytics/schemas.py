@@ -85,20 +85,3 @@ class ThroughputForecastOut(BaseModel):
     weekly: list[ThroughputForecastWeek]
     avg_per_week: float
     projected_next_week: float
-
-
-class ScatterPoint(BaseModel):
-    """One cycle/module plotted by scope vs completion (COS-46)."""
-
-    id: uuid.UUID
-    name: str
-    scope: int
-    completed: int
-    completion_rate: float
-
-
-class ProgressScatterOut(BaseModel):
-    """Scope-vs-completion scatter across cycles or modules."""
-
-    dimension: str
-    points: list[ScatterPoint]

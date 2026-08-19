@@ -18,9 +18,7 @@ from elliptic.modules.projects.schemas import (
     ProjectMemberOut,
     ProjectMemberRoleIn,
     ProjectOut,
-    ProjectUpdateCreateIn,
     ProjectUpdateIn,
-    ProjectUpdateOut,
     SubscriptionStateOut,
 )
 
@@ -145,22 +143,6 @@ async def add_artifact(
 ) -> SuccessResponse[ProjectArtifactOut]:
     artifact = await service.add_artifact(session, ctx, project_id, payload)
     return ok(ProjectArtifactOut.model_validate(artifact), message="Artifact added")
-
-
-@router.get("/{project_id}/updates")
-async def list_project_updates(
-    project_id: uuid.UUID, ctx: OrgCtx, session: SessionDep
-) -> SuccessResponse[list[ProjectUpdateOut]]:
-    updates = await service.list_project_updates(session, ctx, project_id)
-    return ok([ProjectUpdateOut.model_validate(update) for update in updates])
-
-
-@router.post("/{project_id}/updates", status_code=status.HTTP_201_CREATED)
-async def post_project_update(
-    project_id: uuid.UUID, payload: ProjectUpdateCreateIn, ctx: OrgCtx, session: SessionDep
-) -> SuccessResponse[ProjectUpdateOut]:
-    update = await service.create_project_update(session, ctx, project_id, payload)
-    return ok(ProjectUpdateOut.model_validate(update), message="Update posted")
 
 
 @router.delete("/{project_id}/artifacts/{artifact_id}")

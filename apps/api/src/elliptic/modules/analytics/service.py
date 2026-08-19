@@ -14,8 +14,6 @@ from elliptic.core.deps import OrgContext
 from elliptic.core.exceptions import NotFoundError
 from elliptic.core.models_base import utcnow
 from elliptic.modules.activity.models import ActivityEvent
-from elliptic.modules.cycles.models import Cycle
-from elliptic.modules.modules.models import Module
 from elliptic.modules.projects.models import Project
 from elliptic.modules.tasks.models import (
     STATUS_TO_CATEGORY,
@@ -205,59 +203,6 @@ async def throughput_forecast(
     recent = counts[-_FORECAST_RECENT_WEEKS:] if len(counts) >= _FORECAST_RECENT_WEEKS else counts
     projected_next = round(sum(recent) / len(recent), 2) if recent else 0.0
     return {"weekly": weekly, "avg_per_week": avg_per_week, "projected_next_week": projected_next}
-
-
-async def progress_scatter(
-    session: AsyncSession, ctx: OrgContext, dimension: str, project_id: uuid.UUID | None
-) -> dict[str, object]:
-    """Per-cycle or per-module scope vs completion, for an outlier scatter plot (COS-46)."""
-    entity: type[Cycle] | type[Module]
-    if dimension == "cycle":
-        entity, group_col = Cycle, Task.cycle_id
-    elif dimension == "module":
-        entity, group_col = Module, Task.module_id
-    else:
-        raise NotFoundError("Unknown dimension")
-
-    name_by_id = {
-        row[0]: row[1]
-        for row in await session.execute(
-            select(entity.id, entity.name).where(entity.org_id == ctx.org.id)
-        )
-    }
-    completed = [s for s, c in STATUS_TO_CATEGORY.items() if c is StatusCategory.COMPLETED]
-    base = [
-        Task.org_id == ctx.org.id,
-        Task.archived_at.is_(None),
-        group_col.is_not(None),
-    ]
-    if project_id is not None:
-        await _assert_project(session, ctx, project_id)
-        base.append(Task.project_id == project_id)
-
-    rows = await session.execute(
-        select(
-            group_col,
-            func.count(),
-            func.count().filter(Task.status.in_(completed)),
-        )
-        .where(*base)
-        .group_by(group_col)
-    )
-    points: list[dict[str, object]] = []
-    for group_id, scope, done in rows:
-        scope_n = int(scope or 0)
-        done_n = int(done or 0)
-        points.append(
-            {
-                "id": str(group_id),
-                "name": name_by_id.get(group_id, "—"),
-                "scope": scope_n,
-                "completed": done_n,
-                "completion_rate": round(done_n / scope_n, 3) if scope_n else 0.0,
-            }
-        )
-    return {"dimension": dimension, "points": points}
 
 
 async def member_workload(

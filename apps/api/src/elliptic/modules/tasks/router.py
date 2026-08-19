@@ -13,7 +13,7 @@ from elliptic.core.pagination import Page, PageParams, PageParamsDep
 from elliptic.core.schemas import SuccessResponse, ok
 from elliptic.modules.properties import service as properties_service
 from elliptic.modules.properties.schemas import CustomPropertyOut
-from elliptic.modules.tasks import import_service, service, timeline
+from elliptic.modules.tasks import import_service, service
 from elliptic.modules.tasks.models import (
     STATUS_TO_CATEGORY,
     BugSeverity,
@@ -22,7 +22,6 @@ from elliptic.modules.tasks.models import (
     TaskStatus,
 )
 from elliptic.modules.tasks.schemas import (
-    AutoShiftOut,
     BoardColumn,
     DuplicateCandidateOut,
     LabelCreateIn,
@@ -32,9 +31,6 @@ from elliptic.modules.tasks.schemas import (
     RelationResult,
     RelationTypeDefIn,
     RelationTypeDefOut,
-    ScheduleLinkIn,
-    ScheduleLinkOut,
-    ShiftedTaskOut,
     StatusInfo,
     TaskArchiveIn,
     TaskBatchCreateIn,
@@ -53,7 +49,6 @@ from elliptic.modules.tasks.schemas import (
     TaskTransitionsOut,
     TaskUpdateIn,
     ThroughputPoint,
-    TimelineOut,
     WorkItemSchemaOut,
     WorkItemTemplateCreateIn,
     WorkItemTemplateOut,
@@ -110,8 +105,6 @@ async def list_tasks(
     assignee_id: Annotated[uuid.UUID | None, Query()] = None,
     label_id: Annotated[uuid.UUID | None, Query()] = None,
     severity: Annotated[BugSeverity | None, Query()] = None,
-    module_id: Annotated[uuid.UUID | None, Query()] = None,
-    cycle_id: Annotated[uuid.UUID | None, Query()] = None,
     search: Annotated[str | None, Query(max_length=200)] = None,
     include_archived: Annotated[bool, Query()] = False,
 ) -> SuccessResponse[Page[TaskOut]]:
@@ -124,8 +117,6 @@ async def list_tasks(
         assignee_id=assignee_id,
         label_id=label_id,
         severity=severity,
-        module_id=module_id,
-        cycle_id=cycle_id,
         search=search,
         include_archived=include_archived,
     )
@@ -638,40 +629,6 @@ async def delete_label(
     return ok(None, message="Label deleted")
 
 
-@router.get("/tasks/{task_id}/schedule-links")
-async def list_schedule_links(
-    task_id: uuid.UUID, ctx: OrgCtx, session: SessionDep
-) -> SuccessResponse[list[ScheduleLinkOut]]:
-    rows = await service.list_schedule_links(session, ctx, task_id)
-    return ok([ScheduleLinkOut.model_validate(r) for r in rows])
-
-
-@router.post("/tasks/{task_id}/schedule-links", status_code=status.HTTP_201_CREATED)
-async def create_schedule_link(
-    task_id: uuid.UUID, payload: ScheduleLinkIn, ctx: OrgCtx, session: SessionDep
-) -> SuccessResponse[None]:
-    await service.create_schedule_link(
-        session,
-        ctx,
-        task_id,
-        other_task_id=payload.other_task_id,
-        dependency_type=payload.dependency_type,
-        other_is_predecessor=payload.other_is_predecessor,
-    )
-    return ok(None, message="Scheduling dependency created")
-
-
-@router.delete("/tasks/{task_id}/schedule-links/{link_id}")
-async def delete_schedule_link(
-    task_id: uuid.UUID,  # noqa: ARG001
-    link_id: uuid.UUID,
-    ctx: OrgCtx,
-    session: SessionDep,
-) -> SuccessResponse[None]:
-    await service.delete_schedule_link(session, ctx, link_id)
-    return ok(None, message="Scheduling dependency removed")
-
-
 @router.post("/projects/{project_id}/import", status_code=status.HTTP_201_CREATED)
 async def import_tasks(
     project_id: uuid.UUID, payload: TaskImportIn, ctx: OrgCtx, session: SessionDep
@@ -679,21 +636,3 @@ async def import_tasks(
     """Bulk-create work items from pasted CSV (one-click migration, COS-270)."""
     report = await import_service.import_csv(session, ctx, project_id, payload.content)
     return ok(TaskImportOut.model_validate(report), message="Import complete")
-
-
-@router.get("/projects/{project_id}/timeline")
-async def project_timeline(
-    project_id: uuid.UUID, ctx: OrgCtx, session: SessionDep
-) -> SuccessResponse[TimelineOut]:
-    """Gantt timeline for a project: dated tasks, scheduling connectors, critical path (COS-115)."""
-    data = await timeline.project_timeline(session, ctx, project_id)
-    return ok(TimelineOut.model_validate(data))
-
-
-@router.post("/tasks/{task_id}/auto-shift")
-async def auto_shift(
-    task_id: uuid.UUID, ctx: OrgCtx, session: SessionDep
-) -> SuccessResponse[AutoShiftOut]:
-    """Cascade date shifts to dependent successors after a date change (COS-126)."""
-    shifted = await timeline.auto_shift(session, ctx, task_id)
-    return ok(AutoShiftOut(shifted=[ShiftedTaskOut.model_validate(s) for s in shifted]))

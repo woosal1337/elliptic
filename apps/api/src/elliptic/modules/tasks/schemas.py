@@ -10,7 +10,6 @@ from elliptic.modules.projects.models import ProjectHealth
 from elliptic.modules.properties.schemas import CustomPropertyOut
 from elliptic.modules.tasks.models import (
     BugSeverity,
-    ScheduleDependencyType,
     StatusCategory,
     TaskKind,
     TaskPriority,
@@ -199,9 +198,6 @@ class TaskOut(BaseModel):
     parent_task_id: uuid.UUID | None
     source_meeting_id: uuid.UUID | None
     source_note_id: uuid.UUID | None = None
-    cycle_id: uuid.UUID | None = None
-    milestone_id: uuid.UUID | None = None
-    module_id: uuid.UUID | None = None
     workflow_status_id: uuid.UUID | None = None
     custom_fields: dict[str, str] = Field(default_factory=dict)
     dod_items: list[DodItem] = Field(default_factory=list)
@@ -386,27 +382,6 @@ class DuplicateCandidateOut(BaseModel):
     shared_tokens: int
 
 
-class ScheduleLinkIn(BaseModel):
-    """Create a scheduling dependency on a task (COS-68)."""
-
-    other_task_id: uuid.UUID
-    dependency_type: ScheduleDependencyType = ScheduleDependencyType.FINISH_TO_START
-    other_is_predecessor: bool = True
-
-
-class ScheduleLinkOut(BaseModel):
-    """One scheduling dependency from a task's perspective."""
-
-    link_id: uuid.UUID
-    task_id: uuid.UUID
-    identifier: str
-    title: str
-    status: TaskStatus
-    due_date: date | None = None
-    dependency_type: ScheduleDependencyType
-    direction: str
-
-
 class TaskImportIn(BaseModel):
     """Import work items from pasted CSV text (COS-270)."""
 
@@ -420,51 +395,3 @@ class TaskImportOut(BaseModel):
     skipped_count: int
     identifiers: list[str]
     errors: list[str]
-
-
-class TimelineTaskOut(BaseModel):
-    """A task on the project timeline (COS-115)."""
-
-    id: uuid.UUID
-    identifier: str | None = None
-    title: str
-    status: TaskStatus
-    start_date: date | None = None
-    due_date: date | None = None
-    on_critical_path: bool = False
-    is_violated: bool = False
-    is_done: bool = False
-
-
-class TimelineLinkOut(BaseModel):
-    """A scheduling connector on the timeline."""
-
-    predecessor_id: uuid.UUID
-    successor_id: uuid.UUID
-    dependency_type: ScheduleDependencyType
-    violated: bool = False
-
-
-class TimelineOut(BaseModel):
-    """Project timeline: dated tasks, connectors, and the critical path."""
-
-    tasks: list[TimelineTaskOut]
-    links: list[TimelineLinkOut]
-    critical_path: list[uuid.UUID]
-    violation_count: int = 0
-
-
-class ShiftedTaskOut(BaseModel):
-    """A task whose dates were auto-shifted (COS-126)."""
-
-    id: uuid.UUID
-    identifier: str | None = None
-    title: str
-    start_date: date | None = None
-    due_date: date | None = None
-
-
-class AutoShiftOut(BaseModel):
-    """The result of an auto-shift cascade."""
-
-    shifted: list[ShiftedTaskOut]

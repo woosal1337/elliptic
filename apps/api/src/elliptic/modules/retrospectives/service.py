@@ -44,7 +44,6 @@ async def create_retro(
     retro = Retrospective(
         org_id=ctx.org.id,
         project_id=project_id,
-        cycle_id=payload.cycle_id,
         title=payload.title,
         went_well=payload.went_well,
         to_improve=payload.to_improve,
@@ -73,10 +72,6 @@ async def update_retro(
     retro = await _get(session, ctx, retro_id)
     if payload.title is not None:
         retro.title = payload.title
-    if payload.clear_cycle:
-        retro.cycle_id = None
-    elif payload.cycle_id is not None:
-        retro.cycle_id = payload.cycle_id
     if payload.went_well is not None:
         retro.went_well = payload.went_well or None
     if payload.to_improve is not None:

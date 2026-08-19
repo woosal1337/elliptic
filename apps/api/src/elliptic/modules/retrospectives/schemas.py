@@ -10,7 +10,6 @@ class RetrospectiveCreateIn(BaseModel):
     """Create a retrospective."""
 
     title: str = Field(min_length=1, max_length=255)
-    cycle_id: uuid.UUID | None = None
     went_well: str | None = None
     to_improve: str | None = None
     action_items: str | None = None
@@ -20,8 +19,6 @@ class RetrospectiveUpdateIn(BaseModel):
     """Edit a retrospective."""
 
     title: str | None = Field(default=None, min_length=1, max_length=255)
-    cycle_id: uuid.UUID | None = None
-    clear_cycle: bool = False
     went_well: str | None = None
     to_improve: str | None = None
     action_items: str | None = None
@@ -34,7 +31,6 @@ class RetrospectiveOut(BaseModel):
 
     id: uuid.UUID
     project_id: uuid.UUID
-    cycle_id: uuid.UUID | None
     title: str
     went_well: str | None
     to_improve: str | None

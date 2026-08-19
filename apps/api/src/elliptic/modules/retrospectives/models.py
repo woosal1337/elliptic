@@ -9,8 +9,8 @@ from elliptic.core.models_base import BaseModel
 
 
 class Retrospective(BaseModel):
-    """A retro/post-mortem anchored to a project (optionally a cycle): what went
-    well, what to improve, and action items captured for continuous improvement."""
+    """A retro/post-mortem anchored to a project: what went well, what to
+    improve, and action items captured for continuous improvement."""
 
     __tablename__ = "retrospectives"
 
@@ -19,9 +19,6 @@ class Retrospective(BaseModel):
     )
     project_id: Mapped[uuid.UUID] = mapped_column(
         ForeignKey("projects.id", ondelete="CASCADE"), index=True
-    )
-    cycle_id: Mapped[uuid.UUID | None] = mapped_column(
-        ForeignKey("cycles.id", ondelete="SET NULL"), nullable=True, index=True
     )
     title: Mapped[str] = mapped_column(String(255))
     went_well: Mapped[str | None] = mapped_column(Text, nullable=True)

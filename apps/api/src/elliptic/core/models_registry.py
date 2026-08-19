@@ -6,7 +6,6 @@ from elliptic.modules.approvals.models import TaskApproval
 from elliptic.modules.auth_providers.models import AuthProviderConfig
 from elliptic.modules.automation.models import AutomationRule
 from elliptic.modules.comments.models import Comment, CommentReaction, CommentVersion
-from elliptic.modules.cycles.models import Cycle
 from elliptic.modules.domains.models import OrgDomain
 from elliptic.modules.drive.models import DriveFile
 from elliptic.modules.embeds.models import NoteEmbed
@@ -31,8 +30,6 @@ from elliptic.modules.mcp_auth.models import (
 from elliptic.modules.mcp_connectors.models import McpConnector
 from elliptic.modules.mcp_server.models import McpIdempotencyKey
 from elliptic.modules.meetings.models import Meeting, MeetingShare, TranscriptSegment
-from elliptic.modules.milestones.models import Milestone
-from elliptic.modules.modules.models import Module
 from elliptic.modules.notes.models import (
     Note,
     NoteShare,
@@ -59,12 +56,10 @@ from elliptic.modules.projects.models import (
     ProjectState,
     ProjectSubscription,
     ProjectTemplate,
-    ProjectUpdate,
 )
 from elliptic.modules.properties.models import CustomProperty, PropertyTemplate
 from elliptic.modules.rbac_audit.models import RbacAuditEvent
 from elliptic.modules.recurring.models import RecurringTaskRule
-from elliptic.modules.register.models import RegisterEntry
 from elliptic.modules.retrospectives.models import Retrospective
 from elliptic.modules.runner.models import RunnerExecution, RunnerScript
 from elliptic.modules.scim.models import ScimToken
@@ -80,7 +75,6 @@ from elliptic.modules.tasks.models import (
     TaskLink,
     TaskNoteLink,
     TaskRelation,
-    TaskScheduleLink,
     TaskSubscription,
     WorkItemTemplate,
     WorkItemTypeLevel,
@@ -108,7 +102,6 @@ __all__ = [
     "CommentVersion",
     "CustomProperty",
     "CustomRole",
-    "Cycle",
     "DeletedEntity",
     "DeviceToken",
     "DriveFile",
@@ -126,8 +119,6 @@ __all__ = [
     "McpIdempotencyKey",
     "Meeting",
     "MeetingShare",
-    "Milestone",
-    "Module",
     "NotDuplicatePair",
     "Note",
     "NoteEmbed",
@@ -152,13 +143,11 @@ __all__ = [
     "ProjectState",
     "ProjectSubscription",
     "ProjectTemplate",
-    "ProjectUpdate",
     "ProjectWebhook",
     "PropertyTemplate",
     "PublicPageComment",
     "RbacAuditEvent",
     "RecurringTaskRule",
-    "RegisterEntry",
     "RelationTypeDef",
     "Retrospective",
     "RunnerExecution",
@@ -174,7 +163,6 @@ __all__ = [
     "TaskLink",
     "TaskNoteLink",
     "TaskRelation",
-    "TaskScheduleLink",
     "TaskSubscription",
     "TaskView",
     "Team",

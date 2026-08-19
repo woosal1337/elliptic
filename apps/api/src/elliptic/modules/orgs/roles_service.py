@@ -162,7 +162,6 @@ PERMISSION_MATRIX_SCHEMA: list[dict[str, object]] = [
     {"resource": "comments", "label": "Comments", "actions": ["create", "update", "delete"]},
     {"resource": "notes", "label": "Pages", "actions": ["create", "read", "update", "delete"]},
     {"resource": "views", "label": "Views", "actions": ["create", "read", "update", "delete"]},
-    {"resource": "cycles", "label": "Cycles", "actions": ["create", "read", "update", "delete"]},
 ]
 
 

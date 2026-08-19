@@ -193,39 +193,16 @@ async def test_project_feature_toggles(client: AsyncClient) -> None:
 
     updated = await client.patch(
         f"{API}/orgs/{org['id']}/projects/{project['id']}",
-        json={"features": {"timeline": False, "meetings": True}},
+        json={"features": {"notes": False, "meetings": True}},
         headers=auth["headers"],
     )
     assert updated.status_code == 200
-    assert updated.json()["data"]["features"] == {"timeline": False, "meetings": True}
+    assert updated.json()["data"]["features"] == {"notes": False, "meetings": True}
 
     fetched = await client.get(
         f"{API}/orgs/{org['id']}/projects/{project['id']}", headers=auth["headers"]
     )
-    assert fetched.json()["data"]["features"] == {"timeline": False, "meetings": True}
-
-
-async def test_project_updates_rag(client: AsyncClient) -> None:
-    auth = await register_and_login(client)
-    org = await create_org(client, auth["headers"])
-    project = await create_project(client, auth["headers"], org["id"], key="UPD")
-    base = f"{API}/orgs/{org['id']}/projects/{project['id']}/updates"
-
-    posted = await client.post(
-        base,
-        json={"health": "at_risk", "summary": "Slipping on the API work."},
-        headers=auth["headers"],
-    )
-    assert posted.status_code == 201, posted.text
-    assert posted.json()["data"]["health"] == "at_risk"
-
-    await client.post(
-        base, json={"health": "on_track", "summary": "Recovered."}, headers=auth["headers"]
-    )
-    listing = await client.get(base, headers=auth["headers"])
-    rows = listing.json()["data"]
-    assert len(rows) == 2
-    assert rows[0]["health"] == "on_track"
+    assert fetched.json()["data"]["features"] == {"notes": False, "meetings": True}
 
 
 async def test_duplicate_project_key_conflict(client: AsyncClient) -> None:

@@ -7,7 +7,7 @@ from elliptic.modules.mcp_server.principal import mcp_call
 from elliptic.modules.search import service as search_service
 from elliptic.modules.search.schemas import SearchOut, SearchResultOut
 
-SEARCH_TYPES = ("task", "note", "project", "meeting", "cycle", "module")
+SEARCH_TYPES = ("task", "note", "project", "meeting")
 
 
 @mcp.tool
@@ -25,7 +25,7 @@ async def search(
     the human identifier such as ENG-42.
 
     types is an optional comma-separated filter drawn from: task, note, project,
-    meeting, cycle, module. Omit it to search all six.
+    meeting. Omit it to search all four.
 
     Pass org_id to target a specific organization when using a multi-organization token."""
     async with mcp_call("brain:read", org_id=org_id) as call:

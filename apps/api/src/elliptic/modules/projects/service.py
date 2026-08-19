@@ -29,12 +29,10 @@ from elliptic.modules.projects.models import (
     ProjectState,
     ProjectStatus,
     ProjectSubscription,
-    ProjectUpdate,
 )
 from elliptic.modules.projects.schemas import (
     ProjectArtifactIn,
     ProjectCreateIn,
-    ProjectUpdateCreateIn,
     ProjectUpdateIn,
 )
 from elliptic.modules.rbac_audit.models import RbacAction, RbacResourceScope
@@ -592,36 +590,6 @@ async def set_project_subscription(
         await session.delete(existing)
     await session.flush()
     return subscribed
-
-
-async def create_project_update(
-    session: AsyncSession, ctx: OrgContext, project_id: uuid.UUID, payload: ProjectUpdateCreateIn
-) -> ProjectUpdate:
-    """Post a project status update (RAG health + summary)."""
-    await get_project(session, ctx, project_id)
-    update = ProjectUpdate(
-        org_id=ctx.org.id,
-        project_id=project_id,
-        health=payload.health,
-        summary=payload.summary,
-        created_by=ctx.user.id,
-    )
-    session.add(update)
-    await session.flush()
-    return update
-
-
-async def list_project_updates(
-    session: AsyncSession, ctx: OrgContext, project_id: uuid.UUID
-) -> list[ProjectUpdate]:
-    """List a project's status updates, newest first."""
-    await get_project(session, ctx, project_id)
-    result = await session.scalars(
-        select(ProjectUpdate)
-        .where(ProjectUpdate.project_id == project_id, ProjectUpdate.org_id == ctx.org.id)
-        .order_by(ProjectUpdate.created_at.desc())
-    )
-    return list(result)
 
 
 async def set_project_member_role(

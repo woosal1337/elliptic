@@ -34,8 +34,6 @@ from elliptic.modules.automation.router import router as automation_router
 from elliptic.modules.comments.router import router as comments_router
 from elliptic.modules.compliance.router import router as compliance_router
 from elliptic.modules.config.router import router as config_router
-from elliptic.modules.cycles.router import org_router as cycles_org_router
-from elliptic.modules.cycles.router import router as cycles_router
 from elliptic.modules.domains.router import router as domains_router
 from elliptic.modules.drive.router import router as drive_router
 from elliptic.modules.embeds.router import router as embeds_router
@@ -62,8 +60,6 @@ from elliptic.modules.mcp_connectors.router import router as mcp_connectors_rout
 from elliptic.modules.mcp_server.app import build_mcp_app
 from elliptic.modules.meetings.public_router import router as public_share_router
 from elliptic.modules.meetings.router import router as meetings_router
-from elliptic.modules.milestones.router import router as milestones_router
-from elliptic.modules.modules.router import router as modules_router
 from elliptic.modules.notes.public_router import public_router as public_pages_router
 from elliptic.modules.notes.public_router import publish_router as notes_publish_router
 from elliptic.modules.notes.router import router as notes_router
@@ -82,7 +78,6 @@ from elliptic.modules.properties.router import router as properties_router
 from elliptic.modules.properties.router import templates_router as property_templates_lib_router
 from elliptic.modules.rbac_audit.router import router as rbac_audit_router
 from elliptic.modules.recurring.router import router as recurring_router
-from elliptic.modules.register.router import router as register_router
 from elliptic.modules.resolve.router import router as resolve_router
 from elliptic.modules.retrospectives.router import router as retrospectives_router
 from elliptic.modules.runner.router import router as runner_router
@@ -230,16 +225,12 @@ def create_app() -> FastAPI:  # noqa: PLR0915 — flat router registration list
     api.include_router(tasks_router)
     api.include_router(type_levels_router)
     api.include_router(approvals_router)
-    api.include_router(cycles_router)
     api.include_router(outbox_router)
     api.include_router(resolve_router)
-    api.include_router(cycles_org_router)
     api.include_router(favorites_router)
     api.include_router(sync_router)
     api.include_router(idp_sync_router)
     api.include_router(instance_router)
-    api.include_router(milestones_router)
-    api.include_router(modules_router)
     api.include_router(worklogs_router)
     api.include_router(runner_router)
     api.include_router(recurring_router)
@@ -265,7 +256,6 @@ def create_app() -> FastAPI:  # noqa: PLR0915 — flat router registration list
     api.include_router(activity_router)
     api.include_router(audit_router)
     api.include_router(rbac_audit_router)
-    api.include_router(register_router)
     api.include_router(analytics_router)
     api.include_router(stream_router)
     api.include_router(mcp_connectors_router)

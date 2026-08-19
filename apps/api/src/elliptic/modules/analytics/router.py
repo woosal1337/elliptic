@@ -17,7 +17,6 @@ from elliptic.modules.analytics.schemas import (
     FlowAnalyticsOut,
     MemberWorkloadOut,
     PivotTableOut,
-    ProgressScatterOut,
     ThroughputForecastOut,
 )
 
@@ -74,17 +73,6 @@ async def workload(
 ) -> SuccessResponse[MemberWorkloadOut]:
     data = await service.member_workload(session, ctx, project_id)
     return ok(MemberWorkloadOut.model_validate(data))
-
-
-@router.get("/scatter")
-async def scatter(
-    ctx: OrgCtx,
-    session: SessionDep,
-    dimension: Annotated[str, Query()] = "cycle",
-    project_id: Annotated[uuid.UUID | None, Query()] = None,
-) -> SuccessResponse[ProgressScatterOut]:
-    data = await service.progress_scatter(session, ctx, dimension, project_id)
-    return ok(ProgressScatterOut.model_validate(data))
 
 
 @router.get("/forecast")
