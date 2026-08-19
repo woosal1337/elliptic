@@ -12,13 +12,19 @@ NotificationStatusFilter = Literal["unread", "all", "archived"]
 
 
 class NotificationOut(BaseModel):
-    """Serialized notification with the resolved actor display name."""
+    """Serialized notification with the resolved actor display name.
+
+    ``project_id`` is set only when the notification points at a task. A task
+    URL on the web app carries the project in its path, and the row itself
+    stores just the task, so the read path resolves the parent here.
+    """
 
     id: uuid.UUID
     org_id: uuid.UUID
     type: NotificationType
     entity_type: str
     entity_id: uuid.UUID | None
+    project_id: uuid.UUID | None = None
     actor_id: uuid.UUID | None
     actor_name: str | None
     title: str

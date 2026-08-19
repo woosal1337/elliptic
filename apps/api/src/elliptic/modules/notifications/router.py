@@ -22,7 +22,6 @@ from elliptic.modules.notifications.schemas import (
     SnoozeIn,
     UnreadCountOut,
 )
-from elliptic.modules.notifications.service import notification_to_out
 
 router = APIRouter(prefix="/orgs/{org_id}/notifications", tags=["notifications"])
 
@@ -37,10 +36,7 @@ async def list_notifications(
     notifications, actor_names, unread = await service.list_for_user(
         session, ctx, status=status, limit=limit
     )
-    items = [
-        notification_to_out(n, actor_names.get(n.actor_id) if n.actor_id else None)
-        for n in notifications
-    ]
+    items = await service.serialize_many(session, notifications, actor_names)
     return ok(NotificationListOut(items=items, unread_count=unread))
 
 
@@ -93,7 +89,8 @@ async def mark_read(
     notification_id: uuid.UUID, ctx: OrgCtx, session: SessionDep
 ) -> SuccessResponse[NotificationOut]:
     notification, actor_name = await service.mark_read(session, ctx, notification_id)
-    return ok(notification_to_out(notification, actor_name), message="Notification marked read")
+    out = await service.serialize_one(session, notification, actor_name)
+    return ok(out, message="Notification marked read")
 
 
 @router.post("/read-all")
@@ -107,7 +104,8 @@ async def archive(
     notification_id: uuid.UUID, ctx: OrgCtx, session: SessionDep
 ) -> SuccessResponse[NotificationOut]:
     notification, actor_name = await service.archive(session, ctx, notification_id)
-    return ok(notification_to_out(notification, actor_name), message="Notification archived")
+    out = await service.serialize_one(session, notification, actor_name)
+    return ok(out, message="Notification archived")
 
 
 @router.post("/{notification_id}/snooze")
@@ -115,7 +113,8 @@ async def snooze(
     notification_id: uuid.UUID, payload: SnoozeIn, ctx: OrgCtx, session: SessionDep
 ) -> SuccessResponse[NotificationOut]:
     notification, actor_name = await service.snooze(session, ctx, notification_id, payload.until)
-    return ok(notification_to_out(notification, actor_name), message="Notification snoozed")
+    out = await service.serialize_one(session, notification, actor_name)
+    return ok(out, message="Notification snoozed")
 
 
 @router.post("/devices", status_code=status.HTTP_201_CREATED)

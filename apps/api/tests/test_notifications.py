@@ -24,6 +24,7 @@ async def _seed_notification(
     recipient_id: str,
     actor_id: str | None = None,
     title: str = "Hello",
+    entity_id: str | None = None,
 ) -> str | None:
     async with session_factory() as session:
         notification = await notify(
@@ -32,7 +33,7 @@ async def _seed_notification(
             recipient_id=uuid.UUID(recipient_id),
             type=NotificationType.MENTIONED,
             entity_type="task",
-            entity_id=None,
+            entity_id=uuid.UUID(entity_id) if entity_id else None,
             actor_id=uuid.UUID(actor_id) if actor_id else None,
             title=title,
             snippet="snippet",
@@ -237,3 +238,34 @@ async def test_assignment_emits_notification(client: AsyncClient) -> None:
     assert assigned["actor_id"] == owner["user_id"]
     assert assigned["actor_name"] == "Test User"
     assert assigned["entity_id"] == task["id"]
+    # The web link needs the parent project in its path to open the task.
+    assert assigned["project_id"] == project["id"]
+
+    member_added = next(
+        item for item in listing.json()["data"]["items"] if item["type"] == "member_added"
+    )
+    assert member_added["project_id"] is None
+
+    read = await client.post(
+        f"{API}/orgs/{org['id']}/notifications/{assigned['id']}/read",
+        headers=member["headers"],
+    )
+    assert read.status_code == 200
+    assert read.json()["data"]["project_id"] == project["id"]
+
+
+async def test_task_project_is_not_resolved_across_orgs(client: AsyncClient) -> None:
+    """A notification never reports a project that belongs to another workspace."""
+    auth = await register_and_login(client)
+    home = await create_org(client, auth["headers"])
+    other = await create_org(client, auth["headers"])
+    project = await create_project(client, auth["headers"], other["id"], key="OTH")
+    task = await create_task(client, auth["headers"], other["id"], project["id"])
+
+    await _seed_notification(org_id=home["id"], recipient_id=auth["user_id"], entity_id=task["id"])
+
+    listing = await client.get(f"{API}/orgs/{home['id']}/notifications", headers=auth["headers"])
+    seeded = next(
+        item for item in listing.json()["data"]["items"] if item["entity_id"] == task["id"]
+    )
+    assert seeded["project_id"] is None

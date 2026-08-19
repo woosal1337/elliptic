@@ -23,12 +23,10 @@ async def list_notifications(
         notifications, actor_names, unread = await notifications_service.list_for_user(
             call.session, call.ctx, status=status, limit=limit
         )
-        items = [
-            notifications_service.notification_to_out(
-                n, actor_names.get(n.actor_id) if n.actor_id else None
-            ).model_dump(mode="json")
-            for n in notifications
-        ]
+        serialized = await notifications_service.serialize_many(
+            call.session, notifications, actor_names
+        )
+        items = [n.model_dump(mode="json") for n in serialized]
         return {"total": len(items), "items": items, "unread_count": unread}
 
 
@@ -51,9 +49,8 @@ async def mark_notification_read(notification_id: str, org_id: str | None = None
         notification, actor_name = await notifications_service.mark_read(
             call.session, call.ctx, uuid.UUID(notification_id)
         )
-        return notifications_service.notification_to_out(notification, actor_name).model_dump(
-            mode="json"
-        )
+        out = await notifications_service.serialize_one(call.session, notification, actor_name)
+        return out.model_dump(mode="json")
 
 
 @mcp.tool
@@ -75,9 +72,8 @@ async def archive_notification(notification_id: str, org_id: str | None = None) 
         notification, actor_name = await notifications_service.archive(
             call.session, call.ctx, uuid.UUID(notification_id)
         )
-        return notifications_service.notification_to_out(notification, actor_name).model_dump(
-            mode="json"
-        )
+        out = await notifications_service.serialize_one(call.session, notification, actor_name)
+        return out.model_dump(mode="json")
 
 
 @mcp.tool
@@ -91,6 +87,5 @@ async def snooze_notification(
         notification, actor_name = await notifications_service.snooze(
             call.session, call.ctx, uuid.UUID(notification_id), datetime.fromisoformat(until)
         )
-        return notifications_service.notification_to_out(notification, actor_name).model_dump(
-            mode="json"
-        )
+        out = await notifications_service.serialize_one(call.session, notification, actor_name)
+        return out.model_dump(mode="json")

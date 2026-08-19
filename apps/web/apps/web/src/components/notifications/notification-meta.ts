@@ -36,6 +36,7 @@ export function notificationMeta(type: string): NotificationKindMeta {
 
 export function entityHref(orgId: string, notification: Notification): string | null {
   const base = `/app/${orgId}`;
+  if (!notification.entity_id) return null;
   switch (notification.entity_type) {
     case "project":
       return `${base}/projects/${notification.entity_id}`;
@@ -44,7 +45,12 @@ export function entityHref(orgId: string, notification: Notification): string | 
     case "note":
       return `${base}/notes/${notification.entity_id}`;
     case "task":
-      return `${base}/projects?task=${notification.entity_id}`;
+      // The task dialog opens from ?task= on the project page, so the link needs
+      // the parent project in its path. Without project_id there is no page that
+      // can show the task, and /browse resolves the parent from the task id.
+      return notification.project_id
+        ? `${base}/projects/${notification.project_id}?task=${notification.entity_id}`
+        : `${base}/browse/${notification.entity_id}`;
     default:
       return null;
   }

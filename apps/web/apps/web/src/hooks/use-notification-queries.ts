@@ -18,7 +18,10 @@ export interface Notification {
   org_id: string;
   type: string;
   entity_type: NotificationEntityType | string;
-  entity_id: string;
+  /** Null for a notification that names no single record, such as an invite. */
+  entity_id: string | null;
+  /** The project that holds the task. Set only when entity_type is "task". */
+  project_id: string | null;
   actor_id: string | null;
   actor_name: string | null;
   title: string;

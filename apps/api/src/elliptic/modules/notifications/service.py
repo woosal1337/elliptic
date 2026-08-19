@@ -23,10 +23,15 @@ from elliptic.modules.notifications.schemas import (
     NotificationOut,
     NotificationStatusFilter,
 )
+from elliptic.modules.tasks.models import Task
 from elliptic.modules.users.models import User
 
 
-def notification_to_out(notification: Notification, actor_name: str | None) -> NotificationOut:
+def notification_to_out(
+    notification: Notification,
+    actor_name: str | None,
+    project_id: uuid.UUID | None = None,
+) -> NotificationOut:
     """Serialize a notification with the resolved actor display name."""
     return NotificationOut(
         id=notification.id,
@@ -34,6 +39,7 @@ def notification_to_out(notification: Notification, actor_name: str | None) -> N
         type=notification.type,
         entity_type=notification.entity_type,
         entity_id=notification.entity_id,
+        project_id=project_id,
         actor_id=notification.actor_id,
         actor_name=actor_name,
         title=notification.title,
@@ -43,6 +49,63 @@ def notification_to_out(notification: Notification, actor_name: str | None) -> N
         snoozed_until=notification.snoozed_until,
         created_at=notification.created_at,
     )
+
+
+async def _resolve_project_ids(
+    session: AsyncSession, notifications: list[Notification]
+) -> dict[uuid.UUID, uuid.UUID]:
+    """Map each task notification's id to the project that holds that task.
+
+    A notification stores only the entity it points at, but a task opens on the
+    web app under ``/projects/{project_id}?task={task_id}`` — without the parent
+    the link lands on the project list. One extra query per page beats a stored
+    column that every row written before it would leave null.
+
+    The task must sit in the same org as the notification. A row that points
+    across that boundary resolves to nothing rather than to a foreign project.
+    """
+    task_notifications = [
+        n for n in notifications if n.entity_type == "task" and n.entity_id is not None
+    ]
+    if not task_notifications:
+        return {}
+    rows = await session.execute(
+        select(Task.id, Task.org_id, Task.project_id).where(
+            Task.id.in_({n.entity_id for n in task_notifications})
+        )
+    )
+    task_rows = {row.id: (row.org_id, row.project_id) for row in rows}
+    resolved: dict[uuid.UUID, uuid.UUID] = {}
+    for n in task_notifications:
+        row = task_rows.get(n.entity_id)
+        if row is not None and row[0] == n.org_id:
+            resolved[n.id] = row[1]
+    return resolved
+
+
+async def serialize_many(
+    session: AsyncSession,
+    notifications: list[Notification],
+    actor_names: dict[uuid.UUID, str],
+) -> list[NotificationOut]:
+    """Serialize a page of notifications, resolving the project of each task."""
+    project_ids = await _resolve_project_ids(session, notifications)
+    return [
+        notification_to_out(
+            n,
+            actor_names.get(n.actor_id) if n.actor_id else None,
+            project_ids.get(n.id),
+        )
+        for n in notifications
+    ]
+
+
+async def serialize_one(
+    session: AsyncSession, notification: Notification, actor_name: str | None
+) -> NotificationOut:
+    """Serialize one notification, resolving the project when it points at a task."""
+    project_ids = await _resolve_project_ids(session, [notification])
+    return notification_to_out(notification, actor_name, project_ids.get(notification.id))
 
 
 def _unread_predicate(now: datetime) -> ColumnElement[bool]:

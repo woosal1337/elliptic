@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { Task, TaskPriority, TaskStatus } from "@/lib/types";
 import { useUpdateTask } from "@/hooks/use-task-queries";
@@ -43,10 +43,17 @@ export function useTaskSurface(
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [openTaskId, setOpenTaskIdState] = useState<string | null>(
-    () => searchParams.get("task")
-  );
+  const taskParam = searchParams.get("task");
+  const [openTaskId, setOpenTaskIdState] = useState<string | null>(() => taskParam);
   const deepLinkCommentId = searchParams.get("comment");
+
+  // The URL owns which task is open, so a link that lands on the page we are
+  // already on still opens the dialog. Seeding the state at mount alone loses
+  // that case: the App Router keeps the same pathname mounted, so a click on an
+  // inbox row for this project rewrote ?task= and nothing happened.
+  useEffect(() => {
+    setOpenTaskIdState(taskParam);
+  }, [taskParam]);
   const [peekTaskId, setPeekTaskId] = useState<string | null>(null);
   const [picker, setPicker] = useState<PickerState | null>(null);
 
