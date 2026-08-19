@@ -21,7 +21,6 @@ const TYPE_META: Record<string, { label: string; icon: IconName }> = {
   note: { label: "Note", icon: "file-text" },
   project: { label: "Project", icon: "folder" },
   meeting: { label: "Meeting", icon: "calendar" },
-  cycle: { label: "Cycle", icon: "repeat" },
 }
 
 export const SearchScreen: FC<HomeStackScreenProps<"Search">> = ({ navigation }) => {
