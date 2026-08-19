@@ -37,10 +37,6 @@ export const DOCS_NAV: DocsNavGroup[] = [
         "label": "Workflows & transitions"
       },
       {
-        "slug": "cycles-milestones-modules",
-        "label": "Cycles, milestones & modules"
-      },
-      {
         "slug": "views-and-filters",
         "label": "Views & filters"
       },

@@ -32,11 +32,10 @@ No server-side limit cap — pass a sane one.
 
 ### `get_task(task_id*)`
 Scope `tasks:read`. Full task: `identifier` (`ENG-42`), status + immutable
-`category`, priority, kind/severity/component, assignee + `bot_assignee_id`
-dates, labels, `estimate`, `acceptance_criteria`, `dod_items`,
-`custom_fields`, provenance (`source_meeting_id`, `source_note_id`), planning
-links (`cycle_id`, `milestone_id`, `module_id` — read-only over
-MCP), `subtask_total`/`subtask_done`, `blocked` (true when an open task
+`category`, priority, kind/severity/component, assignee, dates, labels,
+`estimate`, `acceptance_criteria`, `dod_items`,
+`custom_fields`, provenance (`source_meeting_id`, `source_note_id`),
+`subtask_total`/`subtask_done`, `blocked` (true when an open task
 `blocks` it), `comment_count`, `latest_comment {content, author_name}`.
 
 ### `create_task(project_id*, title*, description=None, status="backlog", priority="none", assignee_id=None, unassigned=False, start_date=None, due_date=None, label_ids=None, parent_task_id=None, source_meeting_id=None, source_note_id=None, kind="task", severity=None, component=None, mention_user_ids=None, related_task_ids=None)` 🔑
@@ -351,7 +350,7 @@ can see it. Non-images → use `get_attachment` instead.
 
 ### `search(query*, types=None, limit=20)`
 The id resolver — reach for it before hand-filtering lists. `types` is a
-comma-separated subset of `task, note, project, meeting, cycle, module`
+comma-separated subset of `task, note, project, meeting`
 (omit for all six). Substring + fuzzy ranking (no embeddings). **Caveats:**
 note and meeting matching is by **title only** (note bodies via
 `list_notes(search=…)`, transcript content via `meetings_chat`); results skip

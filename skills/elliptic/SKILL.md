@@ -118,10 +118,10 @@ is a first-class product feature.
 | Integrations (Slack) | 2 | status, channels | — |
 | Activity | 2 | org feed, per-entity timeline | — |
 | Profile | 2 | own profile | update name |
-| Search | 1 | tasks, notes, projects, meetings, cycles, modules | — |
+| Search | 1 | tasks, notes, projects, meetings | — |
 
 Not reachable over MCP (web/REST only — say so rather than improvising):
-cycles/sprints, milestones, modules, retrospectives, worklogs, favorites,
+retrospectives, worklogs, favorites,
 approvals, project templates, **comment/note attachment upload** (those upload
 through the web app — Drive documents, by contrast, DO upload over MCP), Slack
 connect/disconnect, GitHub/Sentry/email integrations.

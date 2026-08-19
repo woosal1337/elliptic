@@ -16,7 +16,7 @@ import { FinalCTA } from "@/components/marketing/final-cta";
 export const metadata = pageMetadata({
   title: "Projects & tasks",
   description:
-    "Linear-style projects and tasks with stable identifiers, List, Board, and Table views, sub-tasks, labels, priorities, the PQL query language, and planning from cycles to releases. Your agents run the same board your team does.",
+    "Linear-style projects and tasks with stable identifiers, List, Board, and Table views, sub-tasks, labels, priorities, epics, and per-team workflow states. Your agents run the same board your team does.",
   path: "/projects",
 });
 
@@ -63,7 +63,7 @@ const ROWS: FeatureRowData[] = [
   "priority":   "high",
   "assignee":   "ada@acme.com",
   "labels":     ["launch", "p0"],
-  "cycle":      "Cycle 7"
+  "estimate":   "5"
 }
 
 // the number is claimed atomically, per org:
@@ -94,12 +94,12 @@ const CAPABILITIES = [
     description: "Define statuses per team across categories from backlog to done, and gate which transitions are allowed.",
   },
   {
-    title: "Cycles to releases",
-    description: "Plan sprints with cycles, group long arcs into initiatives, and track milestones and releases.",
+    title: "Epics and relations",
+    description: "Group work under an epic, and relate items that block, duplicate, or depend on each other.",
   },
   {
-    title: "Intake and triage",
-    description: "Turn inbound requests and forms into triaged tasks, with an owner and a queue.",
+    title: "Saved views and custom fields",
+    description: "Save a slice of the board for yourself, your team, or the org, and add the fields you track.",
   },
 ];
 

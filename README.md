@@ -6,8 +6,8 @@
 
 **Jira for your agents.**
 
-An agent-native work platform. Your agents run boards, tasks, sprints, meetings, and notes
-alongside your team, over a built-in MCP server, on your own keys.
+An agent-native work platform. Your agents run boards, tasks, meetings, and notes
+alongside your team, over a built-in MCP server, on your own infrastructure.
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-404040.svg)](LICENSE)
 [![Release](https://img.shields.io/github/v/release/woosal1337/elliptic?color=404040)](https://github.com/woosal1337/elliptic/releases)
@@ -26,31 +26,29 @@ alongside your team, over a built-in MCP server, on your own keys.
 
 Most teams now run on two kinds of labor, people and agents, scattered across a dozen
 disconnected tools. Elliptic gives both one place to work. It is a single, multi-tenant,
-agent-native platform where **projects, tasks, sprints, meetings, notes, and the agents
+agent-native platform where **projects, tasks, meetings, notes, and the agents
 and people doing the work live together**, so every task traces back to the conversation
 that created it.
 
-A built-in **MCP server** exposes the whole workspace to your agents over OAuth, the
-in-product assistant and AI agents run on **your own keys (BYOK)**, and the whole thing is
-**open source and self-hostable**, so your data stays on your infrastructure.
+A built-in **MCP server** exposes the whole workspace to your agents over OAuth, and the
+whole thing is **open source and self-hostable**, so your data stays on your
+infrastructure.
 
 ## Features
 
 **Plan & track**
 - Projects with leads, members, states, and templates
-- Tasks with List, Board (Kanban), and Table views, sub-tasks, labels, priorities, and a query language (PQL)
-- Cycles (sprints), Initiatives, Milestones, and Releases for planning at every altitude
-- Intake & triage — turn inbound requests and forms into tracked work
+- Tasks with List, Board (Kanban), and Table views, sub-tasks, labels, priorities, and epics
+- Saved views, custom properties, recurring work, worklogs, and per-org workflow states
 
 **Meetings & knowledge**
-- Speaker-attributed meeting transcripts, AI summaries, and "ask the meeting"
-- Notes, wiki, and docs with **live, multi-cursor co-editing** (Yjs)
-- Retrospectives and reusable meeting templates
+- Speaker-attributed meeting transcripts with chapters and share links
+- Notes, wiki, and docs, plus an org-wide Drive for uploaded documents
+- Retrospectives and an org glossary
 
-**AI & MCP**
-- In-product AI assistant over your company brain — **bring your own key** (per-org)
-- AI agents with budgets, automations, and a sandboxed runner
+**Agents & MCP**
 - A built-in **MCP server** exposing the whole workspace to agents over OAuth, plus connectors and a marketplace
+- Automations, a sandboxed runner, and GitHub, Sentry, Slack, and email integrations
 
 **Collaboration**
 - Threaded comments, reactions, and resolve across every entity
@@ -61,7 +59,7 @@ in-product assistant and AI agents run on **your own keys (BYOK)**, and the whol
 - True multi-tenancy with org-scoped data isolation
 - SSO (SAML / OIDC), SCIM, LDAP, IdP group sync, and domain verification
 - Role-based access control with audit logs, approvals, and compliance surfaces
-- Webhooks, an outbox/event backbone, S3-compatible object storage, and analytics dashboards
+- Webhooks, an outbox/event backbone, S3-compatible object storage, and analytics
 
 ## Quick start
 

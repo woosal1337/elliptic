@@ -97,8 +97,8 @@ creation (`{app-origin}/invite/{token}`).
 - Soft delete with a 30-day restore window (`list_deleted_projects` /
   `restore_project`); org deletion is instant and total.
 - Useful fields: `lead_id`, `default_assignee_id` (fallback assignee for new
-  `features` (per-project tab/feature toggles: timeline, cycles, meetings,
-  notes, milestones, modules…), `estimate_scale` (the allowed estimate
+  `features` (per-project tab toggles: meetings, notes),
+  `estimate_scale` (the allowed estimate
   strings), `target_date`, portfolio `state_id`
   (draft/planning/execution/monitoring/completed/cancelled lifecycle),
   `auto_archive_days` / `auto_close_days`.
@@ -149,9 +149,6 @@ it. Inverse names are accepted on input and stored in canonical direction.
 from. Completing a meeting-born task notifies that meeting's attendees — set
 provenance whenever you create tasks from a meeting or note.
 
-**Planning links (read-only over MCP):** `cycle_id`, `milestone_id`,
-`module_id`, `release_id`.
-
 **Workflow guardrails** (configured per org/team by admins): allowed
 transition edges per status (open until any edge is defined), per-edge
 required project role, and conditions — require assignee / estimate / due
@@ -194,8 +191,8 @@ speaker-attributed segments in one atomic call).
 ## 7. Search, brain & activity
 
 - `search` covers exactly: **task** (title+description), **note** (title
-  only), **project** (name/key), **meeting** (title only), **cycle** (name),
-  **module** (name/description). Substring+fuzzy, top-N; not a semantic
+  only), **project** (name/key), **meeting** (title only). Substring+fuzzy,
+  top-N; not a semantic
   index. Note bodies → `list_notes(search=…)`; transcript content →
   `meetings_chat`.
 - Brain tools are deterministic composites: `brain_open_threads` (my open
@@ -258,18 +255,13 @@ improvising:
 
 | Capability | Where it lives |
 |---|---|
-| Cycles (sprints), velocity, roll-forward | project → Cycles tab |
-| Milestones, modules | project tabs |
 | Retrospectives | project tab |
 | Worklogs (time tracking + approval) | task panel |
 | Favorites, approvals, project templates | web app |
 | Task status *rename/reorder* transfers | web app |
 | File upload | web/mobile apps |
 | Slack connect/disconnect; GitHub/Sentry/email integrations | settings |
-| Custom relation types, bot-assignee setting | web/REST |
-
-Tasks still expose `cycle_id`/`milestone_id`/`module_id`/`release_id`
-read-only, so you can report on them even though you can't set them.
+| Custom relation types | web/REST |
 
 ## 10. Web-app URL map (for handing humans links)
 
@@ -279,7 +271,7 @@ Base: `{app-origin}/app/{orgId}` (hosted app-origin: `https://elliptic.sh`).
 |---|---|
 | My tasks / Inbox | `/my-tasks`, `/inbox` |
 | Notes / Wiki | `/notes`, `/notes/{noteId}`, `/wiki` |
-| Projects | `/projects`, `/projects/{projectId}` (opens the Board; `?tab=` overview, updates, board, tasks, epics, timeline, cycles, milestones, modules, register, insights, meetings, notes, members, settings) |
+| Projects | `/projects`, `/projects/{projectId}` (opens the Board; `?tab=` overview, board, tasks, epics, insights, meetings, notes, members, settings) |
 | Meetings | `/meetings`, `/meetings/{meetingId}` |
 | Activity / Search | `/activity`, `/search` |
 | Teamspace | `/teams/{teamId}` |

@@ -16,7 +16,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Instead of scattering work across a project tracker, a notes app, a meeting recorder, and a chat tool, Elliptic keeps your projects, tasks, notes, meetings, calendar, and a complete activity feed in one connected system. Every item keeps its context, so when you open a task you can see the meeting it came from, the note that referenced it, and everything that has happened to it since."
+        "text": "Instead of scattering work across a project tracker, a notes app, a meeting recorder, and a chat tool, Elliptic keeps your projects, tasks, notes, meetings, and a complete activity feed in one connected system. Every item keeps its context, so when you open a task you can see the meeting it came from, the note that referenced it, and everything that has happened to it since."
       },
       {
         "type": "p",
@@ -231,19 +231,9 @@ export const DOC_PAGES: DocPage[] = [
             "The org has more than one member."
           ],
           [
-            "Plan a cycle",
-            "Set up a cycle (a time-boxed sprint of work).",
-            "Your org has at least one cycle."
-          ],
-          [
             "Write a note or doc",
             "Capture a spec, decision, or research note.",
             "Your org has at least one note."
-          ],
-          [
-            "Connect an AI provider",
-            "Add your OpenAI or Anthropic key (this is BYOK).",
-            "Your org has at least one provider key stored."
           ]
         ]
       },
@@ -287,18 +277,13 @@ export const DOC_PAGES: DocPage[] = [
           ],
           [
             "Personal",
-            "Assistant",
-            "Your AI assistant, working on your org's own model key."
-          ],
-          [
-            "Personal",
-            "Triage",
-            "Incoming items to sort and route, with a live count badge."
-          ],
-          [
-            "Personal",
             "Notes",
             "Your notes and documents."
+          ],
+          [
+            "Workspace",
+            "Drive",
+            "The org's uploaded documents."
           ],
           [
             "Workspace",
@@ -307,28 +292,8 @@ export const DOC_PAGES: DocPage[] = [
           ],
           [
             "Workspace",
-            "Initiatives",
-            "Larger bodies of work that span projects."
-          ],
-          [
-            "Workspace",
-            "Releases",
-            "Shipping milestones and what is going out in them."
-          ],
-          [
-            "Workspace",
-            "Customers",
-            "The customers your work is tied to."
-          ],
-          [
-            "Workspace",
             "Meetings",
-            "Recorded meetings with transcripts and AI summaries."
-          ],
-          [
-            "Workspace",
-            "Calendar",
-            "A time-based view of the organization."
+            "Recorded meetings with their transcripts."
           ],
           [
             "Workspace",
@@ -337,18 +302,8 @@ export const DOC_PAGES: DocPage[] = [
           ],
           [
             "Workspace",
-            "Query",
-            "Ask the company brain across every surface at once."
-          ],
-          [
-            "Workspace",
-            "Dashboards",
-            "Saved views and metrics about your work."
-          ],
-          [
-            "Workspace",
             "Settings",
-            "Org settings, members and invites, and your model key."
+            "Org settings, members, and invites."
           ]
         ]
       },
@@ -368,7 +323,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "ul",
         "items": [
           "**Quick add.** A fast way to capture a task from anywhere in the app.",
-          "**Search and command palette.** Select Search, or press ⌘K (Ctrl-K on Windows), to jump anywhere or run quick actions without leaving the keyboard. One query spans projects, tasks, meetings, and notes, and the same palette can create a project, note, task, or calendar event, or import a meeting, on the spot.",
+          "**Search and command palette.** Select Search, or press ⌘K (Ctrl-K on Windows), to jump anywhere or run quick actions without leaving the keyboard. One query spans projects, tasks, meetings, and notes, and the same palette can create a project, note, or task, or import a meeting, on the spot.",
           "**Help menu.** Links into the docs and help.",
           "**Notification bell.** Surfaces alerts about things that need you, mentions, assignments, and updates from across the organization."
         ]
@@ -428,7 +383,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Layered across that spine are the surfaces that give the work context. **Notes and wiki pages** hold the thinking. **Meetings** capture conversations as transcripts and AI summaries. The **activity feed** threads every change into one timeline. The **calendar** places dated work on a grid, and the **inbox** routes what needs you personally. None of these replace the spine, they wrap around it, so a task can point back to the meeting it came from and the note that specified it."
+        "text": "Layered across that spine are the surfaces that give the work context. **Notes and wiki pages** hold the thinking. **Meetings** capture conversations as transcripts and AI summaries. The **activity feed** threads every change into one timeline. The **inbox** routes what needs you personally. None of these replace the spine, they wrap around it, so a task can point back to the meeting it came from and the note that specified it."
       },
       {
         "type": "callout",
@@ -504,7 +459,7 @@ export const DOC_PAGES: DocPage[] = [
           [
             "Member",
             "Middle",
-            "Does the work: projects, tasks, notes, meetings, calendar, and activity. The default for invited people."
+            "Does the work: projects, tasks, notes, meetings, and activity. The default for invited people."
           ],
           [
             "Guest",
@@ -589,53 +544,6 @@ export const DOC_PAGES: DocPage[] = [
         "text": "Any work item can have **sub-tasks**, child items nested under a parent. This is how an epic breaks into stories, or a story into the tasks that deliver it. The nesting respects each type's level, so you cannot file a higher-level item under a lower-level one, though same-level nesting (a task under a task) stays allowed."
       },
       {
-        "type": "h3",
-        "text": "The planning layers"
-      },
-      {
-        "type": "p",
-        "text": "Around and above the board sit the layers that organize work over time and across projects. A work item can be attached to any of them:"
-      },
-      {
-        "type": "table",
-        "headers": [
-          "Layer",
-          "Scope",
-          "What it is"
-        ],
-        "rows": [
-          [
-            "Cycle",
-            "Project",
-            "A time-boxed iteration (a sprint), with a start and end date, that work items are pulled into for a fixed window."
-          ],
-          [
-            "Milestone",
-            "Project",
-            "A date-anchored delivery checkpoint that work items are linked to and counted toward."
-          ],
-          [
-            "Module",
-            "Project",
-            "A feature or workstream grouping that gathers related work items under a named area, with its own lead and dates."
-          ],
-          [
-            "Initiative",
-            "Organization",
-            "A cross-project strategic grouping that sits above projects and rolls several of them up under one goal."
-          ],
-          [
-            "Release",
-            "Organization",
-            "A versioned deliverable that work items are tagged into, carrying a version and a changelog of what shipped."
-          ]
-        ]
-      },
-      {
-        "type": "p",
-        "text": "Cycles, milestones, and modules organize work inside one project. Initiatives and releases operate at the org level, spanning projects. The full mechanics live in [Projects & Tasks](/docs/projects-and-tasks)."
-      },
-      {
         "type": "h2",
         "text": "Customizing work"
       },
@@ -678,10 +586,6 @@ export const DOC_PAGES: DocPage[] = [
           [
             "Activity feed",
             "One live, org-wide timeline of every meaningful change, who did what and when, across tasks, notes, and meetings."
-          ],
-          [
-            "Calendar",
-            "A time-based grid view of the organization, where dated work and meetings show up where you expect them."
           ],
           [
             "Inbox",
@@ -769,16 +673,6 @@ export const DOC_PAGES: DocPage[] = [
             "[Projects & Tasks](/docs/projects-and-tasks)"
           ],
           [
-            "Cycles, milestones, modules",
-            "Project-level planning layers.",
-            "[Projects & Tasks](/docs/projects-and-tasks)"
-          ],
-          [
-            "Initiatives & releases",
-            "Org-level grouping and versioned deliverables.",
-            "[Projects & Tasks](/docs/projects-and-tasks)"
-          ],
-          [
             "Labels, properties, views, workflow",
             "The ways you customize work.",
             "[Projects & Tasks](/docs/projects-and-tasks)"
@@ -820,7 +714,7 @@ export const DOC_PAGES: DocPage[] = [
   {
     "title": "Projects & tasks",
     "slug": "projects-and-tasks",
-    "description": "How projects contain and shape work, and how work items move through Elliptic: permanent keys, statuses and immutable categories, kinds and conversion, relations, the board and list and calendar, Your Work, and the agent-native surfaces behind all of it.",
+    "description": "How projects contain and shape work, and how work items move through Elliptic: permanent keys, statuses and immutable categories, kinds and conversion, relations, the board and the list, Your Work, and the agent-native surfaces behind all of it.",
     "blocks": [
       {
         "type": "h2",
@@ -834,7 +728,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "info",
         "title": "Where this lives",
-        "text": "Projects live at **elliptic.sh → Projects**. Each project opens to its own workspace with tabs for Overview, Updates, Board, Tasks, Epics, Calendar, Register, Insights, Members, and Settings, plus (when their feature toggle is on) Timeline, Cycles, Milestones, Modules, Meetings, and Notes. **Your Work** in the sidebar collects the tasks assigned to and created by you across every project."
+        "text": "Projects live at **elliptic.sh → Projects**. Each project opens to its own workspace with tabs for Overview, Board, Tasks, Epics, Insights, Members, and Settings, plus (when their feature toggle is on) Meetings and Notes. **Your Work** in the sidebar collects the tasks assigned to and created by you across every project."
       },
       {
         "type": "callout",
@@ -972,7 +866,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Not every project needs every surface. A project's **features** are a set of per-tab toggles you flip in Settings, and each one shows or hides a tab. **Timeline**, **Cycles**, **Milestones**, **Modules**, **Meetings**, and **Notes** are all toggleable. They are on by default. Turn off the ones a given project does not use to keep its workspace focused. The core tabs (Overview, Updates, Board, Tasks, Epics, Calendar, Register, Insights, Members, Settings) are always present."
+        "text": "Not every project needs every surface. A project's **features** are a set of per-tab toggles you flip in Settings, and each one shows or hides a tab. **Meetings** and **Notes** are both toggleable. They are on by default. Turn off the ones a given project does not use to keep its workspace focused. The core tabs (Overview, Board, Tasks, Epics, Insights, Members, Settings) are always present."
       },
       {
         "type": "h3",
@@ -1083,18 +977,6 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "h2",
-        "text": "Project updates and templates"
-      },
-      {
-        "type": "h3",
-        "text": "State of Project updates (RAG)"
-      },
-      {
-        "type": "p",
-        "text": "On the Updates tab you post a **State of Project** update: a short written summary paired with a **RAG health** signal, **On track**, **At risk**, or **Off track**. Updates are stamped with who posted them and when, and they stack into a running history so anyone can scroll the project's health over time. This is the lightweight status report that replaces the weekly \"how's it going\" thread."
-      },
-      {
-        "type": "h3",
         "text": "Project templates"
       },
       {
@@ -1459,7 +1341,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Project task lists filter on **status**, **assignee**, **label**, **bug severity**, **release-blocker**, **module**, and **cycle**, plus a free-text **search** over title and description. Combine them to carve out exactly the slice you care about (for example, all release-blocker bugs of High severity assigned to you)."
+        "text": "Project task lists filter on **status**, **assignee**, **label**, and **bug severity**, plus a free-text **search** over title and description. Combine them to carve out exactly the slice you care about (for example, all bugs of High severity assigned to you)."
       },
       {
         "type": "h3",
@@ -1872,406 +1754,6 @@ export const DOC_PAGES: DocPage[] = [
     ]
   },
   {
-    "title": "Cycles, milestones & modules",
-    "slug": "cycles-milestones-modules",
-    "description": "The planning layer above tasks: cycles for sprints, milestones for dates that matter, and modules for slices of a project.",
-    "blocks": [
-      {
-        "type": "h2",
-        "text": "The planning layer"
-      },
-      {
-        "type": "p",
-        "text": "Tasks are the unit of work in Elliptic, but real planning happens above a single task. You run work in time-boxed iterations, you commit to dated checkpoints, you group features into workstreams, you roll several projects up under one strategic bet, and you bundle finished work into versioned releases. This page covers all of those, plus the timeline and insights that show whether the plan is holding. Every surface here is also reachable by your agents over the [company-brain MCP](/docs/company-brain-mcp), so an agent can plan a cycle or tag a release the same way you do, on your organization's own model key."
-      },
-      {
-        "type": "table",
-        "headers": [
-          "Concept",
-          "Scope",
-          "What it groups"
-        ],
-        "rows": [
-          [
-            "Cycle (sprint)",
-            "Project",
-            "Work for one time-boxed iteration"
-          ],
-          [
-            "Milestone",
-            "Project",
-            "Work due by one delivery date"
-          ],
-          [
-            "Module (workstream)",
-            "Project",
-            "Work belonging to one feature or stream"
-          ],
-          [
-            "Initiative",
-            "Organization",
-            "Several projects under one strategic goal"
-          ],
-          [
-            "Release",
-            "Organization",
-            "Work items shipping together in one version"
-          ]
-        ]
-      },
-      {
-        "type": "h2",
-        "text": "Cycles (sprints)"
-      },
-      {
-        "type": "p",
-        "text": "A **cycle** is a time-boxed iteration inside a project, what other tools call a sprint. It has a `name`, an optional `start_date` and `end_date`, and a status that moves through three states: **upcoming**, **active**, and **completed**. You assign work items to a cycle, run the cycle, and at the end you see exactly what got done. Cycles live per project, so each project keeps its own cadence."
-      },
-      {
-        "type": "h3",
-        "text": "Creating and assigning work"
-      },
-      {
-        "type": "p",
-        "text": "Create a cycle with a name and, if you want a fixed box, a start and end date. New cycles begin life as **upcoming**. To put work into a cycle, assign a task to it. A task can be moved into a cycle and back out again while the cycle is still open, so an upcoming cycle is also where you stage the work you intend to commit to next. Once a cycle is completed it locks, and its assignments can no longer change."
-      },
-      {
-        "type": "steps",
-        "steps": [
-          {
-            "title": "Create the cycle",
-            "text": "Give it a name like Sprint 24 and, optionally, a start and end date. It starts as upcoming."
-          },
-          {
-            "title": "Assign work",
-            "text": "Add tasks to the cycle. Assign and unassign freely while the cycle is still upcoming or active."
-          },
-          {
-            "title": "Start it",
-            "text": "Starting a cycle flips it to active and stamps the moment it began."
-          },
-          {
-            "title": "Complete it",
-            "text": "Completing a cycle closes it out and freezes its final counts for velocity."
-          }
-        ]
-      },
-      {
-        "type": "h3",
-        "text": "The lifecycle: upcoming, active, completed"
-      },
-      {
-        "type": "p",
-        "text": "Starting a cycle moves it from **upcoming** to **active** and records `started_at`. By default a project allows only one active cycle at a time, so you complete the current one before starting the next, unless the project has parallel cycles enabled, which permits overlapping active cycles. Completing a cycle moves it to **completed** and records `completed_at`. Completion also captures the cycle's final scope and finished count as `final_total_count` and `final_completed_count`, a frozen snapshot that does not change afterward even if the underlying tasks move. That frozen pair is what makes velocity trustworthy over time."
-      },
-      {
-        "type": "h3",
-        "text": "Rolled-up counts"
-      },
-      {
-        "type": "p",
-        "text": "Every cycle reports a live breakdown of the work assigned to it across four buckets:"
-      },
-      {
-        "type": "ul",
-        "items": [
-          "**Total**: every active work item assigned to the cycle. Cancelled and duplicate items are left out of the total.",
-          "**Done**: items in a completed status.",
-          "**Started**: items that are in progress.",
-          "**Todo**: items not yet started, merging the backlog and unstarted categories."
-        ]
-      },
-      {
-        "type": "p",
-        "text": "These counts power the per-cycle progress bar and feed the workspace dashboard. The dashboard surfaces your organization's **active** cycles across all projects in one place, each with its own done-out-of-total rollup and the name and key of the project it belongs to, so you can see every sprint in flight without opening each project."
-      },
-      {
-        "type": "h3",
-        "text": "Transferring incomplete work"
-      },
-      {
-        "type": "p",
-        "text": "When a cycle ends with work unfinished, you do not have to reassign each item by hand. **Transfer** moves every incomplete item from the cycle into a follow-up cycle you choose, in one action, and tells you how many items moved. The natural flow is to create the next cycle, complete the current one, then transfer the leftovers forward so nothing falls through the cracks."
-      },
-      {
-        "type": "callout",
-        "variant": "tip",
-        "title": "A clean handoff between sprints",
-        "text": "Create next sprint, complete this one to freeze its velocity, then transfer the incomplete items into next sprint. The completed cycle keeps an honest record of what it actually delivered, and the unfinished work starts the next box already assigned. The transfer target has to be an open cycle, since a completed one is locked."
-      },
-      {
-        "type": "h2",
-        "text": "Recurring cycles and velocity"
-      },
-      {
-        "type": "h3",
-        "text": "Generating a dated series"
-      },
-      {
-        "type": "p",
-        "text": "If your team runs on a fixed cadence, you do not need to create each sprint manually. **Generate** auto-creates a whole series of future cycles at once from a small config. You give it a base title, how many cycles to create, how long each one runs, an optional gap between them, the date the first one starts, and the number to start counting from."
-      },
-      {
-        "type": "table",
-        "headers": [
-          "Field",
-          "Meaning",
-          "Range"
-        ],
-        "rows": [
-          [
-            "`base_title`",
-            "The repeated name, numbered per cycle (for example Sprint).",
-            "1 to 200 characters"
-          ],
-          [
-            "`count`",
-            "How many cycles to generate.",
-            "1 to 52"
-          ],
-          [
-            "`duration_weeks`",
-            "Length of each cycle in weeks.",
-            "1 to 12, default 2"
-          ],
-          [
-            "`cooldown_days`",
-            "Gap inserted between consecutive cycles.",
-            "0 to 60, default 0"
-          ],
-          [
-            "`start_date`",
-            "When the first cycle begins.",
-            "a date"
-          ],
-          [
-            "`start_index`",
-            "The number the first generated cycle is labeled with.",
-            "1 or more, default 1"
-          ]
-        ]
-      },
-      {
-        "type": "p",
-        "text": "Each generated cycle is dated back to back, offset by its duration plus the cooldown, and numbered from the start index, so its name reads like Sprint 1, Sprint 2, and so on. A typical setup is twelve two-week sprints starting next Monday with no cooldown, which lays out roughly half a year of cadence in a single call. Generated cycles arrive as **upcoming**, ready for you to start when their time comes."
-      },
-      {
-        "type": "h3",
-        "text": "Velocity"
-      },
-      {
-        "type": "p",
-        "text": "A project's **velocity** is the series of frozen completed-and-total counts across its completed cycles, plus a rolling **average velocity** over them. Because each cycle's numbers are frozen at completion, the series is a stable historical record rather than a number that drifts as old tasks get reopened or moved. The velocity view returns one point per completed cycle (its name, when it completed, how many items it finished, and its total scope), the average finished count across those cycles, and the count of cycles included."
-      },
-      {
-        "type": "callout",
-        "variant": "info",
-        "title": "Why completion freezes the numbers",
-        "text": "Live cycle counts move as tasks change status. Once a cycle is completed, its `final_total_count` and `final_completed_count` are captured and never recomputed. That is what lets average velocity stay an honest baseline for planning the size of the next cycle."
-      },
-      {
-        "type": "h2",
-        "text": "Milestones"
-      },
-      {
-        "type": "p",
-        "text": "A **milestone** is a date-anchored delivery checkpoint inside a project. Where a cycle is a box of time, a milestone is a commitment to a date: a launch, a demo, a go-live. Each milestone has a `name`, an optional `description`, an optional `target_date`, and a status of either **upcoming** or **completed**. You link the work items that have to land for the milestone to be met, and the milestone tells you how close you are."
-      },
-      {
-        "type": "h3",
-        "text": "Linking and bulk-linking items"
-      },
-      {
-        "type": "p",
-        "text": "Link a task to a milestone one at a time, or **bulk-link** many at once by passing a list of work items in a single call (1 to 200 items). Bulk linking returns a per-item result, the outcome for each item, so you can see what was linked. You can unlink any item later, and you can list every task currently attached to a milestone to review scope."
-      },
-      {
-        "type": "h3",
-        "text": "Done and total rollups"
-      },
-      {
-        "type": "p",
-        "text": "Each milestone rolls up a simple **done-out-of-total** count over its linked items: total is everything attached, done is everything in a completed status. That ratio is the at-a-glance read on whether a dated commitment is on course. Milestones split into **upcoming** and **completed**, so the ones still ahead of you stay separate from the ones already shipped."
-      },
-      {
-        "type": "h2",
-        "text": "Modules (workstreams)"
-      },
-      {
-        "type": "p",
-        "text": "A **module** is a feature grouping or workstream inside a project. Where a cycle answers \"when\" and a milestone answers \"by what date\", a module answers \"what part of the product\". Use modules for streams like Billing, Onboarding, or Mobile that run across many cycles. A module carries a `name`, an optional `description`, an optional **lead**, an optional `start_date` and `target_date`, a status, and an optional link to a milestone."
-      },
-      {
-        "type": "h3",
-        "text": "Status"
-      },
-      {
-        "type": "p",
-        "text": "A module's status describes the health of the whole stream, independent of any single task:"
-      },
-      {
-        "type": "ul",
-        "items": [
-          "**Planned**: the workstream is defined but not yet underway.",
-          "**In progress**: active work.",
-          "**Paused**: temporarily on hold.",
-          "**Completed**: the stream has delivered.",
-          "**Cancelled**: the stream was dropped."
-        ]
-      },
-      {
-        "type": "h3",
-        "text": "Counts, archiving, and export"
-      },
-      {
-        "type": "p",
-        "text": "Like cycles, modules roll up their linked work across **total**, **done**, **started**, and **todo**, and a project-level summary aggregates across the project's modules. You assign and unassign tasks per module. When a stream is finished or shelved, **archive** it to clear it from the default list without deleting anything, and **restore** it later to bring it back. Listing can optionally include archived modules when you need the full history."
-      },
-      {
-        "type": "p",
-        "text": "Each module can be exported to **CSV** for reporting or migration. The export contains one row per linked work item with its number, title, status, priority, kind, and assignee id, and it neutralizes spreadsheet formula injection on text fields so the file is safe to open."
-      },
-      {
-        "type": "code",
-        "lang": "text",
-        "code": "number,title,status,priority,kind,assignee_id\n42,Wire up billing webhook,in_progress,high,task,\n43,Retry failed charges,todo,medium,task,"
-      },
-      {
-        "type": "h2",
-        "text": "Initiatives"
-      },
-      {
-        "type": "p",
-        "text": "An **initiative** is an organization-level strategic grouping that sits above projects. Where cycles, milestones, and modules organize work inside one project, an initiative pulls several projects together under one goal, something like Q3 Expansion or Enterprise Readiness. Each initiative has a `name`, an optional `description`, an optional `target_date`, and a status of **active**, **completed**, or **archived**."
-      },
-      {
-        "type": "h3",
-        "text": "Linking projects and rolling up progress"
-      },
-      {
-        "type": "p",
-        "text": "You link projects to an initiative and unlink them as priorities change. The initiative then rolls up everything underneath it: how many projects it contains, and the combined task progress across them as **total**, **done**, **started**, and **todo**. It also computes a **weighted** view of progress so larger projects count for more than smaller ones, which the interface shows as a percent done \"by effort\" alongside the raw item count. The Initiatives page offers list, board, and timeline views, and the timeline plots each dated initiative by its target date so you can see the portfolio sequenced over time."
-      },
-      {
-        "type": "h3",
-        "text": "RAG updates"
-      },
-      {
-        "type": "p",
-        "text": "An initiative can carry a running log of **updates**, each a short status post with a **RAG health** and a summary. The health is one of **on track**, **at risk**, or **off track**, the same red-amber-green vocabulary used for project updates. Posting updates over time gives the initiative a narrative of how confidence has shifted, which is exactly the kind of context an executive review or an agent summarizing the quarter needs."
-      },
-      {
-        "type": "callout",
-        "variant": "info",
-        "title": "Where each grouping lives",
-        "text": "Cycles, milestones, and modules belong to a single project. Initiatives and releases belong to the whole organization and reach across projects. If you are grouping work for a portfolio view, you want an initiative; if you are grouping a feature stream inside one product area, you want a module."
-      },
-      {
-        "type": "h2",
-        "text": "Timeline and scheduling"
-      },
-      {
-        "type": "p",
-        "text": "The project **timeline** is a Gantt view of every dated, non-triage work item in a project, drawn from each task's start and due dates and connected by scheduling dependencies. On top of the bars it computes two things that tell you where the plan is fragile: the critical path and any violations."
-      },
-      {
-        "type": "h3",
-        "text": "Critical path and violations"
-      },
-      {
-        "type": "p",
-        "text": "The **critical path** is the longest chain of dependent work through the project, the sequence that sets the earliest the project can finish. Tasks on it are flagged so you know which slips actually move the end date. A **violation** is a scheduling link whose current dates break its own constraint, for example a successor that starts on or before its predecessor finishes under a finish-to-start link. The timeline marks every violated link and every task on the receiving end of one, and reports a total violation count so you can see at a glance whether the schedule is internally consistent."
-      },
-      {
-        "type": "h3",
-        "text": "Scheduling dependencies"
-      },
-      {
-        "type": "p",
-        "text": "A **scheduling dependency** constrains one task's dates relative to another's. It is distinct from a logical task relation: a relation says two items are connected, a scheduling link actually drives the timeline. You create one by pointing a task at another, choosing the dependency type, and saying which of the two is the predecessor. There are four types, the standard project-management set:"
-      },
-      {
-        "type": "table",
-        "headers": [
-          "Type",
-          "Constraint"
-        ],
-        "rows": [
-          [
-            "Finish to start (FS)",
-            "The successor cannot start until the predecessor finishes. The default."
-          ],
-          [
-            "Start to start (SS)",
-            "The successor cannot start before the predecessor starts."
-          ],
-          [
-            "Finish to finish (FF)",
-            "The successor cannot finish before the predecessor finishes."
-          ],
-          [
-            "Start to finish (SF)",
-            "The successor cannot finish before the predecessor starts."
-          ]
-        ]
-      },
-      {
-        "type": "h3",
-        "text": "Auto-shift cascades"
-      },
-      {
-        "type": "p",
-        "text": "When you move a task's dates, **auto-shift** cascades the change down the dependency chain so the schedule stays valid. It walks the dependents in dependency order and pushes each successor just far enough to satisfy its constraint. The cascade is **forward only**: a successor is only ever pushed later, never pulled earlier, and a task's duration is preserved when its start moves. Auto-shift returns exactly which tasks moved and their new dates, so a date change you make in one place resolves the downstream knock-on effects in one step instead of leaving you to fix each violated link by hand."
-      },
-      {
-        "type": "callout",
-        "variant": "warning",
-        "title": "Auto-shift only moves dates outward",
-        "text": "Because it is forward-only, auto-shift will never compress a schedule by pulling work earlier. It pushes successors out to keep constraints satisfied. If a predecessor moves earlier and you want dependents to follow, adjust those dates yourself, since auto-shift will not tighten the plan for you."
-      },
-      {
-        "type": "h2",
-        "text": "Insights"
-      },
-      {
-        "type": "p",
-        "text": "Once work is flowing through cycles and projects, the insights surfaces tell you how it is going."
-      },
-      {
-        "type": "h3",
-        "text": "Throughput trend"
-      },
-      {
-        "type": "p",
-        "text": "The **throughput** trend plots **created versus resolved** work items over a trailing window, with one point per day. The default window is the last 30 days and can run from 7 up to 90. Two lines, items created and items resolved, let you read at a glance whether you are keeping pace with incoming work or falling behind. When the resolved line tracks or beats the created line, the backlog is holding steady."
-      },
-      {
-        "type": "h3",
-        "text": "Project overview stats"
-      },
-      {
-        "type": "p",
-        "text": "The analytics **overview** rolls up a project (or the whole organization) into a compact snapshot: total items, completed items, a completion rate, and how many are overdue, plus breakdowns by status category, by priority, and by work-item kind. The same rollups can be exported to a long-format CSV of metric, dimension, and value for reporting elsewhere."
-      },
-      {
-        "type": "h3",
-        "text": "Epics view"
-      },
-      {
-        "type": "p",
-        "text": "The **epics** view lists the project's work items of kind **Epic** and shows progress per epic from its child items, a done-out-of-total of the subtasks underneath it, along with the summed estimate points rolled up from its children. It is the way to see large bodies of work as single rows while keeping the detail of what is finished underneath each one. For deeper cuts, the analytics module also offers flow and WIP across the open statuses, per-member workload, a scope-versus-completion scatter across cycles or modules, a configurable pivot, and a weekly throughput forecast."
-      },
-      {
-        "type": "h2",
-        "text": "Putting it together"
-      },
-      {
-        "type": "p",
-        "text": "These pieces are designed to layer. Inside a project you run work in **cycles**, commit to dates with **milestones**, and organize streams with **modules**, while the **timeline** keeps the dependencies honest. Above projects, **initiatives** group the portfolio and **releases** bundle what ships, and **insights** tell you whether the whole thing is converging. Because each surface is available to agents over the [company-brain MCP](/docs/company-brain-mcp) on your own key, the same planning loop your team runs by hand is one your agents can run alongside you."
-      }
-    ]
-  },
-  {
     "title": "Views & filters",
     "slug": "views-and-filters",
     "description": "Saved views and filters: slice the board by assignee, label, status or date, and share the slice with your team.",
@@ -2282,7 +1764,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "A project board shows everything in the project. Most of the time you only care about a slice of it: the open work, the items assigned to you, the high-priority tasks, the bugs in one module. Elliptic gives you three layers for getting to that slice. **Filters** narrow what you are looking at right now. **Saved views** remember an arrangement so you can return to it with one click. And **PQL**, the Elliptic Query Language, lets you express anything filters cannot, in a precise expression you run on the Query page or ask for in plain English."
+        "text": "A project board shows everything in the project. Most of the time you only care about a slice of it: the open work, the items assigned to you, the high-priority tasks, the bugs of one severity. Elliptic gives you three layers for getting to that slice. **Filters** narrow what you are looking at right now. **Saved views** remember an arrangement so you can return to it with one click. And **PQL**, the Elliptic Query Language, lets you express anything filters cannot, in a precise expression you run on the Query page or ask for in plain English."
       },
       {
         "type": "p",
@@ -2331,7 +1813,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Next to the inline controls is a **Filter** menu that adds three more filters, each accepting multiple values at once:"
+        "text": "Next to the inline controls is a **Filter** menu that adds two more filters, each accepting multiple values at once:"
       },
       {
         "type": "table",
@@ -2347,10 +1829,6 @@ export const DOC_PAGES: DocPage[] = [
           [
             "Label",
             "Toggle one or more of the project's labels. An item matches if it carries any of the selected labels."
-          ],
-          [
-            "Module",
-            "Toggle one or more of the project's modules. Only items in a selected module remain."
           ]
         ]
       },
@@ -2361,8 +1839,8 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "callout",
         "variant": "info",
-        "title": "Severity, release-blocker, and cycle",
-        "text": "Work items also carry **severity** (for bugs), a **release-blocker** flag, and a **cycle**. The board has no dedicated toggle for these, but they are stored on every item and are fully filterable through PQL, covered below. So `severity = \"critical\"` or `release_blocker = true` is one short query away, and `module`, which the board does expose as a filter, is queryable too."
+        "title": "Severity",
+        "text": "Work items also carry a **severity** (for bugs). The board has no dedicated toggle for it, but it is stored on every item and is fully filterable through PQL, covered below. So `severity = \"critical\"` is one short query away."
       },
       {
         "type": "h2",
@@ -4302,7 +3780,7 @@ export const DOC_PAGES: DocPage[] = [
   {
     "title": "Analytics",
     "slug": "analytics",
-    "description": "How Elliptic turns your work items into numbers: throughput, cycle time, forecasts and workload, per project.",
+    "description": "How Elliptic turns your work items into numbers: throughput, flow, forecasts and workload, per project.",
     "blocks": [
       {
         "type": "h2",
@@ -4310,7 +3788,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Elliptic reads your work and turns it into numbers in two complementary ways. **Built-in analytics** are fixed, ready-made views over your tasks: an overview with totals and a completion rate, a flow view, a member workload table, a progress scatter, a throughput forecast, and pivot tables. **Dashboards** are yours to build: a grid of chart widgets you arrange, each pointed at a metric and a breakdown dimension, filtered with PQL, and shareable with your workspace. Both run on the same tasks and the same definitions, so the numbers line up."
+        "text": "Elliptic reads your work and turns it into numbers with fixed, ready-made views over your tasks: an overview with totals and a completion rate, a flow view, a member workload table, a throughput forecast, and pivot tables. They all run on the same tasks and the same definitions, so the numbers line up."
       },
       {
         "type": "callout",
@@ -4372,14 +3850,6 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "h3",
-        "text": "Progress scatter"
-      },
-      {
-        "type": "p",
-        "text": "The progress scatter plots scope against completion so outliers stand out. You choose a dimension of either `cycle` or `module`, and for each one it returns the **scope** (how many tasks it contains), the **completed** count, and the **completion rate** (completed over scope, rounded to three decimals). Plotting scope on one axis and completion on the other makes the cycle or module that is overloaded, or the one that has quietly finished, easy to spot."
-      },
-      {
-        "type": "h3",
         "text": "Throughput forecast"
       },
       {
@@ -4420,11 +3890,6 @@ export const DOC_PAGES: DocPage[] = [
             "Workload",
             "Open, in-progress, and 30-day completed counts per assignee",
             "project scope"
-          ],
-          [
-            "Scatter",
-            "Scope vs completion per cycle or per module",
-            "dimension (cycle or module), project scope"
           ],
           [
             "Forecast",
@@ -4855,7 +4320,7 @@ export const DOC_PAGES: DocPage[] = [
   {
     "title": "The company-brain MCP",
     "slug": "company-brain-mcp",
-    "description": "Connect Claude Code, Cursor, or any MCP client to operate your Elliptic workspace as first-class tools, with OAuth 2.1 consent, per-org or all-org tokens, per-domain scopes, and 144 tools across tasks, notes, meetings, calendar, comments, the org, the brain, and AI agents.",
+    "description": "Connect Claude Code, Cursor, or any MCP client to operate your Elliptic workspace as first-class tools, with OAuth 2.1 consent, per-org or all-org tokens, per-domain scopes, and 121 tools across tasks, notes, meetings, calendar, comments, the org, the brain, and AI agents.",
     "blocks": [
       {
         "type": "h2",
@@ -5168,7 +4633,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "The MCP exposes 144 tools, grouped below by domain. This is most of the member surface, but it is not literal parity with every screen. There are no MCP tools for connected sources or GitHub linking, and there are no cycle, milestone, or PQL-style query tools. Read tools list and fetch, write tools create, edit, move, and delete. Two cross-cutting conventions apply throughout: many creates accept an optional `idempotency_key` so a retried call never duplicates work, and the most destructive deletes take a `confirm` flag (call once with `confirm=false` to preview, again with `confirm=true` to apply)."
+        "text": "The MCP exposes 121 tools, grouped below by domain. This is most of the member surface, but it is not literal parity with every screen. There are no MCP tools for connected sources or GitHub linking. Read tools list and fetch, write tools create, edit, move, and delete. Two cross-cutting conventions apply throughout: many creates accept an optional `idempotency_key` so a retried call never duplicates work, and the most destructive deletes take a `confirm` flag (call once with `confirm=false` to preview, again with `confirm=true` to apply)."
       },
       {
         "type": "callout",
@@ -7125,15 +6590,11 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "h3",
-        "text": "Portfolio stats and the cycles feed"
+        "text": "Portfolio stats"
       },
       {
         "type": "p",
         "text": "Each team rolls up a **portfolio view** of the projects it owns. Team stats report the project count, the total work-item count, how many are done, and how many are overdue, with cancelled and duplicate items excluded from the totals so the numbers reflect real in-flight work."
-      },
-      {
-        "type": "p",
-        "text": "The team's **Cycles** tab shows a single feed of the **active and upcoming** cycles across all of the team's linked projects, each tagged with its project key and a progress bar of completed versus total work items. It is the fastest way to see what every project under a team is shipping right now, without opening each one."
       },
       {
         "type": "h2",
@@ -7526,10 +6987,6 @@ export const DOC_PAGES: DocPage[] = [
           ],
           [
             "Views (`views`)",
-            "create, read, update, delete"
-          ],
-          [
-            "Cycles (`cycles`)",
             "create, read, update, delete"
           ]
         ]
@@ -8595,7 +8052,7 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "ul",
         "items": [
-          "**Entity type** — the kind of thing that changed: `task`, `project`, `organization`, `note`, `comment`, `cycle`, `milestone`, or `release`. The default is **All entities**.",
+          "**Entity type** — the kind of thing that changed: `task`, `project`, `organization`, `note`, or `comment`. The default is **All entities**.",
           "**Date range** — a **From** and **To** date that bound the window. Each bound is inclusive of its whole day."
         ]
       },
@@ -8825,7 +8282,7 @@ export const DOC_PAGES: DocPage[] = [
             "Pro",
             "50",
             "1,000",
-            "Free plus dashboards, automations, cycles"
+            "Free plus automations"
           ],
           [
             "Business",
@@ -8843,13 +8300,13 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Each step up raises the seat limit and the per-seat AI credit figure on the card, and the feature list grows. The **Free** plan lists the core surfaces, projects, tasks, notes, and search. **Pro** adds dashboards, automations, and cycles. **Business** adds the governance features, and **Enterprise** carries `*`, which the card renders as a single **all features** badge."
+        "text": "Each step up raises the seat limit and the per-seat AI credit figure on the card, and the feature list grows. The **Free** plan lists the core surfaces, projects, tasks, notes, and search. **Pro** adds automations. **Business** adds the governance features, and **Enterprise** carries `*`, which the card renders as a single **all features** badge."
       },
       {
         "type": "callout",
         "variant": "warning",
         "title": "Plan features are descriptive, not hard gates",
-        "text": "The plan stores a feature list and the **Plan & licensing** card renders it as badges, but Elliptic does not currently lock those features behind the plan. Capabilities like dashboards, automations, cycles, the RBAC audit log, and custom roles are available regardless of edition. Treat the feature badges as the catalog for a tier, not a switch that disables functionality on lower plans."
+        "text": "The plan stores a feature list and the **Plan & licensing** card renders it as badges, but Elliptic does not currently lock those features behind the plan. Capabilities like automations, the RBAC audit log, and custom roles are available regardless of edition. Treat the feature badges as the catalog for a tier, not a switch that disables functionality on lower plans."
       },
       {
         "type": "h3",
@@ -8863,7 +8320,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "ul",
         "items": [
           "**`sso`** (single sign-on), **`audit_log`** (a record of sensitive RBAC actions), and **`custom_roles`** (org-defined roles with a granular permission set) appear on **Business** and above.",
-          "**`dashboards`**, **`automations`**, and **`cycles`** appear on **Pro** and above.",
+          "**`automations`** appears on **Pro** and above.",
           "**Enterprise** carries `*`, which the card renders as a single **all features** badge."
         ]
       },
@@ -8952,7 +8409,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "There are six steps, each backed by a live count in your organization:"
+        "text": "There are four steps, each backed by a live count in your organization:"
       },
       {
         "type": "table",
@@ -8974,16 +8431,8 @@ export const DOC_PAGES: DocPage[] = [
             "Your org has more than one member"
           ],
           [
-            "Plan a cycle",
-            "Your org has at least one cycle"
-          ],
-          [
             "Write a note or doc",
             "Your org has at least one note"
-          ],
-          [
-            "Connect an AI provider",
-            "Your org has at least one AI provider key"
           ]
         ]
       },
@@ -8997,7 +8446,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "The checklist is the standard path for getting a workspace operational, and each step links straight to where you do it: the project, task, and cycle steps open Projects, the teammate step opens Settings → Members, the note step opens your workspace browser, and the AI step opens Settings → AI. Work down the list and you end up with a project, a first task, a second teammate, a planned cycle, a written note, and a connected model key, which is everything an org needs to actually run."
+        "text": "The checklist is the standard path for getting a workspace operational, and each step links straight to where you do it: the project and task steps open Projects, the teammate step opens Settings → Members, and the note step opens your workspace browser. Work down the list and you end up with a project, a first task, a second teammate, and a written note, which is everything an org needs to actually run."
       },
       {
         "type": "ul",

@@ -67,7 +67,7 @@ function orderedPages(): DocPage[] {
 export function allPagesToMarkdown(): string {
   const preamble = [
     "# Elliptic — Full Documentation",
-    "> Elliptic is an AI-native company brain: organizations, projects, tasks, meetings, notes, calendar, activity, and an org-wide knowledge brain. Every surface is usable by people in the web app and by AI agents through the Company-Brain MCP (OAuth 2.1). This file concatenates the entire end-user documentation as Markdown so an agent can load the full product scope in a single pass.",
+    "> Elliptic is an AI-native company brain: organizations, projects, tasks, meetings, notes, activity, and an org-wide knowledge brain. Every surface is usable by people in the web app and by AI agents through the Company-Brain MCP (OAuth 2.1). This file concatenates the entire end-user documentation as Markdown so an agent can load the full product scope in a single pass.",
     `Web app: ${APP_ORIGIN}/app · Docs: ${DOCS_ORIGIN} · MCP endpoint: ${MCP_ORIGIN}/api/v1/mcp`,
   ].join("\n\n");
   return [preamble, ...orderedPages().map(pageToMarkdown)].join("\n\n---\n\n") + "\n";
@@ -78,7 +78,7 @@ export function llmsIndex(): string {
   const lines = [
     "# Elliptic",
     "",
-    "> AI-native company brain. Organizations, projects, tasks, meetings, notes, calendar, activity, and a knowledge brain — usable by people and by AI agents via the Company-Brain MCP (OAuth 2.1, per-org tokens, granular scopes).",
+    "> AI-native company brain. Organizations, projects, tasks, meetings, notes, activity, and a knowledge brain — usable by people and by AI agents via the Company-Brain MCP (OAuth 2.1, per-org tokens, granular scopes).",
     "",
     "## Documentation",
     ...orderedPages().map((page) => {

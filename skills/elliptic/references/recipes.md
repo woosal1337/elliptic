@@ -144,5 +144,5 @@ Report deltas, not inventories: what changed, what's blocked, what's due.
 | Timestamps (`since`, `until`, `starts_at`, …) | ISO-8601 **with offset**: `2026-08-10T09:00:00+00:00` |
 | Label / project-key / view color | label color `#rrggbb`; project key `^[A-Z]{2,6}$`; workflow colors are tokens (`warning`, `success`, …) |
 | `list_my_tasks.filter` | `assigned` `created` `subscribed` `recent` |
-| `search.types` | comma-separated ⊆ `task,note,project,meeting,cycle,module` |
+| `search.types` | comma-separated ⊆ `task,note,project,meeting` |
 | Comment `entity_type` | `task` `meeting` `note` |
