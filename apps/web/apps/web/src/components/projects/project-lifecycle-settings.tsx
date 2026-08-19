@@ -57,8 +57,7 @@ export function ProjectLifecycleSettings({
       <div className="flex flex-col gap-1">
         <h2 className="text-small font-semibold text-foreground">Lifecycle automation</h2>
         <p className="text-caption text-muted-foreground">
-          Built-in housekeeping. Leave a field blank to disable it. Items still in a cycle or
-          module are skipped when auto-archiving.
+          Built-in housekeeping. Leave a field blank to disable it.
         </p>
       </div>
 

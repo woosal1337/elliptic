@@ -7,7 +7,6 @@ import { api, errorMessage, orgPath } from "@/lib/api";
 export interface Retrospective {
   id: string;
   project_id: string;
-  cycle_id: string | null;
   title: string;
   went_well: string | null;
   to_improve: string | null;

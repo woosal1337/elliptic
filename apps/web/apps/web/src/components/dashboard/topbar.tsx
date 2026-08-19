@@ -13,7 +13,6 @@ const SEGMENT_LABELS: Record<string, string> = {
   projects: "Projects",
   meetings: "Meetings",
   notes: "Notes",
-  calendar: "Calendar",
   activity: "Activity",
   settings: "Settings",
 };

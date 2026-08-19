@@ -120,7 +120,6 @@ function draftTask(orgId: string, projectId: string, input: CreateTaskInput, lis
     status: input.status,
     priority: input.priority,
     assignee_id: input.assignee_id ?? null,
-    bot_assignee_id: null,
     start_date: null,
     due_date: input.due_date ?? null,
     sort_order: maxOrder + 1,
@@ -128,10 +127,6 @@ function draftTask(orgId: string, projectId: string, input: CreateTaskInput, lis
     created_by: "",
     parent_task_id: input.parent_task_id ?? null,
     source_meeting_id: input.source_meeting_id ?? null,
-    cycle_id: null,
-    milestone_id: null,
-    module_id: null,
-    release_id: null,
     custom_fields: {},
     dod_items: [],
     acceptance_criteria: null,
@@ -671,87 +666,5 @@ export function useTaskTransitions(orgId: string, taskId: string, enabled: boole
     enabled,
     queryFn: ({ signal }) =>
       api.get<TaskTransitions>(orgPath(orgId, `/tasks/${taskId}/transitions`), signal),
-  });
-}
-
-export type ScheduleDependencyType =
-  | "finish_to_start"
-  | "start_to_start"
-  | "finish_to_finish"
-  | "start_to_finish";
-
-export interface ScheduleLink {
-  link_id: string;
-  task_id: string;
-  identifier: string;
-  title: string;
-  status: TaskStatus;
-  due_date: string | null;
-  dependency_type: ScheduleDependencyType;
-  direction: "predecessor" | "successor";
-}
-
-export function useScheduleLinks(orgId: string, taskId: string, enabled = true) {
-  return useQuery({
-    queryKey: [...taskKeys.detail(orgId, taskId), "schedule-links"] as const,
-    enabled,
-    queryFn: ({ signal }) =>
-      api.get<ScheduleLink[]>(orgPath(orgId, `/tasks/${taskId}/schedule-links`), signal),
-  });
-}
-
-export function useCreateScheduleLink(orgId: string, taskId: string) {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (input: {
-      other_task_id: string;
-      dependency_type: ScheduleDependencyType;
-      other_is_predecessor: boolean;
-    }) => api.post<null>(orgPath(orgId, `/tasks/${taskId}/schedule-links`), input),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({
-        queryKey: [...taskKeys.detail(orgId, taskId), "schedule-links"],
-      });
-    },
-    onError: (error) => toast.error(errorMessage(error)),
-  });
-}
-
-export function useDeleteScheduleLink(orgId: string, taskId: string) {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (linkId: string) =>
-      api.delete<null>(orgPath(orgId, `/tasks/${taskId}/schedule-links/${linkId}`)),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({
-        queryKey: [...taskKeys.detail(orgId, taskId), "schedule-links"],
-      });
-    },
-    onError: (error) => toast.error(errorMessage(error)),
-  });
-}
-
-export interface ShiftedTask {
-  id: string;
-  identifier: string | null;
-  title: string;
-  start_date: string | null;
-  due_date: string | null;
-}
-
-export function useAutoShift(orgId: string, projectId: string) {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (taskId: string) =>
-      api.post<{ shifted: ShiftedTask[] }>(orgPath(orgId, `/tasks/${taskId}/auto-shift`)),
-    onSuccess: (result) => {
-      void queryClient.invalidateQueries({ queryKey: taskKeys.all(orgId) });
-      void queryClient.invalidateQueries({
-        queryKey: ["orgs", orgId, "projects", projectId, "timeline"],
-      });
-      const n = result.shifted.length;
-      toast.success(n === 0 ? "Dependents already fit" : `Shifted ${n} dependent ${n === 1 ? "item" : "items"}`);
-    },
-    onError: (error) => toast.error(errorMessage(error)),
   });
 }

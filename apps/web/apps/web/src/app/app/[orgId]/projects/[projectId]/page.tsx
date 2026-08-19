@@ -27,16 +27,9 @@ import { useShortcut } from "@/lib/keyboard";
 import { ErrorState } from "@/components/error-state";
 import { Board } from "@/components/tasks/board";
 import { TasksTable } from "@/components/tasks/tasks-table";
-import { ProjectGantt } from "@/components/tasks/project-gantt";
-import { TaskCalendar } from "@/components/tasks/task-calendar";
-import { ProjectCycles } from "@/components/projects/project-cycles";
-import { ProjectMilestones } from "@/components/projects/project-milestones";
-import { ProjectModules } from "@/components/projects/project-modules";
-import { ProjectRegister } from "@/components/projects/project-register";
 import { ProjectAnalytics } from "@/components/projects/project-analytics";
 import { ThroughputChart } from "@/components/projects/throughput-chart";
 import { ProjectEpics } from "@/components/tasks/project-epics";
-import { ProjectUpdates } from "@/components/projects/project-updates";
 import { FavoriteToggle } from "@/components/favorites/favorite-toggle";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { SegmentedToggle } from "@/components/tasks/task-view-toolbar";
@@ -63,16 +56,9 @@ const SWIMLANE_LABELS: Record<Swimlane, string> = {
 
 const TAB_VALUES = [
   "overview",
-  "updates",
   "board",
   "tasks",
   "epics",
-  "timeline",
-  "calendar",
-  "cycles",
-  "milestones",
-  "modules",
-  "register",
   "insights",
   "meetings",
   "notes",
@@ -123,12 +109,8 @@ function ProjectDetailContent() {
 
   const onTaskTab = activeTab === "board" || activeTab === "tasks";
   const features = project.data?.features ?? {};
-  const showTimeline = features.timeline !== false;
-  const showCycles = features.cycles !== false;
   const showMeetings = features.meetings !== false;
   const showNotes = features.notes !== false;
-  const showMilestones = features.milestones !== false;
-  const showModules = features.modules !== false;
 
   // Only the most-used views stay pinned in the tab bar; the rest live behind a
   // "More" overflow menu to cut visual noise for people (agents/deep-links reach
@@ -142,14 +124,7 @@ function ProjectDetailContent() {
     { value: "settings", label: "Settings", show: true },
   ].filter((tab) => tab.show);
   const moreTabs = [
-    { value: "updates", label: "Updates", show: true },
     { value: "epics", label: "Epics", show: true },
-    { value: "timeline", label: "Timeline", show: showTimeline },
-    { value: "calendar", label: "Calendar", show: true },
-    { value: "cycles", label: "Cycles", show: showCycles },
-    { value: "milestones", label: "Milestones", show: showMilestones },
-    { value: "modules", label: "Modules", show: showModules },
-    { value: "register", label: "Register", show: true },
     { value: "meetings", label: "Meetings", show: showMeetings },
     { value: "members", label: "Members", show: true },
   ].filter((tab) => tab.show);
@@ -319,9 +294,6 @@ function ProjectDetailContent() {
             <ProjectBrief orgId={orgId} projectId={projectId} />
           </div>
         </TabsContent>
-        <TabsContent value="updates">
-          <ProjectUpdates orgId={orgId} projectId={projectId} />
-        </TabsContent>
         <TabsContent value="board">
           <Board orgId={orgId} projectId={projectId} swimlane={prefs.swimlane} />
         </TabsContent>
@@ -335,32 +307,6 @@ function ProjectDetailContent() {
         </TabsContent>
         <TabsContent value="epics">
           <ProjectEpics orgId={orgId} projectId={projectId} />
-        </TabsContent>
-        {showTimeline ? (
-          <TabsContent value="timeline">
-            <ProjectGantt orgId={orgId} projectId={projectId} />
-          </TabsContent>
-        ) : null}
-        <TabsContent value="calendar">
-          <TaskCalendar orgId={orgId} projectId={projectId} />
-        </TabsContent>
-        {showCycles ? (
-          <TabsContent value="cycles">
-            <ProjectCycles orgId={orgId} projectId={projectId} />
-          </TabsContent>
-        ) : null}
-        {showMilestones ? (
-          <TabsContent value="milestones">
-            <ProjectMilestones orgId={orgId} projectId={projectId} />
-          </TabsContent>
-        ) : null}
-        {showModules ? (
-          <TabsContent value="modules">
-            <ProjectModules orgId={orgId} projectId={projectId} />
-          </TabsContent>
-        ) : null}
-        <TabsContent value="register">
-          <ProjectRegister orgId={orgId} projectId={projectId} />
         </TabsContent>
         <TabsContent value="insights">
           <ProjectAnalytics orgId={orgId} projectId={projectId} onDrill={setActiveTab} />

@@ -90,7 +90,7 @@ export function ProjectRetrospectives({
           Retrospectives
         </h2>
         <p className="text-caption text-muted-foreground">
-          Capture what went well, what to improve, and action items after a cycle or release.
+          Capture what went well, what to improve, and action items after a release.
         </p>
       </div>
 

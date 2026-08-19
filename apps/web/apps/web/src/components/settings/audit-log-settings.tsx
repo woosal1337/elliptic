@@ -29,9 +29,6 @@ const ENTITY_TYPES = [
   "organization",
   "note",
   "comment",
-  "cycle",
-  "milestone",
-  "release",
 ];
 
 const ALL = "__all__";

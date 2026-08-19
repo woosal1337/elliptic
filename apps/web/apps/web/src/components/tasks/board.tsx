@@ -53,7 +53,6 @@ import {
 } from "@/lib/task-meta";
 import { formatDate } from "@/lib/format";
 import { useTasks, useUpdateTask } from "@/hooks/use-task-queries";
-import { useModules } from "@/hooks/use-module-queries";
 import { useOrgMembers } from "@/hooks/use-org-queries";
 import { useShortcut } from "@/lib/keyboard";
 import { ErrorState } from "@/components/error-state";
@@ -437,11 +436,6 @@ export function Board({
   const show = display.properties;
 
   const filterLabels = useMemo(() => collectLabels(tasks.data ?? []), [tasks.data]);
-  const boardModules = useModules(orgId, projectId);
-  const filterModules = useMemo(
-    () => (boardModules.data ?? []).map((module) => ({ id: module.id, name: module.name })),
-    [boardModules.data]
-  );
 
   const currentConfig = useMemo<BoardViewConfig>(
     () => ({
@@ -858,7 +852,7 @@ export function Board({
             options={SWIMLANE_OPTIONS}
             onChange={changeSwimlane}
           />
-          <TaskFilterControl filters={taskFilters} labels={filterLabels} modules={filterModules} />
+          <TaskFilterControl filters={taskFilters} labels={filterLabels} />
           <DisplayOptionsMenu config={display} surface="board" hiddenProperties={["createdBy"]} />
         </div>
       </div>

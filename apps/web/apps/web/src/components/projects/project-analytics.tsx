@@ -13,7 +13,6 @@ import { ChartBuilder } from "@/components/projects/chart-builder";
 import { PivotTable } from "@/components/projects/pivot-table";
 import { WorkloadTable } from "@/components/projects/workload-table";
 import { ForecastCard } from "@/components/projects/forecast-card";
-import { ScatterChart } from "@/components/projects/scatter-chart";
 
 const CATEGORY_LABELS_FLOW: Record<string, string> = {
   backlog: "Backlog",
@@ -224,7 +223,6 @@ export function ProjectAnalytics({
       <PivotTable orgId={orgId} projectId={projectId} />
       <WorkloadTable orgId={orgId} projectId={projectId} />
       <ForecastCard orgId={orgId} projectId={projectId} />
-      <ScatterChart orgId={orgId} projectId={projectId} />
     </div>
   );
 }

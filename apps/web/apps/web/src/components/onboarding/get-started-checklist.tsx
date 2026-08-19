@@ -11,7 +11,6 @@ const STEP_LINK: Record<string, string> = {
   create_project: "/projects",
   create_task: "/projects",
   invite_member: "/settings?tab=members",
-  create_cycle: "/projects",
   write_note: "/browse",
   connect_ai: "/settings?tab=ai",
 };

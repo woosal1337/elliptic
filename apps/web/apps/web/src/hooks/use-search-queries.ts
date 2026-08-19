@@ -3,7 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { api, orgPath } from "@/lib/api";
 
-export type SearchEntityType = "task" | "note" | "project" | "meeting" | "cycle" | "module";
+export type SearchEntityType = "task" | "note" | "project" | "meeting";
 
 export interface SearchResult {
   type: SearchEntityType;

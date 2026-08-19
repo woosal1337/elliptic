@@ -6,8 +6,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import {
   Activity,
   BookText,
-  CalendarDays,
-  CalendarPlus,
   CheckSquare,
   FileText,
   FilePlus,
@@ -60,7 +58,6 @@ const NAV_SEGMENTS = [
   { id: "nav-meetings", label: "Go to Meetings", segment: "meetings", icon: Video, keys: "g m" },
   { id: "nav-notes", label: "Go to Notes", segment: "notes", icon: FileText, keys: "g n" },
   { id: "nav-wiki", label: "Go to Wiki", segment: "wiki", icon: BookText, keys: "g w" },
-  { id: "nav-calendar", label: "Go to Calendar", segment: "calendar", icon: CalendarDays, keys: "g c" },
   { id: "nav-activity", label: "Go to Activity", segment: "activity", icon: Activity, keys: "g a" },
   { id: "nav-settings", label: "Go to Settings", segment: "settings", icon: Settings, keys: "g s" },
 ] as const;
@@ -253,14 +250,6 @@ export function CommandPalette({
         kind: "action",
         perform: () => go("/notes?new=1"),
       },
-      {
-        id: "action-new-event",
-        label: "New event",
-        keywords: ["create", "add", "event", "calendar"],
-        icon: CalendarPlus,
-        kind: "action",
-        perform: () => go("/calendar?new=1"),
-      },
     ];
 
     return [...navigation, ...openEntities, ...actions];
@@ -295,9 +284,6 @@ export function CommandPalette({
           return `/notes/${r.id}`;
         case "meeting":
           return `/meetings/${r.id}`;
-        case "cycle":
-        case "module":
-          return r.project_id ? `/projects/${r.project_id}` : "/projects";
         default:
           return "/";
       }
@@ -307,8 +293,6 @@ export function CommandPalette({
       project: FolderKanban,
       note: FileText,
       meeting: Video,
-      cycle: FolderKanban,
-      module: FolderKanban,
     };
     return data.results.map((r) => ({
       id: `gsearch-${r.type}-${r.id}`,

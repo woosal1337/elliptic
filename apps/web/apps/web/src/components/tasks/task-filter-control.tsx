@@ -18,14 +18,11 @@ import type { UseTaskFilters } from "./task-filters";
 export function TaskFilterControl({
   filters,
   labels,
-  modules = [],
 }: {
   filters: UseTaskFilters;
   labels: Label[];
-  modules?: { id: string; name: string }[];
 }) {
   const labelById = new Map(labels.map((label) => [label.id, label]));
-  const moduleById = new Map(modules.map((mod) => [mod.id, mod]));
 
   return (
     <div className="flex flex-wrap items-center gap-1.5">
@@ -76,22 +73,6 @@ export function TaskFilterControl({
               ))}
             </>
           ) : null}
-          {modules.length > 0 ? (
-            <>
-              <DropdownMenuSeparator />
-              <DropdownMenuLabel>Modules</DropdownMenuLabel>
-              {modules.map((mod) => (
-                <DropdownMenuCheckboxItem
-                  key={mod.id}
-                  checked={filters.filters.moduleIds.includes(mod.id)}
-                  onCheckedChange={() => filters.toggleModule(mod.id)}
-                  onSelect={(event) => event.preventDefault()}
-                >
-                  {mod.name}
-                </DropdownMenuCheckboxItem>
-              ))}
-            </>
-          ) : null}
           {filters.activeCount > 0 ? (
             <>
               <DropdownMenuSeparator />
@@ -117,17 +98,6 @@ export function TaskFilterControl({
             label={label.name}
             color={label.color}
             onRemove={() => filters.toggleLabel(labelId)}
-          />
-        );
-      })}
-      {filters.filters.moduleIds.map((moduleId) => {
-        const mod = moduleById.get(moduleId);
-        if (!mod) return null;
-        return (
-          <FilterChip
-            key={`module-${moduleId}`}
-            label={mod.name}
-            onRemove={() => filters.toggleModule(moduleId)}
           />
         );
       })}

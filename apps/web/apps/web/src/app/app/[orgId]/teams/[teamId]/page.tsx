@@ -44,7 +44,6 @@ import {
   useUpdateTeam,
 } from "@/hooks/use-org-queries";
 import { useProjects } from "@/hooks/use-project-queries";
-import { useTeamCycles } from "@/hooks/use-cycle-queries";
 import {
   useCreateTeamspaceView,
   useDeleteServerView,
@@ -362,53 +361,6 @@ function ViewsTab({ orgId, teamId }: { orgId: string; teamId: string }) {
   );
 }
 
-function CyclesTab({ orgId, teamId }: { orgId: string; teamId: string }) {
-  const cycles = useTeamCycles(orgId, teamId);
-
-  if (cycles.isPending) return <Skeleton className="h-48 w-full rounded-xl" />;
-  if (cycles.isError) return <ErrorState error={cycles.error} onRetry={() => void cycles.refetch()} />;
-  if ((cycles.data ?? []).length === 0) {
-    return (
-      <p className="rounded-xl border border-border bg-surface p-8 text-center text-small text-muted-foreground">
-        No active or upcoming cycles across this team&apos;s projects.
-      </p>
-    );
-  }
-
-  return (
-    <ul className="flex flex-col gap-2">
-      {(cycles.data ?? []).map((cycle) => {
-        const total = cycle.task_total || 1;
-        const pct = Math.round((cycle.task_done / total) * 100);
-        return (
-          <li
-            key={cycle.id}
-            className="flex flex-col gap-2 rounded-lg border border-border bg-surface p-4"
-          >
-            <div className="flex items-center justify-between gap-2">
-              <div className="flex items-center gap-2">
-                <span className="text-small font-semibold text-foreground">{cycle.name}</span>
-                <Badge variant="outline" className="font-mono">
-                  {cycle.project_key}
-                </Badge>
-                <Badge variant={cycle.status === "active" ? "success" : "neutral"}>
-                  {cycle.status}
-                </Badge>
-              </div>
-              <span className="text-caption tabular text-muted-foreground">
-                {cycle.task_done}/{cycle.task_total} · {pct}%
-              </span>
-            </div>
-            <div className="h-2 overflow-hidden rounded-full bg-muted">
-              <div className="h-full bg-success" style={{ width: `${pct}%` }} aria-hidden />
-            </div>
-          </li>
-        );
-      })}
-    </ul>
-  );
-}
-
 export default function TeamDetailPage() {
   const { orgId, teamId } = useParams<{ orgId: string; teamId: string }>();
   const team = useTeam(orgId, teamId);
@@ -444,7 +396,6 @@ export default function TeamDetailPage() {
           </TabsTrigger>
           <TabsTrigger value="members">Members</TabsTrigger>
           <TabsTrigger value="projects">Projects</TabsTrigger>
-          <TabsTrigger value="cycles">Cycles</TabsTrigger>
           <TabsTrigger value="views">Views</TabsTrigger>
           <TabsTrigger value="pages">Pages</TabsTrigger>
         </TabsList>
@@ -456,9 +407,6 @@ export default function TeamDetailPage() {
         </TabsContent>
         <TabsContent value="projects">
           <ProjectsTab orgId={orgId} teamId={teamId} />
-        </TabsContent>
-        <TabsContent value="cycles">
-          <CyclesTab orgId={orgId} teamId={teamId} />
         </TabsContent>
         <TabsContent value="views">
           <ViewsTab orgId={orgId} teamId={teamId} />

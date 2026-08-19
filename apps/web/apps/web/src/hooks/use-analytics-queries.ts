@@ -159,24 +159,3 @@ export function useThroughputForecast(orgId: string, projectId?: string, weeks =
       api.get<ThroughputForecast>(orgPath(orgId, `/analytics/forecast?${query.toString()}`), signal),
   });
 }
-
-export interface ScatterPoint {
-  id: string;
-  name: string;
-  scope: number;
-  completed: number;
-  completion_rate: number;
-}
-
-export function useProgressScatter(orgId: string, dimension: string, projectId?: string) {
-  const query = new URLSearchParams({ dimension });
-  if (projectId) query.set("project_id", projectId);
-  return useQuery({
-    queryKey: ["orgs", orgId, "analytics", "scatter", dimension, projectId ?? "all"] as const,
-    queryFn: ({ signal }) =>
-      api.get<{ dimension: string; points: ScatterPoint[] }>(
-        orgPath(orgId, `/analytics/scatter?${query.toString()}`),
-        signal
-      ),
-  });
-}

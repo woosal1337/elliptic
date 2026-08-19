@@ -76,7 +76,6 @@ import { useTaskDetailCommands } from "@/components/command/use-host-commands";
 import { AssigneeSelect, BugGlyph, PrioritySelect, SeveritySelect, StatusSelect } from "./task-bits";
 import { TaskSubtasksPanel } from "./task-subtasks-panel";
 import { TaskRelationsPanel } from "./task-relations-panel";
-import { TaskSchedulePanel } from "./task-schedule-panel";
 import { TaskDodSection } from "./task-dod-section";
 import { TaskUpdatesSection } from "./task-updates-section";
 import { TaskWorklogSection } from "./task-worklog-section";
@@ -85,9 +84,6 @@ import { TaskApprovalsSection } from "./task-approvals-section";
 import { TaskLinksSection } from "./task-links-section";
 import { TaskNoteLinksSection } from "./task-note-links-section";
 import { TaskSubscribers } from "./task-subscribers";
-import { TaskCycleField } from "./task-cycle-field";
-import { TaskMilestoneField } from "./task-milestone-field";
-import { TaskModuleField } from "./task-module-field";
 import { TaskCustomFields } from "./task-custom-fields";
 import { Markdown } from "@/components/notes/markdown";
 
@@ -942,15 +938,6 @@ function TaskDetailBody({
                 </Field>
               </>
             ) : null}
-            <Field label="Cycle">
-              <TaskCycleField orgId={orgId} projectId={projectId} task={task} />
-            </Field>
-            <Field label="Milestone">
-              <TaskMilestoneField orgId={orgId} projectId={projectId} task={task} />
-            </Field>
-            <Field label="Module">
-              <TaskModuleField orgId={orgId} projectId={projectId} task={task} />
-            </Field>
           </div>
         </SidebarSection>
 
@@ -985,7 +972,6 @@ function TaskDetailBody({
             taskId={task.id}
             onOpen={onNavigate}
           />
-          <TaskSchedulePanel orgId={orgId} projectId={projectId} taskId={task.id} />
         </SidebarSection>
 
         <SidebarSection title="Linked notes">

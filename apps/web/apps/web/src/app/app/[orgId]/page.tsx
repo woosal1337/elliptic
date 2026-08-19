@@ -5,16 +5,14 @@ import { GetStartedChecklist } from "@/components/onboarding/get-started-checkli
 import Link from "next/link";
 import {
   Activity as ActivityIcon,
-  Badge as BadgeIcon,
   FolderKanban,
   Star,
 } from "lucide-react";
-import { Badge, Skeleton } from "@elliptic/ui";
+import { Skeleton } from "@elliptic/ui";
 import { useMe } from "@/hooks/use-auth-queries";
 import { useProjects } from "@/hooks/use-project-queries";
 import { useFavorites } from "@/hooks/use-favorite-queries";
 import { useActivity } from "@/hooks/use-activity-queries";
-import { useActiveCycles } from "@/hooks/use-cycle-queries";
 import { ActivityList } from "@/components/activity/activity-list";
 
 function greeting(): string {
@@ -57,10 +55,8 @@ export default function HomePage() {
   const projects = useProjects(orgId);
   const favorites = useFavorites(orgId);
   const activity = useActivity(orgId);
-  const activeCycles = useActiveCycles(orgId);
 
   const activeProjects = (projects.data ?? []).filter((project) => project.status === "active");
-  const cycles = activeCycles.data ?? [];
   const favoriteProjects = (favorites.data ?? []).filter((fav) => fav.entity_type === "project");
   const firstName = me.data?.full_name?.split(" ")[0] ?? "there";
 
@@ -89,43 +85,6 @@ export default function HomePage() {
           label="Favorites"
         />
       </div>
-
-      {cycles.length > 0 ? (
-        <section className="flex flex-col gap-3">
-          <h2 className="flex items-center gap-2 text-small font-semibold text-foreground">
-            <BadgeIcon className="size-4 text-muted-foreground" />
-            Active cycles
-          </h2>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {cycles.map((cycle) => {
-              const total = cycle.task_total || 1;
-              const pct = Math.round((cycle.task_done / total) * 100);
-              return (
-                <Link
-                  key={cycle.id}
-                  href={`/app/${orgId}/projects/${cycle.project_id}?tab=cycles`}
-                  className="flex flex-col gap-2 rounded-lg border border-border bg-surface p-3 transition-colors hover:border-border-strong"
-                >
-                  <div className="flex items-center gap-2">
-                    <Badge variant="outline" className="font-mono">
-                      {cycle.project_key}
-                    </Badge>
-                    <span className="min-w-0 flex-1 truncate text-small font-medium text-foreground">
-                      {cycle.name}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2 text-caption text-muted-foreground">
-                    <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-muted">
-                      <div className="h-full bg-success" style={{ width: `${pct}%` }} aria-hidden />
-                    </div>
-                    <span className="tabular">{pct}%</span>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-        </section>
-      ) : null}
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <section className="flex flex-col gap-3 lg:col-span-2">

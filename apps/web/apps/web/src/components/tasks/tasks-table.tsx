@@ -22,7 +22,6 @@ import { STATUS_LABELS, STATUS_ORDER, STATUS_TINT_CLASSES } from "@/lib/task-met
 import { formatDate, formatRelative } from "@/lib/format";
 import { hierarchy } from "@/lib/hierarchy";
 import { downloadProjectTasksCsv, useCreateTask, useTasks } from "@/hooks/use-task-queries";
-import { useModules } from "@/hooks/use-module-queries";
 import { useOrgMembers } from "@/hooks/use-org-queries";
 import { useShortcut } from "@/lib/keyboard";
 import { ErrorState } from "@/components/error-state";
@@ -184,11 +183,6 @@ export function TasksTable({
   const show = display.properties;
 
   const filterLabels = useMemo(() => collectLabels(tasks.data ?? []), [tasks.data]);
-  const modules = useModules(orgId, projectId);
-  const filterModules = useMemo(
-    () => (modules.data ?? []).map((module) => ({ id: module.id, name: module.name })),
-    [modules.data]
-  );
 
   const currentConfig = useMemo<TableViewConfig>(
     () => ({ surface: "table", density, status: statusFilter, assignee: assigneeFilter, query }),
@@ -379,7 +373,7 @@ export function TasksTable({
           </Select>
         </div>
         <div className="flex items-center gap-2">
-          <TaskFilterControl filters={taskFilters} labels={filterLabels} modules={filterModules} />
+          <TaskFilterControl filters={taskFilters} labels={filterLabels} />
           <DisplayOptionsMenu
             config={display}
             surface="table"

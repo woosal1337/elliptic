@@ -26,10 +26,6 @@ import { ProjectVisibility } from "@/components/projects/project-visibility";
 import { ProjectIdentitySettings } from "@/components/projects/project-identity-settings";
 
 const PROJECT_FEATURES = [
-  { key: "cycles", label: "Cycles", description: "Time-boxed iterations (sprints)." },
-  { key: "milestones", label: "Milestones", description: "Goal markers with target dates." },
-  { key: "modules", label: "Modules", description: "Group work items into deliverables." },
-  { key: "timeline", label: "Timeline", description: "Schedule view grouped by due date." },
   { key: "meetings", label: "Meetings", description: "Meeting list and imports for this project." },
   { key: "notes", label: "Notes", description: "Project pages and notes." },
 ] as const;
@@ -78,22 +74,6 @@ export function ProjectSettings({ orgId, projectId }: { orgId: string; projectId
               />
             </label>
           ))}
-          <label className="flex items-center justify-between gap-4">
-            <span className="flex min-w-0 flex-col">
-              <span className="text-small font-medium text-foreground">Parallel cycles</span>
-              <span className="text-caption text-muted-foreground">
-                Allow multiple active cycles to overlap. Off by default — only one cycle can be active.
-              </span>
-            </span>
-            <Switch
-              checked={features.parallel_cycles === true}
-              disabled={!canManage || updateProject.isPending}
-              aria-label="Toggle parallel cycles"
-              onCheckedChange={(next) =>
-                updateProject.mutate({ features: { ...features, parallel_cycles: next } })
-              }
-            />
-          </label>
         </div>
         {!canManage ? (
           <p className="text-caption text-muted-foreground">

@@ -6,22 +6,15 @@ import type { Label, Task, TaskPriority } from "@/lib/types";
 export interface TaskFilters {
   priorities: TaskPriority[];
   labelIds: string[];
-  moduleIds: string[];
 }
 
-export const EMPTY_TASK_FILTERS: TaskFilters = { priorities: [], labelIds: [], moduleIds: [] };
+export const EMPTY_TASK_FILTERS: TaskFilters = { priorities: [], labelIds: [] };
 
 export function matchesTaskFilters(task: Task, filters: TaskFilters): boolean {
   if (filters.priorities.length > 0 && !filters.priorities.includes(task.priority)) {
     return false;
   }
   if (filters.labelIds.length > 0 && !task.labels.some((label) => filters.labelIds.includes(label.id))) {
-    return false;
-  }
-  if (
-    filters.moduleIds.length > 0 &&
-    !(task.module_id && filters.moduleIds.includes(task.module_id))
-  ) {
     return false;
   }
   return true;
@@ -42,7 +35,6 @@ export interface UseTaskFilters {
   activeCount: number;
   togglePriority: (priority: TaskPriority) => void;
   toggleLabel: (labelId: string) => void;
-  toggleModule: (moduleId: string) => void;
   clear: () => void;
 }
 
@@ -71,23 +63,12 @@ export function useTaskFilters(): UseTaskFilters {
     []
   );
 
-  const toggleModule = useCallback(
-    (moduleId: string) =>
-      setFilters((current) => ({
-        ...current,
-        moduleIds: current.moduleIds.includes(moduleId)
-          ? current.moduleIds.filter((value) => value !== moduleId)
-          : [...current.moduleIds, moduleId],
-      })),
-    []
-  );
-
   const clear = useCallback(() => setFilters(EMPTY_TASK_FILTERS), []);
 
-  const activeCount = filters.priorities.length + filters.labelIds.length + filters.moduleIds.length;
+  const activeCount = filters.priorities.length + filters.labelIds.length;
 
   return useMemo(
-    () => ({ filters, activeCount, togglePriority, toggleLabel, toggleModule, clear }),
-    [filters, activeCount, togglePriority, toggleLabel, toggleModule, clear]
+    () => ({ filters, activeCount, togglePriority, toggleLabel, clear }),
+    [filters, activeCount, togglePriority, toggleLabel, clear]
   );
 }

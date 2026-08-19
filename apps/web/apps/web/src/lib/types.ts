@@ -227,15 +227,6 @@ export interface CustomProperty {
 
 export type ProjectHealth = "on_track" | "at_risk" | "off_track";
 
-export interface ProjectUpdate {
-  id: string;
-  project_id: string;
-  health: ProjectHealth;
-  summary: string;
-  created_by: string | null;
-  created_at: string;
-}
-
 export interface Favorite {
   id: string;
   entity_type: string;
@@ -258,32 +249,6 @@ export interface ThroughputPoint {
   date: string;
   created: number;
   resolved: number;
-}
-
-export type ModuleStatus =
-  | "planned"
-  | "in_progress"
-  | "paused"
-  | "completed"
-  | "cancelled";
-
-export interface Module {
-  id: string;
-  org_id: string;
-  project_id: string;
-  name: string;
-  description: string | null;
-  lead_id: string | null;
-  start_date: string | null;
-  target_date: string | null;
-  status: ModuleStatus;
-  milestone_id: string | null;
-  task_total: number;
-  task_done: number;
-  task_started: number;
-  task_todo: number;
-  archived_at: string | null;
-  created_at: string;
 }
 
 export interface AuditEntry {
@@ -340,48 +305,6 @@ export interface WorklogList {
   total_minutes: number;
 }
 
-export type MilestoneStatus = "upcoming" | "completed";
-
-export interface Milestone {
-  id: string;
-  org_id: string;
-  project_id: string;
-  name: string;
-  description: string | null;
-  target_date: string | null;
-  status: MilestoneStatus;
-  task_total: number;
-  task_done: number;
-  created_at: string;
-}
-
-export type CycleStatus = "upcoming" | "active" | "completed";
-
-export interface Cycle {
-  id: string;
-  org_id: string;
-  project_id: string;
-  name: string;
-  start_date: string | null;
-  end_date: string | null;
-  status: CycleStatus;
-  milestone_id: string | null;
-  started_at: string | null;
-  completed_at: string | null;
-  task_total: number;
-  task_done: number;
-  started: number;
-  todo: number;
-  final_total_count: number | null;
-  final_completed_count: number | null;
-  created_at: string;
-}
-
-export interface ActiveCycle extends Cycle {
-  project_name: string;
-  project_key: string;
-}
-
 export interface Task {
   id: string;
   org_id: string;
@@ -400,9 +323,6 @@ export interface Task {
   created_by: string;
   parent_task_id: string | null;
   source_meeting_id: string | null;
-  cycle_id: string | null;
-  milestone_id: string | null;
-  module_id: string | null;
   custom_fields: Record<string, string>;
   dod_items: DodItem[];
   acceptance_criteria: string | null;
