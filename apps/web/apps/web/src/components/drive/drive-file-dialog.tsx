@@ -10,6 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
   Skeleton,
+  cn,
   toast,
 } from "@elliptic/ui";
 import { formatDateTime } from "@/lib/format";
@@ -19,8 +20,10 @@ import { useDriveFile, useDriveFileText, useDriveFileUrl } from "@/hooks/use-dri
 import type { DriveFile } from "@/lib/types";
 
 /** What the browser can render in place, and how. */
-function previewKind(file: DriveFile): "image" | "pdf" | "text" | "none" {
+function previewKind(file: DriveFile): "image" | "video" | "audio" | "pdf" | "text" | "none" {
   if (file.kind === "image") return "image";
+  if (file.content_type.startsWith("video/")) return "video";
+  if (file.content_type.startsWith("audio/")) return "audio";
   if (file.content_type === "application/pdf") return "pdf";
   if (
     file.content_type.startsWith("text/") ||
@@ -31,6 +34,111 @@ function previewKind(file: DriveFile): "image" | "pdf" | "text" | "none" {
   }
   // Word, Excel, PowerPoint, ZIP: nothing a browser renders without a converter.
   return "none";
+}
+
+type MediaState = "loading" | "ready" | "error";
+
+/**
+ * A skeleton that covers the media until the media itself says it is ready.
+ *
+ * The dialog already shows a skeleton while the signed URL is minted, and used
+ * to drop it the moment the URL arrived — leaving the reader on a blank frame
+ * for however long the bytes take. The media stays mounted underneath so it
+ * keeps loading, because an element that is not in the DOM never loads at all.
+ */
+function MediaFrame({
+  state,
+  placeholder,
+  children,
+}: {
+  state: MediaState;
+  placeholder: string;
+  children: React.ReactNode;
+}) {
+  if (state === "error") {
+    return (
+      <p className="rounded-md border border-border bg-subtle/40 p-3 text-caption text-muted-foreground">
+        This document could not be loaded. Use Download to open it.
+      </p>
+    );
+  }
+  return (
+    <div className={cn("relative", state === "loading" && placeholder)}>
+      {children}
+      {state === "loading" ? (
+        <Skeleton className="absolute inset-0 size-full rounded-md" />
+      ) : null}
+    </div>
+  );
+}
+
+function ImagePreview({ url, name }: { url: string; name: string }) {
+  const [state, setState] = React.useState<MediaState>("loading");
+  return (
+    <MediaFrame state={state} placeholder="min-h-64">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={url}
+        alt={name}
+        loading="lazy"
+        decoding="async"
+        onLoad={() => setState("ready")}
+        onError={() => setState("error")}
+        className="max-h-[60vh] w-full rounded-md border border-border object-contain"
+      />
+    </MediaFrame>
+  );
+}
+
+/**
+ * `preload="metadata"` is what keeps this cheap: the browser reads the header
+ * for the duration and the first frame, and leaves the other twelve megabytes
+ * on the server until someone presses play.
+ *
+ * `suspend` is the escape hatch. A browser may decline to preload at all — iOS
+ * over cellular does — and then `loadedmetadata` never fires. Without this the
+ * skeleton would sit over a working player forever.
+ */
+function VideoPreview({ url, name }: { url: string; name: string }) {
+  const [state, setState] = React.useState<MediaState>("loading");
+  const ready = () => setState((current) => (current === "loading" ? "ready" : current));
+  return (
+    <MediaFrame state={state} placeholder="min-h-64">
+      <video
+        src={url}
+        controls
+        loop
+        playsInline
+        preload="metadata"
+        aria-label={name}
+        onLoadedMetadata={ready}
+        onCanPlay={ready}
+        onSuspend={ready}
+        onError={() => setState("error")}
+        className="max-h-[60vh] w-full rounded-md border border-border bg-black object-contain"
+      />
+    </MediaFrame>
+  );
+}
+
+function AudioPreview({ url, name }: { url: string; name: string }) {
+  const [state, setState] = React.useState<MediaState>("loading");
+  const ready = () => setState((current) => (current === "loading" ? "ready" : current));
+  return (
+    <MediaFrame state={state} placeholder="min-h-14">
+      <audio
+        src={url}
+        controls
+        preload="metadata"
+        aria-label={name}
+        onLoadedMetadata={ready}
+        onCanPlay={ready}
+        onSuspend={ready}
+        onError={() => setState("error")}
+        className="w-full"
+      />
+    </MediaFrame>
+  );
 }
 
 function TextPreview({ orgId, fileId }: { orgId: string; fileId: string }) {
@@ -62,14 +170,11 @@ function TextPreview({ orgId, fileId }: { orgId: string; fileId: string }) {
 function Preview({ orgId, file, url }: { orgId: string; file: DriveFile; url: string }) {
   switch (previewKind(file)) {
     case "image":
-      return (
-        /* eslint-disable-next-line @next/next/no-img-element */
-        <img
-          src={url}
-          alt={file.name}
-          className="max-h-[60vh] w-full rounded-md border border-border object-contain"
-        />
-      );
+      return <ImagePreview key={file.id} url={url} name={file.name} />;
+    case "video":
+      return <VideoPreview key={file.id} url={url} name={file.name} />;
+    case "audio":
+      return <AudioPreview key={file.id} url={url} name={file.name} />;
     case "pdf":
       return (
         <object
