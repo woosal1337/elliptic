@@ -89,6 +89,8 @@ class Settings(BaseSettings):
     file_size_limit_bytes: int = 100 * 1024 * 1024
     allowed_upload_content_types: str = (
         "image/png,image/jpeg,image/gif,image/webp,image/svg+xml,"
+        "video/mp4,video/webm,video/quicktime,"
+        "audio/mpeg,audio/mp4,audio/wav,audio/ogg,audio/webm,"
         "application/pdf,text/plain,text/csv,text/markdown,"
         "application/zip,application/json,"
         "application/msword,"

@@ -94,6 +94,27 @@ async def test_rejects_oversize_and_bad_type(client: AsyncClient) -> None:
     assert "limit" in too_big.json()["message"].lower()
 
 
+async def test_allows_video_and_audio(client: AsyncClient) -> None:
+    """The Drive previews video and audio in place, so uploading them must work."""
+    auth = await register_and_login(client)
+    h = auth["headers"]
+    org = await create_org(client, h)
+    base = f"{API}/orgs/{org['id']}/storage"
+
+    for filename, content_type in [
+        ("loop.mp4", "video/mp4"),
+        ("loop.webm", "video/webm"),
+        ("take.mp3", "audio/mpeg"),
+        ("take.wav", "audio/wav"),
+    ]:
+        response = await client.post(
+            base + "/presign-upload",
+            json={"filename": filename, "content_type": content_type, "size_bytes": 10},
+            headers=h,
+        )
+        assert response.status_code == 201, content_type
+
+
 async def test_confirm_size_recheck_deletes(
     client: AsyncClient, monkeypatch: pytest.MonkeyPatch
 ) -> None:
