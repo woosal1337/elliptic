@@ -72,15 +72,34 @@ function MediaFrame({
   );
 }
 
+/**
+ * `loading="lazy"` is wrong here: the reader opened the dialog to see this one
+ * image, so there is nothing to defer.
+ *
+ * The ref check covers the cached image. React attaches `onLoad` when it mounts
+ * the element, and a hit in the browser cache can finish the load before that.
+ * The event is then already gone, and a skeleton with no listener left to clear
+ * it sits over a picture that is ready. `complete` is the state the event only
+ * reports, so reading it at mount closes that window. A complete image with a
+ * `naturalWidth` of zero is a failed one.
+ */
 function ImagePreview({ url, name }: { url: string; name: string }) {
   const [state, setState] = React.useState<MediaState>("loading");
+  const ref = React.useRef<HTMLImageElement>(null);
+
+  React.useEffect(() => {
+    const image = ref.current;
+    if (image === null || !image.complete) return;
+    setState(image.naturalWidth > 0 ? "ready" : "error");
+  }, [url]);
+
   return (
     <MediaFrame state={state} placeholder="min-h-64">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
+        ref={ref}
         src={url}
         alt={name}
-        loading="lazy"
         decoding="async"
         onLoad={() => setState("ready")}
         onError={() => setState("error")}
