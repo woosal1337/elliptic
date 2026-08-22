@@ -23,7 +23,7 @@ export default function DrivePage() {
   }, [linked, orgId, router]);
 
   return (
-    <div className="mx-auto flex max-w-4xl flex-col gap-8 px-6 py-8">
+    <div className="mx-auto flex max-w-6xl flex-col gap-8 px-6 py-8">
       <PageHeader
         title="Drive"
         description="Every document this workspace has uploaded. Link one from any task description with “@”."

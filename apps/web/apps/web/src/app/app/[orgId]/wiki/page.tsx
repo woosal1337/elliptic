@@ -11,7 +11,7 @@ export default function WikiPage() {
   const [createOpen, setCreateOpen] = useNewParam();
 
   return (
-    <div className="mx-auto flex max-w-4xl flex-col gap-8 px-6 py-8">
+    <div className="mx-auto flex max-w-6xl flex-col gap-8 px-6 py-8">
       <PageHeader
         title="Wiki"
         actions={<CreateNoteDialog orgId={orgId} open={createOpen} onOpenChange={setCreateOpen} />}

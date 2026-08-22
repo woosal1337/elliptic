@@ -11,7 +11,7 @@ export default function NotesPage() {
   const [createOpen, setCreateOpen] = useNewParam();
 
   return (
-    <div className="mx-auto flex max-w-4xl flex-col gap-8 px-6 py-8">
+    <div className="mx-auto flex max-w-6xl flex-col gap-8 px-6 py-8">
       <PageHeader
         title="Notes"
         actions={<CreateNoteDialog orgId={orgId} open={createOpen} onOpenChange={setCreateOpen} />}

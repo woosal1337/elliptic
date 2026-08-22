@@ -1,7 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { ChevronRight, FileText, Folder, FolderPlus, Home, MoveRight } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { BookOpen, ChevronRight, FileText, Folder, FolderPlus, Home, MoveRight } from "lucide-react";
 import {
   Button,
   DropdownMenu,
@@ -16,7 +17,17 @@ import {
 import { relativeTime } from "@/lib/format";
 import { useCreateNote, useNotes, useUpdateNote } from "@/hooks/use-note-queries";
 import { ErrorState } from "@/components/error-state";
-import { ContentCard } from "@/components/content-card";
+import { FolderTree, type FolderTreeNode } from "@/components/library/folder-tree";
+import {
+  FolderCardGrid,
+  LibrarySectionHeading,
+} from "@/components/library/folder-card-grid";
+import {
+  LibraryCell,
+  LibraryNameCell,
+  LibraryRow,
+  LibraryTable,
+} from "@/components/library/library-table";
 import type { Note } from "@/lib/types";
 
 function noteExcerpt(note: Note): string | null {
@@ -50,6 +61,42 @@ function trailFor(noteId: string | null, byId: Map<string, Note>): Note[] {
   return trail;
 }
 
+function byTitle(a: Note, b: Note): number {
+  return a.title.localeCompare(b.title, undefined, { numeric: true });
+}
+
+/**
+ * Folder rows for the tree, depth first from the root, so the date-named week
+ * folders read 07-20, 07-27, 08-03 under their parent.
+ */
+function treeNodes(source: readonly Note[]): FolderTreeNode[] {
+  const nodes: FolderTreeNode[] = [];
+  const idsHere = new Set(source.map((note) => note.id));
+  const walk = (parentId: string | null, depth: number) => {
+    const folders = source
+      .filter((note) => note.is_folder)
+      // A parent outside this view — filtered out, archived — makes its
+      // children roots here rather than orphans that never render.
+      .filter((note) =>
+        parentId === null
+          ? note.parent_id === null || !idsHere.has(note.parent_id)
+          : note.parent_id === parentId
+      )
+      .sort(byTitle);
+    for (const entry of folders) {
+      nodes.push({
+        id: entry.id,
+        label: entry.title,
+        depth,
+        count: source.filter((note) => note.parent_id === entry.id).length,
+      });
+      walk(entry.id, depth + 1);
+    }
+  };
+  walk(null, 0);
+  return nodes;
+}
+
 export function NoteList({
   orgId,
   projectId,
@@ -63,6 +110,7 @@ export function NoteList({
   wikiOnly?: boolean;
   emptyDescription?: string;
 }) {
+  const router = useRouter();
   const notes = useNotes(orgId, projectId);
   const createNote = useCreateNote(orgId);
   const updateNote = useUpdateNote(orgId);
@@ -73,25 +121,20 @@ export function NoteList({
     () => (wikiOnly ? data.filter((note) => note.project_id === null) : data),
     [data, wikiOnly]
   );
-  const byId = React.useMemo(
-    () => new Map(source.map((note) => [note.id, note])),
-    [source]
-  );
+  const byId = React.useMemo(() => new Map(source.map((note) => [note.id, note])), [source]);
 
   // The open folder can disappear underneath us — archived, deleted, or moved
   // out of this view — so fall back to the root rather than showing nothing.
   const currentId = folderId && byId.has(folderId) ? folderId : null;
   const trail = React.useMemo(() => trailFor(currentId, byId), [currentId, byId]);
+  const nodes = React.useMemo(() => treeNodes(source), [source]);
 
   const { folders, files } = React.useMemo(() => {
     const here = source.filter((note) => (note.parent_id ?? null) === currentId);
     return {
-      // By name, numerically, so the date-named week folders read 07-20,
-      // 07-27, 08-03 instead of whatever order the API returned. Files keep
-      // that order, which is recency and is what you want for a document.
-      folders: here
-        .filter((n) => n.is_folder)
-        .sort((a, b) => a.title.localeCompare(b.title, undefined, { numeric: true })),
+      folders: here.filter((n) => n.is_folder).sort(byTitle),
+      // Files keep the API order, which is recency and is what you want for a
+      // document.
       files: here.filter((n) => !n.is_folder),
     };
   }, [source, currentId]);
@@ -121,7 +164,7 @@ export function NoteList({
     return (
       <div className="flex flex-col gap-2">
         {Array.from({ length: 4 }, (_, i) => (
-          <Skeleton key={i} className="h-16 w-full" />
+          <Skeleton key={i} className="h-14 w-full" />
         ))}
       </div>
     );
@@ -145,6 +188,8 @@ export function NoteList({
   const move = (note: Note, target: string | null) =>
     updateNote.mutate({ noteId: note.id, parent_id: target });
 
+  const rootLabel = wikiOnly ? "All pages" : "All notes";
+
   const rowMenu = (note: Note) => {
     const targets = moveTargets(note);
     return (
@@ -154,7 +199,7 @@ export function NoteList({
             variant="ghost"
             size="sm"
             aria-label={`Move ${note.title}`}
-            onClick={(event) => event.preventDefault()}
+            onClick={(event) => event.stopPropagation()}
           >
             <MoveRight className="size-4" />
           </Button>
@@ -165,7 +210,7 @@ export function NoteList({
           {note.parent_id ? (
             <DropdownMenuItem onSelect={() => move(note, null)}>
               <Home className="size-4" />
-              All notes
+              {rootLabel}
             </DropdownMenuItem>
           ) : null}
           {targets.length === 0 && !note.parent_id ? (
@@ -182,105 +227,144 @@ export function NoteList({
     );
   };
 
-  const card = (note: Note) => {
-    const updated = relativeTime(note.updated_at);
-    const childCount = source.filter((n) => n.parent_id === note.id).length;
-    return (
-      <li key={note.id} className="flex items-center gap-2">
-        <div className="min-w-0 flex-1">
-          <ContentCard
-            href={note.is_folder ? undefined : `/app/${orgId}/notes/${note.id}`}
-            onClick={note.is_folder ? () => setFolderId(note.id) : undefined}
-            title={note.title}
-            summary={note.is_folder ? null : noteExcerpt(note)}
-            tag={
-              note.is_folder
-                ? { label: childCount === 1 ? "1 item" : `${childCount} items` }
-                : { label: "Note" }
-            }
-            timestamp={{
-              label: `Updated ${updated.relative}`,
-              title: updated.title,
-              iso: note.updated_at,
-            }}
-            leading={
-              <span className="flex size-9 items-center justify-center rounded-md bg-subtle text-muted-foreground">
-                {note.icon ? (
-                  <span className="text-lg">{note.icon}</span>
-                ) : note.is_folder ? (
-                  <Folder className="size-4" />
-                ) : (
-                  <FileText className="size-4" />
-                )}
-              </span>
-            }
-          />
-        </div>
-        {rowMenu(note)}
-      </li>
+  const noteIcon = (note: Note) =>
+    note.icon ? (
+      <span className="text-lg leading-none">{note.icon}</span>
+    ) : (
+      <FileText className="size-4" />
     );
-  };
 
   const isEmptyHere = folders.length === 0 && files.length === 0;
 
   return (
-    <div className="flex flex-col gap-3">
-      <div className="flex items-center justify-between gap-3">
-        <nav aria-label="Folder path" className="flex min-w-0 items-center gap-1 text-caption">
-          <button
-            type="button"
-            onClick={() => setFolderId(null)}
-            className="shrink-0 text-muted-foreground transition-colors hover:text-foreground"
-          >
-            {wikiOnly ? "All pages" : "All notes"}
-          </button>
-          {trail.map((node, index) => (
-            <span key={node.id} className="flex min-w-0 items-center gap-1">
-              <ChevronRight className="size-3 shrink-0 text-muted-foreground" aria-hidden />
-              <button
-                type="button"
-                onClick={() => setFolderId(node.id)}
-                className={
-                  index === trail.length - 1
-                    ? "truncate font-medium text-foreground"
-                    : "truncate text-muted-foreground transition-colors hover:text-foreground"
-                }
-                aria-current={index === trail.length - 1 ? "page" : undefined}
-              >
-                {node.title}
-              </button>
-            </span>
-          ))}
-        </nav>
-        <Button variant="ghost" size="sm" onClick={createFolder} className="shrink-0">
-          <FolderPlus className="size-4" />
-          New folder
-        </Button>
-      </div>
-
-      {isEmptyHere ? (
-        <EmptyState
-          icon={currentId ? <Folder /> : <FileText />}
-          title={
-            currentId
-              ? "This folder is empty"
-              : wikiOnly
-                ? "No wiki pages yet"
-                : "No notes yet"
-          }
-          description={
-            currentId
-              ? "Anything you create while you are in here is filed here."
-              : emptyDescription
-          }
-          action={emptyAction}
+    <div className="flex items-start gap-8">
+      <aside className="sticky top-8 hidden w-56 shrink-0 flex-col gap-3 lg:flex">
+        <div className="flex items-center justify-between gap-2">
+          <span className="text-caption font-medium uppercase tracking-wide text-muted-foreground">
+            Folders
+          </span>
+        </div>
+        <FolderTree
+          label={wikiOnly ? "Wiki folders" : "Note folders"}
+          rootLabel={rootLabel}
+          rootIcon={BookOpen}
+          nodes={nodes}
+          selectedId={currentId}
+          onSelectRoot={() => setFolderId(null)}
+          onSelect={setFolderId}
         />
-      ) : (
-        <ul className="flex flex-col gap-2">
-          {folders.map(card)}
-          {files.map(card)}
-        </ul>
-      )}
+      </aside>
+
+      <div className="flex min-w-0 flex-1 flex-col gap-5">
+        <div className="flex items-center justify-between gap-3">
+          <nav aria-label="Folder path" className="flex min-w-0 items-center gap-1 text-caption">
+            <button
+              type="button"
+              onClick={() => setFolderId(null)}
+              className="shrink-0 text-muted-foreground transition-colors hover:text-foreground"
+            >
+              {rootLabel}
+            </button>
+            {trail.map((node, index) => (
+              <span key={node.id} className="flex min-w-0 items-center gap-1">
+                <ChevronRight className="size-3 shrink-0 text-muted-foreground" aria-hidden />
+                <button
+                  type="button"
+                  onClick={() => setFolderId(node.id)}
+                  className={
+                    index === trail.length - 1
+                      ? "truncate font-medium text-foreground"
+                      : "truncate text-muted-foreground transition-colors hover:text-foreground"
+                  }
+                  aria-current={index === trail.length - 1 ? "page" : undefined}
+                >
+                  {node.title}
+                </button>
+              </span>
+            ))}
+          </nav>
+          <Button variant="ghost" size="sm" onClick={createFolder} className="shrink-0">
+            <FolderPlus className="size-4" />
+            New folder
+          </Button>
+        </div>
+
+        {isEmptyHere ? (
+          <EmptyState
+            icon={currentId ? <Folder /> : <FileText />}
+            title={
+              currentId ? "This folder is empty" : wikiOnly ? "No wiki pages yet" : "No notes yet"
+            }
+            description={
+              currentId
+                ? "Anything you create while you are in here is filed here."
+                : emptyDescription
+            }
+            action={emptyAction}
+          />
+        ) : (
+          <>
+            {folders.length > 0 ? (
+              <section className="flex flex-col gap-3" aria-label="Folders here">
+                <LibrarySectionHeading>Folders</LibrarySectionHeading>
+                <FolderCardGrid
+                  items={folders.map((entry) => {
+                    const count = source.filter((n) => n.parent_id === entry.id).length;
+                    return {
+                      id: entry.id,
+                      label: entry.title,
+                      countLabel: count === 1 ? "1 item" : `${count} items`,
+                      action: rowMenu(entry),
+                    };
+                  })}
+                  onOpen={setFolderId}
+                />
+              </section>
+            ) : null}
+
+            {files.length > 0 ? (
+              <section className="flex flex-col gap-3" aria-label="Notes here">
+                <LibrarySectionHeading>{wikiOnly ? "Pages" : "Notes"}</LibrarySectionHeading>
+                <LibraryTable
+                  aria-label={wikiOnly ? "Pages" : "Notes"}
+                  columns={[
+                    { label: "Name" },
+                    { label: "Updated", className: "w-36 max-sm:hidden" },
+                    { label: "", className: "w-12" },
+                  ]}
+                >
+                  {files.map((note) => {
+                    const updated = relativeTime(note.updated_at);
+                    return (
+                      <LibraryRow
+                        key={note.id}
+                        onOpen={() => router.push(`/app/${orgId}/notes/${note.id}`)}
+                      >
+                        <LibraryNameCell
+                          icon={noteIcon(note)}
+                          name={note.title}
+                          detail={noteExcerpt(note)}
+                          href={`/app/${orgId}/notes/${note.id}`}
+                        />
+                        <LibraryCell className="max-sm:hidden">
+                          <time
+                            dateTime={note.updated_at}
+                            title={updated.title}
+                            className="text-caption text-muted-foreground"
+                          >
+                            {updated.relative}
+                          </time>
+                        </LibraryCell>
+                        <LibraryCell className="text-right">{rowMenu(note)}</LibraryCell>
+                      </LibraryRow>
+                    );
+                  })}
+                </LibraryTable>
+              </section>
+            ) : null}
+          </>
+        )}
+      </div>
     </div>
   );
 }
