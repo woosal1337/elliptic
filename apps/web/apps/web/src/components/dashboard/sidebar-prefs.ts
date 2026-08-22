@@ -2,24 +2,21 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-export type SidebarSection = "personal" | "team";
-
 export interface SidebarItemDef {
   key: string;
   label: string;
   segment: string;
-  section: SidebarSection;
 }
 
 export const SIDEBAR_ITEMS: readonly SidebarItemDef[] = [
-  { key: "my-tasks", label: "My Tasks", segment: "my-tasks", section: "personal" },
-  { key: "inbox", label: "Inbox", segment: "inbox", section: "personal" },
-  { key: "notes", label: "Notes", segment: "notes", section: "personal" },
-  { key: "drive", label: "Drive", segment: "drive", section: "team" },
-  { key: "projects", label: "Projects", segment: "projects", section: "team" },
-  { key: "meetings", label: "Meetings", segment: "meetings", section: "team" },
-  { key: "activity", label: "Activity", segment: "activity", section: "team" },
-  { key: "settings", label: "Settings", segment: "settings", section: "team" },
+  { key: "my-tasks", label: "My Tasks", segment: "my-tasks" },
+  { key: "inbox", label: "Inbox", segment: "inbox" },
+  { key: "notes", label: "Notes", segment: "notes" },
+  { key: "drive", label: "Drive", segment: "drive" },
+  { key: "projects", label: "Projects", segment: "projects" },
+  { key: "meetings", label: "Meetings", segment: "meetings" },
+  { key: "activity", label: "Activity", segment: "activity" },
+  { key: "settings", label: "Settings", segment: "settings" },
 ] as const;
 
 const ITEM_KEYS = SIDEBAR_ITEMS.map((item) => item.key);

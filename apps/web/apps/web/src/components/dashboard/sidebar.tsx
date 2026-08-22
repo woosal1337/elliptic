@@ -35,11 +35,7 @@ import { OrgSwitcher } from "./org-switcher";
 import { SidebarFavorites } from "./sidebar-favorites";
 import { SidebarProjects } from "./sidebar-projects";
 import { UserMenu } from "./user-menu";
-import {
-  useSidebarPrefs,
-  type ResolvedSidebarItem,
-  type SidebarSection,
-} from "./sidebar-prefs";
+import { useSidebarPrefs, type ResolvedSidebarItem } from "./sidebar-prefs";
 
 const ICONS: Record<string, ComponentType<{ className?: string }>> = {
   "my-tasks": CircleUser,
@@ -51,13 +47,6 @@ const ICONS: Record<string, ComponentType<{ className?: string }>> = {
   activity: Activity,
   settings: Settings,
 };
-
-const SECTION_LABELS: Record<SidebarSection, string> = {
-  personal: "Personal",
-  team: "Workspace",
-};
-
-const SECTION_ORDER: readonly SidebarSection[] = ["personal", "team"];
 
 const COLLAPSE_KEY = "elliptic:sidebar-collapsed";
 
@@ -232,28 +221,6 @@ export function Sidebar({
     );
   };
 
-  const renderSection = (section: SidebarSection, first: boolean) => {
-    const items = prefs.visible.filter((item) => item.section === section);
-    if (items.length === 0) return null;
-    return (
-      <div key={section}>
-        {collapsed ? (
-          <div className={cn("h-px bg-border/60", first ? "mt-1 mb-1" : "my-2")} aria-hidden />
-        ) : (
-          <p
-            className={cn(
-              "px-2.5 pb-1 text-caption font-medium text-muted-foreground/70",
-              first ? "pt-2" : "pt-5"
-            )}
-          >
-            {SECTION_LABELS[section]}
-          </p>
-        )}
-        <div className="flex flex-col gap-0.5">{items.map(renderItem)}</div>
-      </div>
-    );
-  };
-
   return (
     <aside
       className={cn(
@@ -266,16 +233,9 @@ export function Sidebar({
         <OrgSwitcher orgId={orgId} collapsed={collapsed} />
       </div>
       <nav aria-label="Main" className="flex flex-1 flex-col gap-0.5 px-3 pb-3">
-        {(() => {
-          let firstRendered = true;
-          return SECTION_ORDER.map((section) => {
-            const hasItems = prefs.visible.some((item) => item.section === section);
-            if (!hasItems) return null;
-            const node = renderSection(section, firstRendered);
-            firstRendered = false;
-            return node;
-          });
-        })()}
+        <div className={cn("flex flex-col gap-0.5", collapsed ? "pt-1" : "pt-2")}>
+          {prefs.visible.map(renderItem)}
+        </div>
 
         {collapsed ? null : <SidebarFavorites orgId={orgId} />}
 
