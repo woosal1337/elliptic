@@ -80,6 +80,28 @@ test("a row opens the preview dialog with the document text", async ({ page }) =
   await expect(dialog).toHaveCount(0);
 });
 
+test("a long unwrapped line stays inside the preview dialog", async ({ page, request }) => {
+  await uploadDoc(request, session, {
+    filename: "wide.md",
+    content: `# Wide\n\n| ${"cell | ".repeat(80)}\n\nA table row far wider than any dialog.`,
+  });
+  await page.reload();
+  await page
+    .getByRole("table", { name: "Documents" })
+    .getByRole("button", { name: /^wide/ })
+    .click();
+
+  const dialog = page.getByRole("dialog");
+  const block = dialog.locator("pre");
+  await expect(block).toBeVisible();
+  const dialogBox = await dialog.boundingBox();
+  const blockBox = await block.boundingBox();
+  if (!dialogBox || !blockBox) throw new Error("No bounding boxes to compare");
+  expect(blockBox.width).toBeLessThanOrEqual(dialogBox.width);
+  expect(blockBox.x + blockBox.width).toBeLessThanOrEqual(dialogBox.x + dialogBox.width + 1);
+  await page.keyboard.press("Escape");
+});
+
 test("the preview dialog deletes the document", async ({ page, request }) => {
   await uploadDoc(request, session, {
     filename: "doomed.txt",

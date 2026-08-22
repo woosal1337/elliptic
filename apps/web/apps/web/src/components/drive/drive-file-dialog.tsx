@@ -177,8 +177,8 @@ function TextPreview({ orgId, fileId }: { orgId: string; fileId: string }) {
     );
   }
   return (
-    <div className="flex flex-col gap-1">
-      <pre className="max-h-[60vh] overflow-auto rounded-md border border-border bg-subtle/40 p-3 font-mono text-caption text-foreground">
+    <div className="flex min-w-0 flex-col gap-1">
+      <pre className="max-h-[60vh] max-w-full overflow-auto rounded-md border border-border bg-subtle/40 p-3 font-mono text-caption leading-relaxed text-foreground">
         {body.data.text}
       </pre>
       {body.data.truncated ? (
@@ -285,9 +285,12 @@ export function DriveFileDialog({
                 <FileText className="size-4 shrink-0 text-accent" />
                 {file.data.name}
               </DialogTitle>
-              <DialogDescription>
-                {file.data.description ?? file.data.filename}
-              </DialogDescription>
+              {/* The filename alone would repeat the title one line below it. */}
+              {file.data.description ? (
+                <DialogDescription>{file.data.description}</DialogDescription>
+              ) : file.data.filename !== file.data.name ? (
+                <DialogDescription>{file.data.filename}</DialogDescription>
+              ) : null}
             </DialogHeader>
 
             {url.data ? (

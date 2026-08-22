@@ -46,7 +46,11 @@ export const DialogContent = React.forwardRef<
     <DialogPrimitive.Content
       ref={ref}
       className={cn(
-        "fixed left-1/2 top-1/2 z-50 grid w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-4 rounded-xl border border-border bg-surface p-6 shadow-xl focus:outline-none data-[state=open]:animate-content-in data-[state=closed]:animate-content-out",
+        // grid-cols-[minmax(0,1fr)] lets every child shrink below its content
+        // width. Without it a grid track sizes to the longest unwrapped line,
+        // so a <pre> in a preview pushed the whole dialog past its max width
+        // and painted text across the page behind it.
+        "fixed left-1/2 top-1/2 z-50 grid w-[calc(100%-2rem)] grid-cols-[minmax(0,1fr)] -translate-x-1/2 -translate-y-1/2 gap-4 rounded-xl border border-border bg-surface p-6 shadow-xl focus:outline-none data-[state=open]:animate-content-in data-[state=closed]:animate-content-out",
         sizeClasses[size],
         className
       )}
