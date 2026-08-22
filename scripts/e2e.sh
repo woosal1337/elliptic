@@ -102,8 +102,10 @@ stop() {
       rm -f "$LOG_DIR/$name.pid"
     fi
   done
-  pkill -f "uvicorn elliptic.main:app --port $API_PORT" 2>/dev/null || true
-  pkill -f "next dev.*$WEB_PORT" 2>/dev/null || true
+  # By port, not by name: the port sits in the environment, so no command
+  # line names it, and a survivor here breaks the next run with EADDRINUSE.
+  lsof -ti ":$API_PORT" 2>/dev/null | xargs kill 2>/dev/null || true
+  lsof -ti ":$WEB_PORT" 2>/dev/null | xargs kill 2>/dev/null || true
   docker rm -f "$MINIO_NAME" >/dev/null 2>&1 || true
   echo "e2e stack stopped"
 }

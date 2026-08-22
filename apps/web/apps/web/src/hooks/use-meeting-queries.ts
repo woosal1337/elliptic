@@ -42,6 +42,19 @@ export function useMeeting(orgId: string, meetingId: string) {
   });
 }
 
+export function useDeleteMeeting(orgId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (meetingId: string) =>
+      api.delete<null>(orgPath(orgId, `/meetings/${meetingId}`)),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: meetingKeys.all(orgId) });
+      toast.success("Meeting deleted");
+    },
+    onError: (error) => toast.error(errorMessage(error)),
+  });
+}
+
 export function useTranscript(orgId: string, meetingId: string) {
   return useQuery({
     queryKey: meetingKeys.transcript(orgId, meetingId),
