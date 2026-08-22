@@ -15,7 +15,7 @@ from starlette.types import ASGIApp, Receive, Scope, Send
 
 import elliptic.core.models_registry  # noqa: F401
 from elliptic.core.config import get_settings
-from elliptic.core.database import engine
+from elliptic.core.database import CommitBeforeResponse, engine
 from elliptic.core.handlers import register_handlers
 from elliptic.core.logging import setup_logging
 from elliptic.core.ratelimit import limiter
@@ -198,6 +198,7 @@ def create_app() -> FastAPI:  # noqa: PLR0915 — flat router registration list
         MCPAuthChallengeMiddleware,
         metadata_url=f"{settings.oauth_issuer}/.well-known/oauth-protected-resource/api/v1/mcp",
     )
+    app.add_middleware(CommitBeforeResponse)
     register_handlers(app)
 
     api = APIRouter(prefix="/api/v1")
