@@ -230,12 +230,11 @@ see summary + action items + decisions; the transcript only with
 
 Notes are markdown pages in one nesting tree; **a folder is a note with
 `is_folder=true`** and keeps its own `content` describing what belongs
-inside. Visibility: `public` (org-wide, the default), `private`/`shared`
-(creator, admins, explicitly shared members). Locked notes reject edits.
-Every title/content change snapshots a version (restorable in the web app).
+inside. Every org member sees every note — a note carries no visibility
+tier, lock, or version history.
 
 ### `list_notes(project_id=None, search=None, limit=50, offset=0)`
-Scope `notes:read`. `search` covers title **and body**. Excludes archived.
+Scope `notes:read`. `search` covers title **and body**.
 Ordered by `updated_at` desc. Items include the **full markdown content** —
 keep `limit` modest.
 

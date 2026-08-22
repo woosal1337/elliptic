@@ -110,7 +110,7 @@ async def search(
     if included("note"):
         notes = await session.scalars(
             select(Note)
-            .where(Note.org_id == org_id, Note.archived_at.is_(None), Note.title.ilike(like))
+            .where(Note.org_id == org_id, Note.title.ilike(like))
             .limit(_PER_ENTITY_CANDIDATES)
         )
         hits.extend(

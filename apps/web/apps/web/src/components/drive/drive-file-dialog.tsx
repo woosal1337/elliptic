@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Download, FileText, Folder, Link2 } from "lucide-react";
+import { Download, FileText, Folder, Link2, Trash2 } from "lucide-react";
 import {
   Button,
   Dialog,
@@ -16,7 +16,12 @@ import {
 import { formatDateTime } from "@/lib/format";
 import { ErrorState } from "@/components/error-state";
 import { humanSize, mentionMarkdown } from "@/components/drive/drive-browser";
-import { useDriveFile, useDriveFileText, useDriveFileUrl } from "@/hooks/use-drive-queries";
+import {
+  useDeleteDriveFile,
+  useDriveFile,
+  useDriveFileText,
+  useDriveFileUrl,
+} from "@/hooks/use-drive-queries";
 import type { DriveFile } from "@/lib/types";
 
 /** What the browser can render in place, and how. */
@@ -240,6 +245,13 @@ export function DriveFileDialog({
 }) {
   const file = useDriveFile(orgId, fileId ?? "", fileId !== null);
   const url = useDriveFileUrl(orgId, fileId ?? "", fileId !== null);
+  const deleteFile = useDeleteDriveFile(orgId);
+
+  const remove = (target: DriveFile) => {
+    const question = `Delete ${target.name}? Links to it in task descriptions will stop working.`;
+    if (!window.confirm(question)) return;
+    deleteFile.mutate(target.id, { onSuccess: onClose });
+  };
 
   const copyMention = async (target: DriveFile) => {
     try {
@@ -317,6 +329,16 @@ export function DriveFileDialog({
                   </a>
                 </Button>
               ) : null}
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={deleteFile.isPending}
+                onClick={() => remove(file.data)}
+                className="ml-auto text-danger hover:text-danger"
+              >
+                <Trash2 className="size-4" />
+                Delete
+              </Button>
             </div>
           </>
         ) : null}

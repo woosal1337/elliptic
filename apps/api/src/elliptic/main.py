@@ -36,7 +36,6 @@ from elliptic.modules.compliance.router import router as compliance_router
 from elliptic.modules.config.router import router as config_router
 from elliptic.modules.domains.router import router as domains_router
 from elliptic.modules.drive.router import router as drive_router
-from elliptic.modules.embeds.router import router as embeds_router
 from elliptic.modules.favorites.router import router as favorites_router
 from elliptic.modules.idp_sync.router import router as idp_sync_router
 from elliptic.modules.instance.router import router as instance_router
@@ -60,10 +59,7 @@ from elliptic.modules.mcp_connectors.router import router as mcp_connectors_rout
 from elliptic.modules.mcp_server.app import build_mcp_app
 from elliptic.modules.meetings.public_router import router as public_share_router
 from elliptic.modules.meetings.router import router as meetings_router
-from elliptic.modules.notes.public_router import public_router as public_pages_router
-from elliptic.modules.notes.public_router import publish_router as notes_publish_router
 from elliptic.modules.notes.router import router as notes_router
-from elliptic.modules.notes.templates_router import router as note_templates_router
 from elliptic.modules.notifications.router import router as notifications_router
 from elliptic.modules.ops.router import router as ops_router
 from elliptic.modules.orgs.roles_router import router as roles_router
@@ -245,11 +241,7 @@ def create_app() -> FastAPI:  # noqa: PLR0915 — flat router registration list
     api.include_router(sso_admin_router)
     api.include_router(sso_public_router)
     api.include_router(meetings_router)
-    api.include_router(embeds_router)
     api.include_router(notes_router)
-    api.include_router(notes_publish_router)
-    api.include_router(public_pages_router)
-    api.include_router(note_templates_router)
     api.include_router(comments_router)
     api.include_router(config_router)
     api.include_router(compliance_router)

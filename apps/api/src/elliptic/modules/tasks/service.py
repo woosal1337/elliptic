@@ -1858,29 +1858,6 @@ async def link_note(
     await session.flush()
 
 
-async def list_tasks_for_note(
-    session: AsyncSession, ctx: OrgContext, note_id: uuid.UUID
-) -> list[tuple[Task, str]]:
-    """Work items created from or linked to a page (COS-144): source_note_id OR a TaskNoteLink."""
-    linked_ids = set(
-        await session.scalars(
-            select(TaskNoteLink.task_id).where(
-                TaskNoteLink.note_id == note_id, TaskNoteLink.org_id == ctx.org.id
-            )
-        )
-    )
-    conditions = [Task.source_note_id == note_id]
-    if linked_ids:
-        conditions.append(Task.id.in_(linked_ids))
-    rows = await session.execute(
-        select(Task, Project.key)
-        .join(Project, Project.id == Task.project_id)
-        .where(Task.org_id == ctx.org.id, or_(*conditions))
-        .order_by(Task.created_at.desc())
-    )
-    return [(task, key) for task, key in rows]
-
-
 async def list_note_links(
     session: AsyncSession, ctx: OrgContext, task_id: uuid.UUID
 ) -> list[tuple[uuid.UUID, str, uuid.UUID | None]]:

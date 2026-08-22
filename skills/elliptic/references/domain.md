@@ -163,11 +163,9 @@ inside, worth reading before filing. Bodies are plain markdown stored in
 Postgres (returned whole by `get_note`; no separate blob store). Mentions are
 encoded as markdown links (`/__mention/{task|note|user}/{id}`).
 
-Visibility: `public` (org-wide, default), `private`, `shared` (per-member
-view/comment/edit grants). Locked pages reject edits. Every edit snapshots a
-restorable version. Notes can be published to a public URL and support
-templates — both managed in the web app. Deleting a note **cascades to its
-whole subtree**.
+Every org member sees every note — the workspace is the boundary, and a note
+carries no visibility tier, lock, version history, publish link, or template.
+Deleting a note **cascades to its whole subtree**.
 
 Treat concurrent editing carefully: writes are last-write-wins full-content
 replaces. Read, modify, write back — and keep edits tight.

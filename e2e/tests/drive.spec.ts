@@ -80,6 +80,22 @@ test("a row opens the preview dialog with the document text", async ({ page }) =
   await expect(dialog).toHaveCount(0);
 });
 
+test("the preview dialog deletes the document", async ({ page, request }) => {
+  await uploadDoc(request, session, {
+    filename: "doomed.txt",
+    content: "This document exists to be deleted.",
+  });
+  await page.reload();
+  const table = page.getByRole("table", { name: "Documents" });
+  await table.getByRole("button", { name: /^doomed/ }).click();
+
+  page.on("dialog", (dialog) => void dialog.accept());
+  await page.getByRole("dialog").getByRole("button", { name: "Delete" }).click();
+
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await expect(table.getByRole("row", { name: /doomed/ })).toHaveCount(0);
+});
+
 test("an upload through the browser lands in the open folder", async ({ page }) => {
   await page.locator('input[aria-label="Upload documents"]').setInputFiles({
     name: "uploaded-live.txt",

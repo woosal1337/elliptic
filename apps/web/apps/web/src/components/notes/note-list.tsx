@@ -17,6 +17,7 @@ import {
 import { relativeTime } from "@/lib/format";
 import { useCreateNote, useNotes, useUpdateNote } from "@/hooks/use-note-queries";
 import { ErrorState } from "@/components/error-state";
+import { NameDialog, type NameDialogRequest } from "@/components/name-dialog";
 import { FolderTree, type FolderTreeNode } from "@/components/library/folder-tree";
 import {
   FolderCardGrid,
@@ -115,6 +116,7 @@ export function NoteList({
   const createNote = useCreateNote(orgId);
   const updateNote = useUpdateNote(orgId);
   const [folderId, setFolderId] = React.useState<string | null>(null);
+  const [namePrompt, setNamePrompt] = React.useState<NameDialogRequest | null>(null);
 
   const data = React.useMemo(() => notes.data ?? [], [notes.data]);
   const source = React.useMemo(
@@ -175,13 +177,18 @@ export function NoteList({
   }
 
   const createFolder = () => {
-    const name = window.prompt("Folder name");
-    if (!name?.trim()) return;
-    createNote.mutate({
-      title: name.trim(),
-      is_folder: true,
-      parent_id: currentId,
-      project_id: projectId ?? null,
+    setNamePrompt({
+      title: "New folder",
+      label: "Folder name",
+      description: "The folder is filed where you are now.",
+      submitLabel: "Create",
+      onSubmit: (name) =>
+        createNote.mutate({
+          title: name,
+          is_folder: true,
+          parent_id: currentId,
+          project_id: projectId ?? null,
+        }),
     });
   };
 
@@ -238,6 +245,7 @@ export function NoteList({
 
   return (
     <div className="flex items-start gap-8">
+      <NameDialog request={namePrompt} onClose={() => setNamePrompt(null)} />
       <aside className="sticky top-8 hidden w-56 shrink-0 flex-col gap-3 lg:flex">
         <div className="flex items-center justify-between gap-2">
           <span className="text-caption font-medium uppercase tracking-wide text-muted-foreground">

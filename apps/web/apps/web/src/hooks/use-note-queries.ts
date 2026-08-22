@@ -4,7 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "@elliptic/ui";
 import { api, errorMessage, orgPath } from "@/lib/api";
 import { markOptimistic, optimisticMutation, tempId } from "@/lib/optimistic";
-import type { Note, NoteShare, NoteShareAccess, Page } from "@/lib/types";
+import type { Note, Page } from "@/lib/types";
 
 export const noteKeys = {
   all: (orgId: string) => ["orgs", orgId, "notes"] as const,
@@ -44,96 +44,6 @@ export function useNote(orgId: string, noteId: string) {
   });
 }
 
-export interface NoteVersion {
-  id: string;
-  note_id: string;
-  title: string;
-  content: string;
-  edited_by: string | null;
-  created_at: string;
-}
-
-export function useNoteVersions(orgId: string, noteId: string, enabled: boolean) {
-  return useQuery({
-    queryKey: [...noteKeys.detail(orgId, noteId), "versions"] as const,
-    enabled,
-    queryFn: ({ signal }) =>
-      api.get<NoteVersion[]>(orgPath(orgId, `/notes/${noteId}/versions`), signal),
-  });
-}
-
-export function useSetNoteLifecycle(orgId: string, noteId: string) {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (input: {
-      visibility?: "public" | "private" | "shared";
-      locked?: boolean;
-      archived?: boolean;
-    }) => api.patch<Note>(orgPath(orgId, `/notes/${noteId}/lifecycle`), input),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: noteKeys.detail(orgId, noteId) });
-      void queryClient.invalidateQueries({ queryKey: noteKeys.all(orgId) });
-      toast.success("Page updated");
-    },
-    onError: (error) => toast.error(errorMessage(error)),
-  });
-}
-
-export function useNoteShares(orgId: string, noteId: string, enabled: boolean) {
-  return useQuery({
-    queryKey: [...noteKeys.detail(orgId, noteId), "shares"] as const,
-    enabled,
-    queryFn: ({ signal }) =>
-      api.get<NoteShare[]>(orgPath(orgId, `/notes/${noteId}/shares`), signal),
-  });
-}
-
-export function useShareNote(orgId: string, noteId: string) {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (input: { user_id: string; access: NoteShareAccess }) =>
-      api.put<NoteShare>(orgPath(orgId, `/notes/${noteId}/shares`), input),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({
-        queryKey: [...noteKeys.detail(orgId, noteId), "shares"],
-      });
-      toast.success("Shared");
-    },
-    onError: (error) => toast.error(errorMessage(error)),
-  });
-}
-
-export function useUnshareNote(orgId: string, noteId: string) {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (userId: string) =>
-      api.delete<null>(orgPath(orgId, `/notes/${noteId}/shares/${userId}`)),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({
-        queryKey: [...noteKeys.detail(orgId, noteId), "shares"],
-      });
-      toast.success("Unshared");
-    },
-    onError: (error) => toast.error(errorMessage(error)),
-  });
-}
-
-export function useRestoreNoteVersion(orgId: string, noteId: string) {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (versionId: string) =>
-      api.post<Note>(orgPath(orgId, `/notes/${noteId}/versions/${versionId}/restore`), {}),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: noteKeys.detail(orgId, noteId) });
-      void queryClient.invalidateQueries({
-        queryKey: [...noteKeys.detail(orgId, noteId), "versions"],
-      });
-      toast.success("Page restored");
-    },
-    onError: (error) => toast.error(errorMessage(error)),
-  });
-}
-
 interface CreateNoteInput {
   title: string;
   content?: string;
@@ -156,9 +66,6 @@ function draftNote(orgId: string, id: string, input: CreateNoteInput): Note {
     title: input.title,
     content: input.content ?? "",
     icon: input.icon ?? null,
-    visibility: "public",
-    locked: false,
-    archived_at: null,
     created_by: "",
     updated_by: "",
     created_at: now,
@@ -263,24 +170,6 @@ export function useUpdateNote(orgId: string) {
       toast.success("Note saved");
     },
     onSettled: optimistic.onSettled,
-  });
-}
-
-export function useDuplicateNote(orgId: string) {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (noteId: string) =>
-      api.post<Note>(orgPath(orgId, `/notes/${noteId}/duplicate`)),
-    onSuccess: (note) => {
-      toast.success("Page duplicated");
-      void queryClient.invalidateQueries({ queryKey: noteKeys.all(orgId) });
-      if (note.project_id) {
-        void queryClient.invalidateQueries({
-          queryKey: noteKeys.list(orgId, note.project_id),
-        });
-      }
-    },
-    onError: () => toast.error("Could not duplicate page"),
   });
 }
 

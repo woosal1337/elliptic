@@ -471,8 +471,6 @@ export interface PublicMeetingShare {
   transcript: TranscriptSegment[];
 }
 
-export type NoteVisibility = "public" | "private" | "shared";
-export type NoteShareAccess = "view" | "comment" | "edit";
 
 export interface Note {
   id: string;
@@ -484,9 +482,6 @@ export interface Note {
   title: string;
   content: string;
   icon: string | null;
-  visibility: NoteVisibility;
-  locked: boolean;
-  archived_at: string | null;
   created_by: string;
   updated_by: string;
   created_at: string;
@@ -512,13 +507,6 @@ export interface DriveFolder {
   path: string;
   name: string;
   file_count: number;
-}
-
-export interface NoteShare {
-  id: string;
-  note_id: string;
-  user_id: string;
-  access: NoteShareAccess;
 }
 
 export type WebhookProvider = "slack" | "discord";

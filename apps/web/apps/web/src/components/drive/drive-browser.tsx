@@ -35,6 +35,7 @@ import {
 } from "@elliptic/ui";
 import { relativeTime } from "@/lib/format";
 import { ErrorState } from "@/components/error-state";
+import { NameDialog, type NameDialogRequest } from "@/components/name-dialog";
 import { FolderTree, type FolderTreeNode } from "@/components/library/folder-tree";
 import {
   FolderCardGrid,
@@ -147,6 +148,7 @@ export function DriveBrowser({
 
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [dragging, setDragging] = React.useState(false);
+  const [namePrompt, setNamePrompt] = React.useState<NameDialogRequest | null>(null);
 
   const folderPaths = React.useMemo(
     () => (folders.data ?? []).map((entry) => entry.path),
@@ -204,13 +206,15 @@ export function DriveBrowser({
   };
 
   const rename = (file: DriveFile) => {
-    const next = window.prompt("Document name", file.name);
-    if (next === null || next.trim() === file.name) return;
-    if (!next.trim()) {
-      toast.error("A document needs a name");
-      return;
-    }
-    updateFile.mutate({ fileId: file.id, name: next.trim() });
+    setNamePrompt({
+      title: "Rename document",
+      label: "Document name",
+      initialValue: file.name,
+      submitLabel: "Rename",
+      onSubmit: (name) => {
+        if (name !== file.name) updateFile.mutate({ fileId: file.id, name });
+      },
+    });
   };
 
   const move = (file: DriveFile, target: string) =>
@@ -232,20 +236,34 @@ export function DriveBrowser({
   };
 
   const createFolder = () => {
-    const name = window.prompt("Folder name");
-    if (!name?.trim()) return;
-    // A folder is a path on a document, so it exists once something is in it.
-    // Opening it immediately lets the next upload land there.
-    openFolder(joinPath(folder, name.trim()));
+    setNamePrompt({
+      title: "New folder",
+      label: "Folder name",
+      description: "The folder holds its place once a document lands in it.",
+      submitLabel: "Create",
+      // A folder is a path on a document, so it exists once something is in
+      // it. Opening it immediately lets the next upload land there.
+      onSubmit: (name) => openFolder(joinPath(folder, name)),
+    });
   };
 
   const renameCurrentFolder = () => {
     if (!folder) return;
     const segments = folder.split("/");
-    const next = window.prompt("Folder name", segments[segments.length - 1] ?? "");
-    if (!next?.trim()) return;
-    const target = [...segments.slice(0, -1), next.trim()].join("/");
-    renameFolder.mutate({ path: folder, new_path: target }, { onSuccess: () => setFolder(target) });
+    setNamePrompt({
+      title: "Rename folder",
+      label: "Folder name",
+      initialValue: segments[segments.length - 1] ?? "",
+      submitLabel: "Rename",
+      onSubmit: (name) => {
+        const target = [...segments.slice(0, -1), name].join("/");
+        if (target === folder) return;
+        renameFolder.mutate(
+          { path: folder, new_path: target },
+          { onSuccess: () => setFolder(target) }
+        );
+      },
+    });
   };
 
   const fileMenu = (file: DriveFile) => (
@@ -365,6 +383,7 @@ export function DriveBrowser({
 
   return (
     <div className="flex items-start gap-8">
+      <NameDialog request={namePrompt} onClose={() => setNamePrompt(null)} />
       <aside className="sticky top-8 hidden w-56 shrink-0 flex-col gap-3 lg:flex">
         <div className="flex items-center justify-between gap-2">
           <span className="text-caption font-medium uppercase tracking-wide text-muted-foreground">

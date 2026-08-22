@@ -8,22 +8,8 @@ import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import { TaskItem, TaskList } from "@tiptap/extension-list";
 import { Markdown } from "tiptap-markdown";
-import { ListChecks, RefreshCw, Sparkles, Wand2 } from "lucide-react";
-import { useMutation } from "@tanstack/react-query";
-import {
-  Button,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  Textarea,
-  cn,
-  toast,
-} from "@elliptic/ui";
-import { api, errorMessage, orgPath } from "@/lib/api";
+import { ListChecks } from "lucide-react";
+import { Button, cn } from "@elliptic/ui";
 import {
   SlashCommand,
   createMention,
@@ -100,134 +86,6 @@ function readMarkdown(editor: Editor): string {
   return storage ? storage.getMarkdown() : "";
 }
 
-const AI_ACTIONS = [
-  { action: "rephrase", label: "Rephrase" },
-  { action: "fix_grammar", label: "Fix grammar" },
-  { action: "summarize", label: "Summarize" },
-  { action: "expand", label: "Expand" },
-] as const;
-
-const GENERATE_PRESETS = [
-  { label: "TL;DR", prompt: "Write a concise TL;DR summary of the document as a short paragraph." },
-  {
-    label: "Action items",
-    prompt: "Extract the action items from the document as a Markdown checklist.",
-  },
-  { label: "FAQ", prompt: "Generate a short FAQ (3-5 question/answer pairs) based on the document." },
-] as const;
-
-function AiGenerateControl({
-  orgId,
-  editorRef,
-}: {
-  orgId: string;
-  editorRef: React.MutableRefObject<Editor | null>;
-}) {
-  const [open, setOpen] = useState(false);
-  const [prompt, setPrompt] = useState("");
-  const [lastPrompt, setLastPrompt] = useState("");
-  const [result, setResult] = useState<string | null>(null);
-
-  const generate = useMutation({
-    mutationFn: (variables: { prompt: string; context: string }) =>
-      api.post<{ result: string; ai_run_id: string }>(orgPath(orgId, "/ai/generate"), variables),
-    onSuccess: ({ result: text }) => setResult(text),
-    onError: (error) => toast.error(errorMessage(error)),
-  });
-
-  const run = (raw: string) => {
-    const trimmed = raw.trim();
-    if (!trimmed) return;
-    setLastPrompt(trimmed);
-    const context = editorRef.current ? readMarkdown(editorRef.current).slice(0, 12000) : "";
-    generate.mutate({ prompt: trimmed, context });
-  };
-
-  const insert = () => {
-    if (!result || !editorRef.current) return;
-    editorRef.current.chain().focus().insertContent(`\n${result}\n`).run();
-    setOpen(false);
-    setResult(null);
-    setPrompt("");
-  };
-
-  return (
-    <Popover
-      open={open}
-      onOpenChange={(next) => {
-        setOpen(next);
-        if (!next) setResult(null);
-      }}
-    >
-      <PopoverTrigger asChild>
-        <Button size="sm" variant="outline" onMouseDown={(event) => event.preventDefault()}>
-          <Wand2 className="size-3.5" />
-          Generate
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent
-        align="end"
-        className="flex w-80 flex-col gap-2 p-3"
-        onCloseAutoFocus={(event) => event.preventDefault()}
-      >
-        <div className="flex flex-wrap gap-1.5">
-          {GENERATE_PRESETS.map((preset) => (
-            <Button
-              key={preset.label}
-              size="sm"
-              variant="ghost"
-              disabled={generate.isPending}
-              onClick={() => {
-                setPrompt(preset.prompt);
-                run(preset.prompt);
-              }}
-            >
-              {preset.label}
-            </Button>
-          ))}
-        </div>
-        <Textarea
-          rows={2}
-          value={prompt}
-          onChange={(event) => setPrompt(event.target.value)}
-          placeholder="Describe what to generate from this page…"
-        />
-        {result ? (
-          <div className="max-h-48 overflow-y-auto whitespace-pre-wrap rounded-md border border-border bg-muted/40 p-2 text-caption text-foreground">
-            {result}
-          </div>
-        ) : null}
-        <div className="flex items-center justify-between gap-2">
-          {result ? (
-            <Button
-              size="sm"
-              variant="ghost"
-              disabled={generate.isPending}
-              onClick={() => run(lastPrompt || prompt)}
-            >
-              <RefreshCw className="size-3.5" />
-              Regenerate
-            </Button>
-          ) : (
-            <span />
-          )}
-          <div className="flex items-center gap-2">
-            {result ? (
-              <Button size="sm" onClick={insert}>
-                Insert
-              </Button>
-            ) : (
-              <Button size="sm" variant="outline" loading={generate.isPending} onClick={() => run(prompt)}>
-                Generate
-              </Button>
-            )}
-          </div>
-        </div>
-      </PopoverContent>
-    </Popover>
-  );
-}
-
 export function NoteEditor({
   value,
   onChange,
@@ -236,7 +94,6 @@ export function NoteEditor({
   slashCommands = true,
   mention,
   taskActions,
-  orgId,
 }: {
   value: string;
   onChange: (markdown: string) => void;
@@ -245,7 +102,6 @@ export function NoteEditor({
   slashCommands?: boolean;
   mention?: MentionConfig;
   taskActions?: NoteTaskActions;
-  orgId?: string;
 }) {
   const routeTasks = useNoteTaskActions();
   const effectiveTaskActions = taskActions ?? routeTasks.taskActions;
@@ -261,37 +117,7 @@ export function NoteEditor({
   );
 
   const [selectionCount, setSelectionCount] = useState(0);
-  const [hasTextSelection, setHasTextSelection] = useState(false);
   const editorRef = useRef<Editor | null>(null);
-
-  const transform = useMutation({
-    mutationFn: (variables: { text: string; action: string }) =>
-      api.post<{ result: string; ai_run_id: string }>(orgPath(orgId ?? "", "/ai/transform"), {
-        text: variables.text,
-        action: variables.action,
-      }),
-    onError: (error) => toast.error(errorMessage(error)),
-  });
-
-  const transformSelection = useCallback(
-    (action: string) => {
-      const instance = editorRef.current;
-      if (!instance || !orgId) return;
-      const { from, to } = instance.state.selection;
-      if (from === to) return;
-      const text = instance.state.doc.textBetween(from, to, "\n");
-      if (!text.trim()) return;
-      transform.mutate(
-        { text, action },
-        {
-          onSuccess: ({ result }) => {
-            instance.chain().focus().insertContentAt({ from, to }, result).run();
-          },
-        }
-      );
-    },
-    [orgId, transform]
-  );
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -316,11 +142,9 @@ export function NoteEditor({
     onSelectionUpdate: ({ editor: instance }) => {
       if (instance.state.selection.empty) {
         setSelectionCount(0);
-        setHasTextSelection(false);
         return;
       }
       setSelectionCount(selectionToTaskDrafts(instance).length);
-      setHasTextSelection(true);
     },
   });
 
@@ -347,85 +171,21 @@ export function NoteEditor({
 
   return (
     <div className="relative">
-      {orgId || selectionCount > 0 ? (
+      {selectionCount > 0 ? (
         <div className="sticky top-2 z-20 mb-2 flex justify-end gap-2">
-          {orgId ? <AiGenerateControl orgId={orgId} editorRef={editorRef} /> : null}
-          {hasTextSelection && orgId ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  loading={transform.isPending}
-                  onMouseDown={(event) => event.preventDefault()}
-                >
-                  <Sparkles className="size-3.5" />
-                  AI
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" onCloseAutoFocus={(event) => event.preventDefault()}>
-                {AI_ACTIONS.map((item) => (
-                  <DropdownMenuItem
-                    key={item.action}
-                    onSelect={() => transformSelection(item.action)}
-                  >
-                    {item.label}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ) : null}
-          {selectionCount > 0 ? (
-            <Button
-              size="sm"
-              variant="outline"
-              onMouseDown={(event) => event.preventDefault()}
-              onClick={convertSelection}
-            >
-              <ListChecks className="size-3.5" />
-              Create {selectionCount === 1 ? "task" : `${selectionCount} tasks`}
-            </Button>
-          ) : null}
+          <Button
+            size="sm"
+            variant="outline"
+            onMouseDown={(event) => event.preventDefault()}
+            onClick={convertSelection}
+          >
+            <ListChecks className="size-3.5" />
+            Create {selectionCount === 1 ? "task" : `${selectionCount} tasks`}
+          </Button>
         </div>
       ) : null}
       <EditorContent editor={editor} />
       {taskActions ? null : routeTasks.picker}
     </div>
   );
-}
-
-export function NoteRenderer({
-  source,
-  className,
-  mention,
-}: {
-  source: string;
-  className?: string;
-  mention?: MentionConfig;
-}) {
-  const extensions = useMemo(
-    () => buildExtensions("", { slash: false, mention }),
-    [mention]
-  );
-
-  const editor = useEditor({
-    immediatelyRender: false,
-    editable: false,
-    extensions,
-    content: source,
-    editorProps: {
-      attributes: { class: cn(PROSE_CLASS, className) },
-    },
-  });
-
-  useEffect(() => {
-    if (!editor || editor.isDestroyed) return;
-    editor.commands.setContent(source, { emitUpdate: false });
-  }, [editor, source]);
-
-  if (source.trim().length === 0) {
-    return <p className="text-small text-muted-foreground">Nothing here yet.</p>;
-  }
-
-  return <EditorContent editor={editor} />;
 }

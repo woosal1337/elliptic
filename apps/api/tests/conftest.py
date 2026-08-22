@@ -25,7 +25,11 @@ from elliptic.main import app as fastapi_app
 @pytest.fixture(scope="session", autouse=True)
 async def setup_db() -> AsyncIterator[None]:
     async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.drop_all)
+        # Reset the whole schema rather than metadata.drop_all: drop_all only
+        # sees tables that still have models, so a table left behind by a
+        # removed model would block the drops with its foreign keys forever.
+        await conn.execute(text("DROP SCHEMA public CASCADE"))
+        await conn.execute(text("CREATE SCHEMA public"))
         await conn.run_sync(Base.metadata.create_all)
     yield
     await engine.dispose()

@@ -8,7 +8,6 @@ from elliptic.modules.automation.models import AutomationRule
 from elliptic.modules.comments.models import Comment, CommentReaction, CommentVersion
 from elliptic.modules.domains.models import OrgDomain
 from elliptic.modules.drive.models import DriveFile
-from elliptic.modules.embeds.models import NoteEmbed
 from elliptic.modules.favorites.models import Favorite
 from elliptic.modules.idp_sync.models import GroupRoleMapping
 from elliptic.modules.instance.models import InstanceLicense, InstanceSettings
@@ -30,13 +29,7 @@ from elliptic.modules.mcp_auth.models import (
 from elliptic.modules.mcp_connectors.models import McpConnector
 from elliptic.modules.mcp_server.models import McpIdempotencyKey
 from elliptic.modules.meetings.models import Meeting, MeetingShare, TranscriptSegment
-from elliptic.modules.notes.models import (
-    Note,
-    NoteShare,
-    NoteTemplate,
-    NoteVersion,
-    PublicPageComment,
-)
+from elliptic.modules.notes.models import Note
 from elliptic.modules.notifications.models import (
     DeviceToken,
     Notification,
@@ -121,10 +114,6 @@ __all__ = [
     "MeetingShare",
     "NotDuplicatePair",
     "Note",
-    "NoteEmbed",
-    "NoteShare",
-    "NoteTemplate",
-    "NoteVersion",
     "Notification",
     "NotificationPreference",
     "OAuthAccessToken",
@@ -145,7 +134,6 @@ __all__ = [
     "ProjectTemplate",
     "ProjectWebhook",
     "PropertyTemplate",
-    "PublicPageComment",
     "RbacAuditEvent",
     "RecurringTaskRule",
     "RelationTypeDef",

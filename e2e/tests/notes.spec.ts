@@ -62,8 +62,10 @@ test("a note row opens the note", async ({ page }) => {
 });
 
 test("the New folder button files a folder in place", async ({ page }) => {
-  page.on("dialog", (dialog) => void dialog.accept("Ideas"));
   await page.getByRole("button", { name: "New folder" }).click();
+  const dialog = page.getByRole("dialog");
+  await dialog.getByLabel("Folder name").fill("Ideas");
+  await dialog.getByRole("button", { name: "Create" }).click();
   await expect(
     page.getByRole("navigation", { name: "Note folders" }).getByRole("button", { name: /^Ideas/ })
   ).toBeVisible();

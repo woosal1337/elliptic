@@ -2,63 +2,23 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { MoreHorizontal, Trash2 } from "lucide-react";
 import {
-  Archive,
-  ArchiveRestore,
-  Copy,
-  Eye,
-  Lock,
-  LockOpen,
-  Maximize2,
-  ListChecks,
-  MessageSquare,
-  MoreHorizontal,
-  Paperclip,
-  Minimize2,
-  Pencil,
-  StretchHorizontal,
-  Trash2,
-  Sparkles,
-} from "lucide-react";
-import {
-  Button,
-  Card,
-  CardContent,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
   IconButton,
   Input,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
   Skeleton,
   cn,
 } from "@elliptic/ui";
 import { formatRelative } from "@/lib/format";
-import {
-  useDeleteNote,
-  useDuplicateNote,
-  useNote,
-  useSetNoteLifecycle,
-  useUpdateNote,
-} from "@/hooks/use-note-queries";
+import { useDeleteNote, useNote, useUpdateNote } from "@/hooks/use-note-queries";
 import { ErrorState } from "@/components/error-state";
 import { Breadcrumbs } from "@/components/breadcrumbs";
-import { NoteEditor, NoteRenderer } from "@/components/notes/note-editor";
+import { NoteEditor } from "@/components/notes/note-editor";
 import { NoteOutline } from "@/components/notes/note-outline";
-import { NoteAttachments } from "@/components/notes/note-attachments";
-import { NoteComments } from "@/components/notes/note-comments";
-import { NoteWorkItems } from "@/components/notes/note-work-items";
-import { NoteHistoryButton } from "@/components/notes/note-history";
-import { NoteExportMenu } from "@/components/notes/note-export-menu";
-import { SaveNoteTemplateButton } from "@/components/notes/save-note-template";
-import { NoteShareButton } from "@/components/notes/note-share";
-import { NotePublishButton } from "@/components/notes/note-publish-button";
 
 export default function NoteEditorPage() {
   const { orgId, noteId } = useParams<{ orgId: string; noteId: string }>();
@@ -67,19 +27,10 @@ export default function NoteEditorPage() {
   const updateNote = useUpdateNote(orgId);
   const saveNote = updateNote.mutate;
   const deleteNote = useDeleteNote(orgId);
-  const duplicateNote = useDuplicateNote(orgId);
 
-  const setLifecycle = useSetNoteLifecycle(orgId, noteId);
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
-  const [preview, setPreview] = useState(false);
   const [hydrated, setHydrated] = useState(false);
-  const [fullWidth, setFullWidth] = useState(false);
-  const [focusMode, setFocusMode] = useState(false);
-  const [showComments, setShowComments] = useState(false);
-  const [showWorkItems, setShowWorkItems] = useState(false);
-  const [showAi, setShowAi] = useState(false);
-  const [showAttachments, setShowAttachments] = useState(false);
 
   const savedRef = useRef({ title: "", content: "" });
   const latestRef = useRef({ title: "", content: "" });
@@ -152,103 +103,27 @@ export default function NoteEditorPage() {
   }
 
   const saving = updateNote.isPending || dirty;
-  const sidecarOpen = showAttachments || showAi || showWorkItems || showComments;
 
   return (
-    <div
-      className={cn(
-        "mx-auto flex w-full justify-center gap-8 px-6 py-8 transition-[max-width]",
-        focusMode ? "max-w-3xl" : "max-w-6xl"
-      )}
-    >
-      <div
-        className={cn(
-          "flex min-w-0 flex-col gap-4",
-          fullWidth ? "flex-1" : "w-full max-w-3xl"
-        )}
-      >
-      {focusMode ? (
-        <div className="flex justify-end">
-          <Button size="sm" variant="outline" onClick={() => setFocusMode(false)}>
-            <Minimize2 className="size-4" />
-            Exit focus
-          </Button>
-        </div>
-      ) : null}
-      {!focusMode ? (
+    <div className="mx-auto flex w-full max-w-6xl justify-center gap-8 px-6 py-8">
+      <div className="flex w-full max-w-3xl min-w-0 flex-col gap-4">
         <Breadcrumbs
           items={[
             { label: "Pages", href: `/app/${orgId}/notes` },
             { label: note.data.title || "Untitled" },
           ]}
         />
-      ) : null}
-      {!focusMode ? (
-      <div className="flex items-center justify-between gap-3">
-        <p className="flex items-center gap-1.5 text-caption text-muted-foreground">
-          <span
-            aria-hidden="true"
-            className={cn(
-              "size-1.5 rounded-full",
-              saving ? "bg-warning" : "bg-success"
-            )}
-          />
-          {saving ? "Saving…" : `Saved ${formatRelative(note.data.updated_at)}`}
-        </p>
-        <div className="flex items-center gap-2">
-          <Select
-            value={note.data.visibility}
-            onValueChange={(value) =>
-              setLifecycle.mutate({ visibility: value as "public" | "private" | "shared" })
-            }
-          >
-            <SelectTrigger className="h-8 w-28" aria-label="Page visibility">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="public">Public</SelectItem>
-              <SelectItem value="private">Private</SelectItem>
-              <SelectItem value="shared">Shared</SelectItem>
-            </SelectContent>
-          </Select>
-          {note.data.visibility !== "public" ? (
-            <NoteShareButton orgId={orgId} noteId={noteId} />
-          ) : null}
-          <NotePublishButton orgId={orgId} noteId={noteId} />
-          <IconButton
-            aria-label={preview ? "Edit" : "Preview"}
-            variant="outline"
-            onClick={() => setPreview((value) => !value)}
-          >
-            {preview ? <Pencil /> : <Eye />}
-          </IconButton>
-          <IconButton
-            aria-label="Comments"
-            variant={showComments ? "primary" : "outline"}
-            onClick={() => {
-              setShowComments((value) => !value);
-              setShowWorkItems(false);
-              setShowAttachments(false);
-            }}
-          >
-            <MessageSquare />
-          </IconButton>
-          <IconButton
-            aria-label="Page assistant"
-            variant={showAi ? "primary" : "outline"}
-            onClick={() => {
-              setShowAi((value) => !value);
-              setShowComments(false);
-              setShowWorkItems(false);
-              setShowAttachments(false);
-            }}
-          >
-            <Sparkles />
-          </IconButton>
-          <NoteExportMenu orgId={orgId} noteId={noteId} />
-          <NoteHistoryButton orgId={orgId} noteId={noteId} />
-          <SaveNoteTemplateButton orgId={orgId} noteId={noteId} />
-
+        <div className="flex items-center justify-between gap-3">
+          <p className="flex items-center gap-1.5 text-caption text-muted-foreground">
+            <span
+              aria-hidden="true"
+              className={cn(
+                "size-1.5 rounded-full",
+                saving ? "bg-warning" : "bg-success"
+              )}
+            />
+            {saving ? "Saving…" : `Saved ${formatRelative(note.data.updated_at)}`}
+          </p>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <IconButton aria-label="More page actions" variant="outline">
@@ -256,56 +131,6 @@ export default function NoteEditorPage() {
               </IconButton>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-52">
-              <DropdownMenuItem
-                onSelect={() => {
-                  setShowWorkItems((value) => !value);
-                  setShowComments(false);
-                  setShowAttachments(false);
-                }}
-              >
-                <ListChecks /> Work items
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onSelect={() => {
-                  setShowAttachments((value) => !value);
-                  setShowComments(false);
-                  setShowWorkItems(false);
-                  setShowAi(false);
-                }}
-              >
-                <Paperclip /> Attachments &amp; embeds
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onSelect={() => setFullWidth((value) => !value)}>
-                <StretchHorizontal /> {fullWidth ? "Standard width" : "Full width"}
-              </DropdownMenuItem>
-              <DropdownMenuItem onSelect={() => setFocusMode(true)}>
-                <Maximize2 /> Focus mode
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onSelect={() => setLifecycle.mutate({ locked: !note.data.locked })}>
-                {note.data.locked ? <Lock /> : <LockOpen />}{" "}
-                {note.data.locked ? "Unlock page" : "Lock page"}
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onSelect={() => setLifecycle.mutate({ archived: !note.data.archived_at })}
-              >
-                {note.data.archived_at ? <ArchiveRestore /> : <Archive />}{" "}
-                {note.data.archived_at ? "Unarchive page" : "Archive page"}
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                disabled={duplicateNote.isPending}
-                onSelect={() =>
-                  duplicateNote.mutate(noteId, {
-                    onSuccess: (copy) => {
-                      router.push(`/app/${orgId}/notes/${copy.id}`);
-                    },
-                  })
-                }
-              >
-                <Copy /> Duplicate page
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
               <DropdownMenuItem
                 className="text-danger focus:bg-danger-muted focus:text-danger"
                 onSelect={() =>
@@ -321,64 +146,33 @@ export default function NoteEditorPage() {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-      </div>
-      ) : null}
-      <div className="flex items-center gap-1">
-        <Input
-          aria-label="Page icon"
-          defaultValue={note.data.icon ?? ""}
-          onBlur={(event) => {
-            const next = event.target.value.trim();
-            if (next !== (note.data?.icon ?? "")) {
-              updateNote.mutate({ noteId, icon: next || null });
-            }
-          }}
-          maxLength={8}
-          placeholder="📄"
-          className="h-auto w-12 border-transparent bg-transparent px-2 py-1.5 text-center text-h3 shadow-none hover:border-input"
-        />
-        <Input
-          aria-label="Note title"
-          value={title}
-          onChange={(event) => setTitle(event.target.value)}
-          className="h-auto flex-1 border-transparent bg-transparent px-2 py-1.5 text-h3 font-semibold tracking-[-0.015em] shadow-none hover:border-input"
-          placeholder="Untitled"
-        />
-      </div>
-      <div className="flex gap-6">
-        <div className="min-w-0 flex-1">
-          {preview ? (
-            <Card>
-              <CardContent className="p-6">
-                <NoteRenderer source={body} />
-              </CardContent>
-            </Card>
-          ) : (
-            <NoteEditor value={body} onChange={setBody} orgId={orgId} />
-          )}
+        <div className="flex items-center gap-1">
+          <Input
+            aria-label="Page icon"
+            defaultValue={note.data.icon ?? ""}
+            onBlur={(event) => {
+              const next = event.target.value.trim();
+              if (next !== (note.data?.icon ?? "")) {
+                updateNote.mutate({ noteId, icon: next || null });
+              }
+            }}
+            maxLength={8}
+            placeholder="📄"
+            className="h-auto w-12 border-transparent bg-transparent px-2 py-1.5 text-center text-h3 shadow-none hover:border-input"
+          />
+          <Input
+            aria-label="Note title"
+            value={title}
+            onChange={(event) => setTitle(event.target.value)}
+            className="h-auto flex-1 border-transparent bg-transparent px-2 py-1.5 text-h3 font-semibold tracking-[-0.015em] shadow-none hover:border-input"
+            placeholder="Untitled"
+          />
         </div>
-        {!focusMode && sidecarOpen ? (
-          <div className="sticky top-8 hidden h-fit lg:block">
-            {showAttachments ? (
-              <NoteAttachments orgId={orgId} noteId={noteId} />
-            ) : showWorkItems ? (
-              <NoteWorkItems
-                orgId={orgId}
-                noteId={noteId}
-                projectId={note.data?.project_id ?? null}
-              />
-            ) : (
-              <NoteComments orgId={orgId} noteId={noteId} />
-            )}
-          </div>
-        ) : null}
+        <NoteEditor value={body} onChange={setBody} />
       </div>
-      </div>
-      {!focusMode ? (
-        <aside className="sticky top-8 hidden h-fit w-56 shrink-0 xl:block">
-          <NoteOutline content={body} />
-        </aside>
-      ) : null}
+      <aside className="sticky top-8 hidden h-fit w-56 shrink-0 xl:block">
+        <NoteOutline content={body} />
+      </aside>
     </div>
   );
 }

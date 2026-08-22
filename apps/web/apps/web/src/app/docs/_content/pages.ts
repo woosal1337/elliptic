@@ -2470,7 +2470,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "info",
         "title": "Linking those tasks back to the page",
-        "text": "Tasks made this way are filed in the project you choose, but they are not automatically tied back to the page. To get a task that shows up in the page's work-items list, use **Create from selection** in the work-items sidecar (covered below), which records the originating page."
+        "text": "Tasks made this way are filed in the project you choose, but they are not automatically tied back to the page. An agent can record the link by passing source_note_id when it creates the task over the MCP."
       },
       {
         "type": "h2",
@@ -2517,94 +2517,15 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "info",
         "title": "Autosave to durable Markdown",
-        "text": "Edits are persisted back to durable Markdown automatically. There is no Save button. The same Markdown is what history, export, comments, and the MCP all read."
+        "text": "Edits are persisted back to durable Markdown automatically. There is no Save button. The same Markdown is what the MCP reads."
       },
       {
         "type": "h2",
-        "text": "History, visibility and locking"
-      },
-      {
-        "type": "h3",
-        "text": "Version history and restore"
+        "text": "Deleting"
       },
       {
         "type": "p",
-        "text": "Every time a page's title or body changes, Elliptic snapshots the previous state as a version, attributed to whoever made the edit. You can browse those versions newest-first and restore any one of them. A restore is itself non-destructive: the current state is snapshotted first, then the chosen version is applied, so restoring is always reversible and nothing is ever lost."
-      },
-      {
-        "type": "h3",
-        "text": "Visibility and sharing"
-      },
-      {
-        "type": "p",
-        "text": "Each page has one of three visibility tiers:"
-      },
-      {
-        "type": "table",
-        "headers": [
-          "Visibility",
-          "Who can see it"
-        ],
-        "rows": [
-          [
-            "Public",
-            "Every member of the organization"
-          ],
-          [
-            "Private",
-            "Only the creator, org admins, and members granted an explicit share"
-          ],
-          [
-            "Shared",
-            "The creator, org admins, and members granted an explicit share"
-          ]
-        ]
-      },
-      {
-        "type": "p",
-        "text": "On a private or shared page you grant access per member, at one of three levels: **view**, **comment**, or **edit**. View and comment grants let someone read, while edit is what lets a non-owner change the body. Changing a page's visibility, granting or revoking a share, locking, and archiving are all limited to the page's creator or an org admin."
-      },
-      {
-        "type": "callout",
-        "variant": "info",
-        "title": "\"Public\" means visible to the org",
-        "text": "\"Public\" here means visible to the whole organization, not to the open internet. Publishing a page to a public web link for people outside the org is a separate capability with its own published-page URL and visitor comments."
-      },
-      {
-        "type": "h3",
-        "text": "Locking"
-      },
-      {
-        "type": "p",
-        "text": "Locking a page freezes its content. While a page is locked, edits to the body are refused even for members who would otherwise have edit access, which is useful for a finalized policy or a runbook you do not want drifting. Unlock it to resume editing. Locking is a creator or admin action."
-      },
-      {
-        "type": "h3",
-        "text": "Archiving and deleting"
-      },
-      {
-        "type": "p",
-        "text": "Archiving a page tucks it out of the active list without deleting it. Archived pages are hidden by default and reappear when you flip the archived toggle, and you can unarchive at any time to bring a page back. Deleting a page, by contrast, removes it for good, and the deletion is recorded in the activity feed."
-      },
-      {
-        "type": "h2",
-        "text": "Reuse"
-      },
-      {
-        "type": "h3",
-        "text": "Templates"
-      },
-      {
-        "type": "p",
-        "text": "Page templates capture a starter title and body so you do not rebuild the same structure every time. There are two ways to make one: define a template directly, or save an existing page as a template. Either way, creating a new page from the template prefills the editor with its title and content, ready to fill in. Templates are scoped to the organization, and can optionally be scoped to a project. Each template name is unique within the org."
-      },
-      {
-        "type": "h3",
-        "text": "Duplication"
-      },
-      {
-        "type": "p",
-        "text": "Any page can be duplicated in one click. The copy keeps the original's project, parent, icon, and full content, and is titled \"… (copy)\" so the two are easy to tell apart. It is the quickest way to fork a working doc when a template would be overkill."
+        "text": "Deleting a page removes it for good, and the deletion is recorded in the activity feed. Every org member can see every page: the workspace is the boundary, so pages carry no per-page visibility tiers."
       },
       {
         "type": "h2",
@@ -2613,60 +2534,6 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "p",
         "text": "Pages and tasks are linked both ways. A task can record the page it was filed from, and a task can be linked to a page after the fact. Either way the relationship is tracked, so a page can show every task that originated from it or was linked to it."
-      },
-      {
-        "type": "h3",
-        "text": "The page work-items sidecar"
-      },
-      {
-        "type": "p",
-        "text": "A page exposes a work-items list: the tasks that record this page as their source plus any tasks explicitly linked to it. This is the sidecar that turns a planning page into something live, you see at a glance what is still open against the doc, and the tasks stay current as their status changes on the board. The sidecar's **Create from selection** button makes a task from the highlighted text and records this page as its source, so it appears in the list right away. That button needs the page to be in a project, since the task has to land somewhere."
-      },
-      {
-        "type": "h2",
-        "text": "AI on the page"
-      },
-      {
-        "type": "h3",
-        "text": "Inline text transforms"
-      },
-      {
-        "type": "p",
-        "text": "Select text in the editor and an AI action appears in the toolbar. Pick a transform and the selection is rewritten in place: **Rephrase**, **Fix grammar**, **Summarize**, or **Expand**. There is also a **Generate** control that writes new content from a short prompt (with presets like TL;DR, Action items, and FAQ) and inserts it into the page. Inline transforms run through the AI transform endpoint and, like everything else, on your own key."
-      },
-      {
-        "type": "h2",
-        "text": "Comments"
-      },
-      {
-        "type": "p",
-        "text": "Comments are threaded discussions attached to a task, a meeting, or a page. A thread can nest one level deep: a comment, and replies under it. Every comment is Markdown, so it can carry mentions and references just like a page body."
-      },
-      {
-        "type": "h3",
-        "text": "Internal vs. external visibility"
-      },
-      {
-        "type": "p",
-        "text": "Each comment is either **internal** or **external**. Internal is the default and is for the team. External comments are the ones guests are allowed to read. A guest member only ever sees external comments, which keeps an internal back-and-forth private even on an item a guest can otherwise open."
-      },
-      {
-        "type": "h3",
-        "text": "Anchors, edits, and resolution"
-      },
-      {
-        "type": "ul",
-        "items": [
-          "**Text anchors** let a comment point at a specific span of the item it is attached to, so feedback lands on the exact place it is about.",
-          "**Edit history** is kept: editing a comment snapshots the prior content and marks it as edited, and you can list a comment's prior versions.",
-          "**Resolve and reopen** mark a thread done or bring it back. Both are author or admin actions.",
-          "**Emoji reactions** can be toggled on any comment, aggregated per emoji with a count and whether you reacted.",
-          "**Attachments** can be added to a comment, so a screenshot or file rides along with the message."
-        ]
-      },
-      {
-        "type": "p",
-        "text": "Commenting notifies the right people. The owner of the commented item gets a \"new comment\" notification (a task's assignee, a meeting's or page's creator), and anyone you @-mention in the comment is notified too, and on a task is auto-subscribed."
       },
       {
         "type": "h2",
@@ -2693,7 +2560,7 @@ export const DOC_PAGES: DocPage[] = [
         "items": [
           "`list_notes` and `get_note` to read pages, with optional project and text-search filters.",
           "`create_note` to write a new Markdown page (org- or project-scoped), with an idempotency key so a retried call does not create a duplicate.",
-          "`update_note` to revise a page's title, body, or project. Each edit snapshots a version, exactly as it would from the editor.",
+          "`update_note` to revise a page's title, body, or project.",
           "`delete_note`, which previews by default and only deletes when called with confirm set to true."
         ]
       },
@@ -5506,7 +5373,7 @@ export const DOC_PAGES: DocPage[] = [
   {
     "title": "Public sharing",
     "slug": "public-sharing",
-    "description": "Publish boards, pages, saved views, and meetings to no-login links backed by revocable, unguessable tokens, with anonymous comments, page export, and a guest Ask scoped to shared content.",
+    "description": "Publish boards, saved views, and meetings to no-login links backed by revocable, unguessable tokens, with a guest Ask scoped to shared content.",
     "blocks": [
       {
         "type": "h2",
@@ -5522,11 +5389,11 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Public surfaces are **read-only or narrowly scoped** by design. A public board shows only the task attributes you choose. A public page renders your note as HTML and accepts anonymous comments, nothing more. A public view is a read-only list of tasks. A shared meeting shows the summary and, only if you opt in, the transcript. No public surface lets an anonymous visitor change anything inside your org."
+        "text": "Public surfaces are **read-only or narrowly scoped** by design. A public board shows only the task attributes you choose. A public view is a read-only list of tasks. A shared meeting shows the summary and, only if you opt in, the transcript. No public surface lets an anonymous visitor change anything inside your org."
       },
       {
         "type": "p",
-        "text": "And every public surface is **revocable**. Publishing is reversible at any moment: unpublish a board, page, or view and the token is cleared, so the old URL stops resolving and returns a not-found page. Revoke a meeting share and the link goes dead. There is no separate cleanup step, the link simply stops working the instant you pull it."
+        "text": "And every public surface is **revocable**. Publishing is reversible at any moment: unpublish a board or a view and the token is cleared, so the old URL stops resolving and returns a not-found page. Revoke a meeting share and the link goes dead. There is no separate cleanup step, the link simply stops working the instant you pull it."
       },
       {
         "type": "callout",
@@ -5604,69 +5471,6 @@ export const DOC_PAGES: DocPage[] = [
         "variant": "info",
         "title": "Attribute changes are filtered",
         "text": "Only the five recognized attributes (status, priority, assignee, due date, labels) are ever honored. Anything else you pass is dropped on the way in. There is no way to expose task descriptions, comments, assignee names, or any other field through a public board, the surface is intentionally limited to these five."
-      },
-      {
-        "type": "h2",
-        "text": "Public pages"
-      },
-      {
-        "type": "p",
-        "text": "A **public page** publishes a note as a rendered web page anyone can read. It is the way to turn a spec, a changelog, an announcement, or a policy into a clean public document without copying it anywhere. Publishing mints a token and a path of the form `/public/pages/<token>`, and the reader sees your note's title, its icon, and its body rendered as HTML."
-      },
-      {
-        "type": "p",
-        "text": "Rendering uses a small, safe subset of Markdown: headings, bold, italic, inline code, links, bullet lists, code fences, and paragraphs. Your note's content is run through that converter into the page, and the text is escaped first, so what you write in the note is what readers see, formatted and readable, with no raw HTML injection."
-      },
-      {
-        "type": "h3",
-        "text": "Anonymous comments and abuse reports"
-      },
-      {
-        "type": "p",
-        "text": "A public page accepts **anonymous comments**. Any reader can leave a name (optional, it defaults to \"Anonymous\") and a comment body, with no account and no login. New comments appear oldest-first under the page. This makes a public page a lightweight way to collect feedback on a draft or an announcement from people outside your org."
-      },
-      {
-        "type": "p",
-        "text": "Because comments are anonymous, every comment carries a **report control** (a flag icon that appears on hover). Anyone can report a comment they consider abusive. A reported comment is hidden from the public page right away, it no longer appears to readers, so the community can keep an open page clean without waiting on a moderator."
-      },
-      {
-        "type": "callout",
-        "variant": "warning",
-        "title": "Open the gate deliberately",
-        "text": "A published page is readable and commentable by anyone with the link. If you only want feedback from named teammates, keep the note private and use in-app sharing instead. Publish a page when you genuinely want it open to the world."
-      },
-      {
-        "type": "p",
-        "text": "Unpublishing a page clears its token, and the old link returns a \"Page not found\" page. There is one more rule worth knowing: an **archived page 404s** even while a token is set. If you archive a note that was published, its public link immediately stops resolving and returns not-found, so archiving doubles as a fast way to take a page offline. Un-archive it and, if the token is still set, it resolves again."
-      },
-      {
-        "type": "h3",
-        "text": "Exporting a page"
-      },
-      {
-        "type": "p",
-        "text": "Separate from publishing, you can export any note as a file to take it out of Elliptic. Export does not create a public link, it just downloads or opens the content. There are two formats, plus print-to-PDF:"
-      },
-      {
-        "type": "table",
-        "headers": [
-          "Format",
-          "What you get"
-        ],
-        "rows": [
-          [
-            "Markdown",
-            "A `.md` file whose first line is the note's title as a top-level heading, followed by its raw Markdown content. Ideal for moving a note into another tool or a repo."
-          ],
-          [
-            "HTML",
-            "A standalone, self-styled HTML document with the title, the rendered body, and clean built-in typography (a readable column width and styling for headings, code, and links). It opens in a browser, and because it is a complete document it also opens in a word processor."
-          ],
-          [
-            "PDF",
-            "There is no separate PDF export. Open the HTML export and use your browser's print-to-PDF. The HTML is styled to print cleanly, with a readable column width, so the printed result looks like a proper document."
-          ]
-        ]
       },
       {
         "type": "h2",
@@ -5765,12 +5569,6 @@ export const DOC_PAGES: DocPage[] = [
             "Read-only out"
           ],
           [
-            "Public page",
-            "`/public/pages/<token>`",
-            "A note rendered as HTML, with anonymous comments and abuse reports",
-            "Read + comment out"
-          ],
-          [
             "Public view",
             "`/public/views/<token>`",
             "A saved view's filtered task list (identifier, title, status, priority)",
@@ -5792,7 +5590,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Every row above mints a revocable, secrets-based token, and every one can be pulled back the instant you no longer want it open. Page export is the one exception that is not a link at all, it just hands you a file. When in doubt, publish narrowly, share the link only with the people who need it, and revoke the moment the work is done being public."
+        "text": "Every row above mints a revocable, secrets-based token, and every one can be pulled back the instant you no longer want it open. When in doubt, publish narrowly, share the link only with the people who need it, and revoke the moment the work is done being public."
       }
     ]
   },
@@ -6870,10 +6668,6 @@ export const DOC_PAGES: DocPage[] = [
             "Remove members"
           ],
           [
-            "`notes.publish`",
-            "Publish pages"
-          ],
-          [
             "`automations.manage`",
             "Manage automations"
           ],
@@ -6936,7 +6730,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "ul",
         "items": [
           "**Owners and admins always have every permission in the catalog.** Custom roles do not apply to them and cannot reduce them.",
-          "**A plain member starts from a base set:** `projects.create`, `tasks.create`, `tasks.assign`, and `notes.publish`. This is what every member can do without any custom role.",
+          "**A plain member starts from a base set:** `projects.create`, `tasks.create`, and `tasks.assign`. This is what every member can do without any custom role.",
           "**A member with a custom role gets the base set plus whatever the role grants.** The two are unioned, so a custom role can only ever add permissions to a member, never remove them."
         ]
       },

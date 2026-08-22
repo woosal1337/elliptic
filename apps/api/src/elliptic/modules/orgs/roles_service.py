@@ -17,7 +17,6 @@ PERMISSION_CATALOG: list[dict[str, str]] = [
     {"key": "tasks.assign", "label": "Assign work items"},
     {"key": "members.invite", "label": "Invite members"},
     {"key": "members.remove", "label": "Remove members"},
-    {"key": "notes.publish", "label": "Publish pages"},
     {"key": "automations.manage", "label": "Manage automations"},
     {"key": "billing.manage", "label": "Manage billing & plan"},
     {"key": "ai.manage", "label": "Manage AI providers"},
@@ -25,7 +24,7 @@ PERMISSION_CATALOG: list[dict[str, str]] = [
 ]
 _VALID = {p["key"] for p in PERMISSION_CATALOG}
 
-_MEMBER_BASE = {"projects.create", "tasks.create", "tasks.assign", "notes.publish"}
+_MEMBER_BASE = {"projects.create", "tasks.create", "tasks.assign"}
 
 
 def _clean(permissions: list[str]) -> list[str]:
