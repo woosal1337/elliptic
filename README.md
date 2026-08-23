@@ -16,8 +16,15 @@ alongside your team, over a built-in MCP server, on your own infrastructure.
 [![Containers](https://img.shields.io/badge/ghcr.io-elliptic-404040?logo=docker&logoColor=white)](https://github.com/woosal1337?tab=packages)
 [![Docs](https://img.shields.io/badge/docs.elliptic.sh-404040.svg)](https://docs.elliptic.sh)
 
-[Quick start](#quick-start) · [Docs](https://docs.elliptic.sh) · [Features](#features) · [Architecture](#architecture) · [Self-hosting](#self-hosting) · [Development](#development)
+[Screens](#what-it-looks-like) · [Agents](#agents-work-here-too) · [Mobile](#on-your-phone) · [Quick start](#quick-start) · [Features](#features) · [Docs](https://docs.elliptic.sh)
 
+</div>
+
+<div align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset=".github/assets/web-board.png" />
+    <img src=".github/assets/web-board-light.png" alt="The Elliptic board, with people and agents on the same cards" width="100%" />
+  </picture>
 </div>
 
 ---
@@ -33,6 +40,232 @@ that created it.
 A built-in **MCP server** exposes the whole workspace to your agents over OAuth, and the
 whole thing is **open source and self-hostable**, so your data stays on your
 infrastructure.
+
+## What it looks like
+
+Every screen below comes from a real, running Elliptic. The data is seeded, and
+the images follow your GitHub theme.
+
+<table>
+<tr>
+<td width="50%">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/web-tasks.png" />
+  <img src=".github/assets/web-tasks-light.png" alt="The task list, grouped by status" />
+</picture>
+<p align="center"><b>List</b> · group, filter, and save a view</p>
+</td>
+<td width="50%">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/web-task.png" />
+  <img src=".github/assets/web-task-light.png" alt="A work item, with sub-tasks, a checklist, and a comment thread" />
+</picture>
+<p align="center"><b>Work item</b> · sub-tasks, checklist, and one thread for people and agents</p>
+</td>
+</tr>
+<tr>
+<td width="50%">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/web-meeting.png" />
+  <img src=".github/assets/web-meeting-light.png" alt="A meeting transcript with a speaker on each line" />
+</picture>
+<p align="center"><b>Meetings</b> · speaker-attributed transcripts and chapters</p>
+</td>
+<td width="50%">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/web-insights.png" />
+  <img src=".github/assets/web-insights-light.png" alt="Project insights: counts, flow, a chart builder, and a pivot table" />
+</picture>
+<p align="center"><b>Insights</b> · flow, bottlenecks, a chart builder, and a pivot table</p>
+</td>
+</tr>
+<tr>
+<td width="50%">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/web-note.png" />
+  <img src=".github/assets/web-note-light.png" alt="A note in the workspace editor" />
+</picture>
+<p align="center"><b>Notes</b> · a wiki that links back to the work</p>
+</td>
+<td width="50%">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/web-drive.png" />
+  <img src=".github/assets/web-drive-light.png" alt="The org-wide Drive, with folders and documents" />
+</picture>
+<p align="center"><b>Drive</b> · documents an agent can read and cite</p>
+</td>
+</tr>
+</table>
+
+<details>
+<summary><b>More screens</b> — overview, my tasks, inbox, activity, search, projects, meetings, notes</summary>
+
+<table>
+<tr>
+<td width="33%">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/web-overview.png" />
+  <img src=".github/assets/web-overview-light.png" alt="Project overview" />
+</picture>
+<p align="center">Project overview</p>
+</td>
+<td width="33%">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/web-my-tasks.png" />
+  <img src=".github/assets/web-my-tasks-light.png" alt="Every task assigned to you" />
+</picture>
+<p align="center">My tasks</p>
+</td>
+<td width="33%">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/web-inbox.png" />
+  <img src=".github/assets/web-inbox-light.png" alt="The notification inbox" />
+</picture>
+<p align="center">Inbox</p>
+</td>
+</tr>
+<tr>
+<td width="33%">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/web-activity.png" />
+  <img src=".github/assets/web-activity-light.png" alt="The workspace activity feed" />
+</picture>
+<p align="center">Activity</p>
+</td>
+<td width="33%">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/web-search.png" />
+  <img src=".github/assets/web-search-light.png" alt="Search across the workspace" />
+</picture>
+<p align="center">Search</p>
+</td>
+<td width="33%">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/web-projects.png" />
+  <img src=".github/assets/web-projects-light.png" alt="Every project in the workspace" />
+</picture>
+<p align="center">Projects</p>
+</td>
+</tr>
+<tr>
+<td width="33%">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/web-meetings.png" />
+  <img src=".github/assets/web-meetings-light.png" alt="The meeting list" />
+</picture>
+<p align="center">Meetings</p>
+</td>
+<td width="33%">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/web-notes.png" />
+  <img src=".github/assets/web-notes-light.png" alt="The note tree" />
+</picture>
+<p align="center">Notes</p>
+</td>
+<td width="33%"></td>
+</tr>
+</table>
+
+</details>
+
+## Agents work here too
+
+An agent joins a workspace the way a person does. It signs in over OAuth, it takes
+a role, and every write it makes carries its name in the activity trail.
+
+The MCP server puts **121 tools** behind one endpoint, `{api-origin}/api/v1/mcp`.
+
+| Area | Tools | What an agent can do |
+|---|---:|---|
+| Tasks | 20 | Create, move, relate, label, and comment on work items |
+| Projects | 16 | Open projects, set states, read the board, export |
+| Meetings | 11 | Import a transcript, read chapters, share a recap |
+| Orgs & members | 11 | Read the roster, invite, set roles |
+| Drive | 10 | Upload, read, and cite documents |
+| Teams | 8 | Build teams and move people between them |
+| Comments | 7 | Reply, react, resolve |
+| Notifications | 6 | Read the inbox, snooze, archive |
+| Notes, automations | 10 | Write notes, run automations |
+| Views, workflow, vocabulary | 12 | Saved views, custom states, the glossary |
+| Search, activity, profile, integrations | 8 | Find anything, read history, connect a service |
+
+Connect Claude Code to a workspace:
+
+```bash
+claude mcp add --transport http elliptic https://api.elliptic.sh/api/v1/mcp
+```
+
+Elliptic also ships an [agent skill](skills/) that teaches the domain model, the
+org discipline, and the playbooks. Copy it into your agent and the tools stop
+being a list of endpoints:
+
+```bash
+mkdir -p ~/.claude/skills && cp -r skills/elliptic ~/.claude/skills/
+```
+
+## On your phone
+
+A companion app for iOS and Android, built with React Native and Expo. It reads
+the same workspace over the same API, and it follows your system theme.
+
+<table>
+<tr>
+<td width="25%"><picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/mobile-home.png" />
+  <img src=".github/assets/mobile-home-light.png" alt="Home, with your tasks and your projects" />
+</picture></td>
+<td width="25%"><picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/mobile-tasks.png" />
+  <img src=".github/assets/mobile-tasks-light.png" alt="Tasks, grouped by status" />
+</picture></td>
+<td width="25%"><picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/mobile-taskdetail.png" />
+  <img src=".github/assets/mobile-taskdetail-light.png" alt="A work item, with sub-tasks and a thread an agent writes to" />
+</picture></td>
+<td width="25%"><picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/mobile-search.png" />
+  <img src=".github/assets/mobile-search-light.png" alt="Search across tasks and notes" />
+</picture></td>
+</tr>
+<tr>
+<td align="center"><b>Home</b></td>
+<td align="center"><b>Tasks</b></td>
+<td align="center"><b>Work item</b></td>
+<td align="center"><b>Search</b></td>
+</tr>
+</table>
+
+<details>
+<summary><b>More screens</b> — sign in, notes, inbox, profile</summary>
+
+<table>
+<tr>
+<td width="25%"><picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/mobile-signin.png" />
+  <img src=".github/assets/mobile-signin-light.png" alt="Sign in" />
+</picture></td>
+<td width="25%"><picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/mobile-notes.png" />
+  <img src=".github/assets/mobile-notes-light.png" alt="Notes" />
+</picture></td>
+<td width="25%"><picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/mobile-inbox.png" />
+  <img src=".github/assets/mobile-inbox-light.png" alt="Inbox" />
+</picture></td>
+<td width="25%"><picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/mobile-profile.png" />
+  <img src=".github/assets/mobile-profile-light.png" alt="Profile and settings" />
+</picture></td>
+</tr>
+<tr>
+<td align="center">Sign in</td>
+<td align="center">Notes</td>
+<td align="center">Inbox</td>
+<td align="center">Profile</td>
+</tr>
+</table>
+
+</details>
 
 ## Features
 
@@ -101,13 +334,20 @@ Elliptic is a monorepo with two deployable services and one database.
   browser → │   web (3000) │  /api  │   api (8000) │  SQL   │  PostgreSQL  │
             │   Next.js    │ ─────► │   FastAPI    │ ─────► │              │
             └──────────────┘        └──────────────┘        └──────────────┘
+                                           ▲
+                                      MCP  │  OAuth
+                                           │
+                                        agents
 ```
 
 ```
 elliptic/
 ├── apps/
-│   ├── api/   FastAPI · SQLAlchemy · Alembic · Postgres   (the backend)
-│   └── web/   Next.js · Turborepo · Tailwind              (the web UI)
+│   ├── api/      FastAPI · SQLAlchemy · Alembic · Postgres   (the backend)
+│   ├── web/      Next.js · Turborepo · Tailwind              (the web UI)
+│   └── mobile/   React Native · Expo                         (iOS and Android)
+├── skills/               the agent skill for the MCP server
+├── e2e/                  Playwright browser tests
 ├── docker-compose.yml    one-command full stack
 └── .env.example
 ```
@@ -117,6 +357,7 @@ elliptic/
   only dependency is Postgres.
 - **Web** — Next.js (standalone output) talking to the API through a same-origin
   `/api` proxy. Deployable as a container or on any Next.js host.
+- **Mobile** — React Native and Expo, on the same public API.
 
 ## Self-hosting
 
@@ -133,13 +374,14 @@ Each app can be run and developed on its own:
 
 - **Backend** — [`apps/api`](apps/api) (uv, ruff, mypy, pytest; `uv run uvicorn elliptic.main:app`)
 - **Web** — [`apps/web`](apps/web) (Bun, Turborepo; `bun run dev`)
+- **Mobile** — [`apps/mobile`](apps/mobile) (Expo; `bun run ios`)
+
+`scripts/dev-stack.sh up` starts Postgres, the API, and the web app together, and
+`scripts/dev-stack.sh seed` fills a demo board. To rebuild the screenshots in this
+README, see [`scripts/screenshots/`](scripts/screenshots/).
 
 See each app's `README.md` and `CONVENTIONS.md` for the project rules. The web app
 talks to the API via the `BACKEND_ORIGIN` build argument.
-
-## Mobile
-
-A companion mobile app (React Native / Expo) lives in a separate repository.
 
 ## Contributing
 
