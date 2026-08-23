@@ -19,3 +19,7 @@ Thumbs.db
 # Python bytecode from scripts/
 __pycache__/
 *.pyc
+
+# Written by scripts/screenshots/seed_showcase.py. It holds the ids of a
+# throwaway local workspace, and they change on every run.
+scripts/screenshots/showcase.json

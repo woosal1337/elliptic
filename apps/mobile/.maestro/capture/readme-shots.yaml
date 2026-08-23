@@ -1,0 +1,113 @@
+# The mobile screenshots the repository README shows.
+#
+# It signs in to the showcase workspace that
+# `scripts/screenshots/seed_showcase.py` builds on the local stack, then tours
+# the screens the README puts side by side. Build the app against that stack
+# first, or it signs in to production:
+#
+#   EXPO_PUBLIC_API_URL=http://localhost:8000/api/v1 \
+#     npx expo run:ios --device <iPhone 17 Pro Max UDID>
+#
+# Build Debug, not Release. Only `config.dev.ts` reads EXPO_PUBLIC_API_URL, so
+# a Release build talks to production whatever that variable says.
+#
+# Run:
+#   MAESTRO_EMAIL=ada.reyes@northwind.dev MAESTRO_PASSWORD=showcase-2026 \
+#     scripts/maestro.sh ios .maestro/capture/readme-shots.yaml
+#
+# The flow expects a signed-out app, and it never launches with `clearState`.
+# Clearing state also erases `EXDevMenuShowFloatingActionButton`, and the
+# dev-menu button then floats over every screen and lands in each image.
+# `scripts/screenshots/run.sh` reinstalls the app and writes that preference
+# before each pass. To run the flow on its own, sign out in the app first.
+#
+# It writes no workspace data. `scripts/screenshots/run.sh` copies the
+# screenshots into .github/assets/.
+appId: sh.elliptic
+---
+- launchApp
+- waitForAnimationToEnd
+# A fresh install opens the dev client on its launcher. Tap the running Metro
+# entry to load the app itself.
+- runFlow:
+    when:
+      visible: "DEVELOPMENT SERVERS"
+    commands:
+      - tapOn: "http://.*:8081"
+      - extendedWaitUntil:
+          notVisible:
+            text: "DEVELOPMENT SERVERS"
+          timeout: 60000
+      - waitForAnimationToEnd
+# The Expo dev client shows an onboarding sheet on a first launch.
+- runFlow:
+    when:
+      visible: "Continue"
+    commands:
+      - tapOn: "Continue"
+- runFlow:
+    when:
+      visible: "Toggle performance monitor"
+    commands:
+      - tapOn:
+          point: "90%, 45%"
+
+- assertVisible: "Sign in to your workspace"
+- takeScreenshot: readme-00-signin
+
+# Each field is one accessibility element carrying a combined label, so the
+# bare placeholder never matches on its own.
+- tapOn: "Email, .*"
+- eraseText
+- inputText: ${MAESTRO_EMAIL}
+- tapOn: "Password, .*"
+- eraseText
+- inputText: ${MAESTRO_PASSWORD}
+- tapOn: "Sign in"
+# iOS offers to save the typed password. The alert covers the tab bar, so it
+# must go before any assertion on the screen behind it.
+- waitForAnimationToEnd:
+    timeout: 10000
+- runFlow:
+    when:
+      visible: "Not Now"
+    commands:
+      - tapOn: "Not Now"
+- extendedWaitUntil:
+    visible:
+      text: "Home"
+    timeout: 30000
+- waitForAnimationToEnd
+- takeScreenshot: readme-01-home
+
+- tapOn: "Tasks"
+- waitForAnimationToEnd
+- takeScreenshot: readme-02-tasks
+
+- tapOn: "Notes"
+- waitForAnimationToEnd
+- takeScreenshot: readme-03-notes
+
+- tapOn: "Inbox"
+- waitForAnimationToEnd
+- takeScreenshot: readme-04-inbox
+
+- tapOn: "Profile"
+- waitForAnimationToEnd
+- takeScreenshot: readme-05-profile
+
+# Search across the workspace, then the work item it finds. That item is the
+# screen where an agent and a person hold one thread.
+- tapOn: "Home"
+- waitForAnimationToEnd
+- tapOn: "Search tasks, notes, projects"
+- waitForAnimationToEnd
+- inputText: "agent"
+- waitForAnimationToEnd
+- takeScreenshot: readme-06-search
+
+# The row is one accessibility element holding the title and the summary, so
+# the selector must not stop at the title.
+- tapOn: "Agents lose the org scope on a token refresh.*"
+- waitForAnimationToEnd
+- takeScreenshot: readme-07-taskdetail
