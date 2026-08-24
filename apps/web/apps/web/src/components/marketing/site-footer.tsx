@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { cn, Container, Logo } from "@elliptic/ui";
+import { linkProps } from "@/lib/analytics";
 
 interface FooterLink {
   label: string;
@@ -82,15 +83,25 @@ function FooterLinkItem({
   className: string;
   children: ReactNode;
 }) {
+  // One place for every footer link, so the docs links, the outbound ones and
+  // the internal ones all name themselves the same way.
+  const tracking = linkProps(href, "footer");
+
   if (isExternal(href)) {
     return (
-      <a href={href} target="_blank" rel="noopener noreferrer" className={className}>
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={className}
+        {...tracking}
+      >
         {children}
       </a>
     );
   }
   return (
-    <Link href={href} className={className}>
+    <Link href={href} className={className} {...tracking}>
       {children}
     </Link>
   );

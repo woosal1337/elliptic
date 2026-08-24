@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { linkProps } from "@/lib/analytics";
 import { Button, Container, Section } from "@elliptic/ui";
 import { ArrowRight } from "lucide-react";
 
@@ -16,13 +17,15 @@ export function FinalCTA() {
           </h2>
           <div className="mt-12 flex flex-col items-center gap-3 sm:flex-row">
             <Button asChild variant="primary" size="xl">
-              <Link href="/signup">
+              <Link href="/signup" {...linkProps("/signup", "final-cta")}>
                 Start free
                 <ArrowRight />
               </Link>
             </Button>
             <Button asChild variant="outline" size="xl">
-              <Link href="/contact">Talk to us</Link>
+              <Link href="/contact" {...linkProps("/contact", "final-cta")}>
+                Talk to us
+              </Link>
             </Button>
           </div>
         </div>

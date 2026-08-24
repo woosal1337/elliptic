@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { linkProps } from "@/lib/analytics";
 import {
   BrowserFrame,
   Button,
@@ -33,13 +34,15 @@ export function Hero() {
           </p>
           <div className="mt-9 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
             <Button asChild variant="primary" size="xl">
-              <Link href="/signup">
+              <Link href="/signup" {...linkProps("/signup", "hero")}>
                 Start free
                 <ArrowRight />
               </Link>
             </Button>
             <Button asChild variant="ghost" size="xl">
-              <Link href="#how-it-works">See how it works</Link>
+              <Link href="#how-it-works" {...linkProps("#how-it-works", "hero")}>
+                See how it works
+              </Link>
             </Button>
           </div>
         </div>
