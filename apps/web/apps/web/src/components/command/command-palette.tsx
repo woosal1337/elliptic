@@ -37,7 +37,7 @@ import { useGlobalSearch, type SearchResult } from "@/hooks/use-search-queries";
 import { meetingKeys } from "@/hooks/use-meeting-queries";
 import { noteKeys } from "@/hooks/use-note-queries";
 import { taskKeys } from "@/hooks/use-task-queries";
-import type { Meeting, Note, Project, Task } from "@/lib/types";
+import { collectPaletteEntities, type PaletteEntityKind } from "@/lib/palette-entities";
 
 type CommandKind = "scoped" | "navigation" | "open" | "action" | "search";
 
@@ -68,85 +68,37 @@ const OPEN_ENTITIES = [
   { id: "open-profile", label: "Open my profile", segment: "settings", icon: UserCircle, keys: "o m" },
 ] as const;
 
+const ENTITY_ICONS: Record<PaletteEntityKind, LucideIcon> = {
+  project: FolderKanban,
+  meeting: Video,
+  note: FileText,
+  task: CheckSquare,
+};
+
 function collectCacheEntities(
   queryClient: ReturnType<typeof useQueryClient>,
   orgId: string,
   go: (path: string) => void
 ): PaletteCommand[] {
-  const results: PaletteCommand[] = [];
-  const seen = new Set<string>();
+  const dataOf = (queryKey: readonly unknown[]): unknown[] =>
+    queryClient.getQueriesData({ queryKey }).map(([, data]) => data);
 
-  const push = (command: PaletteCommand) => {
-    if (seen.has(command.id)) return;
-    seen.add(command.id);
-    results.push(command);
-  };
+  const entities = collectPaletteEntities({
+    projects: dataOf(projectKeys.lists(orgId)),
+    meetings: dataOf(meetingKeys.all(orgId)),
+    notes: dataOf(noteKeys.all(orgId)),
+    tasks: dataOf(taskKeys.all(orgId)),
+  });
 
-  for (const [, data] of queryClient.getQueriesData<Project[]>({
-    queryKey: projectKeys.lists(orgId),
-  })) {
-    for (const project of data ?? []) {
-      push({
-        id: `search-project-${project.id}`,
-        label: project.name,
-        keywords: [project.key, "project"],
-        icon: FolderKanban,
-        kind: "search",
-        hint: project.key,
-        perform: () => go(`/projects/${project.id}`),
-      });
-    }
-  }
-
-  for (const [, data] of queryClient.getQueriesData<Meeting[]>({
-    queryKey: meetingKeys.all(orgId),
-  })) {
-    for (const meeting of data ?? []) {
-      push({
-        id: `search-meeting-${meeting.id}`,
-        label: meeting.title,
-        keywords: ["meeting"],
-        icon: Video,
-        kind: "search",
-        hint: "Meeting",
-        perform: () => go(`/meetings/${meeting.id}`),
-      });
-    }
-  }
-
-  for (const [, data] of queryClient.getQueriesData<Note[]>({
-    queryKey: noteKeys.all(orgId),
-  })) {
-    for (const note of data ?? []) {
-      push({
-        id: `search-note-${note.id}`,
-        label: note.title,
-        keywords: ["note"],
-        icon: FileText,
-        kind: "search",
-        hint: "Note",
-        perform: () => go(`/notes/${note.id}`),
-      });
-    }
-  }
-
-  for (const [, data] of queryClient.getQueriesData<Task[]>({
-    queryKey: taskKeys.all(orgId),
-  })) {
-    for (const task of data ?? []) {
-      push({
-        id: `search-task-${task.id}`,
-        label: task.title,
-        keywords: [task.identifier, "task"],
-        icon: CheckSquare,
-        kind: "search",
-        hint: task.identifier,
-        perform: () => go(`/projects/${task.project_id}?task=${task.id}`),
-      });
-    }
-  }
-
-  return results;
+  return entities.map((entity) => ({
+    id: `search-${entity.kind}-${entity.id}`,
+    label: entity.label,
+    keywords: entity.keywords,
+    icon: ENTITY_ICONS[entity.kind],
+    kind: "search",
+    hint: entity.hint ?? undefined,
+    perform: () => go(entity.route),
+  }));
 }
 
 export function CommandPalette({
