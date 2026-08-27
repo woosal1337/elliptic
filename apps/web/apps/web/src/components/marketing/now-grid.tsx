@@ -89,7 +89,7 @@ function NowCard({ entry }: { entry: NowEntry }) {
   return (
     <article
       className={cn(
-        "group flex flex-col gap-5 rounded-xl border border-transparent p-2 transition-all duration-300",
+        "group flex flex-col gap-5 rounded-xl border border-transparent p-2 transition-[translate,border-color] duration-300 ease-out",
         "hover:-translate-y-1 hover:border-border-strong"
       )}
     >

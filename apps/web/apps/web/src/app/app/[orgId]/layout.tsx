@@ -78,7 +78,9 @@ export default function OrgLayout({ children }: { children: React.ReactNode }) {
           <div className="flex min-w-0 flex-1 flex-col lg:py-2 lg:pr-2">
             <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-container lg:rounded-md lg:border lg:border-border">
               <Topbar orgId={params.orgId} onMenuClick={() => setNavOpen(true)} />
-              <main className="flex-1 overflow-y-auto">{children}</main>
+              <main key={pathname} className="flex-1 animate-fade-in overflow-y-auto">
+                {children}
+              </main>
             </div>
           </div>
         </div>

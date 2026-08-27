@@ -23,14 +23,17 @@ export interface CommandDialogProps
   label?: string;
 }
 
+// The palette opens on Cmd+K, hundreds of times a day. An animation there does
+// not read as polish, it reads as lag, so this surface stays instant while every
+// other overlay in the app animates.
 export function CommandDialog({ children, label = "Command palette", ...props }: CommandDialogProps) {
   return (
     <DialogPrimitive.Root {...props}>
       <DialogPrimitive.Portal>
-        <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-overlay backdrop-blur-[1px] data-[state=open]:animate-overlay-in data-[state=closed]:animate-overlay-out" />
+        <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-overlay backdrop-blur-[1px]" />
         <DialogPrimitive.Content
           aria-label={label}
-          className="fixed left-1/2 top-[18%] z-50 w-[calc(100%-2rem)] max-w-xl -translate-x-1/2 overflow-hidden rounded-xl border border-border bg-surface shadow-xl focus:outline-none data-[state=open]:animate-content-in data-[state=closed]:animate-content-out"
+          className="fixed left-1/2 top-[18%] z-50 w-[calc(100%-2rem)] max-w-xl -translate-x-1/2 overflow-hidden rounded-xl border border-border bg-surface shadow-xl focus:outline-none"
         >
           <DialogPrimitive.Title className="sr-only">{label}</DialogPrimitive.Title>
           <Command

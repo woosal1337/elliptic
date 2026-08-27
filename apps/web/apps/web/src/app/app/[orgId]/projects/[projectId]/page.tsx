@@ -288,7 +288,7 @@ function ProjectDetailContent() {
           ) : null}
         </div>
         <TabsContent value="overview">
-          <div className="flex flex-col gap-6">
+          <div className="stagger-in flex flex-col gap-6">
             <ProjectOverviewStats orgId={orgId} projectId={projectId} />
             <ThroughputChart orgId={orgId} projectId={projectId} />
             <ProjectBrief orgId={orgId} projectId={projectId} />

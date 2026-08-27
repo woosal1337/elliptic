@@ -23,7 +23,7 @@ export function Hero() {
         className="pointer-events-none absolute inset-x-0 top-0 h-[460px] bg-dot-grid mask-fade-b opacity-40"
       />
       <Container className="relative">
-        <div className="flex max-w-3xl flex-col items-start text-left">
+        <div className="stagger-hero flex max-w-3xl flex-col items-start text-left">
           <SectionNumber index="0.0" label="Agent-native" />
           <h1 className="mt-7 max-w-3xl text-pretty text-two-tone font-display text-hero">
             <b>Jira</b> for your agents.

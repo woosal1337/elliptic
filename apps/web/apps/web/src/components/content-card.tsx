@@ -45,7 +45,7 @@ export function ContentCard({
   className,
 }: ContentCardProps) {
   const shell = cn(
-    "group flex w-full items-start gap-3 rounded-lg border border-border bg-surface px-4 py-3 text-left shadow-xs transition-all duration-150 hover:border-input hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40",
+    "group flex w-full items-start gap-3 rounded-lg border border-border bg-surface px-4 py-3 text-left shadow-xs transition-[border-color,box-shadow] duration-150 ease-out hover:border-input hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40",
     className
   );
   const Shell = href

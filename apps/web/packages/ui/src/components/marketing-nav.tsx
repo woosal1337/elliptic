@@ -106,15 +106,30 @@ export const MarketingNav = React.forwardRef<HTMLElement, MarketingNavProps>(
               aria-label={open ? "Close menu" : "Open menu"}
               aria-expanded={open}
               onClick={() => setOpen((prev) => !prev)}
-              className="inline-flex size-8 items-center justify-center rounded-md text-muted-foreground transition-colors duration-150 hover:text-foreground lg:hidden [&_svg]:size-5"
+              className="relative inline-flex size-8 items-center justify-center rounded-md text-muted-foreground transition-colors duration-150 hover:text-foreground lg:hidden [&_svg]:size-5"
             >
-              {open ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
+              <span
+                className={cn(
+                  "absolute inset-0 flex items-center justify-center transition-[opacity,filter,scale] duration-300 ease-[cubic-bezier(0.2,0,0,1)]",
+                  open ? "scale-100 opacity-100 blur-0" : "scale-[0.25] opacity-0 blur-[4px]"
+                )}
+              >
+                <X aria-hidden="true" />
+              </span>
+              <span
+                className={cn(
+                  "flex items-center justify-center transition-[opacity,filter,scale] duration-300 ease-[cubic-bezier(0.2,0,0,1)]",
+                  open ? "scale-[0.25] opacity-0 blur-[4px]" : "scale-100 opacity-100 blur-0"
+                )}
+              >
+                <Menu aria-hidden="true" />
+              </span>
             </button>
           </div>
         </Container>
 
         {open ? (
-          <div className="border-t border-border bg-canvas lg:hidden">
+          <div className="animate-rise-in border-t border-border bg-canvas lg:hidden">
             <Container className="flex flex-col gap-1 py-4">
               {links.map((item) => (
                 <span key={item.href} className="py-1.5">

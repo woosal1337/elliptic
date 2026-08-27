@@ -84,11 +84,25 @@
   --shadow-lg: 0 6px 14px -4px oklch(0 0 0 / 0.5), 0 16px 32px -8px oklch(0 0 0 / 0.55);
   --shadow-xl: 0 12px 24px -8px oklch(0 0 0 / 0.55), 0 32px 64px -16px oklch(0 0 0 / 0.65);
 
-  --motion-quick: 0.1s;
-  --motion-regular: 0.25s;
-  --motion-slow: 0.35s;
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  /* Motion. One scale for the whole product, sized to what each surface is.
+     Press feedback 100-160ms, a popover 150-250ms, a modal 200-500ms, and
+     nothing else in the app over 300ms. A slower control does not read as
+     considered, it reads as late. */
+  --motion-press: 150ms;
+  --motion-quick: 150ms;
+  --motion-regular: 200ms;
+  --motion-slow: 250ms;
+  --motion-drawer: 350ms;
+  /* The browser's own ease-out is too weak to read as a response. These three
+     replace it: an exit curve for anything entering or leaving, a movement
+     curve for anything travelling across the screen, and the iOS drawer curve
+     for a panel that slides in from an edge. */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  /* There is no ease-in token on purpose. An ease-in curve starts slow, which
+     holds back the first frame the reader is watching for. Even a surface that
+     leaves the screen uses the ease-out curve. */
 }
 
 .light {
@@ -455,8 +469,8 @@
       opacity: 0;
       transform: translateY(14px);
       transition:
-        opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-        transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        opacity 0.7s var(--ease-out),
+        transform 0.7s var(--ease-out);
       will-change: opacity, transform;
     }
     .reveal[data-revealed="true"] {
@@ -466,46 +480,113 @@
   }
 
   @media (prefers-reduced-motion: no-preference) {
+    /* A dialog and its backdrop read as one surface, so they share a duration.
+       200ms rather than the 250ms a modal can carry: a task dialog opens tens
+       of times a day here, and at that rate the reader times the animation. */
     .animate-overlay-in {
-      animation: cos-fade-in var(--motion-quick) var(--ease-out);
+      animation: cos-fade-in var(--motion-regular) var(--ease-out);
     }
     .animate-overlay-out {
-      animation: cos-fade-out var(--motion-quick) var(--ease-in);
+      animation: cos-fade-out var(--motion-quick) var(--ease-out);
     }
     .animate-content-in {
       transform-origin: center;
-      animation: cos-content-in var(--motion-quick) var(--ease-out);
+      animation: cos-content-in var(--motion-regular) var(--ease-out);
     }
     .animate-content-out {
       transform-origin: center;
-      animation: cos-content-out 130ms var(--ease-in);
+      animation: cos-content-out var(--motion-quick) var(--ease-out);
     }
     .animate-pop-in {
       transform-origin: var(--radix-popper-transform-origin, center);
-      animation: cos-pop-in var(--motion-quick) var(--ease-out);
+      animation: cos-pop-in var(--motion-regular) var(--ease-out);
     }
     .animate-pop-out {
       transform-origin: var(--radix-popper-transform-origin, center);
-      animation: cos-pop-out 130ms var(--ease-in);
+      animation: cos-pop-out var(--motion-quick) var(--ease-out);
     }
     .animate-slide-in-left {
-      animation: cos-slide-in-left var(--motion-quick) var(--ease-out);
+      animation: cos-slide-in-left var(--motion-drawer) var(--ease-drawer);
     }
     .animate-slide-out-left {
-      animation: cos-slide-out-left 130ms var(--ease-in);
+      animation: cos-slide-out-left var(--motion-slow) var(--ease-drawer);
+    }
+    /* The swap from a skeleton to the data it stood in for, and from one view
+       to the next. Opacity only, and short: this fires on every navigation, so
+       anything the eye can time reads as lag. */
+    .animate-fade-in {
+      animation: cos-fade-in var(--motion-quick) var(--ease-out);
+    }
+    /* A panel that takes the place of another one. The 4px rise says the panel
+       arrived, without moving far enough to make the reader wait for it. */
+    .animate-rise-in {
+      animation: cos-rise-in var(--motion-regular) var(--ease-out);
+    }
+    /* A group the reader meets once in a while, such as a dashboard. The delay
+       stops at the sixth child, because a longer ladder makes the last card
+       arrive after the reader looks at it. */
+    .stagger-in > * {
+      animation: cos-rise-in var(--motion-regular) var(--ease-out) backwards;
+    }
+    .stagger-in > *:nth-child(2) {
+      animation-delay: 40ms;
+    }
+    .stagger-in > *:nth-child(3) {
+      animation-delay: 80ms;
+    }
+    .stagger-in > *:nth-child(4) {
+      animation-delay: 120ms;
+    }
+    .stagger-in > *:nth-child(5) {
+      animation-delay: 160ms;
+    }
+    .stagger-in > *:nth-child(n + 6) {
+      animation-delay: 200ms;
+    }
+    /* A page the reader meets one time, so the hierarchy may arrive in order.
+       400ms is longer than the app's own budget: a marketing page explains,
+       where a control answers. The blur softens the first frame. */
+    .stagger-hero > * {
+      animation: cos-hero-in 400ms var(--ease-out) backwards;
+    }
+    .stagger-hero > *:nth-child(2) {
+      animation-delay: 100ms;
+    }
+    .stagger-hero > *:nth-child(3) {
+      animation-delay: 200ms;
+    }
+    .stagger-hero > *:nth-child(n + 4) {
+      animation-delay: 300ms;
+    }
+    /* A chart line draws itself one time, from the first day to the last one.
+       `--draw-length` carries the path length the component measured. */
+    .animate-draw-in {
+      stroke-dasharray: var(--draw-length, 1200);
+      animation: cos-draw-in 700ms var(--ease-out) backwards;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .animate-overlay-in,
-    .animate-overlay-out,
     .animate-content-in,
     .animate-content-out,
     .animate-pop-in,
     .animate-pop-out,
     .animate-slide-in-left,
-    .animate-slide-out-left {
+    .animate-slide-out-left,
+    .animate-rise-in,
+    .animate-draw-in,
+    .stagger-in > *,
+    .stagger-hero > * {
       animation: none;
+    }
+    /* An opacity change carries no movement, so it stays. It is the one cue
+       that tells a reader the screen answered. */
+    .animate-overlay-in,
+    .animate-fade-in {
+      animation: cos-fade-in var(--motion-quick) linear;
+    }
+    .animate-overlay-out {
+      animation: cos-fade-out var(--motion-quick) linear;
     }
   }
 }
@@ -529,7 +610,7 @@
 @keyframes cos-content-in {
   from {
     opacity: 0;
-    transform: translate(-50%, -50%) scale(0.97);
+    transform: translate(-50%, -50%) scale(0.96);
   }
   to {
     opacity: 1;
@@ -543,13 +624,13 @@
   }
   to {
     opacity: 0;
-    transform: translate(-50%, -50%) scale(0.97);
+    transform: translate(-50%, -50%) scale(0.96);
   }
 }
 @keyframes cos-pop-in {
   from {
     opacity: 0;
-    transform: scale(0.94);
+    transform: scale(0.96);
   }
   to {
     opacity: 1;
@@ -563,7 +644,37 @@
   }
   to {
     opacity: 0;
-    transform: scale(0.94);
+    transform: scale(0.96);
+  }
+}
+@keyframes cos-hero-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+}
+@keyframes cos-rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes cos-draw-in {
+  from {
+    stroke-dashoffset: var(--draw-length, 1200);
+  }
+  to {
+    stroke-dashoffset: 0;
   }
 }
 @keyframes cos-slide-in-left {

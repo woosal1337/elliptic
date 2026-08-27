@@ -55,7 +55,7 @@ export function GetStartedChecklist({ orgId }: { orgId: string }) {
       </div>
 
       <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
-        <div className="h-full rounded-full bg-accent transition-all" style={{ width: `${pct}%` }} />
+        <div className="h-full rounded-full bg-accent transition-[width] duration-500 ease-out" style={{ width: `${pct}%` }} />
       </div>
 
       <ul className="flex flex-col gap-1">

@@ -61,7 +61,7 @@ export default function HomePage() {
   const firstName = me.data?.full_name?.split(" ")[0] ?? "there";
 
   return (
-    <div className="mx-auto flex max-w-5xl flex-col gap-6 px-6 py-8">
+    <div className="stagger-in mx-auto flex max-w-5xl flex-col gap-6 px-6 py-8">
       <div className="flex flex-col gap-1">
         <h1 className="text-h3 font-semibold tracking-[-0.02em] text-foreground">
           {greeting()}, {firstName}

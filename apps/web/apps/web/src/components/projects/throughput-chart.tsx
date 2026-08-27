@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { Activity } from "lucide-react";
 import { EmptyState, Skeleton } from "@elliptic/ui";
 import type { ThroughputPoint } from "@/lib/types";
@@ -38,6 +38,19 @@ export function ThroughputChart({ orgId, projectId }: { orgId: string; projectId
     [points]
   );
 
+  const svgRef = useRef<SVGSVGElement>(null);
+
+  // The line draws itself from the first day to the last one, so each path
+  // needs its own length as the dash pattern. A constant would finish the
+  // reveal early on a short path and leave the rest of the animation empty.
+  useEffect(() => {
+    const svg = svgRef.current;
+    if (!svg) return;
+    for (const path of svg.querySelectorAll("path")) {
+      path.style.setProperty("--draw-length", `${path.getTotalLength()}`);
+    }
+  }, [points, max]);
+
   if (throughput.isPending) return <Skeleton className="h-48 w-full rounded-lg" />;
   if (throughput.isError) {
     return <ErrorState error={throughput.error} onRetry={() => void throughput.refetch()} />;
@@ -71,6 +84,7 @@ export function ThroughputChart({ orgId, projectId }: { orgId: string; projectId
         </div>
       </div>
       <svg
+        ref={svgRef}
         viewBox={`0 0 ${W} ${H}`}
         className="h-40 w-full"
         preserveAspectRatio="none"
@@ -80,14 +94,14 @@ export function ThroughputChart({ orgId, projectId }: { orgId: string; projectId
         <path
           d={line(points, (p) => p.created, max)}
           fill="none"
-          className="stroke-accent"
+          className="animate-draw-in stroke-accent"
           strokeWidth={2}
           vectorEffect="non-scaling-stroke"
         />
         <path
           d={line(points, (p) => p.resolved, max)}
           fill="none"
-          className="stroke-success"
+          className="animate-draw-in stroke-success"
           strokeWidth={2}
           vectorEffect="non-scaling-stroke"
         />

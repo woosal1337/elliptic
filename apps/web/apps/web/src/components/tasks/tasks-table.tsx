@@ -431,7 +431,7 @@ export function TasksTable({
           }
         />
       ) : (
-        <div className="-mx-4 max-h-[calc(100dvh-16rem)] overflow-auto text-small">
+        <div className="-mx-4 max-h-[calc(100dvh-16rem)] animate-fade-in overflow-auto text-small">
           {groups.map((group) => {
             const isCollapsed = collapsed.has(group.status);
             return (

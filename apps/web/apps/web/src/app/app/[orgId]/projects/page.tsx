@@ -57,7 +57,7 @@ function GalleryCard({ orgId, project, state }: { orgId: string; project: Projec
       href={`/app/${orgId}/projects/${project.id}`}
       className="group rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
     >
-      <Card className="flex h-full flex-col p-5 shadow-xs transition-all duration-150 group-hover:-translate-y-0.5 group-hover:border-input group-hover:shadow-md">
+      <Card className="flex h-full flex-col p-5 shadow-xs transition-[translate,border-color,box-shadow] duration-150 ease-out group-hover:-translate-y-0.5 group-hover:border-input group-hover:shadow-md">
         <div className="flex items-center justify-between gap-2">
           <Badge variant="outline" className="font-mono text-caption">
             {project.key}

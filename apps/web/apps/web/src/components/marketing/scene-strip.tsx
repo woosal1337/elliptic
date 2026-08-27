@@ -44,7 +44,7 @@ function SceneFrame({ scene, className }: { scene: Scene; className?: string }) 
         fill
         sizes="(min-width: 1024px) 22vw, 45vw"
         draggable={false}
-        className="select-none object-cover opacity-90 transition-[opacity,transform] duration-700 group-hover:scale-[1.03] group-hover:opacity-100"
+        className="select-none object-cover opacity-90 transition-[opacity,transform] duration-300 group-hover:scale-[1.03] group-hover:opacity-100"
       />
       <div
         aria-hidden="true"

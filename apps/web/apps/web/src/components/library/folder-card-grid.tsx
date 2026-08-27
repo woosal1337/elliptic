@@ -31,7 +31,7 @@ export function FolderCardGrid({
           <button
             type="button"
             onClick={() => onOpen(item.id)}
-            className="group flex w-full flex-col items-start gap-3 rounded-lg border border-border bg-surface p-4 text-left shadow-xs transition-all duration-150 hover:border-input hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
+            className="group flex w-full flex-col items-start gap-3 rounded-lg border border-border bg-surface p-4 text-left shadow-xs transition-[border-color,box-shadow] duration-150 ease-out hover:border-input hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
           >
             <span className="flex size-11 items-center justify-center rounded-lg bg-subtle text-muted-foreground transition-colors duration-150 group-hover:text-foreground">
               <Folder className="size-5" aria-hidden="true" />
