@@ -175,6 +175,29 @@ function readTable(lines: string[], start: number): TableBlock | null {
   return { header, aligns: delimiters.map(alignOf), rows, next: index };
 }
 
+function startsBlock(lines: string[], index: number): boolean {
+  const line = lines[index];
+  if (line === undefined) return true;
+  if (line.trim().length === 0) return true;
+  if (line.trimEnd().startsWith("```")) return true;
+  if (DIVIDER_LINE.test(line)) return true;
+  if (BULLET_LINE.test(line)) return true;
+  if (ORDERED_LINE.test(line)) return true;
+  if (QUOTE_LINE.test(line)) return true;
+  if (HEADING_LINE.test(line)) return true;
+  return readTable(lines, index) !== null;
+}
+
+function readContinuation(lines: string[], start: number): { text: string; next: number } {
+  const parts: string[] = [];
+  let index = start;
+  while (index < lines.length && !startsBlock(lines, index)) {
+    parts.push((lines[index] ?? "").trim());
+    index += 1;
+  }
+  return { text: parts.join(" "), next: index };
+}
+
 const ALIGN_CLASS: Record<CellAlign, string> = {
   left: "text-left",
   center: "text-center",
@@ -273,8 +296,9 @@ export function Markdown({ source, orgId }: { source: string; orgId?: string }) 
       while (index < lines.length) {
         const match = BULLET_LINE.exec(lines[index] ?? "");
         if (!match || match[1] === undefined) break;
-        items.push(match[1]);
-        index += 1;
+        const rest = readContinuation(lines, index + 1);
+        items.push(rest.text ? `${match[1]} ${rest.text}` : match[1]);
+        index = rest.next;
       }
       blocks.push(
         <ul
@@ -295,8 +319,9 @@ export function Markdown({ source, orgId }: { source: string; orgId?: string }) 
       while (index < lines.length) {
         const match = ORDERED_LINE.exec(lines[index] ?? "");
         if (!match || match[1] === undefined) break;
-        items.push(match[1]);
-        index += 1;
+        const rest = readContinuation(lines, index + 1);
+        items.push(rest.text ? `${match[1]} ${rest.text}` : match[1]);
+        index = rest.next;
       }
       blocks.push(
         <ol
@@ -317,8 +342,9 @@ export function Markdown({ source, orgId }: { source: string; orgId?: string }) 
       while (index < lines.length) {
         const match = QUOTE_LINE.exec(lines[index] ?? "");
         if (!match || match[1] === undefined) break;
-        quoted.push(match[1]);
-        index += 1;
+        const rest = readContinuation(lines, index + 1);
+        quoted.push(rest.text ? `${match[1]} ${rest.text}` : match[1]);
+        index = rest.next;
       }
       blocks.push(
         <blockquote
@@ -365,12 +391,13 @@ export function Markdown({ source, orgId }: { source: string; orgId?: string }) 
       continue;
     }
 
+    const paragraph = readContinuation(lines, index);
     blocks.push(
       <p key={`paragraph-${key}`} className="text-small leading-relaxed text-foreground">
-        {renderInline(line, orgId)}
+        {renderInline(paragraph.text, orgId)}
       </p>
     );
-    index += 1;
+    index = paragraph.next;
   }
 
   if (blocks.length === 0) {

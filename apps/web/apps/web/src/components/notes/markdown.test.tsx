@@ -124,3 +124,49 @@ describe("plainText", () => {
     );
   });
 });
+
+describe("a hard-wrapped source", () => {
+  it("joins the lines of one paragraph, so the browser wraps the text", () => {
+    const html = render(
+      ["A webhook call from techops would", "have been twenty lines.", "", "A second paragraph."].join(
+        "\n"
+      )
+    );
+
+    expect(html.match(/<p\b/g) ?? []).toHaveLength(2);
+    expect(html).toContain("techops would have been twenty lines.");
+  });
+
+  it("keeps a wrapped list item in one list, so the count runs 1, 2", () => {
+    const html = render(
+      [
+        "1. **An unknown channel fails.** A webhook that does not exist",
+        "   will not start existing.",
+        "2. **Slack is not Markdown.** Bold is one asterisk.",
+      ].join("\n")
+    );
+
+    expect(html.match(/<ol\b/g) ?? []).toHaveLength(1);
+    expect(html.match(/<li>/g) ?? []).toHaveLength(2);
+    expect(html).toContain("does not exist will not start existing.");
+  });
+
+  it("gives a bullet and a quote the same continuation", () => {
+    const bullets = render(["- one line", "  and its rest", "- two"].join("\n"));
+    expect(bullets.match(/<li>/g) ?? []).toHaveLength(2);
+    expect(bullets).toContain("one line and its rest");
+
+    const quote = render(["> a quote that", "> runs on"].join("\n"));
+    expect(quote).toContain("<blockquote");
+  });
+
+  it("still ends a paragraph at a heading, a table or a fence", () => {
+    const html = render(
+      ["Lead line.", "## Heading", "| a | b |", "| --- | --- |", "| 1 | 2 |"].join("\n")
+    );
+
+    expect(html).toContain("<h2");
+    expect(html).toContain("<table");
+    expect(html.match(/<p\b/g) ?? []).toHaveLength(1);
+  });
+});
