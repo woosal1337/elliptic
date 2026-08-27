@@ -36,6 +36,12 @@ import { ReactRenderer, ReactNodeViewRenderer, NodeViewWrapper } from "@tiptap/r
 import { Plugin, PluginKey } from "@tiptap/pm/state";
 import { Decoration, DecorationSet } from "@tiptap/pm/view";
 import { cn } from "@elliptic/ui";
+import type { AnyExtension } from "@tiptap/core";
+import StarterKit from "@tiptap/starter-kit";
+import Placeholder from "@tiptap/extension-placeholder";
+import { TaskItem, TaskList } from "@tiptap/extension-list";
+import { TableKit } from "@tiptap/extension-table";
+import { Markdown as MarkdownExtension } from "tiptap-markdown";
 
 export type TaskDraft = { title: string };
 
@@ -782,4 +788,49 @@ export function createMention(config: MentionConfig) {
       ];
     },
   });
+}
+
+export interface EditorExtensionOptions {
+  placeholder: string;
+  slash?: boolean;
+  mention?: MentionConfig;
+  taskActions?: NoteTaskActions;
+  taskList?: boolean;
+}
+
+export function buildEditorExtensions(options: EditorExtensionOptions): AnyExtension[] {
+  const extensions: AnyExtension[] = [
+    StarterKit.configure({
+      heading: { levels: [1, 2, 3, 4] },
+      link: {
+        openOnClick: false,
+        HTMLAttributes: { rel: "noreferrer", target: "_blank" },
+      },
+    }),
+    TableKit.configure({ table: { resizable: false } }),
+  ];
+
+  if (options.taskList !== false) {
+    extensions.push(TaskList, TaskItem.configure({ nested: true }));
+  }
+
+  extensions.push(
+    MarkdownExtension.configure({
+      html: false,
+      tightLists: true,
+      transformPastedText: true,
+      transformCopiedText: true,
+      linkify: true,
+    }),
+    Placeholder.configure({ placeholder: options.placeholder })
+  );
+
+  if (options.slash) {
+    extensions.push(SlashCommand.configure({ taskActions: options.taskActions }));
+  }
+  if (options.mention) {
+    extensions.push(createMention(options.mention));
+  }
+
+  return extensions;
 }

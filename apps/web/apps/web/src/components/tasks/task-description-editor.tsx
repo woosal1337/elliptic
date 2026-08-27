@@ -3,39 +3,13 @@
 import { useEffect, useMemo } from "react";
 import { EditorContent, useEditor } from "@tiptap/react";
 import type { Editor } from "@tiptap/react";
-import type { AnyExtension } from "@tiptap/core";
-import StarterKit from "@tiptap/starter-kit";
-import Placeholder from "@tiptap/extension-placeholder";
-import { Markdown } from "tiptap-markdown";
 import { cn } from "@elliptic/ui";
-import { SlashCommand, createMention, type MentionConfig } from "@/components/notes/editor-extensions";
+import { buildEditorExtensions, type MentionConfig } from "@/components/notes/editor-extensions";
 import { PROSE_CLASS } from "@/components/notes/note-editor";
 
 function readMarkdown(editor: Editor): string {
   const storage = (editor.storage as { markdown?: { getMarkdown(): string } }).markdown;
   return storage ? storage.getMarkdown() : "";
-}
-
-function buildExtensions(placeholder: string, mention: MentionConfig): AnyExtension[] {
-  return [
-    StarterKit.configure({
-      heading: { levels: [1, 2, 3, 4] },
-      link: {
-        openOnClick: false,
-        HTMLAttributes: { rel: "noreferrer", target: "_blank" },
-      },
-    }),
-    Markdown.configure({
-      html: false,
-      tightLists: true,
-      transformPastedText: true,
-      transformCopiedText: true,
-      linkify: true,
-    }),
-    Placeholder.configure({ placeholder }),
-    SlashCommand.configure({}),
-    createMention(mention),
-  ];
 }
 
 export function TaskDescriptionEditor({
@@ -44,14 +18,19 @@ export function TaskDescriptionEditor({
   mention,
   placeholder = "Add a description… “/” for blocks, “@” to link a task, page or document",
   className,
+  autoFocus = false,
 }: {
   value: string;
   onChange: (markdown: string) => void;
   mention: MentionConfig;
   placeholder?: string;
   className?: string;
+  autoFocus?: boolean;
 }) {
-  const extensions = useMemo(() => buildExtensions(placeholder, mention), [placeholder, mention]);
+  const extensions = useMemo(
+    () => buildEditorExtensions({ placeholder, slash: true, mention, taskList: false }),
+    [placeholder, mention]
+  );
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -68,6 +47,11 @@ export function TaskDescriptionEditor({
     },
     onUpdate: ({ editor: instance }) => onChange(readMarkdown(instance)),
   });
+
+  useEffect(() => {
+    if (!autoFocus || !editor || editor.isDestroyed) return;
+    editor.commands.focus("end");
+  }, [autoFocus, editor]);
 
   useEffect(() => {
     if (!editor || editor.isDestroyed) return;

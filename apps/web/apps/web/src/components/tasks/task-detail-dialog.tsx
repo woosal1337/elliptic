@@ -64,6 +64,7 @@ import {
   useUpdateTask,
 } from "@/hooks/use-task-queries";
 import { TaskDescriptionEditor } from "./task-description-editor";
+import { TaskDescriptionField } from "./task-description-field";
 import { TaskDescriptionHistory } from "./task-description-history";
 import type { MentionConfig, MentionItem } from "@/components/notes/editor-extensions";
 import { useOrgMembers } from "@/hooks/use-org-queries";
@@ -858,9 +859,10 @@ function TaskDetailBody({
             <span className="text-caption font-medium text-muted-foreground">Description</span>
             <TaskDescriptionHistory orgId={orgId} taskId={task.id} />
           </div>
-          <TaskDescriptionEditor
+          <TaskDescriptionField
             value={description}
             onChange={handleDescriptionChange}
+            orgId={orgId}
             mention={mentionConfig}
           />
         </div>

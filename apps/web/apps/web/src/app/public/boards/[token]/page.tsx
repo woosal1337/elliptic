@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Kanban } from "lucide-react";
 import { Badge, Skeleton } from "@elliptic/ui";
 import { api } from "@/lib/api";
+import { plainText } from "@/components/notes/markdown";
 
 interface PublicTask {
   identifier: string;
@@ -67,7 +68,7 @@ export default function PublicBoardPage({ params }: { params: Promise<{ token: s
           <div className="flex flex-col gap-1">
             <h1 className="text-h2 font-semibold text-foreground">{board.data.name}</h1>
             {board.data.description ? (
-              <p className="text-small text-muted-foreground">{board.data.description}</p>
+              <p className="text-small text-muted-foreground">{plainText(board.data.description)}</p>
             ) : null}
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

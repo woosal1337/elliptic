@@ -18,6 +18,7 @@ import {
   Skeleton,
 } from "@elliptic/ui";
 import { useProjects } from "@/hooks/use-project-queries";
+import { plainText } from "@/components/notes/markdown";
 import { useProjectStates, type ProjectState } from "@/hooks/use-project-state-queries";
 import { useNewParam } from "@/lib/use-new-param";
 import { PageHeader } from "@/components/page-header";
@@ -70,7 +71,7 @@ function GalleryCard({ orgId, project, state }: { orgId: string; project: Projec
           {project.name}
         </h3>
         <p className="mt-1 line-clamp-2 text-small text-muted-foreground">
-          {project.description ?? "No description"}
+          {project.description ? plainText(project.description) : "No description"}
         </p>
       </Card>
     </Link>

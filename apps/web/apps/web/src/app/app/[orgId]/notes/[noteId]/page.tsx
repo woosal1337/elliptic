@@ -17,7 +17,7 @@ import { formatRelative } from "@/lib/format";
 import { useDeleteNote, useNote, useUpdateNote } from "@/hooks/use-note-queries";
 import { ErrorState } from "@/components/error-state";
 import { Breadcrumbs } from "@/components/breadcrumbs";
-import { NoteEditor } from "@/components/notes/note-editor";
+import { MarkdownBody } from "@/components/notes/markdown-body";
 import { NoteOutline } from "@/components/notes/note-outline";
 
 export default function NoteEditorPage() {
@@ -168,7 +168,7 @@ export default function NoteEditorPage() {
             placeholder="Untitled"
           />
         </div>
-        <NoteEditor value={body} onChange={setBody} />
+        <MarkdownBody value={body} onChange={setBody} orgId={orgId} />
       </div>
       <aside className="sticky top-8 hidden h-fit w-56 shrink-0 xl:block">
         <NoteOutline content={body} />

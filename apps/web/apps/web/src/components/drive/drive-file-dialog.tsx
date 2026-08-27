@@ -14,6 +14,7 @@ import {
   toast,
 } from "@elliptic/ui";
 import { formatDateTime } from "@/lib/format";
+import { plainText } from "@/components/notes/markdown";
 import { ErrorState } from "@/components/error-state";
 import { humanSize, mentionMarkdown } from "@/components/drive/drive-browser";
 import {
@@ -287,7 +288,7 @@ export function DriveFileDialog({
               </DialogTitle>
               {/* The filename alone would repeat the title one line below it. */}
               {file.data.description ? (
-                <DialogDescription>{file.data.description}</DialogDescription>
+                <DialogDescription>{plainText(file.data.description)}</DialogDescription>
               ) : file.data.filename !== file.data.name ? (
                 <DialogDescription>{file.data.filename}</DialogDescription>
               ) : null}

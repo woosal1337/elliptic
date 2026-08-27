@@ -23,6 +23,11 @@ beforeAll(() => {
     "Event",
     "CustomEvent",
     "MutationObserver",
+    "ShadowRoot",
+    "requestAnimationFrame",
+    "cancelAnimationFrame",
+    "ResizeObserver",
+    "DOMRect",
     "getComputedStyle",
   ]) {
     if (g[key] === undefined) {
@@ -40,28 +45,13 @@ afterAll(async () => {
 
 async function buildEditor() {
   const { Editor } = await import("@tiptap/core");
-  const { default: StarterKit } = await import("@tiptap/starter-kit");
-  const { Markdown } = await import("tiptap-markdown");
-  const { createMention } = await import("./editor-extensions");
+  const { buildEditorExtensions } = await import("./editor-extensions");
 
   return new Editor({
-    extensions: [
-      StarterKit.configure({
-        heading: { levels: [1, 2, 3, 4] },
-        link: {
-          openOnClick: false,
-          HTMLAttributes: { rel: "noreferrer", target: "_blank" },
-        },
-      }),
-      Markdown.configure({
-        html: false,
-        tightLists: true,
-        transformPastedText: true,
-        transformCopiedText: true,
-        linkify: true,
-      }),
-      createMention({ resolve: () => [], onActivate: () => {} }),
-    ],
+    extensions: buildEditorExtensions({
+      placeholder: "",
+      mention: { resolve: () => [], onActivate: () => {} },
+    }),
   });
 }
 
@@ -220,5 +210,35 @@ describe("task list markdown round-trip", () => {
     b.destroy();
     expect(hasNodeType(json, "taskList")).toBe(true);
     expect(hasNodeType(json, "taskItem")).toBe(true);
+  });
+});
+
+describe("table markdown round-trip", () => {
+  const TABLE = ["| State | Count |", "| --- | --- |", "| allowed | 2 |", "| closed | 3 |"].join(
+    "\n"
+  );
+
+  it("keeps a table as a table, and does not join the cells", async () => {
+    const editor = await buildEditor();
+    editor.commands.setContent(TABLE);
+    const json = editor.getJSON() as { content?: { type?: string }[] };
+    const markdown = getMarkdown(editor);
+    editor.destroy();
+
+    expect(json.content?.[0]?.type).toBe("table");
+    expect(markdown).toContain("| State | Count |");
+    expect(markdown).toContain("| --- | --- |");
+    expect(markdown).toContain("| allowed | 2 |");
+    expect(markdown).not.toContain("allowed2");
+  });
+
+  it("keeps the inline marks inside a cell", async () => {
+    const editor = await buildEditor();
+    editor.commands.setContent(["| a | b |", "| --- | --- |", "| **bold** | `code` |"].join("\n"));
+    const markdown = getMarkdown(editor);
+    editor.destroy();
+
+    expect(markdown).toContain("**bold**");
+    expect(markdown).toContain("`code`");
   });
 });

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { plainText } from "@/components/notes/markdown";
 import { Check, Compass, Globe, Users } from "lucide-react";
 import { Badge, Button, Card, EmptyState, Skeleton } from "@elliptic/ui";
 import { useBrowseProjects, useJoinProject } from "@/hooks/use-project-queries";
@@ -54,7 +55,7 @@ export default function BrowseProjectsPage() {
                 {project.name}
               </h3>
               <p className="mt-1 line-clamp-2 flex-1 text-small text-muted-foreground">
-                {project.description ?? "No description"}
+                {project.description ? plainText(project.description) : "No description"}
               </p>
               <div className="mt-4 flex items-center justify-between gap-2">
                 <span className="flex items-center gap-1.5 text-caption text-muted-foreground">

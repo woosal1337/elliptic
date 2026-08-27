@@ -13,6 +13,7 @@ import {
 } from "@elliptic/ui";
 import type { ProjectHealth } from "@/lib/types";
 import { relativeTime } from "@/lib/format";
+import { Markdown } from "@/components/notes/markdown";
 import {
   usePostWorkItemUpdate,
   useWorkItemUpdates,
@@ -95,9 +96,7 @@ export function TaskUpdatesSection({ orgId, taskId }: { orgId: string; taskId: s
                     {when.relative}
                   </span>
                 </div>
-                <p className="whitespace-pre-wrap text-small leading-relaxed text-foreground">
-                  {update.summary}
-                </p>
+                <Markdown source={update.summary} orgId={orgId} />
               </li>
             );
           })}

@@ -17,7 +17,7 @@ import { useOrgMembers } from "@/hooks/use-org-queries";
 import { useNotes } from "@/hooks/use-note-queries";
 import { useTasks } from "@/hooks/use-task-queries";
 import { ErrorState } from "@/components/error-state";
-import { NoteEditor } from "@/components/notes/note-editor";
+import { MarkdownBody } from "@/components/notes/markdown-body";
 import type { MentionConfig, MentionItem } from "@/components/notes/editor-extensions";
 
 type Artifact = { label: string; url: string };
@@ -209,11 +209,13 @@ export function ProjectBrief({ orgId, projectId }: { orgId: string; projectId: s
   return (
     <div className="grid gap-6 lg:grid-cols-[1fr_18rem]">
       <div className="flex min-w-0 flex-col gap-3">
-        <NoteEditor
+        <MarkdownBody
           value={body}
           onChange={setBody}
+          orgId={orgId}
           mention={mention}
           placeholder="Capture the vision. Why it matters, what good looks like, where it stands. Type “/” for blocks, “@” to mention…"
+          emptyLabel="Click to write the brief…"
         />
       </div>
 

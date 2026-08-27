@@ -3,16 +3,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { EditorContent, useEditor } from "@tiptap/react";
 import type { Editor } from "@tiptap/react";
-import type { AnyExtension } from "@tiptap/core";
-import StarterKit from "@tiptap/starter-kit";
-import Placeholder from "@tiptap/extension-placeholder";
-import { TaskItem, TaskList } from "@tiptap/extension-list";
-import { Markdown } from "tiptap-markdown";
 import { ListChecks } from "lucide-react";
 import { Button, cn } from "@elliptic/ui";
 import {
-  SlashCommand,
-  createMention,
+  buildEditorExtensions,
   selectionToTaskDrafts,
   type MentionConfig,
   type NoteTaskActions,
@@ -37,6 +31,9 @@ export const PROSE_CLASS = cn(
   "[&_ul[data-type=taskList]_li>label]:mt-1 [&_ul[data-type=taskList]_li>label]:select-none",
   "[&_ul[data-type=taskList]_li>div]:min-w-0 [&_ul[data-type=taskList]_li>div]:flex-1",
   "[&_li>p]:my-0",
+  "[&_table]:my-3 [&_table]:w-full [&_table]:border-collapse",
+  "[&_th]:border [&_th]:border-border [&_th]:bg-subtle [&_th]:px-3 [&_th]:py-1.5 [&_th]:text-left [&_th]:font-semibold",
+  "[&_td]:border [&_td]:border-border [&_td]:px-3 [&_td]:py-1.5 [&_td]:align-top",
   "[&_blockquote]:my-3 [&_blockquote]:border-l-2 [&_blockquote]:border-border-strong [&_blockquote]:pl-4 [&_blockquote]:text-muted-foreground [&_blockquote]:italic",
   "[&_code]:rounded-xs [&_code]:bg-subtle [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-[0.85em]",
   "[&_pre]:my-3 [&_pre]:overflow-x-auto [&_pre]:rounded-md [&_pre]:bg-subtle [&_pre]:p-3 [&_pre]:font-mono [&_pre]:text-caption [&_pre]:leading-relaxed",
@@ -44,42 +41,6 @@ export const PROSE_CLASS = cn(
   "[&_hr]:my-6 [&_hr]:border-border",
   "[&_p.is-editor-empty:first-child]:before:pointer-events-none [&_p.is-editor-empty:first-child]:before:float-left [&_p.is-editor-empty:first-child]:before:h-0 [&_p.is-editor-empty:first-child]:before:text-muted-foreground/70 [&_p.is-editor-empty:first-child]:before:content-[attr(data-placeholder)]"
 );
-
-function buildExtensions(
-  placeholder: string,
-  options: {
-    slash?: boolean;
-    mention?: MentionConfig;
-    taskActions?: NoteTaskActions;
-  } = {}
-): AnyExtension[] {
-  const extensions: AnyExtension[] = [
-    StarterKit.configure({
-      heading: { levels: [1, 2, 3, 4] },
-      link: {
-        openOnClick: false,
-        HTMLAttributes: { rel: "noreferrer", target: "_blank" },
-      },
-    }),
-    TaskList,
-    TaskItem.configure({ nested: true }),
-    Markdown.configure({
-      html: false,
-      tightLists: true,
-      transformPastedText: true,
-      transformCopiedText: true,
-      linkify: true,
-    }),
-    Placeholder.configure({ placeholder }),
-  ];
-  if (options.slash) {
-    extensions.push(SlashCommand.configure({ taskActions: options.taskActions }));
-  }
-  if (options.mention) {
-    extensions.push(createMention(options.mention));
-  }
-  return extensions;
-}
 
 function readMarkdown(editor: Editor): string {
   const storage = (editor.storage as { markdown?: { getMarkdown(): string } }).markdown;
@@ -94,12 +55,14 @@ export function NoteEditor({
   slashCommands = true,
   mention,
   taskActions,
+  autoFocus = false,
 }: {
   value: string;
   onChange: (markdown: string) => void;
   placeholder?: string;
   className?: string;
   slashCommands?: boolean;
+  autoFocus?: boolean;
   mention?: MentionConfig;
   taskActions?: NoteTaskActions;
 }) {
@@ -108,7 +71,8 @@ export function NoteEditor({
 
   const extensions = useMemo(
     () =>
-      buildExtensions(placeholder, {
+      buildEditorExtensions({
+        placeholder,
         slash: slashCommands,
         mention,
         taskActions: effectiveTaskActions,
@@ -151,6 +115,11 @@ export function NoteEditor({
   useEffect(() => {
     editorRef.current = editor;
   }, [editor]);
+
+  useEffect(() => {
+    if (!autoFocus || !editor || editor.isDestroyed) return;
+    editor.commands.focus("end");
+  }, [autoFocus, editor]);
 
   const valueRef = useRef(value);
   valueRef.current = value;

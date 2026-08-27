@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { plainText } from "@/components/notes/markdown";
 import {
   ChevronRight,
   Eye,
@@ -345,7 +346,7 @@ export function DriveBrowser({
             <LibraryNameCell
               icon={fileIcon(file)}
               name={file.name}
-              detail={file.description ?? file.filename}
+              detail={file.description ? plainText(file.description) : file.filename}
               onOpen={() => onOpenDetails?.(file.id)}
             />
             <LibraryCell className="max-lg:hidden">
