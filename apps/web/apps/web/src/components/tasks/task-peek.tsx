@@ -114,7 +114,7 @@ export function TaskPeek({
 
             {task.data.description ? (
               <p className="line-clamp-3 border-t border-border px-4 py-3 text-small leading-relaxed text-muted-foreground">
-                {task.data.description}
+                {plainText(task.data.description)}
               </p>
             ) : null}
 

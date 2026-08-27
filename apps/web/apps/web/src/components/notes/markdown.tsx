@@ -3,6 +3,12 @@ import Link from "next/link";
 
 const INLINE_PATTERN = /(\*\*[^*]+\*\*|\*[^*]+\*|`[^`]+`|\[(?:\\.|[^\]\\])+\]\([^)]+\))/g;
 const LINK_PATTERN = /^\[((?:\\.|[^\]\\])+)\]\(([^)]+)\)$/;
+const DELIMITER_CELL = /^:?-+:?$/;
+const DIVIDER_LINE = /^\s*(?:-{3,}|\*{3,}|_{3,})\s*$/;
+const HEADING_LINE = /^(#{1,6})\s+(.*)$/;
+const BULLET_LINE = /^\s*[-*]\s+(.*)$/;
+const ORDERED_LINE = /^\s*\d{1,9}[.)]\s+(.*)$/;
+const QUOTE_LINE = /^\s*>\s?(.*)$/;
 
 import {
   MENTION_GLYPH,
@@ -10,6 +16,15 @@ import {
   parseMentionHref as parseMention,
   type MentionKind,
 } from "@/lib/mentions";
+
+type CellAlign = "left" | "center" | "right";
+
+interface TableBlock {
+  header: string[];
+  aligns: CellAlign[];
+  rows: string[][];
+  next: number;
+}
 
 function unescapeLabel(label: string): string {
   return label.replace(/\\([[\]])/g, "$1");
@@ -101,90 +116,262 @@ function renderInline(text: string, orgId?: string): ReactNode[] {
   });
 }
 
+function hasPipe(line: string): boolean {
+  return /(?:^|[^\\])\|/.test(line);
+}
+
+function splitRow(line: string): string[] {
+  const cells: string[] = [];
+  let current = "";
+  for (let index = 0; index < line.length; index += 1) {
+    const char = line[index];
+    if (char === "\\" && line[index + 1] === "|") {
+      current += "|";
+      index += 1;
+      continue;
+    }
+    if (char === "|") {
+      cells.push(current);
+      current = "";
+      continue;
+    }
+    current += char;
+  }
+  cells.push(current);
+  if (cells.length > 1 && cells[0]?.trim() === "") cells.shift();
+  if (cells.length > 1 && cells[cells.length - 1]?.trim() === "") cells.pop();
+  return cells.map((cell) => cell.trim());
+}
+
+function alignOf(cell: string): CellAlign {
+  const starts = cell.startsWith(":");
+  const ends = cell.endsWith(":");
+  if (starts && ends) return "center";
+  if (ends) return "right";
+  return "left";
+}
+
+function readTable(lines: string[], start: number): TableBlock | null {
+  const headerLine = lines[start];
+  const delimiterLine = lines[start + 1];
+  if (headerLine === undefined || delimiterLine === undefined) return null;
+  if (!hasPipe(headerLine) || !hasPipe(delimiterLine)) return null;
+
+  const header = splitRow(headerLine);
+  const delimiters = splitRow(delimiterLine);
+  if (header.length < 1 || header.length !== delimiters.length) return null;
+  if (!delimiters.every((cell) => DELIMITER_CELL.test(cell))) return null;
+
+  const rows: string[][] = [];
+  let index = start + 2;
+  while (index < lines.length) {
+    const line = lines[index];
+    if (line === undefined || line.trim().length === 0 || !hasPipe(line)) break;
+    const cells = splitRow(line);
+    rows.push(header.map((_, column) => cells[column] ?? ""));
+    index += 1;
+  }
+
+  return { header, aligns: delimiters.map(alignOf), rows, next: index };
+}
+
+const ALIGN_CLASS: Record<CellAlign, string> = {
+  left: "text-left",
+  center: "text-center",
+  right: "text-right",
+};
+
+function TableBlockView({
+  block,
+  orgId,
+}: {
+  block: TableBlock;
+  orgId?: string;
+}) {
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full border-collapse text-small leading-relaxed text-foreground">
+        <thead>
+          <tr>
+            {block.header.map((cell, column) => (
+              <th
+                key={column}
+                className={`border border-border bg-subtle px-3 py-1.5 font-semibold ${
+                  ALIGN_CLASS[block.aligns[column] ?? "left"]
+                }`}
+              >
+                {renderInline(cell, orgId)}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {block.rows.map((row, rowIndex) => (
+            <tr key={rowIndex}>
+              {row.map((cell, column) => (
+                <td
+                  key={column}
+                  className={`border border-border px-3 py-1.5 align-top ${
+                    ALIGN_CLASS[block.aligns[column] ?? "left"]
+                  }`}
+                >
+                  {renderInline(cell, orgId)}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
 export function Markdown({ source, orgId }: { source: string; orgId?: string }) {
   const lines = source.split("\n");
   const blocks: ReactNode[] = [];
-  let listItems: string[] = [];
-  let codeLines: string[] | null = null;
+  let index = 0;
 
-  const flushList = (key: number) => {
-    if (listItems.length === 0) return;
-    blocks.push(
-      <ul
-        key={`list-${key}`}
-        className="list-disc space-y-1 pl-5 text-small leading-relaxed text-foreground marker:text-muted-foreground"
-      >
-        {listItems.map((item, i) => (
-          <li key={i}>{renderInline(item, orgId)}</li>
-        ))}
-      </ul>
-    );
-    listItems = [];
-  };
+  while (index < lines.length) {
+    const line = lines[index] ?? "";
+    const key = blocks.length;
 
-  lines.forEach((line, index) => {
-    if (codeLines !== null) {
-      if (line.trimEnd() === "```") {
-        blocks.push(
-          <pre
-            key={`code-${index}`}
-            className="overflow-x-auto rounded-md bg-subtle p-3 font-mono text-caption leading-relaxed"
-          >
-            {codeLines.join("\n")}
-          </pre>
-        );
-        codeLines = null;
-      } else {
-        codeLines.push(line);
-      }
-      return;
-    }
     if (line.trimEnd().startsWith("```")) {
-      flushList(index);
-      codeLines = [];
-      return;
+      const code: string[] = [];
+      index += 1;
+      while (index < lines.length && (lines[index] ?? "").trimEnd() !== "```") {
+        code.push(lines[index] ?? "");
+        index += 1;
+      }
+      index += 1;
+      blocks.push(
+        <pre
+          key={`code-${key}`}
+          className="overflow-x-auto rounded-md bg-subtle p-3 font-mono text-caption leading-relaxed"
+        >
+          {code.join("\n")}
+        </pre>
+      );
+      continue;
     }
-    const listMatch = /^\s*[-*]\s+(.*)$/.exec(line);
-    if (listMatch && listMatch[1] !== undefined) {
-      listItems.push(listMatch[1]);
-      return;
+
+    const table = readTable(lines, index);
+    if (table) {
+      blocks.push(<TableBlockView key={`table-${key}`} block={table} orgId={orgId} />);
+      index = table.next;
+      continue;
     }
-    flushList(index);
-    const headingMatch = /^(#{1,3})\s+(.*)$/.exec(line);
-    if (headingMatch && headingMatch[1] && headingMatch[2] !== undefined) {
-      const level = headingMatch[1].length;
-      const content = renderInline(headingMatch[2], orgId);
+
+    if (DIVIDER_LINE.test(line)) {
+      blocks.push(<hr key={`divider-${key}`} className="border-border" />);
+      index += 1;
+      continue;
+    }
+
+    const bullet = BULLET_LINE.exec(line);
+    if (bullet) {
+      const items: string[] = [];
+      while (index < lines.length) {
+        const match = BULLET_LINE.exec(lines[index] ?? "");
+        if (!match || match[1] === undefined) break;
+        items.push(match[1]);
+        index += 1;
+      }
+      blocks.push(
+        <ul
+          key={`list-${key}`}
+          className="list-disc space-y-1 pl-5 text-small leading-relaxed text-foreground marker:text-muted-foreground"
+        >
+          {items.map((item, position) => (
+            <li key={position}>{renderInline(item, orgId)}</li>
+          ))}
+        </ul>
+      );
+      continue;
+    }
+
+    const ordered = ORDERED_LINE.exec(line);
+    if (ordered) {
+      const items: string[] = [];
+      while (index < lines.length) {
+        const match = ORDERED_LINE.exec(lines[index] ?? "");
+        if (!match || match[1] === undefined) break;
+        items.push(match[1]);
+        index += 1;
+      }
+      blocks.push(
+        <ol
+          key={`ordered-${key}`}
+          className="list-decimal space-y-1 pl-5 text-small leading-relaxed text-foreground marker:text-muted-foreground"
+        >
+          {items.map((item, position) => (
+            <li key={position}>{renderInline(item, orgId)}</li>
+          ))}
+        </ol>
+      );
+      continue;
+    }
+
+    const quote = QUOTE_LINE.exec(line);
+    if (quote) {
+      const quoted: string[] = [];
+      while (index < lines.length) {
+        const match = QUOTE_LINE.exec(lines[index] ?? "");
+        if (!match || match[1] === undefined) break;
+        quoted.push(match[1]);
+        index += 1;
+      }
+      blocks.push(
+        <blockquote
+          key={`quote-${key}`}
+          className="border-l-2 border-border pl-3 text-small leading-relaxed text-muted-foreground"
+        >
+          {quoted.map((item, position) => (
+            <p key={position}>{renderInline(item, orgId)}</p>
+          ))}
+        </blockquote>
+      );
+      continue;
+    }
+
+    const heading = HEADING_LINE.exec(line);
+    if (heading && heading[1] && heading[2] !== undefined) {
+      const level = heading[1].length;
+      const content = renderInline(heading[2], orgId);
       if (level === 1) {
         blocks.push(
-          <h1 key={index} className="text-h4 font-semibold tracking-[-0.01em] text-foreground">
+          <h1 key={`heading-${key}`} className="text-h4 font-semibold tracking-[-0.01em] text-foreground">
             {content}
           </h1>
         );
       } else if (level === 2) {
         blocks.push(
-          <h2 key={index} className="text-body font-semibold text-foreground">
+          <h2 key={`heading-${key}`} className="text-body font-semibold text-foreground">
             {content}
           </h2>
         );
       } else {
         blocks.push(
-          <h3 key={index} className="text-small font-semibold text-foreground">
+          <h3 key={`heading-${key}`} className="text-small font-semibold text-foreground">
             {content}
           </h3>
         );
       }
-      return;
+      index += 1;
+      continue;
     }
+
     if (line.trim().length === 0) {
-      return;
+      index += 1;
+      continue;
     }
+
     blocks.push(
-      <p key={index} className="text-small leading-relaxed text-foreground">
+      <p key={`paragraph-${key}`} className="text-small leading-relaxed text-foreground">
         {renderInline(line, orgId)}
       </p>
     );
-  });
-  flushList(lines.length);
+    index += 1;
+  }
 
   if (blocks.length === 0) {
     return <p className="text-small text-muted-foreground">Nothing here yet.</p>;
@@ -196,6 +383,8 @@ export function Markdown({ source, orgId }: { source: string; orgId?: string }) 
 export function plainText(source: string): string {
   return source
     .replace(/```[\s\S]*?```/g, " ")
+    .replace(/^[\s|:-]*$/gm, " ")
+    .replace(/\|/g, " ")
     .replace(/`([^`]+)`/g, "$1")
     .replace(/\*\*([^*]+)\*\*/g, "$1")
     .replace(/\*([^*]+)\*/g, "$1")
@@ -204,8 +393,10 @@ export function plainText(source: string): string {
       const mention = parseMention(href);
       return mention ? `${MENTION_GLYPH[mention.kind]}${label}` : label;
     })
-    .replace(/^#{1,3}\s+/gm, "")
+    .replace(/^#{1,6}\s+/gm, "")
+    .replace(/^\s*>\s?/gm, "")
     .replace(/^\s*[-*]\s+/gm, "")
+    .replace(/^\s*\d{1,9}[.)]\s+/gm, "")
     .replace(/\s+/g, " ")
     .trim();
 }

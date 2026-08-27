@@ -1,3 +1,4 @@
+import { plainText } from "@/components/notes/markdown";
 import type { Task } from "@/lib/types";
 
 interface SubtaskCounts {
@@ -44,16 +45,18 @@ export function taskSubtaskProgress(task: Task): SubtaskProgress | null {
 export function taskCardContext(task: Task, assigneeName: string | null): string | null {
   const data = extras(task);
 
-  if (typeof data.context_line === "string" && data.context_line.trim().length > 0) {
-    return data.context_line.trim();
+  if (typeof data.context_line === "string") {
+    const line = plainText(data.context_line);
+    if (line.length > 0) return line;
   }
 
   const comment = data.latest_comment;
-  if (typeof comment === "string" && comment.trim().length > 0) {
-    return comment.trim();
+  if (typeof comment === "string") {
+    const line = plainText(comment);
+    if (line.length > 0) return line;
   }
   if (comment && typeof comment === "object") {
-    const content = typeof comment.content === "string" ? comment.content.trim() : "";
+    const content = typeof comment.content === "string" ? plainText(comment.content) : "";
     if (content.length > 0) {
       const author = comment.author_name?.trim();
       return author ? `${content} — ${author}` : content;
