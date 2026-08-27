@@ -637,13 +637,11 @@ function TaskDetailBody({
   projectId,
   task,
   onNavigate,
-  fullscreen,
 }: {
   orgId: string;
   projectId: string;
   task: Task;
   onNavigate?: (taskId: string) => void;
-  fullscreen?: boolean;
 }) {
   const router = useRouter();
   const updateTask = useUpdateTask(orgId, projectId);
@@ -768,7 +766,7 @@ function TaskDetailBody({
 
   return (
     <div
-      className={`flex ${fullscreen ? "h-full" : "max-h-[88dvh]"} min-h-0 flex-col md:flex-row`}
+      className="flex h-full min-h-0 animate-fade-in flex-col md:flex-row"
     >
       <div className="flex min-w-0 flex-1 flex-col gap-4 overflow-y-auto p-6">
         <div className="flex flex-wrap items-center gap-2 pl-8 pr-9">
@@ -884,7 +882,7 @@ function TaskDetailBody({
         />
       </div>
 
-      <aside className="flex w-full shrink-0 flex-col gap-6 border-t border-border bg-surface/40 p-5 pt-10 md:w-72 md:border-l md:border-t-0">
+      <aside className="flex w-full shrink-0 flex-col gap-6 overflow-y-auto border-t border-border bg-surface/40 p-5 pt-10 md:w-72 md:border-l md:border-t-0">
         <SidebarSection title="Properties">
           <div className="flex flex-col gap-3">
             <Field label="Status">
@@ -1024,10 +1022,13 @@ export function TaskDetailDialog({
     <Dialog open={taskId !== null} onOpenChange={(open) => (!open ? onClose() : undefined)}>
       <DialogContent
         size="xl"
-        className={`overflow-hidden p-0 ${
+        // The box is a fixed height, not a maximum. A dialog that opens at the
+        // height of its skeleton and then grows to the height of its content
+        // stretches in front of the reader, and no easing hides that.
+        className={`grid-rows-1 overflow-hidden p-0 ${
           fullscreen
             ? "h-[96dvh] max-h-[96dvh] w-[98vw] max-w-[98vw]"
-            : "max-h-[88dvh] max-w-6xl"
+            : "h-[88dvh] max-h-[88dvh] max-w-6xl"
         }`}
       >
         <DialogTitle className="sr-only">Task details</DialogTitle>
@@ -1040,22 +1041,22 @@ export function TaskDetailDialog({
           {fullscreen ? <Minimize2 className="size-4" /> : <Maximize2 className="size-4" />}
         </button>
         {task.isPending ? (
-          <div className="flex flex-col gap-4 p-6">
+          <div className="flex h-full flex-col gap-4 p-6">
             <Skeleton className="h-6 w-24" />
             <Skeleton className="h-10 w-full" />
             <Skeleton className="h-24 w-full" />
           </div>
         ) : task.isError ? (
-          <div className="p-6">
+          <div className="flex h-full items-center justify-center p-6">
             <ErrorState error={task.error} onRetry={() => void task.refetch()} />
           </div>
         ) : (
           <TaskDetailBody
+            key={task.data.id}
             orgId={orgId}
             projectId={projectId}
             task={task.data}
             onNavigate={onNavigate}
-            fullscreen={fullscreen}
           />
         )}
       </DialogContent>

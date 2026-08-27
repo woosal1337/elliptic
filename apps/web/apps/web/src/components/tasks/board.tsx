@@ -1,6 +1,7 @@
 "use client";
 
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   ChevronDown,
   ChevronRight,
@@ -52,7 +53,9 @@ import {
   statusCategory,
 } from "@/lib/task-meta";
 import { formatDate } from "@/lib/format";
-import { useTasks, useUpdateTask } from "@/hooks/use-task-queries";
+import { useTasks, useUpdateTask,
+  prefetchTask,
+} from "@/hooks/use-task-queries";
 import { useOrgMembers } from "@/hooks/use-org-queries";
 import { useShortcut } from "@/lib/keyboard";
 import { ErrorState } from "@/components/error-state";
@@ -185,7 +188,7 @@ function BoardCard({
       onClick={onSelect}
       {...listeners}
       className={cn(
-        "group relative cursor-grab touch-none select-none rounded-md border bg-surface p-3 shadow-xs transition-all duration-150 hover:border-input hover:shadow-sm active:cursor-grabbing",
+        "group relative cursor-grab touch-none select-none rounded-md border bg-surface p-3 shadow-xs transition-[border-color,box-shadow] duration-150 ease-out hover:border-input hover:shadow-sm active:cursor-grabbing",
         selected ? "border-accent ring-1 ring-accent/40" : "border-border",
         focused && "outline-none ring-2 ring-ring ring-offset-2 ring-offset-background",
         isDragging && "opacity-40"
@@ -410,6 +413,7 @@ export function Board({
   projectId: string;
   swimlane?: Swimlane;
 }) {
+  const queryClient = useQueryClient();
   const tasks = useTasks(orgId, projectId);
   const members = useOrgMembers(orgId);
   const updateTask = useUpdateTask(orgId, projectId);
@@ -719,8 +723,16 @@ export function Board({
     return (
       <div
         ref={inLane ? undefined : columnsRef}
+        // One listener for every card. The pointer reaching a card is the
+        // earliest honest signal that the reader may open it, so the detail and
+        // the comments start loading then rather than on the click.
+        onPointerOver={(event) => {
+          const card = (event.target as HTMLElement).closest("[data-task-item]");
+          const id = card?.getAttribute("data-task-item");
+          if (id) prefetchTask(queryClient, orgId, id);
+        }}
         className={cn(
-          "flex gap-4 overflow-x-auto pb-4",
+          "flex animate-fade-in gap-4 overflow-x-auto pb-4",
           // Ungrouped: the inline style below caps the row at the fold, and this
           // is only the pre-measurement guess. Grouped: lanes stack, so each one
           // caps lower and the page scrolls between lanes.

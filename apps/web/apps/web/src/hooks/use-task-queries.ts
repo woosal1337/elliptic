@@ -98,12 +98,75 @@ export function useTasks(orgId: string, projectId: string) {
   });
 }
 
+/**
+ * One task, seeded from whichever list already holds it.
+ *
+ * The board and the table fetched this task seconds ago. Without the seed the
+ * detail dialog opens on a skeleton, waits for a request that returns what the
+ * client already had, and then resizes around the real content. The reader sees
+ * the box stretch. With it the dialog opens on the real title, status and
+ * description, and the request only refreshes what is on screen.
+ */
 export function useTask(orgId: string, taskId: string, enabled = true) {
+  const queryClient = useQueryClient();
+  const seed = cachedTask(queryClient, orgId, taskId);
+
   return useQuery({
     queryKey: taskKeys.detail(orgId, taskId),
     queryFn: ({ signal }) => api.get<Task>(orgPath(orgId, `/tasks/${taskId}`), signal),
     enabled,
+    placeholderData: seed,
   });
+}
+
+/**
+ * Warm the detail and the comments for one task.
+ *
+ * The board calls this when the pointer reaches a card. By the time the reader
+ * clicks, both requests are usually home, so the dialog opens on content
+ * instead of on a wait.
+ */
+export function prefetchTask(
+  queryClient: ReturnType<typeof useQueryClient>,
+  orgId: string,
+  taskId: string
+): void {
+  void queryClient.prefetchQuery({
+    queryKey: taskKeys.detail(orgId, taskId),
+    queryFn: ({ signal }) => api.get<Task>(orgPath(orgId, `/tasks/${taskId}`), signal),
+    staleTime: 30_000,
+  });
+  void queryClient.prefetchQuery({
+    queryKey: taskKeys.comments(orgId, taskId),
+    queryFn: async ({ signal }) => {
+      const page = await api.get<Page<Comment>>(
+        orgPath(orgId, `/comments?entity_type=task&entity_id=${taskId}`),
+        signal
+      );
+      return page.items;
+    },
+    staleTime: 30_000,
+  });
+}
+
+function cachedTask(
+  queryClient: ReturnType<typeof useQueryClient>,
+  orgId: string,
+  taskId: string
+): Task | undefined {
+  for (const [, data] of queryClient.getQueriesData({ queryKey: taskKeys.all(orgId) })) {
+    if (!Array.isArray(data)) continue;
+    for (const item of data) {
+      if (isTask(item) && item.id === taskId) return item;
+    }
+  }
+  return undefined;
+}
+
+function isTask(value: unknown): value is Task {
+  if (typeof value !== "object" || value === null) return false;
+  const record = value as Record<string, unknown>;
+  return typeof record.id === "string" && typeof record.title === "string";
 }
 
 function draftTask(orgId: string, projectId: string, input: CreateTaskInput, list: Task[]): Task {
