@@ -10,6 +10,82 @@ export interface Release {
 
 export const RELEASES: Release[] = [
   {
+    version: "1.6.0",
+    date: "2026-08-27",
+    blocks: [
+      {
+        type: "p",
+        text: "Drive, notes as folders, an iOS widget and an Android app that works. This release also removes eight features that nobody used.",
+      },
+      { type: "h3", text: "Drive" },
+      {
+        type: "ul",
+        items: [
+          "A document store for the organization. Upload a file, file it in a folder, and mention it from a task, a note or a comment. Web, mobile and the MCP reach the same files.",
+          "The preview plays a video and an audio file, and an image no longer sits behind a skeleton that never clears.",
+          "The upload allowlist accepts video and audio.",
+          "A browser end-to-end suite covers the Drive and the Notes.",
+        ],
+      },
+      { type: "h3", text: "Notes" },
+      {
+        type: "ul",
+        items: [
+          "A note can be a folder. Web and mobile browse the tree, and a folder opens as its own screen on the phone.",
+          "The note page is the editor and nothing else. Live co-editing is gone.",
+          "An agent reads and writes the folder fields the API already carried.",
+        ],
+      },
+      { type: "h3", text: "iOS and Android" },
+      {
+        type: "ul",
+        items: [
+          "A Tasks widget for the home screen and the lock screen, drawn in the app's own colours.",
+          "Android gets a tab bar, inset form cards, native switches and a read-only smoke tour.",
+          "The row swipe is one continuous gesture, and a full swipe stays inside the reach of a thumb.",
+          "The Profile screen no longer crashes on iOS.",
+        ],
+      },
+      { type: "h3", text: "Notifications" },
+      {
+        type: "ul",
+        items: [
+          "A push arrives when a task appears or moves. It arrives once, in the workspace it came from.",
+          "The toggles in settings govern push. Email now carries account mail only.",
+          "A push, a widget row and a web notification each open the task they name.",
+        ],
+      },
+      { type: "h3", text: "Agents and the MCP" },
+      {
+        type: "ul",
+        items: [
+          "A search tool, plus the task fields the API already had.",
+          "Every tool reaches the organization you meant, instead of the first one you joined.",
+          "The Elliptic agent skill ships with the repo.",
+        ],
+      },
+      { type: "h3", text: "Removed" },
+      {
+        type: "ul",
+        items: [
+          "Eight features that nobody used, and seven project views, out of the API and the web app together.",
+          "The docs and the agent skill describe what is left.",
+        ],
+      },
+      { type: "h3", text: "Fixes" },
+      {
+        type: "ul",
+        items: [
+          "The command palette no longer replaces the page with an error screen after you open a task, a note or a meeting.",
+          "A markdown table renders as a table in a comment, a task update and a description. The editor kept the cells apart, instead of joining them on save.",
+          "A one-line preview shows clean text, with no asterisks and no pipes.",
+          "The API commits its session before the response leaves.",
+          "The sidebar is one list, and a long line stays inside the task dialog.",
+        ],
+      },
+    ],
+  },
+  {
     version: "1.1.2",
     date: "2026-07-17",
     blocks: [

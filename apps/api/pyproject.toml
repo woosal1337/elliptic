@@ -1,6 +1,6 @@
 [project]
 name = "elliptic-api"
-version = "1.5.0"
+version = "1.6.0"
 description = "Elliptic API, an agent-native work platform (Jira for your agents)"
 readme = "README.md"
 license = "Apache-2.0"
