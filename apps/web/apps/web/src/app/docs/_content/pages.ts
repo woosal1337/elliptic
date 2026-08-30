@@ -255,7 +255,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "The left sidebar is how you move between sections. At the very top sits the **org switcher**, showing your current organization. Below it, navigation is grouped into two sections, **Personal** (what is on your plate) and **Workspace** (the shared surfaces of the org). Your user menu sits at the bottom."
+        "text": "The left sidebar is how you move between sections. At the very top sits the **org switcher**, showing your current organization. Below it every section sits in one list, from what is on your plate to the shared surfaces of the org. Your user menu sits at the bottom."
       },
       {
         "type": "table",
@@ -1405,6 +1405,24 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "p",
         "text": "Within each group, started work floats to the top, then higher priority, then most recently updated. Each row shows the status dot, priority, the `KEY-number` identifier, the title, a context line, the project key badge, and when it was last updated."
+      },
+      {
+        "type": "h3",
+        "text": "The iOS Tasks widget"
+      },
+      {
+        "type": "p",
+        "text": "On iOS your work also sits on the home screen and the lock screen. Add the **Tasks** widget, then long-press it and choose **Edit Widget** to pick the organization, the project and the statuses it watches. Every widget holds its own filter, so two widgets on one screen can watch two different workspaces. A row opens that task in the app."
+      },
+      {
+        "type": "p",
+        "text": "A small widget shows three rows by priority, with the identifier breaking a tie, and a count of the rest. The medium and large sizes show more of the same list."
+      },
+      {
+        "type": "callout",
+        "variant": "info",
+        "title": "The widget reads, it never fetches",
+        "text": "A lock-screen widget draws while the device is locked, and the app keeps its tokens readable only after the first unlock. So there is no moment at which the widget could sign in. The app writes a snapshot of your open tasks into the shared App Group, and the widget reads and filters that snapshot. A widget therefore shows what the app last wrote."
       }
     ]
   },
@@ -2348,6 +2366,28 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "h3",
+        "text": "Folders"
+      },
+      {
+        "type": "p",
+        "text": "A **folder** is a page that holds pages instead of prose. Use **New folder** on the Notes list or in the Wiki, name it, and file pages into it. A folder opens as a list of what sits inside it rather than as an editor, so a handbook reads as a shelf and not as one long document."
+      },
+      {
+        "type": "p",
+        "text": "The list carries a rail of every folder down the left, a breadcrumb path across the top, and the folders and pages of the open folder below it. Folders sort by name. Pages sort by the most recent edit. Each row carries a **Move to** menu that files it into another folder, and a folder cannot move inside itself or inside anything filed beneath it."
+      },
+      {
+        "type": "p",
+        "text": "On the phone a folder opens as its own screen, so the platform's own back gesture walks you out of it."
+      },
+      {
+        "type": "callout",
+        "variant": "tip",
+        "title": "A folder and a parent are different tools",
+        "text": "A parent nests one page under another and keeps both readable as pages. A folder holds pages and is not a page you write in. Use a parent for a document with sections, and a folder for a shelf of separate documents."
+      },
+      {
+        "type": "h3",
         "text": "List and filter"
       },
       {
@@ -2387,7 +2427,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "The page editor is a real block editor, not a plain text box. It supports headings, bold and italic, ordered and unordered lists, task lists, block quotes, inline code, code blocks, horizontal dividers, and links. Everything you write is saved as clean Markdown, which is what makes the same content readable to people, to exports, and to agents over the MCP."
+        "text": "The page editor is a real block editor, not a plain text box. It supports headings, bold and italic, ordered and unordered lists, task lists, block quotes, inline code, code blocks, tables, horizontal dividers, and links. Everything you write is saved as clean Markdown, which is what makes the same content readable to people, to exports, and to agents over the MCP."
       },
       {
         "type": "h3",
@@ -3285,6 +3325,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "ul",
         "items": [
           "**Images**: PNG, JPEG, GIF, WebP, and SVG.",
+          "**Video and audio**: MP4, WebM, QuickTime, MP3, M4A, WAV, and OGG.",
           "**Documents**: PDF, plain text, CSV, Markdown, and JSON.",
           "**Office files**: Word (`.doc` and `.docx`), Excel (`.xlsx`), and PowerPoint (`.pptx`).",
           "**Archives**: ZIP."
@@ -3532,7 +3573,7 @@ export const DOC_PAGES: DocPage[] = [
         "type": "callout",
         "variant": "info",
         "title": "Size and type limits",
-        "text": "A document may be up to **100 MB**, and its content type must be on the upload allowlist (PDF, images, plain text, CSV, Markdown, JSON, Word, Excel, PowerPoint, ZIP). Both are server settings — see **Files, attachments & embeds** for the full list and the self-hosting knobs."
+        "text": "A document may be up to **100 MB**, and its content type must be on the upload allowlist (PDF, images, video, audio, plain text, CSV, Markdown, JSON, Word, Excel, PowerPoint, ZIP). Both are server settings — see **Files, attachments & embeds** for the full list and the self-hosting knobs."
       },
       {
         "type": "h2",
@@ -3553,7 +3594,7 @@ export const DOC_PAGES: DocPage[] = [
       },
       {
         "type": "p",
-        "text": "Clicking the chip opens the Drive with that document selected, whether or not the reader has ever opened the folder it lives in. The document opens **inside Elliptic**: a panel that previews the file itself — an image, a PDF, or the first few thousand characters of a text file — above the folder, file name, size and the date it was added. Nothing navigates away to storage. **Download** takes the file when you want the file, and **Copy link** puts the Markdown above on your clipboard for pasting into another description. Word, Excel and PowerPoint have no in-browser preview, so those offer Download alone. Full detail on the format is in **References & mentions**."
+        "text": "Clicking the chip opens the Drive with that document selected, whether or not the reader has ever opened the folder it lives in. The document opens **inside Elliptic**: a panel that previews the file itself — an image, a PDF, the first few thousand characters of a text file, or a video or audio file playing in place — above the folder, file name, size and the date it was added. Nothing navigates away to storage. **Download** takes the file when you want the file, and **Copy link** puts the Markdown above on your clipboard for pasting into another description. Word, Excel and PowerPoint have no in-browser preview, so those offer Download alone. Full detail on the format is in **References & mentions**."
       },
       {
         "type": "h2",
@@ -4944,7 +4985,7 @@ export const DOC_PAGES: DocPage[] = [
       {
         "type": "ul",
         "items": [
-          "Start from a list or search tool, then drill in: `list_projects`, `list_project_tasks`, `get_task`.",
+          "Start from `search`, which finds a task, a note, a project or a meeting by name or content across the workspace, then drill in: `list_projects`, `list_project_tasks`, `get_task`.",
           "Create and move work with `create_task`, `update_task`, `transition_task_status`.",
           "Capture thinking with `create_note` and `list_notes`, and read schedule context with `list_meetings` and `list_calendar_events`.",
           "Catch up or resume with `brain_changes_since`, `brain_open_threads`, and `brain_resume`.",
