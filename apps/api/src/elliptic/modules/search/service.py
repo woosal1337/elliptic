@@ -9,7 +9,7 @@ engine (OpenSearch) + semantic ranking is a deferred phase.
 import re
 from difflib import SequenceMatcher
 
-from sqlalchemy import and_, or_, select
+from sqlalchemy import ColumnElement, and_, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from elliptic.core.deps import OrgContext
@@ -97,7 +97,10 @@ async def search(
                 )
 
     if included("task"):
-        matchers = [Task.title.ilike(like), Task.description.ilike(like)]
+        matchers: list[ColumnElement[bool]] = [
+            Task.title.ilike(like),
+            Task.description.ilike(like),
+        ]
         wanted = _identifier_parts(query)
         if wanted:
             key, number = wanted
