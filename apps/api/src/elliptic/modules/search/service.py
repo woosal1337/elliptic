@@ -6,9 +6,10 @@ OrgContext (a member sees their organization's content). An external search
 engine (OpenSearch) + semantic ranking is a deferred phase.
 """
 
+import re
 from difflib import SequenceMatcher
 
-from sqlalchemy import or_, select
+from sqlalchemy import and_, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from elliptic.core.deps import OrgContext
@@ -18,6 +19,18 @@ from elliptic.modules.projects.models import Project
 from elliptic.modules.tasks.models import Task
 
 _PER_ENTITY_CANDIDATES = 40
+
+# The one string a person reads on a card: a project key, then the task number.
+# A reader types it in any case, with a hyphen, a space, or nothing between the
+# two halves, so all three shapes resolve to the same task.
+_IDENTIFIER = re.compile(r"^\s*([A-Za-z][A-Za-z0-9]{1,5})[-\s]?(\d{1,9})\s*$")
+
+
+def _identifier_parts(query: str) -> tuple[str, int] | None:
+    match = _IDENTIFIER.match(query)
+    if not match:
+        return None
+    return match.group(1).upper(), int(match.group(2))
 
 
 def _score(query: str, *fields: str | None) -> float:
@@ -84,17 +97,29 @@ async def search(
                 )
 
     if included("task"):
+        matchers = [Task.title.ilike(like), Task.description.ilike(like)]
+        wanted = _identifier_parts(query)
+        if wanted:
+            key, number = wanted
+            keyed = [pid for pid, pkey, _ in project_rows if (pkey or "").upper() == key]
+            if keyed:
+                matchers.append(and_(Task.project_id.in_(keyed), Task.number == number))
+
         tasks = await session.scalars(
             select(Task)
             .where(
                 Task.org_id == org_id,
                 Task.archived_at.is_(None),
-                or_(Task.title.ilike(like), Task.description.ilike(like)),
+                or_(*matchers),
             )
             .limit(_PER_ENTITY_CANDIDATES)
         )
         for task in tasks:
             key = key_by_project.get(task.project_id)
+            identifier = f"{key}-{task.number}" if key else None
+            exact = (
+                wanted is not None and (key or "").upper() == wanted[0] and task.number == wanted[1]
+            )
             hits.append(
                 {
                     "type": "task",
@@ -102,8 +127,11 @@ async def search(
                     "title": task.title,
                     "snippet": _snippet(task.description),
                     "project_id": task.project_id,
-                    "identifier": f"{key}-{task.number}" if key else None,
-                    "score": _score(query, task.title, task.description),
+                    "identifier": identifier,
+                    # The task a reader named by its identifier leads the list.
+                    # Nothing matched on a word can be a better answer than the
+                    # one item the reader asked for.
+                    "score": 1.0 if exact else _score(query, task.title, task.description),
                 }
             )
 
