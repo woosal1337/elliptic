@@ -9,6 +9,7 @@ import {
   useRef,
   type ReactNode,
 } from "react";
+import { shortcutAllowed } from "./gate";
 import { eventKey, isPlainKey, matchesCombo, parseKeys } from "./parse";
 import type { KeyboardContextValue, ShortcutBinding } from "./types";
 
@@ -16,7 +17,7 @@ const CHORD_TIMEOUT_MS = 1000;
 
 const KeyboardContext = createContext<KeyboardContextValue | null>(null);
 
-function isEditableTarget(target: EventTarget | null): boolean {
+export function isEditableTarget(target: EventTarget | null): boolean {
   if (!(target instanceof HTMLElement)) return false;
   const tag = target.tagName;
   if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return true;
@@ -57,8 +58,9 @@ export function KeyboardProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
-      const bindings = Array.from(bindingsRef.current.values()).filter(
-        (binding) => binding.enabled !== false
+      const blocked = suppressedRef.current || isEditableTarget(event.target);
+      const bindings = Array.from(bindingsRef.current.values()).filter((binding) =>
+        shortcutAllowed(binding, blocked)
       );
 
       for (const binding of bindings) {
@@ -71,7 +73,7 @@ export function KeyboardProvider({ children }: { children: ReactNode }) {
         }
       }
 
-      if (suppressedRef.current || isEditableTarget(event.target)) {
+      if (blocked) {
         clearPrefix();
         return;
       }

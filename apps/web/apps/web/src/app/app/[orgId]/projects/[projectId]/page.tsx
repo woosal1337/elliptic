@@ -135,7 +135,7 @@ function ProjectDetailContent() {
       id: "tasks-toggle-view",
       keys: "mod+b",
       label: "Toggle board / list view",
-      scope: "global",
+      scope: "action",
       enabled: onTaskTab,
     },
     () => {
